@@ -22,11 +22,14 @@ const PROMPT_INJECTION = [
   /ignore\s+(all\s+)?(previous|prior|above)\s+instructions/i,
   /do\s+not\s+(tell|inform|mention\s+(this\s+)?to)\s+the\s+user/i,
   /without\s+(asking|telling)\s+the\s+user/i,
-  /(send|upload|post|exfiltrate)[^\n]{0,60}(api[_ -]?key|token|\.env|credentials|ssh)/i,
+  // Only counts when secrets are sent somewhere: "send the API key to https://...".
+  /\b(send|upload|post|exfiltrate|forward|transmit)\b[^\n]{0,40}\b(api[_ -]?keys?|tokens?|\.env|credentials|ssh\s+keys?|secrets?)\b[^\n]{0,40}\b(to|at)\s+(https?:\/\/|an?\s+(external|remote)|this\s+(url|endpoint|server))/i,
   /(webhook\.site|requestbin|pipedream\.net|ngrok\.io|discord(app)?\.com\/api\/webhooks)/i,
   /\bcat\s+~\/\.(ssh|aws)|\bprintenv\b|process\.env\b[^\n]{0,40}(fetch|post)/i,
 ];
-const RISKY_FILE = /\.(exe|scr|bat|cmd|msi|vbs|ps1|jar|dll|apk|dmg|pkg|zip|rar|7z)$/i;
+// Ready-to-run programs and archives. Plain-text launch scripts (.bat, .ps1, .sh) are left out:
+// many real projects ship them, and anyone can open them to read what they do.
+const RISKY_FILE = /\.(exe|scr|msi|vbs|jar|dll|apk|dmg|pkg|zip|rar|7z)$/i;
 
 const DAY = 24 * 60 * 60 * 1000;
 const daysSince = (iso) => (Date.now() - new Date(iso).getTime()) / DAY;
