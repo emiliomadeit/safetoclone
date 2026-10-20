@@ -37,11 +37,15 @@ python3 -m http.server 8000
 ```
 Then open http://localhost:8000
 
+Live at **https://safetoclone.com**. Contact: hello@safetoclone.com (Cloudflare Email Routing forwards it to the owner's Gmail).
+
 ## Put it online (Cloudflare Workers, free and allowed for business use)
 
 1. Sign up at dash.cloudflare.com.
 2. Workers & Pages → Create → Import a repository → pick this repo → Deploy. Cloudflare reads `wrangler.jsonc`, so no settings are needed.
 3. For the newsletter, add `RESEND_API_KEY` and `RESEND_AUDIENCE_ID` under the Worker's Settings → Variables and Secrets.
+
+`www.safetoclone.com` and the old `workers.dev` address redirect to `safetoclone.com` (see `worker.js`).
 
 Every change to `main`, including the nightly score update, redeploys the site by itself.
 
