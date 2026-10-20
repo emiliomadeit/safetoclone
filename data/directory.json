@@ -1,0 +1,79 @@
+{
+  "updatedAt": "2026-10-20T20:37:34.336234Z",
+  "example": true,
+  "repos": [
+    {
+      "name": "example/well-kept-ai-tool",
+      "url": "",
+      "description": "An open-source assistant from a long-running team.",
+      "score": 96,
+      "grade": "A",
+      "verdict": "",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:37:34.336234Z"
+    },
+    {
+      "name": "example/popular-but-quiet",
+      "url": "",
+      "description": "Image generator that hasn't been updated in a year.",
+      "score": 74,
+      "grade": "B",
+      "verdict": "",
+      "flags": [
+        "Runs a script straight from the internet"
+      ],
+      "checkedAt": "2026-10-20T20:37:34.336234Z"
+    },
+    {
+      "name": "example/new-agent-skill",
+      "url": "",
+      "description": "An AI skill pack from a two-month-old account.",
+      "score": 58,
+      "grade": "C",
+      "verdict": "",
+      "flags": [
+        "Runs code during install"
+      ],
+      "checkedAt": "2026-10-20T20:37:34.336234Z"
+    },
+    {
+      "name": "example/weekend-project",
+      "url": "",
+      "description": "A hobby script with no license or releases.",
+      "score": 47,
+      "grade": "D",
+      "verdict": "",
+      "flags": [
+        "Brand-new owner account"
+      ],
+      "checkedAt": "2026-10-20T20:37:34.336234Z"
+    },
+    {
+      "name": "example/helpful-mcp-server",
+      "url": "",
+      "description": "Connects your AI to a calendar.",
+      "score": 20,
+      "grade": "F",
+      "verdict": "",
+      "flags": [
+        "Could hijack your AI assistant"
+      ],
+      "checkedAt": "2026-10-20T20:37:34.336234Z"
+    },
+    {
+      "name": "example/free-gpt-pro-unlocked",
+      "url": "",
+      "description": "Claims to unlock paid AI for free.",
+      "score": 15,
+      "grade": "F",
+      "verdict": "",
+      "flags": [
+        "Scam-style wording",
+        "Asks you to turn off antivirus",
+        "Password-protected download",
+        "Suspiciously fast fame"
+      ],
+      "checkedAt": "2026-10-20T20:37:34.336234Z"
+    }
+  ]
+}

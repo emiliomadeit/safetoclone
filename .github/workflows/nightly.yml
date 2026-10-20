@@ -1,0 +1,26 @@
+# Re-scores the directory every night and saves the result. This is the "runs by itself" part.
+name: Nightly scores
+on:
+  schedule:
+    - cron: "0 7 * * *"   # 07:00 UTC = 3am Ottawa
+  workflow_dispatch: {}    # lets you press "Run workflow" by hand
+permissions:
+  contents: write
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node test/score.test.mjs
+      - run: node scripts/build-directory.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Save new scores
+        run: |
+          git config user.name "safetoclone-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/directory.json
+          git diff --cached --quiet || git commit -m "Nightly score update"
+          git push
