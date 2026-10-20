@@ -12,7 +12,7 @@ for (const name of list) {
   try {
     const r = await checkRepo(name, { token: process.env.GITHUB_TOKEN });
     results.push({ name: r.name, url: r.url, description: r.description, score: r.score, grade: r.grade,
-      verdict: r.verdict, flags: r.flags.map((f) => f.label), checkedAt: r.checkedAt });
+      level: r.level, label: r.label, verdict: r.verdict, flags: r.flags.map((f) => f.label), checkedAt: r.checkedAt });
     console.log(`${r.grade} ${String(r.score).padStart(3)}  ${r.name}`);
   } catch (e) {
     console.error(`skip ${name}: ${e.message}`);

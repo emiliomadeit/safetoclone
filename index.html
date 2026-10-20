@@ -87,7 +87,8 @@ button[disabled] { opacity: 0.6; cursor: progress; }
 .stamp { width: 7.5rem; height: 7.5rem; border-radius: 50%; border: 5px double currentColor; display: grid; place-items: center; transform: rotate(-8deg); text-align: center; line-height: 1; }
 .stamp b { display: block; font: 800 3.4rem/1 var(--display); font-stretch: 112%; }
 .stamp span { font: 500 0.75rem var(--mono); letter-spacing: 0.06em; }
-.g-A, .g-B { color: var(--good); } .g-C { color: var(--warn); } .g-D, .g-F { color: var(--bad); }
+.lvl-trusted, .lvl-fine { color: var(--good); } .lvl-careful, .lvl-unproven { color: var(--warn); } .lvl-dangerous { color: var(--bad); }
+.lvl-label { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
 .report-head .meta { min-width: 0; display: grid; gap: 0.35rem; }
 .report-head .meta a { font: 500 1rem var(--mono); word-break: break-all; }
 .verdict { font: 800 1.35rem/1.2 var(--display); font-stretch: 112%; }
@@ -184,7 +185,8 @@ footer .wrap { display: grid; gap: 0.5rem; }
       <button type="button" aria-pressed="true" data-g="all">All</button>
       <button type="button" aria-pressed="false" data-g="AB">Safe-looking (A–B)</button>
       <button type="button" aria-pressed="false" data-g="C">Careful (C)</button>
-      <button type="button" aria-pressed="false" data-g="DF">Risky (D–F)</button>
+      <button type="button" aria-pressed="false" data-g="unproven">Unproven</button>
+      <button type="button" aria-pressed="false" data-g="dangerous">Dangerous</button>
     </div>
     <div class="dir" id="dir"></div>
   </div></section>
@@ -201,6 +203,7 @@ footer .wrap { display: grid; gap: 0.5rem; }
       <div><span class="big">15</span><h3>Is it open about itself?</h3><ul><li>A license</li><li>Real instructions</li><li>A way to report security problems</li></ul></div>
       <div><span class="big">30</span><h3>Any malware tricks?</h3><ul><li>"Turn off your antivirus"</li><li>Password-protected zips, cracks, free premium</li><li>Fake stars, brand-new accounts</li><li>AI instruction files that try to hijack your assistant</li></ul></div>
     </div>
+    <p class="note">A low grade comes with one of two labels. <strong>Dangerous</strong> means we found malware tricks. <strong>Unproven</strong> means nothing looks wrong, but the project is too new or little-known to trust yet.</p>
     <p class="note">A score is a set of warning signs, not a guarantee. A clever attacker can pass every check. When in doubt, don't install it on a work computer, and ask your IT team.</p>
   </div></section>
 
@@ -256,10 +259,11 @@ function renderReport(r, { example = false } = {}) {
   const cap = r.capped ? `<p class="note">Score capped at ${r.capped} because of a serious warning sign.</p>` : "";
   $("#out").innerHTML = `<article class="report">
     <div class="report-head">
-      <div class="stamp g-${r.grade}" role="img" aria-label="Grade ${r.grade}, ${r.score} out of 100"><div><b>${r.grade}</b><span>${r.score}/100</span></div></div>
+      <div class="stamp lvl-${r.level}" role="img" aria-label="Grade ${r.grade}, ${r.score} out of 100, ${esc(r.label)}"><div><b>${r.grade}</b><span>${r.score}/100</span></div></div>
       <div class="meta">
         ${example ? `<span class="example-tag">Example report, made-up repo</span>` : ""}
         ${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : `<span style="font-family:var(--mono)">${esc(r.name)}</span>`}
+        <span class="lvl-label lvl-${r.level}">${esc(r.label)}</span>
         <p class="verdict">${esc(r.verdict)}</p>
         ${r.description ? `<p class="muted">${esc(r.description)}</p>` : ""}
       </div>
@@ -298,11 +302,13 @@ document.querySelectorAll("[data-try]").forEach((b) => b.addEventListener("click
 
 // Directory
 let dirData = [];
+// Older directory files have no level, so work one out from the grade and flags.
+const levelOf = (x) => x.level || ({ A: "trusted", B: "fine", C: "careful" }[x.grade] ?? (x.flags.length ? "dangerous" : "unproven"));
 function renderDir(filter = "all") {
-  const list = dirData.filter((x) => filter === "all" || filter.includes(x.grade));
+  const list = dirData.filter((x) => filter === "all" || (filter.length <= 2 ? filter.includes(x.grade) : levelOf(x) === filter));
   $("#dir").innerHTML = list.map((x) => `<article>
     <span class="name">${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.name)}</a>` : esc(x.name)}</span>
-    <span class="grade g-${x.grade}">${x.grade}<small>${x.score}</small></span>
+    <span class="grade lvl-${levelOf(x)}">${x.grade}<small>${x.score}</small></span>
     <span class="desc">${esc(x.description)}</span>
     ${x.flags.length ? `<div class="tags">${x.flags.map((f) => `<span>${esc(f)}</span>`).join("")}</div>` : ""}
   </article>`).join("") || `<p class="muted">No repos in this group yet.</p>`;

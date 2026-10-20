@@ -26,7 +26,7 @@ A website that gives non-technical people a safety grade (A to F) for any GitHub
 - **Transparency (15):** license, README, security policy
 - **Red flags (30, points taken away):** "disable your antivirus" (caps at 15), AI-hijacking instructions (caps at 20), scam words like crack/free premium (caps at 35), password-protected zips (caps at 30), fake-looking star growth (caps at 50), brand-new owner accounts, programs sitting in the code, hidden encoded text, install scripts, pipe-to-shell installs
 
-Grades: A 85+, B 70+, C 55+, D 40+, F below 40.
+Grades: A 85+, B 70+, C 55+, D 40+, F below 40. Each result also gets a label: Trusted (A), Probably fine (B), Be careful (C), Unproven (D or F with no serious red flags) or Dangerous (any serious red flag, or red-flag points at 15 or below).
 
 **Limits:** it only reads the README, the top folder, releases and AI instruction files. It never runs code. It is a warning-sign checker, not antivirus. Visitors' browsers call GitHub directly, so each visitor gets about 12 checks an hour before GitHub's free limit kicks in.
 
