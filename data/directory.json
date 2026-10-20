@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T20:52:42.575Z",
+  "updatedAt": "2026-10-20T20:56:29.999Z",
   "example": false,
   "repos": [
     {
@@ -10,7 +10,7 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:28.592Z"
+      "checkedAt": "2026-10-20T20:56:15.556Z"
     },
     {
       "name": "google-gemini/gemini-cli",
@@ -20,7 +20,7 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:32.951Z"
+      "checkedAt": "2026-10-20T20:56:20.013Z"
     },
     {
       "name": "Significant-Gravitas/AutoGPT",
@@ -30,7 +30,7 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:33.718Z"
+      "checkedAt": "2026-10-20T20:56:20.714Z"
     },
     {
       "name": "lobehub/lobehub",
@@ -40,7 +40,7 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:36.781Z"
+      "checkedAt": "2026-10-20T20:56:23.822Z"
     },
     {
       "name": "mudler/LocalAI",
@@ -50,7 +50,17 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:37.551Z"
+      "checkedAt": "2026-10-20T20:56:24.609Z"
+    },
+    {
+      "name": "modelcontextprotocol/servers",
+      "url": "https://github.com/modelcontextprotocol/servers",
+      "description": "Model Context Protocol Servers",
+      "score": 100,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:56:27.072Z"
     },
     {
       "name": "microsoft/autogen",
@@ -60,7 +70,7 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:40.990Z"
+      "checkedAt": "2026-10-20T20:56:28.423Z"
     },
     {
       "name": "ollama/ollama",
@@ -72,7 +82,7 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T20:52:26.473Z"
+      "checkedAt": "2026-10-20T20:56:13.473Z"
     },
     {
       "name": "open-webui/open-webui",
@@ -82,7 +92,7 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:27.412Z"
+      "checkedAt": "2026-10-20T20:56:14.304Z"
     },
     {
       "name": "openai/codex",
@@ -94,7 +104,7 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T20:52:32.185Z"
+      "checkedAt": "2026-10-20T20:56:19.211Z"
     },
     {
       "name": "langchain-ai/langchain",
@@ -104,7 +114,7 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:34.530Z"
+      "checkedAt": "2026-10-20T20:56:21.466Z"
     },
     {
       "name": "ggml-org/llama.cpp",
@@ -116,7 +126,7 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T20:52:38.340Z"
+      "checkedAt": "2026-10-20T20:56:25.515Z"
     },
     {
       "name": "infiniflow/ragflow",
@@ -126,7 +136,7 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:42.575Z"
+      "checkedAt": "2026-10-20T20:56:29.998Z"
     },
     {
       "name": "crewAIInc/crewAI",
@@ -138,7 +148,7 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T20:52:41.694Z"
+      "checkedAt": "2026-10-20T20:56:29.220Z"
     },
     {
       "name": "n8n-io/n8n",
@@ -151,7 +161,17 @@
         "Runs a script straight from the internet",
         "Runs code during install"
       ],
-      "checkedAt": "2026-10-20T20:52:35.307Z"
+      "checkedAt": "2026-10-20T20:56:22.493Z"
+    },
+    {
+      "name": "browser-use/browser-use",
+      "url": "https://github.com/browser-use/browser-use",
+      "description": "Open-source Python library for AI browser agents, plus Browser Use Cloud: stealth browsers and a hosted agent API.",
+      "score": 93,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:56:27.827Z"
     },
     {
       "name": "anthropics/claude-code",
@@ -163,7 +183,17 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T20:52:30.792Z"
+      "checkedAt": "2026-10-20T20:56:17.731Z"
+    },
+    {
+      "name": "AUTOMATIC1111/stable-diffusion-webui",
+      "url": "https://github.com/AUTOMATIC1111/stable-diffusion-webui",
+      "description": "Stable Diffusion web UI",
+      "score": 90,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:56:16.328Z"
     },
     {
       "name": "lllyasviel/Fooocus",
@@ -173,7 +203,7 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:29.877Z"
+      "checkedAt": "2026-10-20T20:56:16.979Z"
     },
     {
       "name": "nomic-ai/gpt4all",
@@ -183,43 +213,7 @@
       "grade": "A",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:52:38.924Z"
-    },
-    {
-      "name": "AUTOMATIC1111/stable-diffusion-webui",
-      "url": "https://github.com/AUTOMATIC1111/stable-diffusion-webui",
-      "description": "Stable Diffusion web UI",
-      "score": 80,
-      "grade": "B",
-      "verdict": "Probably fine. Read the warnings first.",
-      "flags": [
-        "Programs sitting in the code"
-      ],
-      "checkedAt": "2026-10-20T20:52:29.364Z"
-    },
-    {
-      "name": "modelcontextprotocol/servers",
-      "url": "https://github.com/modelcontextprotocol/servers",
-      "description": "Model Context Protocol Servers",
-      "score": 20,
-      "grade": "F",
-      "verdict": "Don't download this.",
-      "flags": [
-        "Could hijack your AI assistant"
-      ],
-      "checkedAt": "2026-10-20T20:52:39.628Z"
-    },
-    {
-      "name": "browser-use/browser-use",
-      "url": "https://github.com/browser-use/browser-use",
-      "description": "Open-source Python library for AI browser agents, plus Browser Use Cloud: stealth browsers and a hosted agent API.",
-      "score": 20,
-      "grade": "F",
-      "verdict": "Don't download this.",
-      "flags": [
-        "Could hijack your AI assistant"
-      ],
-      "checkedAt": "2026-10-20T20:52:40.348Z"
+      "checkedAt": "2026-10-20T20:56:26.262Z"
     }
   ]
 }
