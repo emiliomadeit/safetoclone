@@ -1,11 +1,12 @@
-// Cloudflare Pages version of the newsletter signup (api/subscribe.js is the Vercel version).
+// Cloudflare Worker: serves the website files and handles the newsletter signup.
 // Needs two settings in Cloudflare > Workers & Pages > safetoclone > Settings > Variables and Secrets:
 //   RESEND_API_KEY      (from resend.com > API Keys)
 //   RESEND_AUDIENCE_ID  (from resend.com > Audiences)
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 
-export async function onRequestPost({ request, env }) {
+async function subscribe(request, env) {
+  if (request.method !== "POST") return json({ error: "Use POST" }, 405);
   const { email: raw } = await request.json().catch(() => ({}));
   const email = String(raw || "").trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "That email address doesn't look right." }, 400);
@@ -18,3 +19,11 @@ export async function onRequestPost({ request, env }) {
   if (!r.ok) return json({ error: "Couldn't save your email. Try again later." }, 502);
   return json({ ok: true });
 }
+
+export default {
+  async fetch(request, env) {
+    const { pathname } = new URL(request.url);
+    if (pathname === "/api/subscribe") return subscribe(request, env);
+    return env.ASSETS.fetch(request);
+  },
+};
