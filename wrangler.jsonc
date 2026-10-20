@@ -6,5 +6,7 @@
   "assets": {
     "directory": ".",
     "binding": "ASSETS"
-  }
+  },
+  // Lets Cloudflare build a test copy of the site for every pull request.
+  "previews": {}
 }
