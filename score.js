@@ -167,13 +167,18 @@ export function score(data) {
   const raw = checks.reduce((s, c) => s + c.points, 0);
   const total = Math.max(0, Math.min(cap, raw));
   const grade = total >= 85 ? "A" : total >= 70 ? "B" : total >= 55 ? "C" : total >= 40 ? "D" : "F";
-  const verdict = {
-    A: "Looks trustworthy. Still only install what you need.",
-    B: "Probably fine. Read the warnings first.",
-    C: "Be careful. Ask someone technical before installing.",
-    D: "Risky. We wouldn't install this on a work computer.",
-    F: "Don't download this.",
-  }[grade];
+  // A low score can mean two different things. "Dangerous" means we found malware tricks.
+  // "Unproven" means nothing looks wrong, the project is just too new or little-known to trust yet.
+  const dangerous = flags.some((f) => f.severity === "high") || flagPts <= 15;
+  const level = dangerous ? "dangerous"
+    : grade === "A" ? "trusted" : grade === "B" ? "fine" : grade === "C" ? "careful" : "unproven";
+  const { label, verdict } = {
+    trusted: { label: "Trusted", verdict: "Looks trustworthy. Still only install what you need." },
+    fine: { label: "Probably fine", verdict: "Probably fine. Read the warnings first." },
+    careful: { label: "Be careful", verdict: "Be careful. Ask someone technical before installing." },
+    unproven: { label: "Unproven", verdict: "No warning signs, but it's too new or little-known to trust yet. Only install it if you know who made it." },
+    dangerous: { label: "Dangerous", verdict: "Don't download this. It shows signs of malware." },
+  }[level];
 
   return {
     name: r.full_name,
@@ -181,6 +186,8 @@ export function score(data) {
     description: r.description || "",
     score: total,
     grade,
+    level,
+    label,
     verdict,
     capped: cap < raw ? cap : null,
     checks,
