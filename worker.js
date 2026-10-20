@@ -20,9 +20,17 @@ async function subscribe(request, env) {
   return json({ ok: true });
 }
 
+// Old addresses that should send visitors to the main one.
+// Pull request previews use other workers.dev names, so they are left alone.
+const OLD_HOSTS = ["www.safetoclone.com", "safetoclone.emileantoun10.workers.dev"];
+
 export default {
   async fetch(request, env) {
-    const { pathname } = new URL(request.url);
+    const url = new URL(request.url);
+    const { pathname } = url;
+    if (OLD_HOSTS.includes(url.hostname) && (request.method === "GET" || request.method === "HEAD")) {
+      return Response.redirect(`https://safetoclone.com${pathname}${url.search}`, 301);
+    }
     if (pathname === "/api/subscribe") return subscribe(request, env);
     return env.ASSETS.fetch(request);
   },
