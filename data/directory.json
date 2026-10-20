@@ -1,79 +1,225 @@
 {
-  "updatedAt": "2026-10-20T20:37:34.336234Z",
-  "example": true,
+  "updatedAt": "2026-10-20T20:52:42.575Z",
+  "example": false,
   "repos": [
     {
-      "name": "example/well-kept-ai-tool",
-      "url": "",
-      "description": "An open-source assistant from a long-running team.",
-      "score": 96,
+      "name": "Comfy-Org/ComfyUI",
+      "url": "https://github.com/Comfy-Org/ComfyUI",
+      "description": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface. The fastest local inference engine in the world.",
+      "score": 100,
       "grade": "A",
-      "verdict": "",
+      "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T20:37:34.336234Z"
+      "checkedAt": "2026-10-20T20:52:28.592Z"
     },
     {
-      "name": "example/popular-but-quiet",
-      "url": "",
-      "description": "Image generator that hasn't been updated in a year.",
-      "score": 74,
-      "grade": "B",
-      "verdict": "",
+      "name": "google-gemini/gemini-cli",
+      "url": "https://github.com/google-gemini/gemini-cli",
+      "description": "An open-source AI agent that brings the power of Gemini directly into your terminal.",
+      "score": 100,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:52:32.951Z"
+    },
+    {
+      "name": "Significant-Gravitas/AutoGPT",
+      "url": "https://github.com/Significant-Gravitas/AutoGPT",
+      "description": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters.",
+      "score": 100,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:52:33.718Z"
+    },
+    {
+      "name": "lobehub/lobehub",
+      "url": "https://github.com/lobehub/lobehub",
+      "description": "🤯 LobeHub is your Chief Agent Operator, organizing your agents into 7×24 operations by hiring, scheduling, and reporting on your entire AI team.",
+      "score": 100,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:52:36.781Z"
+    },
+    {
+      "name": "mudler/LocalAI",
+      "url": "https://github.com/mudler/LocalAI",
+      "description": "LocalAI is the open-source AI engine. Run any model - LLMs, vision, voice, image, video - on any hardware. No GPU required.",
+      "score": 100,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:52:37.551Z"
+    },
+    {
+      "name": "microsoft/autogen",
+      "url": "https://github.com/microsoft/autogen",
+      "description": "A programming framework for agentic AI",
+      "score": 100,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:52:40.990Z"
+    },
+    {
+      "name": "ollama/ollama",
+      "url": "https://github.com/ollama/ollama",
+      "description": "Get up and running with Kimi, GLM, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models.",
+      "score": 97,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T20:37:34.336234Z"
+      "checkedAt": "2026-10-20T20:52:26.473Z"
     },
     {
-      "name": "example/new-agent-skill",
-      "url": "",
-      "description": "An AI skill pack from a two-month-old account.",
-      "score": 58,
-      "grade": "C",
-      "verdict": "",
+      "name": "open-webui/open-webui",
+      "url": "https://github.com/open-webui/open-webui",
+      "description": "User-friendly AI Interface (Supports Ollama, OpenAI API, ...)",
+      "score": 97,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:52:27.412Z"
+    },
+    {
+      "name": "openai/codex",
+      "url": "https://github.com/openai/codex",
+      "description": "Lightweight coding agent that runs in your terminal",
+      "score": 97,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [
+        "Runs a script straight from the internet"
+      ],
+      "checkedAt": "2026-10-20T20:52:32.185Z"
+    },
+    {
+      "name": "langchain-ai/langchain",
+      "url": "https://github.com/langchain-ai/langchain",
+      "description": "The agent engineering platform.",
+      "score": 97,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:52:34.530Z"
+    },
+    {
+      "name": "ggml-org/llama.cpp",
+      "url": "https://github.com/ggml-org/llama.cpp",
+      "description": "LLM inference in C/C++",
+      "score": 97,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [
+        "Runs a script straight from the internet"
+      ],
+      "checkedAt": "2026-10-20T20:52:38.340Z"
+    },
+    {
+      "name": "infiniflow/ragflow",
+      "url": "https://github.com/infiniflow/ragflow",
+      "description": "RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-edge RAG with Agent capabilities to create a superior context layer for LLMs",
+      "score": 97,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:52:42.575Z"
+    },
+    {
+      "name": "crewAIInc/crewAI",
+      "url": "https://github.com/crewAIInc/crewAI",
+      "description": "Framework for orchestrating role-playing, autonomous AI agents. By fostering collaborative intelligence, CrewAI empowers agents to work together seamlessly, tackling complex tasks.",
+      "score": 94,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [
+        "Runs a script straight from the internet"
+      ],
+      "checkedAt": "2026-10-20T20:52:41.694Z"
+    },
+    {
+      "name": "n8n-io/n8n",
+      "url": "https://github.com/n8n-io/n8n",
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+      "score": 93,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [
+        "Runs a script straight from the internet",
         "Runs code during install"
       ],
-      "checkedAt": "2026-10-20T20:37:34.336234Z"
+      "checkedAt": "2026-10-20T20:52:35.307Z"
     },
     {
-      "name": "example/weekend-project",
-      "url": "",
-      "description": "A hobby script with no license or releases.",
-      "score": 47,
-      "grade": "D",
-      "verdict": "",
+      "name": "anthropics/claude-code",
+      "url": "https://github.com/anthropics/claude-code",
+      "description": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.",
+      "score": 92,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [
-        "Brand-new owner account"
+        "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T20:37:34.336234Z"
+      "checkedAt": "2026-10-20T20:52:30.792Z"
     },
     {
-      "name": "example/helpful-mcp-server",
-      "url": "",
-      "description": "Connects your AI to a calendar.",
+      "name": "lllyasviel/Fooocus",
+      "url": "https://github.com/lllyasviel/Fooocus",
+      "description": "Focus on prompting and generating",
+      "score": 90,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:52:29.877Z"
+    },
+    {
+      "name": "nomic-ai/gpt4all",
+      "url": "https://github.com/nomic-ai/gpt4all",
+      "description": "GPT4All: Run Local LLMs on Any Device. Open-source and available for commercial use.",
+      "score": 87,
+      "grade": "A",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "checkedAt": "2026-10-20T20:52:38.924Z"
+    },
+    {
+      "name": "AUTOMATIC1111/stable-diffusion-webui",
+      "url": "https://github.com/AUTOMATIC1111/stable-diffusion-webui",
+      "description": "Stable Diffusion web UI",
+      "score": 80,
+      "grade": "B",
+      "verdict": "Probably fine. Read the warnings first.",
+      "flags": [
+        "Programs sitting in the code"
+      ],
+      "checkedAt": "2026-10-20T20:52:29.364Z"
+    },
+    {
+      "name": "modelcontextprotocol/servers",
+      "url": "https://github.com/modelcontextprotocol/servers",
+      "description": "Model Context Protocol Servers",
       "score": 20,
       "grade": "F",
-      "verdict": "",
+      "verdict": "Don't download this.",
       "flags": [
         "Could hijack your AI assistant"
       ],
-      "checkedAt": "2026-10-20T20:37:34.336234Z"
+      "checkedAt": "2026-10-20T20:52:39.628Z"
     },
     {
-      "name": "example/free-gpt-pro-unlocked",
-      "url": "",
-      "description": "Claims to unlock paid AI for free.",
-      "score": 15,
+      "name": "browser-use/browser-use",
+      "url": "https://github.com/browser-use/browser-use",
+      "description": "Open-source Python library for AI browser agents, plus Browser Use Cloud: stealth browsers and a hosted agent API.",
+      "score": 20,
       "grade": "F",
-      "verdict": "",
+      "verdict": "Don't download this.",
       "flags": [
-        "Scam-style wording",
-        "Asks you to turn off antivirus",
-        "Password-protected download",
-        "Suspiciously fast fame"
+        "Could hijack your AI assistant"
       ],
-      "checkedAt": "2026-10-20T20:37:34.336234Z"
+      "checkedAt": "2026-10-20T20:52:40.348Z"
     }
   ]
 }
