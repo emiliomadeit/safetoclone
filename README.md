@@ -12,7 +12,8 @@ A website that gives non-technical people a safety grade (A to F) for any GitHub
 | `repos.txt` | Which repos the directory covers. Add a line to add a repo |
 | `scripts/build-directory.mjs` | Scores everything in `repos.txt` |
 | `.github/workflows/nightly.yml` | Runs the script every night on GitHub for free |
-| `api/subscribe.js` | Adds newsletter signups to Resend (runs on Vercel) |
+| `functions/api/subscribe.js` | Adds newsletter signups to Resend (runs on Cloudflare Pages) |
+| `api/subscribe.js` | Same thing, for Vercel instead |
 | `test/score.test.mjs` | Checks the scoring still works: `node test/score.test.mjs` |
 
 ## How the score works
@@ -35,8 +36,11 @@ python3 -m http.server 8000
 ```
 Then open http://localhost:8000
 
-## Put it online (Vercel)
+## Put it online (Cloudflare Pages, free and allowed for business use)
 
-1. Sign in to vercel.com with GitHub.
-2. "Add New Project" → pick this repo → Deploy. No settings needed.
-3. For the newsletter, add `RESEND_API_KEY` and `RESEND_AUDIENCE_ID` under Project → Settings → Environment Variables, then redeploy.
+1. Sign up at dash.cloudflare.com.
+2. Workers & Pages → Create → Pages → Connect to Git → pick this repo.
+3. Leave the build command and output folder empty → Save and Deploy.
+4. For the newsletter, add `RESEND_API_KEY` and `RESEND_AUDIENCE_ID` under the project's Settings → Variables and Secrets, then redeploy.
+
+Vercel works too (`api/subscribe.js`), but its free plan doesn't allow commercial use.
