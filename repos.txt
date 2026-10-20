@@ -1,0 +1,22 @@
+# One repo per line. The nightly job scores each one and updates data/directory.json.
+# Popular AI tools non-technical people get told to download.
+ollama/ollama
+open-webui/open-webui
+comfyanonymous/ComfyUI
+AUTOMATIC1111/stable-diffusion-webui
+lllyasviel/Fooocus
+anthropics/claude-code
+openai/codex
+google-gemini/gemini-cli
+Significant-Gravitas/AutoGPT
+langchain-ai/langchain
+n8n-io/n8n
+lobehub/lobe-chat
+mudler/LocalAI
+ggml-org/llama.cpp
+nomic-ai/gpt4all
+modelcontextprotocol/servers
+browser-use/browser-use
+microsoft/autogen
+crewAIInc/crewAI
+infiniflow/ragflow

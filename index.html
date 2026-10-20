@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SafeToClone</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Paste a GitHub link and get a plain-English safety score before you download it. Built for people who don't code.">
+<meta property="og:title" content="SafeToClone: is this GitHub repo safe to download?">
+<meta property="og:description" content="A safety score for GitHub repos, written for people who don't code.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is it safe to download code from GitHub?","acceptedAnswer":{"@type":"Answer","text":"Most GitHub repos are safe, but some are malware dressed up as free tools. Warning signs include requests to turn off antivirus, password-protected zip files, brand-new accounts and repos that got thousands of stars in days."}},
+{"@type":"Question","name":"Can a GitHub repo harm my AI assistant?","acceptedAnswer":{"@type":"Answer","text":"Yes. Files like CLAUDE.md, AGENTS.md, SKILL.md or .cursorrules give instructions to AI coding tools. A malicious one can tell your AI to leak API keys or run commands without asking you."}}]}
+</script>
+<style>
+/* Layout: an inspection office. One wide check bar up top, the report reads like a stamped certificate, everything else in a calm single column. */
+:root {
+  --paper: #eef1ef;
+  --card: #ffffff;
+  --ink: #15201c;
+  --muted: #56645e;
+  --line: #d3dad6;
+  --accent: #1d6b4c;
+  --accent-ink: #ffffff;
+  --good: #1d7a4f;
+  --warn: #a86a00;
+  --bad: #b3261e;
+  --good-bg: #e3f2e9;
+  --warn-bg: #fbf0d9;
+  --bad-bg: #fbe4e1;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #111a17; --card: #18231f; --ink: #e6ede9; --muted: #9aaaa3; --line: #2b3a34;
+  --accent: #4fc08d; --accent-ink: #0c1512;
+  --good: #5ccf96; --warn: #f0b44c; --bad: #ff7b6e;
+  --good-bg: #173226; --warn-bg: #332712; --bad-bg: #3a1a17; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #111a17; --card: #18231f; --ink: #e6ede9; --muted: #9aaaa3; --line: #2b3a34;
+  --accent: #4fc08d; --accent-ink: #0c1512;
+  --good: #5ccf96; --warn: #f0b44c; --bad: #ff7b6e;
+  --good-bg: #173226; --warn-bg: #332712; --bad-bg: #3a1a17; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1rem/1.6 var(--body); }
+.wrap { max-width: 68rem; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: var(--accent); }
+h1, h2, h3 { font-family: var(--display); font-stretch: 112%; line-height: 1.1; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.1rem, 5.5vw, 3.6rem); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.label { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+header.top { border-bottom: 1px solid var(--line); }
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.9rem; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: var(--ink); font: 800 1.15rem/1 var(--display); font-stretch: 112%; }
+.brand-mark { width: 1.9rem; height: 1.9rem; border: 2.5px solid var(--accent); border-radius: 50%; display: grid; place-items: center; color: var(--accent); font-size: 0.9rem; transform: rotate(-12deg); }
+nav { display: flex; gap: 1.1rem; flex-wrap: wrap; }
+nav a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 0.95rem; }
+nav a:hover { color: var(--ink); }
+
+.hero { padding-block: clamp(2.5rem, 7vw, 4.5rem) 2rem; display: grid; gap: 1.4rem; }
+.hero p.lede { font-size: 1.15rem; max-width: 40rem; color: var(--muted); }
+form.check { display: flex; gap: 0.6rem; flex-wrap: wrap; max-width: 46rem; }
+form.check input { flex: 1 1 18rem; min-width: 0; font: 500 1.05rem var(--mono); padding: 0.95rem 1rem; border: 2px solid var(--ink); border-radius: 10px; background: var(--card); color: var(--ink); }
+button, .btn { font: 600 1rem var(--body); padding: 0.95rem 1.4rem; border-radius: 10px; border: 2px solid var(--accent); background: var(--accent); color: var(--accent-ink); cursor: pointer; text-decoration: none; display: inline-block; }
+button:hover, .btn:hover { filter: brightness(1.08); }
+button[disabled] { opacity: 0.6; cursor: progress; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.tries { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; font-size: 0.9rem; }
+.tries button { padding: 0.35rem 0.7rem; font: 500 0.8rem var(--mono); border-width: 1px; border-color: var(--line); background: var(--card); color: var(--ink); border-radius: 999px; }
+
+/* The report: a certificate with a stamped grade */
+.report { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: clamp(1.1rem, 3vw, 2rem); display: grid; gap: 1.6rem; margin-bottom: 3rem; }
+.report-head { display: grid; grid-template-columns: auto 1fr; gap: 1.5rem; align-items: center; }
+.stamp { width: 7.5rem; height: 7.5rem; border-radius: 50%; border: 5px double currentColor; display: grid; place-items: center; transform: rotate(-8deg); text-align: center; line-height: 1; }
+.stamp b { display: block; font: 800 3.4rem/1 var(--display); font-stretch: 112%; }
+.stamp span { font: 500 0.75rem var(--mono); letter-spacing: 0.06em; }
+.g-A, .g-B { color: var(--good); } .g-C { color: var(--warn); } .g-D, .g-F { color: var(--bad); }
+.report-head .meta { min-width: 0; display: grid; gap: 0.35rem; }
+.report-head .meta a { font: 500 1rem var(--mono); word-break: break-all; }
+.verdict { font: 800 1.35rem/1.2 var(--display); font-stretch: 112%; }
+.example-tag { display: inline-block; font: 500 0.7rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; background: var(--warn-bg); color: var(--warn); padding: 0.25rem 0.5rem; border-radius: 4px; justify-self: start; }
+.groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem; }
+.group { border-top: 3px solid var(--line); padding-top: 0.75rem; display: grid; gap: 0.5rem; align-content: start; }
+.group header { display: flex; justify-content: space-between; align-items: baseline; }
+.group .pts { font: 500 0.85rem var(--mono); font-variant-numeric: tabular-nums; }
+.row { display: grid; grid-template-columns: 0.6rem 1fr; gap: 0.6rem; font-size: 0.92rem; }
+.dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-top: 0.45rem; }
+.dot.good { background: var(--good); } .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); }
+.row strong { font-weight: 600; }
+.flags { display: grid; gap: 0.6rem; }
+.flag { padding: 0.8rem 1rem; border-radius: 8px; display: grid; gap: 0.2rem; }
+.flag.high { background: var(--bad-bg); } .flag.high strong { color: var(--bad); }
+.flag.medium { background: var(--warn-bg); } .flag.medium strong { color: var(--warn); }
+.flag.low { background: var(--paper); }
+.note { font-size: 0.85rem; color: var(--muted); }
+.error { background: var(--bad-bg); color: var(--ink); border-radius: 10px; padding: 1rem; max-width: 46rem; }
+
+section { padding-block: 3rem; border-top: 1px solid var(--line); }
+section > .wrap { display: grid; gap: 1.5rem; }
+.section-intro { max-width: 42rem; display: grid; gap: 0.6rem; }
+.dir { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1rem; }
+.dir article { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1rem; display: grid; grid-template-columns: 1fr auto; gap: 0.4rem 1rem; align-content: start; }
+.dir .name { font: 500 0.9rem var(--mono); word-break: break-all; min-width: 0; }
+.dir .grade { font: 800 1.6rem/1 var(--display); grid-row: span 2; text-align: right; }
+.dir .grade small { display: block; font: 500 0.75rem var(--mono); }
+.dir .desc { font-size: 0.9rem; color: var(--muted); grid-column: 1; }
+.dir .tags { grid-column: 1 / -1; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.dir .tags span { font-size: 0.75rem; background: var(--paper); border-radius: 4px; padding: 0.15rem 0.45rem; }
+.filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.filters button { padding: 0.4rem 0.8rem; font-size: 0.85rem; border-width: 1px; border-color: var(--line); background: var(--card); color: var(--ink); }
+.filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.method { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.2rem; }
+.method div { display: grid; gap: 0.4rem; align-content: start; }
+.method .big { font: 800 2rem/1 var(--display); color: var(--accent); font-variant-numeric: tabular-nums; }
+.method ul { margin: 0; padding-left: 1.1rem; font-size: 0.92rem; color: var(--muted); }
+
+.plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
+.plan { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.3rem; display: grid; gap: 0.8rem; align-content: start; }
+.plan.featured { border: 2px solid var(--accent); }
+.plan .price { font: 800 2rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.plan .price small { font: 500 0.9rem var(--body); color: var(--muted); }
+.plan ul { margin: 0; padding-left: 1.1rem; font-size: 0.92rem; display: grid; gap: 0.3rem; }
+
+form.news { display: flex; gap: 0.6rem; flex-wrap: wrap; max-width: 34rem; }
+form.news input { flex: 1 1 14rem; min-width: 0; font: 400 1rem var(--body); padding: 0.85rem 1rem; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink); }
+footer { border-top: 1px solid var(--line); padding-block: 2rem 3rem; font-size: 0.85rem; color: var(--muted); }
+footer .wrap { display: grid; gap: 0.5rem; }
+
+@media (max-width: 30rem) {
+  .report-head { grid-template-columns: 1fr; }
+  .stamp { width: 6rem; height: 6rem; } .stamp b { font-size: 2.7rem; }
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#check"><span class="brand-mark" aria-hidden="true">✓</span>SafeToClone</a>
+  <nav aria-label="Main">
+    <a href="#directory">Directory</a>
+    <a href="#method">How we score</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#newsletter">Newsletter</a>
+  </nav>
+</div></header>
+
+<main>
+  <div class="wrap hero" id="check">
+    <h1>Check a GitHub repo before you download it.</h1>
+    <p class="lede">Paste a link. In a few seconds you get a grade from A to F and a plain-English list of warning signs, including tricks that target your AI assistant.</p>
+    <form class="check" id="checkForm">
+      <label class="label" for="repoInput" style="flex-basis:100%">GitHub link</label>
+      <input id="repoInput" name="repo" placeholder="github.com/owner/repo" autocomplete="off" spellcheck="false" required>
+      <button id="checkBtn" type="submit">Check safety</button>
+    </form>
+    <div class="tries"><span class="muted">Try:</span>
+      <button type="button" data-try="ollama/ollama">ollama/ollama</button>
+      <button type="button" data-try="comfyanonymous/ComfyUI">ComfyUI</button>
+      <button type="button" data-try="modelcontextprotocol/servers">MCP servers</button>
+    </div>
+    <div id="out" aria-live="polite"></div>
+  </div>
+
+  <section id="directory"><div class="wrap">
+    <div class="section-intro">
+      <span class="label">Directory</span>
+      <h2>AI tools people keep telling you to install</h2>
+      <p class="muted" id="dirNote">Re-checked every night.</p>
+    </div>
+    <div class="filters" role="group" aria-label="Filter by grade">
+      <button type="button" aria-pressed="true" data-g="all">All</button>
+      <button type="button" aria-pressed="false" data-g="AB">Safe-looking (A–B)</button>
+      <button type="button" aria-pressed="false" data-g="C">Careful (C)</button>
+      <button type="button" aria-pressed="false" data-g="DF">Risky (D–F)</button>
+    </div>
+    <div class="dir" id="dir"></div>
+  </div></section>
+
+  <section id="method"><div class="wrap">
+    <div class="section-intro">
+      <span class="label">How we score</span>
+      <h2>100 points, four questions</h2>
+      <p class="muted">We only read public information from GitHub. We never run the code. Some warning signs are so serious they cap the score no matter how popular the repo is.</p>
+    </div>
+    <div class="method">
+      <div><span class="big">30</span><h3>Do people trust it?</h3><ul><li>How many people starred and copied it</li><li>How long the owner has been on GitHub</li></ul></div>
+      <div><span class="big">25</span><h3>Is anyone looking after it?</h3><ul><li>When it was last updated</li><li>How old it is</li><li>Whether it ships proper releases</li></ul></div>
+      <div><span class="big">15</span><h3>Is it open about itself?</h3><ul><li>A license</li><li>Real instructions</li><li>A way to report security problems</li></ul></div>
+      <div><span class="big">30</span><h3>Any malware tricks?</h3><ul><li>"Turn off your antivirus"</li><li>Password-protected zips, cracks, free premium</li><li>Fake stars, brand-new accounts</li><li>AI instruction files that try to hijack your assistant</li></ul></div>
+    </div>
+    <p class="note">A score is a set of warning signs, not a guarantee. A clever attacker can pass every check. When in doubt, don't install it on a work computer, and ask your IT team.</p>
+  </div></section>
+
+  <section id="pricing"><div class="wrap">
+    <div class="section-intro">
+      <span class="label">Pricing</span>
+      <h2>Free for one-off checks</h2>
+    </div>
+    <div class="plans">
+      <div class="plan"><h3>Free</h3><p class="price">$0</p><ul><li>Unlimited checks in your browser</li><li>The full directory</li><li>Weekly newsletter</li></ul></div>
+      <div class="plan featured"><h3>Pro</h3><p class="price">$7 <small>/ month</small></p><ul><li>Watchlist: email me if a repo I use turns risky</li><li>Deep check of every file, not just the front page</li><li>Shareable PDF report for your IT team</li></ul><a class="btn" href="#newsletter">Join the waitlist</a></div>
+      <div class="plan"><h3>Team</h3><p class="price">$49 <small>/ month</small></p><ul><li>Approved-tools list for your whole office</li><li>Slack or Teams alerts</li><li>Up to 25 people</li></ul><a class="btn ghost" href="#newsletter">Join the waitlist</a></div>
+    </div>
+  </div></section>
+
+  <section id="newsletter"><div class="wrap">
+    <div class="section-intro">
+      <span class="label">Newsletter</span>
+      <h2>One email a week: the AI tools worth installing, and the ones to avoid</h2>
+      <p class="muted">Written for people who don't code. No spam, unsubscribe in one click.</p>
+    </div>
+    <form class="news" id="newsForm">
+      <label class="label" for="newsEmail" style="flex-basis:100%">Email</label>
+      <input id="newsEmail" type="email" placeholder="you@example.com" required>
+      <button type="submit">Subscribe</button>
+    </form>
+    <p id="newsMsg" class="note" aria-live="polite"></p>
+  </div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>SafeToClone reads public GitHub data and gives an opinion. It is not antivirus software and can be wrong.</p>
+  <p>Not affiliated with GitHub.</p>
+</div></footer>
+
+<script type="module">
+import { checkRepo, score } from "./score.js";
+
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function renderReport(r, { example = false } = {}) {
+  const groups = {};
+  for (const c of r.checks) (groups[c.group] ||= []).push(c);
+  const groupHTML = Object.entries(groups).map(([g, list]) => {
+    const got = list.reduce((s, c) => s + c.points, 0), max = list.reduce((s, c) => s + c.max, 0);
+    return `<div class="group"><header><h3>${esc(g)}</h3><span class="pts">${got}/${max}</span></header>
+      ${list.map((c) => `<div class="row"><span class="dot ${c.level}"></span><span><strong>${esc(c.label)}.</strong> ${esc(c.note)}</span></div>`).join("")}</div>`;
+  }).join("");
+  const flagHTML = r.flags.length ? `<div class="flags"><span class="label">Warning signs</span>${r.flags.map((f) =>
+    `<div class="flag ${f.severity}"><strong>${esc(f.label)}</strong><span>${esc(f.note)}</span></div>`).join("")}</div>` : "";
+  const ai = r.aiFilesFound.length ? `<p class="note">AI instruction files we read: ${r.aiFilesFound.map(esc).join(", ")}.</p>` : "";
+  const cap = r.capped ? `<p class="note">Score capped at ${r.capped} because of a serious warning sign.</p>` : "";
+  $("#out").innerHTML = `<article class="report">
+    <div class="report-head">
+      <div class="stamp g-${r.grade}" role="img" aria-label="Grade ${r.grade}, ${r.score} out of 100"><div><b>${r.grade}</b><span>${r.score}/100</span></div></div>
+      <div class="meta">
+        ${example ? `<span class="example-tag">Example report, made-up repo</span>` : ""}
+        ${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : `<span style="font-family:var(--mono)">${esc(r.name)}</span>`}
+        <p class="verdict">${esc(r.verdict)}</p>
+        ${r.description ? `<p class="muted">${esc(r.description)}</p>` : ""}
+      </div>
+    </div>
+    ${flagHTML}
+    <div class="groups">${groupHTML}</div>
+    ${cap}${ai}
+  </article>`;
+}
+
+// What visitors see before they check anything: a made-up malware repo, scored by the real engine.
+const ago = (d) => new Date(Date.now() - d * 864e5).toISOString();
+renderReport(score({
+  repo: { full_name: "example/free-gpt-pro-unlocked", html_url: "", stargazers_count: 1400, forks_count: 3, created_at: ago(9), pushed_at: ago(1), archived: false, license: null, description: "Unlock ChatGPT Plus for free. Free premium unlocked." },
+  user: { type: "User", created_at: ago(12) },
+  files: [{ name: "Setup.exe", type: "file" }, { name: "README.md", type: "file" }],
+  releases: [], readme: "Download Setup.zip, the zip password is 1234. Disable Windows Defender before running.", pkg: "", aiFiles: {},
+}), { example: true });
+
+$("#checkForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const btn = $("#checkBtn"), val = $("#repoInput").value;
+  btn.disabled = true; btn.textContent = "Checking…";
+  try {
+    renderReport(await checkRepo(val));
+  } catch (err) {
+    const msg = err instanceof TypeError
+      ? "We couldn't reach GitHub from here. If you're on a work network, it may block this. Try again on another connection."
+      : err.message;
+    $("#out").innerHTML = `<p class="error">${esc(msg)}</p>`;
+  } finally { btn.disabled = false; btn.textContent = "Check safety"; }
+});
+document.querySelectorAll("[data-try]").forEach((b) => b.addEventListener("click", () => {
+  $("#repoInput").value = b.dataset.try; $("#checkForm").requestSubmit();
+}));
+
+// Directory
+let dirData = [];
+function renderDir(filter = "all") {
+  const list = dirData.filter((x) => filter === "all" || filter.includes(x.grade));
+  $("#dir").innerHTML = list.map((x) => `<article>
+    <span class="name">${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.name)}</a>` : esc(x.name)}</span>
+    <span class="grade g-${x.grade}">${x.grade}<small>${x.score}</small></span>
+    <span class="desc">${esc(x.description)}</span>
+    ${x.flags.length ? `<div class="tags">${x.flags.map((f) => `<span>${esc(f)}</span>`).join("")}</div>` : ""}
+  </article>`).join("") || `<p class="muted">No repos in this group yet.</p>`;
+}
+document.querySelectorAll(".filters button").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll(".filters button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  renderDir(b.dataset.g);
+}));
+fetch("./data/directory.json").then((r) => r.json()).then((d) => {
+  dirData = d.repos;
+  $("#dirNote").textContent = d.example
+    ? "These are made-up examples. Real scores appear after the first nightly update."
+    : `Re-checked every night. Last update ${new Date(d.updatedAt).toLocaleDateString("en-CA", { dateStyle: "medium" })}.`;
+  renderDir();
+}).catch(() => { $("#dirNote").textContent = "The directory couldn't load right now."; });
+
+// Newsletter
+$("#newsForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const msg = $("#newsMsg");
+  try {
+    const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: $("#newsEmail").value }) });
+    const j = await r.json().catch(() => ({}));
+    msg.textContent = r.ok ? "You're on the list. Check your inbox on Sunday." : (j.error || "Signup isn't open yet. Check back soon.");
+  } catch { msg.textContent = "Signup isn't open yet. Check back soon."; }
+});
+</script>
+</body>
+</html>
