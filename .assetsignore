@@ -12,3 +12,4 @@ wrangler.jsonc
 package.json
 repos.txt
 README.md
+.wrangler
