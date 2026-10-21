@@ -14,18 +14,14 @@ A website that gives non-technical people a safety grade (A to F) for any GitHub
 | `.github/workflows/nightly.yml` | Runs the script every night on GitHub for free |
 | `worker.js` + `wrangler.jsonc` | Runs the site on Cloudflare and handles newsletter signups through Resend |
 | `.assetsignore` | Files Cloudflare should not publish |
+| `CLAUDE.md` | Guide for AI helpers: what each file does and what a change affects |
 | `test/score.test.mjs` | Checks the scoring still works: `node test/score.test.mjs` |
 
 ## How the score works
 
-100 points across four questions. Serious warning signs cap the score no matter how popular the repo is.
+100 points across four questions: reputation, upkeep, transparency and red flags. Serious warning signs cap the score no matter how popular the repo is. Each result gets a grade (A to F) and a label (Trusted, Probably fine, Be careful, Unproven or Dangerous).
 
-- **Reputation (30):** stars, forks, how old the owner's account is
-- **Upkeep (25):** last update, repo age, official releases
-- **Transparency (15):** license, README, security policy
-- **Red flags (30, points taken away):** "disable your antivirus" (caps at 15), AI-hijacking instructions (caps at 20), scam words like crack/free premium (caps at 35), password-protected zips (caps at 30), fake-looking star growth (caps at 50), brand-new owner accounts, programs sitting in the code, hidden encoded text, install scripts, pipe-to-shell installs
-
-Grades: A 85+, B 70+, C 55+, D 40+, F below 40. Each result also gets a label: Trusted (A), Probably fine (B), Be careful (C), Unproven (D or F with no serious red flags) or Dangerous (any serious red flag, or red-flag points at 15 or below).
+The exact points, caps and grade cut-offs live in one place only: `score.js`. Read it there so this page never goes out of date.
 
 **Limits:** it only reads the README, the top folder, releases and AI instruction files. It never runs code. It is a warning-sign checker, not antivirus. Visitors' browsers call GitHub directly, so each visitor gets about 12 checks an hour before GitHub's free limit kicks in.
 
