@@ -16,14 +16,17 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 |---|---|
 | `index.html` | The whole website (checker, directory, "How we score", pricing, newsletter form) |
 | `score.js` | Scoring engine. **The only source of truth for points, caps, grades and labels** |
-| `worker.js` | Cloudflare Worker: `/api/subscribe` (Resend) and old-address redirects |
+| `worker.js` | Cloudflare Worker: `/api/subscribe` (Resend), `/mcp` (read-only connector Meta Muse uses to fetch Instagram posts) and old-address redirects |
+| `data/instagram-posts.json` | Instagram post queue (date, image, caption). Muse posts from it via `/mcp`. Hand-edited, unlike `directory.json` |
+| `instagram/` | Post images, public at safetoclone.com/instagram/... (Instagram needs a public image URL) |
+| `scripts/make-instagram-images.py` | Makes the post images: `python3 scripts/make-instagram-images.py` |
 | `wrangler.jsonc` | Cloudflare settings (what to publish, `previews` for PR test sites) |
 | `repos.txt` | List of repos in the directory, one per line |
 | `scripts/build-directory.mjs` | Scores every repo in `repos.txt` and writes `data/directory.json` |
 | `data/directory.json` | Generated every night. **Never edit by hand** |
 | `.github/workflows/nightly.yml` | Runs the build script at 07:00 UTC and commits the result |
 | `.github/workflows/test.yml` | Runs the tests on every push and PR |
-| `test/score.test.mjs` | Tests: `node test/score.test.mjs` |
+| `test/score.test.mjs`, `test/mcp.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs` |
 | `robots.txt`, `sitemap.xml` | For search engines |
 | `README.md` | For humans: what this is and how to deploy |
 
@@ -36,6 +39,8 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `/api/subscribe` in `worker.js` | The newsletter form's `fetch("/api/subscribe")` in `index.html` |
 | Domain or address | `worker.js` redirects, `index.html` canonical link and footer, `robots.txt`, `sitemap.xml`, `README.md` |
 | `repos.txt` | Nothing until the next nightly run (or run the workflow by hand) |
+| `data/instagram-posts.json` | What Muse posts next. Add the image first (edit `CARDS` in the image script, run it), keep dates `YYYY-MM-DD` (Ottawa time), captions under 2200 characters, run `node test/mcp.test.mjs` |
+| `/mcp` tool names in `worker.js` | Emile's Muse recurring task calls `get_next_post` by name. Renaming it breaks posting |
 
 ## Ground rules
 

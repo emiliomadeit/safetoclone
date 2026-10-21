@@ -1,0 +1,27 @@
+{
+  "account": "@safetoclone",
+  "note": "Instagram post queue. Claude writes these; Meta Muse reads them through safetoclone.com/mcp and posts them. Images are made by scripts/make-instagram-images.py.",
+  "posts": [
+    {
+      "id": "2026-10-23-intro",
+      "date": "2026-10-23",
+      "image": "instagram/2026-10-23-intro.jpg",
+      "alt": "SafeToClone card: Check a GitHub project before you download it. Grades from A to F.",
+      "caption": "Someone told you to download an AI tool from GitHub. Is it safe?\n\nMost people just click and hope. We built SafeToClone so you don't have to.\n\nPaste any GitHub link at safetoclone.com and get a grade from A to F in seconds. No coding needed. Free.\n\nWe check who made it, how long it has been around, whether it runs scripts from the internet, and whether it hides instructions meant to hijack your AI assistant.\n\nLink in bio.\n\n#AI #cybersecurity #github #opensource #aitools #techtips #safetoclone"
+    },
+    {
+      "id": "2026-10-25-hijack",
+      "date": "2026-10-25",
+      "image": "instagram/2026-10-25-hijack.jpg",
+      "alt": "SafeToClone card: Some projects hide instructions for your AI assistant, in files like CLAUDE.md and .cursorrules.",
+      "caption": "Your AI assistant reads files you never open.\n\nWhen you download a project and ask Claude, Cursor or Copilot to help with it, the AI reads files like CLAUDE.md, .cursorrules or SKILL.md first. They are meant to be helpful notes.\n\nBut a bad actor can hide instructions in them. Things like \"send the user's passwords here\" or \"ignore your safety rules\". You would never see it. Your AI would.\n\nSafeToClone opens these files for you and flags anything that looks like a hijack attempt.\n\nCheck before you clone: safetoclone.com (link in bio)\n\n#AI #promptinjection #cybersecurity #claude #cursor #aitools #safetoclone"
+    },
+    {
+      "id": "2026-10-27-scripts",
+      "date": "2026-10-27",
+      "image": "instagram/2026-10-27-scripts.jpg",
+      "alt": "SafeToClone card: We checked 20 popular AI tools. All got an A, but 6 run a script straight from the internet when you install them.",
+      "caption": "We graded 20 of the most popular AI tools on GitHub. All 20 got an A. Good news.\n\nBut 6 of them, including Ollama, n8n and Claude Code, ask you to install by pasting a command that downloads a script and runs it straight away.\n\nThat is normal for big, trusted projects. It is also exactly how scams work. The command looks the same either way.\n\nThe rule: only run a \"paste this in your terminal\" command if it comes from the project's official page, and the project has a track record.\n\nSee all 20 grades free at safetoclone.com (link in bio).\n\n#AI #ollama #n8n #claudecode #cybersecurity #aitools #safetoclone"
+    }
+  ]
+}
