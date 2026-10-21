@@ -9,6 +9,8 @@
   },
   // Posts today's Instagram post every day at 14:00 UTC (10am Ottawa in summer, 9am in winter).
   "triggers": { "crons": ["0 14 * * *"] },
+  // Storage where instagram.js keeps the renewed Instagram token (KV namespace "safetoclone-instagram").
+  "kv_namespaces": [{ "binding": "INSTAGRAM", "id": "c6dcee47a48741efbf4530730b19f4ed" }],
   // Lets Cloudflare build a test copy of the site for every pull request.
   "previews": {}
 }
