@@ -17,6 +17,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `index.html` | The whole website (checker, directory, "How we score", pricing, newsletter form) |
 | `score.js` | Scoring engine. **The only source of truth for points, caps, grades and labels** |
 | `worker.js` | Cloudflare Worker: link previews for shared results (`/?repo=owner/name`), `/api/subscribe` (Resend), `/mcp` (read-only connector Meta Muse uses to fetch Instagram posts) and old-address redirects |
+| `seo.js` | Pages for Google, built by `worker.js` from `data/directory.json`: one page per graded repo (`/repo/owner/name`), the list `/repos`, and `/sitemap.xml` |
 | `share-card.js` | Draws the "Download image" PNG of a result in the visitor's browser |
 | `share/` | Link-preview pictures (one per grade and label, plus `default.png`). Made by `python3 scripts/make-share-images.py` |
 | `instagram.js` | Posts the day's Instagram post through Meta's official API, once a day (cron in `wrangler.jsonc`). Token: `INSTAGRAM_TOKEN` Secret, renewed copy kept in the `INSTAGRAM` KV store. Check it at safetoclone.com/api/instagram/status |
@@ -29,8 +30,8 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `data/directory.json` | Generated every night. **Never edit by hand** |
 | `.github/workflows/nightly.yml` | Runs the build script at 07:00 UTC and commits the result |
 | `.github/workflows/test.yml` | Runs the tests on every push and PR |
-| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs && node test/share.test.mjs` |
-| `robots.txt`, `sitemap.xml` | For search engines |
+| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs && node test/share.test.mjs && node test/seo.test.mjs` |
+| `robots.txt` | For search engines. The sitemap is made by `seo.js` (no `sitemap.xml` file) |
 | `README.md` | For humans: what this is and how to deploy |
 
 ## If you change X, check Y
@@ -38,12 +39,13 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | You change | Also affected |
 |---|---|
 | `score.js` | The website checker, the nightly directory, the tests. Run the tests. If you change point weights or labels, update the "How we score" section and the directory filter buttons in `index.html` |
-| `score.js` result fields | `scripts/build-directory.mjs` (copies chosen fields) and the directory code in `index.html` |
+| `score.js` result fields | `scripts/build-directory.mjs` (copies chosen fields), the directory code in `index.html`, and the repo pages in `seo.js` |
+| `seo.js` or the `/repo/`, `/repos`, `/sitemap.xml` routes | `run_worker_first` in `wrangler.jsonc`, the directory links in `index.html`. Run `node test/seo.test.mjs` |
 | `score.js` grades or labels | The share pictures: `SHARE_IMAGES` in `worker.js`, the list in `scripts/make-share-images.py` (rerun it), colours in `share-card.js` |
 | `/?repo=` share links | `wireShare` and the `?repo=` auto-check in `index.html`, `homePage` in `worker.js`, `run_worker_first` in `wrangler.jsonc`. Run `node test/share.test.mjs` |
 | `/api/subscribe` in `worker.js` | The newsletter form's `fetch("/api/subscribe")` in `index.html` |
-| Domain or address | `worker.js` redirects, `index.html` canonical link and footer, `robots.txt`, `sitemap.xml`, `README.md` |
-| `repos.txt` | Nothing until the next nightly run (or run the workflow by hand) |
+| Domain or address | `worker.js` redirects, `SITE` in `seo.js`, `index.html` canonical link and footer, `robots.txt`, `README.md` |
+| `repos.txt` | Nothing until the next nightly run (or run the workflow by hand). Then each new repo gets its own Google page and sitemap entry |
 | `data/instagram-posts.json` | What gets posted next (real posts, public, no undo). Add the image first (edit `CARDS` in the image script, run it), keep dates `YYYY-MM-DD` (Ottawa time), captions under 2200 characters, run `node test/mcp.test.mjs` |
 | `/mcp` tool names in `worker.js` | Any agent connected to it (e.g. Meta Muse) calls them by name |
 | `instagram.js` or the cron in `wrangler.jsonc` | Real posts on @safetoclone. Run `node test/instagram.test.mjs`. Don't also let Muse post from the queue, or posts double up |

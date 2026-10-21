@@ -7,6 +7,7 @@
 // Optional:
 //   RESEND_SEGMENT_ID  (from resend.com > Audience > Segments) to also tag signups with a segment
 import { autopost, status as instagramStatus } from "./instagram.js";
+import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath } from "./seo.js";
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -188,6 +189,31 @@ async function homePage(request, env, url) {
   return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=300" } });
 }
 
+// ---- Pages for Google (built in seo.js from the nightly directory) ----
+// /repo/owner/name  one page per graded repo ("Is owner/name safe to download?")
+// /repos            the list of every graded repo
+// /sitemap.xml      the list of pages Google should read
+async function seoPage(env, url) {
+  const { pathname } = url;
+  const dir = await readJson(env, "/data/directory.json").catch(() => null);
+  const html = (body, status = 200) =>
+    new Response(body, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=3600" } });
+  if (pathname === "/sitemap.xml") {
+    return new Response(sitemap(dir), { headers: { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" } });
+  }
+  if (pathname === "/repos") return html(reposPage(dir));
+  if (pathname === "/repos/") return Response.redirect(`${SITE}/repos`, 301);
+  let rest = pathname.slice("/repo/".length);
+  try { rest = decodeURIComponent(rest); } catch { /* bad % code in the address: use it as typed */ }
+  const name = shareRepoName(rest);
+  if (!name) return html(missingPage("this repo"), 404);
+  const known = findRepo(dir, name);
+  if (!known) return html(missingPage(name), 404);
+  // One address per repo, so Google doesn't see copies: fix upper/lower case and trailing slashes.
+  if (pathname !== repoPath(known.name)) return Response.redirect(SITE + repoPath(known.name), 301);
+  return html(repoPage(known, dir));
+}
+
 // Old addresses that should send visitors to the main one.
 // Pull request previews use other workers.dev names, so they are left alone.
 const OLD_HOSTS = ["www.safetoclone.com", "safetoclone.emileantoun10.workers.dev"];
@@ -202,7 +228,9 @@ export default {
     if (pathname === "/api/subscribe") return subscribe(request, env);
     if (pathname === "/mcp") return mcp(request, env);
     if (pathname === "/api/instagram/status") return json(await instagramStatus(env));
-    if (pathname === "/" && (request.method === "GET" || request.method === "HEAD")) return homePage(request, env, url);
+    const read = request.method === "GET" || request.method === "HEAD";
+    if (pathname === "/" && read) return homePage(request, env, url);
+    if (read && (pathname === "/sitemap.xml" || pathname === "/repos" || pathname === "/repos/" || pathname.startsWith("/repo/"))) return seoPage(env, url);
     return env.ASSETS.fetch(request);
   },
   // Runs on the schedule in wrangler.jsonc: posts today's Instagram post, if there is one.
