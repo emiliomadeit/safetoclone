@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T21:23:15.025Z",
+  "updatedAt": "2026-10-21T12:41:41.680Z",
   "example": false,
   "repos": [
     {
@@ -12,7 +12,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:00.638Z"
+      "checkedAt": "2026-10-21T12:41:28.798Z"
     },
     {
       "name": "google-gemini/gemini-cli",
@@ -24,7 +24,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:05.518Z"
+      "checkedAt": "2026-10-21T12:41:32.849Z"
     },
     {
       "name": "Significant-Gravitas/AutoGPT",
@@ -36,7 +36,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:06.277Z"
+      "checkedAt": "2026-10-21T12:41:33.606Z"
     },
     {
       "name": "lobehub/lobehub",
@@ -48,7 +48,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:09.047Z"
+      "checkedAt": "2026-10-21T12:41:36.253Z"
     },
     {
       "name": "mudler/LocalAI",
@@ -60,7 +60,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:09.840Z"
+      "checkedAt": "2026-10-21T12:41:36.968Z"
     },
     {
       "name": "modelcontextprotocol/servers",
@@ -72,7 +72,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:12.169Z"
+      "checkedAt": "2026-10-21T12:41:39.031Z"
     },
     {
       "name": "microsoft/autogen",
@@ -84,7 +84,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:13.477Z"
+      "checkedAt": "2026-10-21T12:41:40.278Z"
     },
     {
       "name": "ollama/ollama",
@@ -98,7 +98,7 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T21:22:58.705Z"
+      "checkedAt": "2026-10-21T12:41:27.080Z"
     },
     {
       "name": "open-webui/open-webui",
@@ -110,7 +110,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:22:59.533Z"
+      "checkedAt": "2026-10-21T12:41:27.806Z"
     },
     {
       "name": "openai/codex",
@@ -124,7 +124,7 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T21:23:04.650Z"
+      "checkedAt": "2026-10-21T12:41:32.113Z"
     },
     {
       "name": "langchain-ai/langchain",
@@ -136,7 +136,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:06.986Z"
+      "checkedAt": "2026-10-21T12:41:34.317Z"
     },
     {
       "name": "ggml-org/llama.cpp",
@@ -150,7 +150,7 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T21:23:10.836Z"
+      "checkedAt": "2026-10-21T12:41:37.687Z"
     },
     {
       "name": "infiniflow/ragflow",
@@ -162,7 +162,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:15.025Z"
+      "checkedAt": "2026-10-21T12:41:41.680Z"
     },
     {
       "name": "crewAIInc/crewAI",
@@ -176,7 +176,7 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T21:23:14.198Z"
+      "checkedAt": "2026-10-21T12:41:40.991Z"
     },
     {
       "name": "n8n-io/n8n",
@@ -191,7 +191,7 @@
         "Runs a script straight from the internet",
         "Runs code during install"
       ],
-      "checkedAt": "2026-10-20T21:23:07.737Z"
+      "checkedAt": "2026-10-21T12:41:34.993Z"
     },
     {
       "name": "browser-use/browser-use",
@@ -203,7 +203,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:12.838Z"
+      "checkedAt": "2026-10-21T12:41:39.728Z"
     },
     {
       "name": "anthropics/claude-code",
@@ -217,7 +217,7 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-20T21:23:03.271Z"
+      "checkedAt": "2026-10-21T12:41:30.692Z"
     },
     {
       "name": "AUTOMATIC1111/stable-diffusion-webui",
@@ -229,7 +229,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:01.457Z"
+      "checkedAt": "2026-10-21T12:41:29.414Z"
     },
     {
       "name": "lllyasviel/Fooocus",
@@ -241,7 +241,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:02.037Z"
+      "checkedAt": "2026-10-21T12:41:29.910Z"
     },
     {
       "name": "nomic-ai/gpt4all",
@@ -253,7 +253,7 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-20T21:23:11.415Z"
+      "checkedAt": "2026-10-21T12:41:38.272Z"
     }
   ]
 }
