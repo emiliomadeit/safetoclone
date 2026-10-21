@@ -11,7 +11,13 @@
 <meta property="og:url" content="https://safetoclone.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SafeToClone">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://safetoclone.com/share/default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SafeToClone safety grade from A to F">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SafeToClone: is this GitHub repo safe to download?">
+<meta name="twitter:description" content="A safety score for GitHub repos, written for people who don't code.">
 <link rel="canonical" href="https://safetoclone.com/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,6 +112,8 @@ button[disabled] { opacity: 0.6; cursor: progress; }
 .dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-top: 0.45rem; }
 .dot.good { background: var(--good); } .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); }
 .row strong { font-weight: 600; }
+.share { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
+.share button { padding: 0.6rem 1rem; font-size: 0.92rem; }
 .flags { display: grid; gap: 0.6rem; }
 .flag { padding: 0.8rem 1rem; border-radius: 8px; display: grid; gap: 0.2rem; }
 .flag.high { background: var(--bad-bg); } .flag.high strong { color: var(--bad); }
@@ -247,6 +255,7 @@ footer .wrap { display: grid; gap: 0.5rem; }
 
 <script type="module">
 import { checkRepo, score } from "./score.js";
+import { shareCard } from "./share-card.js";
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -274,10 +283,40 @@ function renderReport(r, { example = false } = {}) {
         ${r.description ? `<p class="muted">${esc(r.description)}</p>` : ""}
       </div>
     </div>
+    ${example ? "" : `<div class="share" role="group" aria-label="Share this result">
+      <button type="button" class="btn ghost" id="copyLink">Copy link</button>
+      <button type="button" class="btn ghost" id="saveImage">Download image</button>
+      <span class="note" id="shareMsg" aria-live="polite"></span>
+    </div>`}
     ${flagHTML}
     <div class="groups">${groupHTML}</div>
     ${cap}${ai}
   </article>`;
+  if (!example) wireShare(r);
+}
+
+// Sharing: every checked repo has its own link, safetoclone.com/?repo=owner/name, which runs the check again when opened.
+const shareLink = (r) => `${location.origin}/?repo=${r.name}`;
+function wireShare(r) {
+  const link = shareLink(r);
+  history.replaceState(null, "", `/?repo=${r.name}`);
+  const say = (t) => { $("#shareMsg").textContent = t; };
+  $("#copyLink").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(link); say("Link copied. Paste it anywhere."); }
+    catch { window.prompt("Copy this link:", link); }
+  });
+  $("#saveImage").addEventListener("click", async (e) => {
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    try {
+      const url = URL.createObjectURL(await shareCard(r, link));
+      const a = Object.assign(document.createElement("a"), { href: url, download: `safetoclone-${r.name.replace("/", "-")}.png` });
+      document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+      say("Image saved to your downloads.");
+    } catch { say("Couldn't make the image in this browser. Try a screenshot instead."); }
+    finally { btn.disabled = false; }
+  });
 }
 
 // What visitors see before they check anything: a made-up malware repo, scored by the real engine.
@@ -288,6 +327,10 @@ renderReport(score({
   files: [{ name: "Setup.exe", type: "file" }, { name: "README.md", type: "file" }],
   releases: [], readme: "Download Setup.zip, the zip password is 1234. Disable Windows Defender before running.", pkg: "", aiFiles: {},
 }), { example: true });
+
+// Opened from a shared link (?repo=owner/name)? Run that check straight away.
+const sharedRepo = new URLSearchParams(location.search).get("repo");
+if (sharedRepo) setTimeout(() => { $("#repoInput").value = sharedRepo; $("#checkForm").requestSubmit(); });
 
 $("#checkForm").addEventListener("submit", async (e) => {
   e.preventDefault();

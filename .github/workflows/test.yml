@@ -11,3 +11,4 @@ jobs:
       - run: node test/score.test.mjs
       - run: node test/mcp.test.mjs
       - run: node test/instagram.test.mjs
+      - run: node test/share.test.mjs

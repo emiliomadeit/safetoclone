@@ -16,7 +16,9 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 |---|---|
 | `index.html` | The whole website (checker, directory, "How we score", pricing, newsletter form) |
 | `score.js` | Scoring engine. **The only source of truth for points, caps, grades and labels** |
-| `worker.js` | Cloudflare Worker: `/api/subscribe` (Resend), `/mcp` (read-only connector Meta Muse uses to fetch Instagram posts) and old-address redirects |
+| `worker.js` | Cloudflare Worker: link previews for shared results (`/?repo=owner/name`), `/api/subscribe` (Resend), `/mcp` (read-only connector Meta Muse uses to fetch Instagram posts) and old-address redirects |
+| `share-card.js` | Draws the "Download image" PNG of a result in the visitor's browser |
+| `share/` | Link-preview pictures (one per grade and label, plus `default.png`). Made by `python3 scripts/make-share-images.py` |
 | `instagram.js` | Posts the day's Instagram post through Meta's official API, once a day (cron in `wrangler.jsonc`). Token: `INSTAGRAM_TOKEN` Secret, renewed copy kept in the `INSTAGRAM` KV store. Check it at safetoclone.com/api/instagram/status |
 | `data/instagram-posts.json` | Instagram post queue (date, image, caption). The daily job posts from it; `/mcp` also serves it. Hand-edited, unlike `directory.json` |
 | `instagram/` | Post images, public at safetoclone.com/instagram/... (Instagram needs a public image URL) |
@@ -27,7 +29,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `data/directory.json` | Generated every night. **Never edit by hand** |
 | `.github/workflows/nightly.yml` | Runs the build script at 07:00 UTC and commits the result |
 | `.github/workflows/test.yml` | Runs the tests on every push and PR |
-| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs` |
+| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs && node test/share.test.mjs` |
 | `robots.txt`, `sitemap.xml` | For search engines |
 | `README.md` | For humans: what this is and how to deploy |
 
@@ -37,6 +39,8 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 |---|---|
 | `score.js` | The website checker, the nightly directory, the tests. Run the tests. If you change point weights or labels, update the "How we score" section and the directory filter buttons in `index.html` |
 | `score.js` result fields | `scripts/build-directory.mjs` (copies chosen fields) and the directory code in `index.html` |
+| `score.js` grades or labels | The share pictures: `SHARE_IMAGES` in `worker.js`, the list in `scripts/make-share-images.py` (rerun it), colours in `share-card.js` |
+| `/?repo=` share links | `wireShare` and the `?repo=` auto-check in `index.html`, `homePage` in `worker.js`, `run_worker_first` in `wrangler.jsonc`. Run `node test/share.test.mjs` |
 | `/api/subscribe` in `worker.js` | The newsletter form's `fetch("/api/subscribe")` in `index.html` |
 | Domain or address | `worker.js` redirects, `index.html` canonical link and footer, `robots.txt`, `sitemap.xml`, `README.md` |
 | `repos.txt` | Nothing until the next nightly run (or run the workflow by hand) |
