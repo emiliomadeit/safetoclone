@@ -214,8 +214,9 @@ footer .wrap { display: grid; gap: 0.5rem; }
       <div><span class="big">30</span><h3>Do people trust it?</h3><ul><li>How many people starred and copied it</li><li>How long the owner has been on GitHub</li></ul></div>
       <div><span class="big">25</span><h3>Is anyone looking after it?</h3><ul><li>When it was last updated</li><li>How old it is</li><li>Whether it ships proper releases</li></ul></div>
       <div><span class="big">15</span><h3>Is it open about itself?</h3><ul><li>A license</li><li>Real instructions</li><li>A way to report security problems</li></ul></div>
-      <div><span class="big">30</span><h3>Any malware tricks?</h3><ul><li>"Turn off your antivirus"</li><li>Password-protected zips, cracks, free premium</li><li>Fake stars, brand-new accounts</li><li>AI instruction files that try to hijack your assistant</li></ul></div>
+      <div><span class="big">30</span><h3>Any malware tricks?</h3><ul><li>"Turn off your antivirus"</li><li>Password-protected zips, cracks, free premium</li><li>Fake stars, brand-new accounts</li><li>We read the name, topics, README and release notes</li><li>AI instruction files that try to hijack your assistant</li></ul></div>
     </div>
+    <p class="note">A repo needs at least 50 stars to get an A or B. A license and a README take minutes to add, so they can't make an unknown repo look safe on their own.</p>
     <p class="note">A low grade comes with one of two labels. <strong>Dangerous</strong> means we found malware tricks. <strong>Unproven</strong> means nothing looks wrong, but the project is too new or little-known to trust yet.</p>
     <p class="note">A score is a set of warning signs, not a guarantee. A clever attacker can pass every check. When in doubt, don't install it on a work computer, and ask your IT team.</p>
   </div></section>
@@ -271,7 +272,7 @@ function renderReport(r, { example = false } = {}) {
   const flagHTML = r.flags.length ? `<div class="flags"><span class="label">Warning signs</span>${r.flags.map((f) =>
     `<div class="flag ${f.severity}"><strong>${esc(f.label)}</strong><span>${esc(f.note)}</span></div>`).join("")}</div>` : "";
   const ai = r.aiFilesFound.length ? `<p class="note">AI instruction files we read: ${r.aiFilesFound.map(esc).join(", ")}.</p>` : "";
-  const cap = r.capped ? `<p class="note">Score capped at ${r.capped} because of a serious warning sign.</p>` : "";
+  const cap = r.capped ? `<p class="note">Score capped at ${r.capped} because ${esc(r.capReason || "of a serious warning sign")}.</p>` : "";
   $("#out").innerHTML = `<article class="report">
     <div class="report-head">
       <div class="stamp lvl-${r.level}" role="img" aria-label="Grade ${r.grade}, ${r.score} out of 100, ${esc(r.label)}"><div><b>${r.grade}</b><span>${r.score}/100</span></div></div>

@@ -49,6 +49,39 @@ assert(["D", "F"].includes(newbie.grade) && newbie.level === "unproven", `newbie
 assert(bad.level === "dangerous" && inject.level === "dangerous", "malware must be dangerous");
 assert(good.level === "trusted");
 
+// Fairness checks (2026-10 audit). Each one was a real mistake the scorer used to make.
+const repoWith = (o = {}) => score({
+  repo: { full_name: "t/t", name: "t", html_url: "", stargazers_count: 5000, forks_count: 900, created_at: ago(1500), pushed_at: ago(5), archived: false, license: { spdx_id: "MIT" }, description: "", ...o.repo },
+  user: { type: "User", created_at: ago(2000), ...o.user }, files: [{ name: "SECURITY.md", type: "file" }],
+  releases: o.releases || [{ assets: [] }], readme: "Docs. ".repeat(400) + (o.readme || ""), pkg: "", aiFiles: {},
+});
+// Innocent words must not make a repo look like malware.
+for (const words of [" See our cheat sheet.", " Never share your seed phrase with anyone.",
+  "\nUnzip the release and set the admin password in config.", "\nA password is required to extract the backup.", " A password cracking tool."]) {
+  const r = repoWith({ readme: words });
+  assert(!r.flags.length && r.level === "trusted", `false alarm on "${words.trim()}": ${r.flags.map((f) => f.label)}`);
+}
+// Real scam wording still counts, including in the repo name and topics.
+assert(repoWith({ readme: " Download the cracked version here." }).level === "dangerous", "cracked version");
+assert(repoWith({ readme: " Undetected cheats, aimbot included." }).level === "dangerous", "cheats");
+assert(repoWith({ repo: { name: "roblox-executor-free" } }).level === "dangerous", "scam words in the name");
+assert(repoWith({ repo: { topics: ["free-robux"] } }).level === "dangerous", "scam words in topics");
+// Big companies get famous fast. That isn't fake stars.
+const launch = repoWith({ repo: { stargazers_count: 8000, created_at: ago(14) }, user: { type: "Organization", created_at: ago(4000) } });
+assert(!launch.flags.length && launch.grade === "A", `org launch got ${launch.grade}/${launch.level}`);
+// Fast fame from a young account is a warning (max C), not an automatic Dangerous.
+const fame = repoWith({ repo: { stargazers_count: 8000, created_at: ago(14) }, user: { created_at: ago(200) } });
+assert(fame.flags.length === 1 && fame.grade === "C" && fame.level === "careful", `young-account fame got ${fame.grade}/${fame.level}`);
+// No A or B without real users, however tidy the paperwork.
+const lonely = repoWith({ repo: { stargazers_count: 0, forks_count: 0, created_at: ago(10) } });
+assert(lonely.grade === "C" && lonely.capReason === "fewer than 50 people have starred it", `0-star repo got ${lonely.grade}`);
+// Password-protected downloads hidden in release notes are caught, whatever the star count.
+const locked = repoWith({ repo: { stargazers_count: 150 }, releases: [{ body: "Password: 1234", assets: [{ name: "Setup.zip" }] }] });
+assert(locked.level === "dangerous", "password in release notes");
+assert(repoWith({ releases: [{ body: "Unzip it. The archive password is infected", assets: [] }] }).level === "dangerous", "zip password in notes");
+// The website's built-in example must still come out Dangerous.
+assert(repoWith({ readme: "Download Setup.zip, the zip password is 1234." }).flags.some((f) => f.label === "Password-protected download"));
+
 // If GitHub's hourly limit hits after the first call, the check must stop, not score a repo with its files missing.
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (url) => /\/repos\/[^/]+\/[^/]+$/.test(url)
