@@ -6,13 +6,21 @@
 const API = "https://api.github.com";
 
 // Words that show up again and again in malware repos that pretend to be free tools.
+// Written so everyday phrases ("cheat sheet", "never share your seed phrase") don't count.
 const SCAM_WORDS = [
-  /\bcrack(ed)?\b/i, /\bkeygen\b/i, /\bfree\s+robux\b/i, /\bcheat\s*(engine|menu)?\b/i,
+  /\bcrack\s+(version|download|for|full)\b/i, /\bcracked\b(?!\s+(passwords?|hash(es)?))/i, /\bkeygen\b/i,
+  /\bfree\s+robux\b/i, /\b(roblox|script)\s+executor\b/i,
+  /\bcheat\s*(engine|menu|codes?)\b/i, /\b[Cc]heats?\s+(for|in)\s+[A-Z0-9]/, /\b(free|undetected|working)\s+cheats?\b/i, /\bmod\s+menu\b/i,
   /\bunlocked?\s+(premium|pro|full)\b/i, /\bfree\s+(premium|pro|full\s+version)\b/i,
-  /\bspoofer\b/i, /\baimbot\b/i, /\bwallet\s+drainer\b/i, /\bseed\s+phrase\b/i,
+  /\bspoofer\b/i, /\baimbot\b/i, /\bwallet\s+drainer\b/i,
 ];
 const DISABLE_AV = /(disable|turn\s+off|deactivate)\s+(your\s+)?(anti-?virus|windows\s+defender|defender|real-?time\s+protection|smartscreen)/i;
-const ZIP_PASSWORD = /\b(zip|rar|7z|archive|extract|unzip)\b[^\n]{0,80}\b(password|pwd)\b|\b(password|pwd)\b[^\n]{0,80}\b(zip|rar|7z|archive|extract|unzip)\b/i;
+// A password that is actually given out ("password: 1234", "the password is abc"), not just the word "password".
+const PASSWORD_GIVEN = /\b(password|pwd|pass)\s*(is|:|=)\s*(?!(required|optional|needed|not|the|your|a|an|set|stored|saved|hashed|empty|blank)\b)["'`*]*[^\s"'`*]{2,}/i;
+const ARCHIVE_WORD = /\b(zip|rar|7z|archive|extract|unzip)\b/i;
+const ARCHIVE_FILE = /\.(zip|rar|7z)$/i;
+// True when a line mentions an archive and also hands out a password.
+const zipPassword = (text) => text.split("\n").some((line) => ARCHIVE_WORD.test(line) && PASSWORD_GIVEN.test(line));
 const PIPE_TO_SHELL = /(curl|wget)[^\n|]*\|\s*(sudo\s+)?(ba|z)?sh\b|iwr[^\n|]*\|\s*iex|Invoke-Expression|irm[^\n|]*\|\s*iex|sh\s+-c\s+"\$\((curl|wget)/i;
 const LONG_BASE64 = /[A-Za-z0-9+/]{400,}={0,2}/;
 
@@ -133,15 +141,22 @@ export function score(data) {
   // 4. Red flags (30, deductions). Some are "hard" flags that cap the final score.
   let flagPts = 30;
   let cap = 100;
+  let capReason = null;
+  const softCap = (why, n) => { if (n < cap) { cap = n; capReason = why; } };
   const flags = [];
   const flag = (label, minus, note, hardCap) => {
     flagPts -= minus; flags.push({ label, note, severity: hardCap ? "high" : minus >= 8 ? "medium" : "low" });
-    if (hardCap) cap = Math.min(cap, hardCap);
+    if (hardCap) softCap("flag", hardCap);
   };
-  const text = readme + "\n" + (r.description || "");
-  if (SCAM_WORDS.some((re) => re.test(text))) flag("Scam-style wording", 15, "Mentions cracks, cheats, free premium, or crypto seed phrases. Most malware on GitHub looks like this.", 35);
+  // Everything the owner wrote about the repo: name, description, topics, README and release notes.
+  const releaseNotes = releases.map((x) => x.body || "").join("\n");
+  const about = [r.name, r.description, ...(r.topics || [])].filter(Boolean).join(" ").replace(/[-_.]+/g, " ");
+  const text = about + "\n" + readme + "\n" + releaseNotes;
+  if (SCAM_WORDS.some((re) => re.test(text))) flag("Scam-style wording", 15, "Mentions cracks, cheats, keygens or free premium. Most malware on GitHub looks like this.", 35);
   if (DISABLE_AV.test(text)) flag("Asks you to turn off antivirus", 30, "Real software never needs this. This is the #1 sign of malware.", 15);
-  if (ZIP_PASSWORD.test(text)) flag("Password-protected download", 15, "Passwords on zip files stop antivirus from looking inside.", 30);
+  // A password in the notes of a release that offers an archive counts too, even if the notes never say "zip".
+  const lockedRelease = releases.some((x) => (x.assets || []).some((a) => ARCHIVE_FILE.test(a.name || "")) && PASSWORD_GIVEN.test(x.body || ""));
+  if (zipPassword(text) || lockedRelease) flag("Password-protected download", 15, "Passwords on zip files stop antivirus from looking inside.", 30);
   const riskyRoot = files.filter((f) => f.type === "file" && RISKY_FILE.test(f.name)).map((f) => f.name);
   const riskyAssets = releases.flatMap((x) => (x.assets || []).map((a) => a.name)).filter((n) => RISKY_FILE.test(n));
   if (riskyRoot.length) flag("Programs sitting in the code", 10, `Ready-to-run files in the main folder: ${riskyRoot.slice(0, 3).join(", ")}. Source code projects rarely do this.`, stars < 100 ? 40 : null);
@@ -149,7 +164,13 @@ export function score(data) {
   if (PIPE_TO_SHELL.test(readme)) flag("Runs a script straight from the internet", 3, "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.");
   const readmeNoImages = readme.replace(/data:image\/[a-z+]+;base64,[A-Za-z0-9+/=]+/gi, "");
   if (LONG_BASE64.test(readmeNoImages)) flag("Hidden encoded text", 10, "The README contains a long scrambled block of text. That can hide commands.");
-  if (age < 30 && stars > 500) flag("Suspiciously fast fame", 12, `${stars} stars in ${Math.round(age)} days. Fake stars are bought to make malware look popular.`, 50);
+  // Big companies launch repos that get famous in days, so only accounts with no long history are suspect.
+  // It's a warning, not proof: it keeps the grade at C or below but doesn't mark the repo Dangerous by itself.
+  const establishedOwner = user && (user.type === "Organization" || ownerAge > 730);
+  if (age < 30 && stars > 500 && !establishedOwner) {
+    flag("Suspiciously fast fame", 12, `${stars} stars in ${Math.round(age)} days from a young account. Fake stars are bought to make malware look popular.`);
+    softCap("fame", 69);
+  }
   if (user && ownerAge < 30) flag("Brand-new owner account", 8, "The account behind it is less than a month old.");
   try {
     const scripts = pkg ? JSON.parse(pkg).scripts || {} : {};
@@ -165,6 +186,9 @@ export function score(data) {
   flagPts = Math.max(0, flagPts);
   add("Red flags", flags.length ? `${flags.length} warning sign${flags.length > 1 ? "s" : ""}` : "No warning signs found", flagPts, 30,
     flagPts >= 25 ? "good" : flagPts >= 15 ? "warn" : "bad", flags.length ? "See the list below." : "We didn't find any of the common malware tricks.");
+
+  // Paperwork (license, README, security file) takes minutes to add. Without real users, the best grade is C.
+  if (stars < 50) softCap("users", 69);
 
   const raw = checks.reduce((s, c) => s + c.points, 0);
   const total = Math.max(0, Math.min(cap, raw));
@@ -192,6 +216,7 @@ export function score(data) {
     label,
     verdict,
     capped: cap < raw ? cap : null,
+    capReason: cap < raw ? { flag: "a serious warning sign", fame: "it got famous suspiciously fast", users: "fewer than 50 people have starred it" }[capReason] : null,
     checks,
     flags,
     aiFilesFound: aiNames,
