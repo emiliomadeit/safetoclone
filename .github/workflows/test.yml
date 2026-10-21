@@ -9,3 +9,5 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: node test/score.test.mjs
+      - run: node test/mcp.test.mjs
+      - run: node test/instagram.test.mjs
