@@ -14,7 +14,6 @@ A website that gives non-technical people a safety grade (A to F) for any GitHub
 | `.github/workflows/nightly.yml` | Runs the script every night on GitHub for free |
 | `worker.js` + `wrangler.jsonc` | Runs the site on Cloudflare and handles newsletter signups through Resend |
 | `.assetsignore` | Files Cloudflare should not publish |
-| `api/subscribe.js` | Same thing, for Vercel instead |
 | `test/score.test.mjs` | Checks the scoring still works: `node test/score.test.mjs` |
 
 ## How the score works
@@ -43,10 +42,9 @@ Live at **https://safetoclone.com**. Contact: hello@safetoclone.com (Cloudflare 
 
 1. Sign up at dash.cloudflare.com.
 2. Workers & Pages → Create → Import a repository → pick this repo → Deploy. Cloudflare reads `wrangler.jsonc`, so no settings are needed.
-3. For the newsletter, add `RESEND_API_KEY` and `RESEND_AUDIENCE_ID` under the Worker's Settings → Variables and Secrets.
+3. For the newsletter, add `RESEND_API_KEY` (type Secret, a Full access key from resend.com → API keys) under the Worker's Settings → Variables and Secrets. Signups appear in Resend → Audience → Contacts. Optionally add `RESEND_SEGMENT_ID` to put signups in a segment.
 
 `www.safetoclone.com` and the old `workers.dev` address redirect to `safetoclone.com` (see `worker.js`).
 
 Every change to `main`, including the nightly score update, redeploys the site by itself.
 
-Vercel works too (`api/subscribe.js`), but its free plan doesn't allow commercial use.

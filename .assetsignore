@@ -6,7 +6,6 @@
 node_modules
 test
 scripts
-api
 worker.js
 wrangler.jsonc
 package.json
