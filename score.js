@@ -69,10 +69,12 @@ async function getText(url) {
 export async function collect(owner, repo, { token } = {}) {
   const r = await getJSON(`${API}/repos/${owner}/${repo}`, token);
   if (!r) { const e = new Error("That repo doesn't exist or is private."); e.code = "NOT_FOUND"; throw e; }
+  // If GitHub's hourly limit hits halfway, stop. Scoring with missing files could make a bad repo look clean.
+  const orEmpty = (empty) => (e) => { if (e.code === "RATE_LIMIT") throw e; return empty; };
   const [user, contents, releases] = await Promise.all([
-    getJSON(`${API}/users/${r.owner.login}`, token).catch(() => null),
-    getJSON(`${API}/repos/${owner}/${repo}/contents/`, token).catch(() => []),
-    getJSON(`${API}/repos/${owner}/${repo}/releases?per_page=5`, token).catch(() => []),
+    getJSON(`${API}/users/${r.owner.login}`, token).catch(orEmpty(null)),
+    getJSON(`${API}/repos/${owner}/${repo}/contents/`, token).catch(orEmpty([])),
+    getJSON(`${API}/repos/${owner}/${repo}/releases?per_page=5`, token).catch(orEmpty([])),
   ]);
   const files = Array.isArray(contents) ? contents : [];
   const byName = (n) => files.find((f) => f.name.toLowerCase() === n.toLowerCase());

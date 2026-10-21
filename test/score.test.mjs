@@ -1,5 +1,5 @@
 // Run with: node test/score.test.mjs
-import { score, parseRepo } from "../score.js";
+import { score, parseRepo, collect } from "../score.js";
 import assert from "node:assert";
 const ago = (d) => new Date(Date.now() - d * 864e5).toISOString();
 
@@ -48,4 +48,12 @@ const newbie = score({
 assert(["D", "F"].includes(newbie.grade) && newbie.level === "unproven", `newbie got ${newbie.grade}/${newbie.level}`);
 assert(bad.level === "dangerous" && inject.level === "dangerous", "malware must be dangerous");
 assert(good.level === "trusted");
+
+// If GitHub's hourly limit hits after the first call, the check must stop, not score a repo with its files missing.
+const realFetch = globalThis.fetch;
+globalThis.fetch = async (url) => /\/repos\/[^/]+\/[^/]+$/.test(url)
+  ? new Response(JSON.stringify({ owner: { login: "x" } }), { status: 200 })
+  : new Response("{}", { status: 403 });
+await assert.rejects(collect("x", "y"), (e) => e.code === "RATE_LIMIT", "rate limit halfway must stop the check");
+globalThis.fetch = realFetch;
 console.log("all tests passed");
