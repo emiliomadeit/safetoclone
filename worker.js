@@ -1,4 +1,5 @@
-// Cloudflare Worker: serves the website files, handles the newsletter signup,
+// Cloudflare Worker: serves the website files, fills in link previews for shared results (/?repo=owner/name),
+// handles the newsletter signup,
 // posts to Instagram once a day (instagram.js, status at /api/instagram/status),
 // and runs /mcp, a read-only connector any AI agent (like Meta Muse) can use to read our posts and scores.
 // Needs one setting in Cloudflare > Workers & Pages > safetoclone > Settings > Variables and Secrets:
@@ -141,6 +142,52 @@ async function mcp(request, env) {
   });
 }
 
+// ---- Shared result links: safetoclone.com/?repo=owner/name ----
+// The page itself runs the check in the visitor's browser. Here we only fill in the link preview
+// (the title, text and picture that WhatsApp, Slack, LinkedIn, X... show when someone pastes the link).
+// If the repo is in our nightly directory, the preview shows its grade. Otherwise it shows a general picture,
+// because we never trust a grade written into the link itself (anyone could fake one).
+const escAttr = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const SHARE_IMAGES = ["A-trusted", "B-fine", "C-careful", "D-unproven", "F-unproven", "A-dangerous", "B-dangerous", "C-dangerous", "D-dangerous", "F-dangerous"];
+
+export function shareRepoName(param) {
+  // Same rules as parseRepo in score.js: owner/name, letters, numbers, - _ . only.
+  const m = String(param || "").trim().replace(/^https?:\/\//, "").replace(/^github\.com\//, "").replace(/\.git$/, "").replace(/\/+$/, "")
+    .match(/^([A-Za-z0-9-_.]{1,100})\/([A-Za-z0-9-_.]{1,100})$/);
+  return m ? `${m[1]}/${m[2]}` : null;
+}
+
+export function sharePreview(html, name, known) {
+  const link = `${SITE}/?repo=${name}`;
+  const title = known ? `${name}: grade ${known.grade} (${known.label}) on SafeToClone` : `Is ${name} safe to download? Check it on SafeToClone`;
+  const description = known
+    ? `${known.verdict} Score ${known.score}/100 in our last nightly check. Open the link for the full report.`
+    : "A free safety grade from A to F, with a plain-English list of warning signs. Built for people who don't code.";
+  const image = known && SHARE_IMAGES.includes(`${known.grade}-${known.level}`) ? `${known.grade}-${known.level}` : "default";
+  const set = (attr, key, value) => {
+    html = html.replace(new RegExp(`(<meta ${attr}="${key}" content=")[^"]*(")`), `$1${escAttr(value)}$2`);
+  };
+  set("property", "og:title", title);
+  set("property", "og:description", description);
+  set("property", "og:url", link);
+  set("property", "og:image", `${SITE}/share/${image}.png`);
+  set("property", "og:image:alt", known ? `SafeToClone grade ${known.grade}: ${known.label}` : "SafeToClone safety grade from A to F");
+  set("name", "twitter:title", title);
+  set("name", "twitter:description", description);
+  set("name", "description", description);
+  return html.replace(/<title>[^<]*<\/title>/, `<title>${escAttr(name)} safety check · SafeToClone</title>`);
+}
+
+async function homePage(request, env, url) {
+  const page = await env.ASSETS.fetch(request);
+  const name = shareRepoName(url.searchParams.get("repo"));
+  if (!name || !page.ok || !(page.headers.get("Content-Type") || "").includes("text/html")) return page;
+  const dir = await readJson(env, "/data/directory.json").catch(() => null);
+  const known = (dir?.repos || []).find((r) => r.name.toLowerCase() === name.toLowerCase());
+  const html = sharePreview(await page.text(), known ? known.name : name, known);
+  return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=300" } });
+}
+
 // Old addresses that should send visitors to the main one.
 // Pull request previews use other workers.dev names, so they are left alone.
 const OLD_HOSTS = ["www.safetoclone.com", "safetoclone.emileantoun10.workers.dev"];
@@ -155,6 +202,7 @@ export default {
     if (pathname === "/api/subscribe") return subscribe(request, env);
     if (pathname === "/mcp") return mcp(request, env);
     if (pathname === "/api/instagram/status") return json(await instagramStatus(env));
+    if (pathname === "/" && (request.method === "GET" || request.method === "HEAD")) return homePage(request, env, url);
     return env.ASSETS.fetch(request);
   },
   // Runs on the schedule in wrangler.jsonc: posts today's Instagram post, if there is one.

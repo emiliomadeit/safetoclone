@@ -5,7 +5,9 @@
   "compatibility_date": "2025-09-01",
   "assets": {
     "directory": ".",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    // The home page goes through worker.js first, so shared links (/?repo=owner/name) get a matching link preview.
+    "run_worker_first": ["/"]
   },
   // Posts today's Instagram post every day at 14:00 UTC (10am Ottawa in summer, 9am in winter).
   "triggers": { "crons": ["0 14 * * *"] },
