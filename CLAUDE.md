@@ -17,7 +17,8 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `index.html` | The whole website (checker, directory, "How we score", pricing, newsletter form) |
 | `score.js` | Scoring engine. **The only source of truth for points, caps, grades and labels** |
 | `worker.js` | Cloudflare Worker: `/api/subscribe` (Resend), `/mcp` (read-only connector Meta Muse uses to fetch Instagram posts) and old-address redirects |
-| `data/instagram-posts.json` | Instagram post queue (date, image, caption). Muse posts from it via `/mcp`. Hand-edited, unlike `directory.json` |
+| `instagram.js` | Posts the day's Instagram post through Meta's official API, once a day (cron in `wrangler.jsonc`). Token: `INSTAGRAM_TOKEN` Secret, renewed copy kept in the `INSTAGRAM` KV store. Check it at safetoclone.com/api/instagram/status |
+| `data/instagram-posts.json` | Instagram post queue (date, image, caption). The daily job posts from it; `/mcp` also serves it. Hand-edited, unlike `directory.json` |
 | `instagram/` | Post images, public at safetoclone.com/instagram/... (Instagram needs a public image URL) |
 | `scripts/make-instagram-images.py` | Makes the post images: `python3 scripts/make-instagram-images.py` |
 | `wrangler.jsonc` | Cloudflare settings (what to publish, `previews` for PR test sites) |
@@ -26,7 +27,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `data/directory.json` | Generated every night. **Never edit by hand** |
 | `.github/workflows/nightly.yml` | Runs the build script at 07:00 UTC and commits the result |
 | `.github/workflows/test.yml` | Runs the tests on every push and PR |
-| `test/score.test.mjs`, `test/mcp.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs` |
+| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs` |
 | `robots.txt`, `sitemap.xml` | For search engines |
 | `README.md` | For humans: what this is and how to deploy |
 
@@ -39,8 +40,9 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `/api/subscribe` in `worker.js` | The newsletter form's `fetch("/api/subscribe")` in `index.html` |
 | Domain or address | `worker.js` redirects, `index.html` canonical link and footer, `robots.txt`, `sitemap.xml`, `README.md` |
 | `repos.txt` | Nothing until the next nightly run (or run the workflow by hand) |
-| `data/instagram-posts.json` | What Muse posts next. Add the image first (edit `CARDS` in the image script, run it), keep dates `YYYY-MM-DD` (Ottawa time), captions under 2200 characters, run `node test/mcp.test.mjs` |
-| `/mcp` tool names in `worker.js` | Emile's Muse recurring task calls `get_next_post` by name. Renaming it breaks posting |
+| `data/instagram-posts.json` | What gets posted next (real posts, public, no undo). Add the image first (edit `CARDS` in the image script, run it), keep dates `YYYY-MM-DD` (Ottawa time), captions under 2200 characters, run `node test/mcp.test.mjs` |
+| `/mcp` tool names in `worker.js` | Any agent connected to it (e.g. Meta Muse) calls them by name |
+| `instagram.js` or the cron in `wrangler.jsonc` | Real posts on @safetoclone. Run `node test/instagram.test.mjs`. Don't also let Muse post from the queue, or posts double up |
 
 ## Ground rules
 

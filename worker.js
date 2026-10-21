@@ -1,9 +1,12 @@
 // Cloudflare Worker: serves the website files, handles the newsletter signup,
-// and runs /mcp, a read-only connector that lets Meta Muse (or any AI agent) fetch our Instagram posts.
+// posts to Instagram once a day (instagram.js, status at /api/instagram/status),
+// and runs /mcp, a read-only connector any AI agent (like Meta Muse) can use to read our posts and scores.
 // Needs one setting in Cloudflare > Workers & Pages > safetoclone > Settings > Variables and Secrets:
 //   RESEND_API_KEY     (Secret, from resend.com > API keys, "Full access")
 // Optional:
 //   RESEND_SEGMENT_ID  (from resend.com > Audience > Segments) to also tag signups with a segment
+import { autopost, status as instagramStatus } from "./instagram.js";
+
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 
@@ -151,6 +154,13 @@ export default {
     }
     if (pathname === "/api/subscribe") return subscribe(request, env);
     if (pathname === "/mcp") return mcp(request, env);
+    if (pathname === "/api/instagram/status") return json(await instagramStatus(env));
     return env.ASSETS.fetch(request);
+  },
+  // Runs on the schedule in wrangler.jsonc: posts today's Instagram post, if there is one.
+  async scheduled(event, env, ctx) {
+    const [next] = await upcomingPosts(env);
+    const result = await autopost(env, next);
+    console.log("Instagram:", JSON.stringify(result));
   },
 };

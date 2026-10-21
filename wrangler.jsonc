@@ -1,4 +1,4 @@
-// Tells Cloudflare how to run the site. The pages are plain files; worker.js only handles /api/subscribe.
+// Tells Cloudflare how to run the site. The pages are plain files; worker.js handles /api/*, /mcp and the daily Instagram post.
 {
   "name": "safetoclone",
   "main": "worker.js",
@@ -7,6 +7,8 @@
     "directory": ".",
     "binding": "ASSETS"
   },
+  // Posts today's Instagram post every day at 14:00 UTC (10am Ottawa in summer, 9am in winter).
+  "triggers": { "crons": ["0 14 * * *"] },
   // Lets Cloudflare build a test copy of the site for every pull request.
   "previews": {}
 }
