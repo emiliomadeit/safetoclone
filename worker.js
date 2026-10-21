@@ -1,7 +1,8 @@
 // Cloudflare Worker: serves the website files and handles the newsletter signup.
-// Needs two settings in Cloudflare > Workers & Pages > safetoclone > Settings > Variables and Secrets:
-//   RESEND_API_KEY      (from resend.com > API Keys)
-//   RESEND_AUDIENCE_ID  (from resend.com > Audiences)
+// Needs one setting in Cloudflare > Workers & Pages > safetoclone > Settings > Variables and Secrets:
+//   RESEND_API_KEY     (Secret, from resend.com > API keys, "Full access")
+// Optional:
+//   RESEND_SEGMENT_ID  (from resend.com > Audience > Segments) to also tag signups with a segment
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 
@@ -10,13 +11,16 @@ async function subscribe(request, env) {
   const { email: raw } = await request.json().catch(() => ({}));
   const email = String(raw || "").trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "That email address doesn't look right." }, 400);
-  if (!env.RESEND_API_KEY || !env.RESEND_AUDIENCE_ID) return json({ error: "Newsletter isn't connected yet." }, 503);
-  const r = await fetch(`https://api.resend.com/audiences/${env.RESEND_AUDIENCE_ID}/contacts`, {
+  if (!env.RESEND_API_KEY) return json({ error: "Newsletter isn't connected yet." }, 503);
+  const contact = { email, unsubscribed: false };
+  if (env.RESEND_SEGMENT_ID) contact.segments = [{ id: env.RESEND_SEGMENT_ID }];
+  const r = await fetch("https://api.resend.com/contacts", {
     method: "POST",
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ email, unsubscribed: false }),
+    body: JSON.stringify(contact),
   });
-  if (!r.ok) return json({ error: "Couldn't save your email. Try again later." }, 502);
+  // 409 = this email is already on the list, which is fine.
+  if (!r.ok && r.status !== 409) return json({ error: "Couldn't save your email. Try again later." }, 502);
   return json({ ok: true });
 }
 
