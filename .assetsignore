@@ -8,6 +8,7 @@ test
 scripts
 worker.js
 instagram.js
+seo.js
 wrangler.jsonc
 package.json
 repos.txt

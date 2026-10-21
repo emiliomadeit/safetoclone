@@ -16,6 +16,7 @@ A website that gives non-technical people a safety grade (A to F) for any GitHub
 | `.assetsignore` | Files Cloudflare should not publish |
 | `CLAUDE.md` | Guide for AI helpers: what each file does and what a change affects |
 | `test/score.test.mjs` | Checks the scoring still works: `node test/score.test.mjs` |
+| `seo.js` | Pages for Google: `safetoclone.com/repo/owner/name` for every graded repo, `/repos`, and `/sitemap.xml` |
 | `share-card.js`, `share/` | Sharing: the "Download image" card, and the pictures shown when someone pastes a `safetoclone.com/?repo=owner/name` link |
 
 ## How the score works

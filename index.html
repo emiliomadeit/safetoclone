@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SafeToClone</title>
+<title>SafeToClone: is this GitHub repo safe to download? Free safety check</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Paste a GitHub link and get a plain-English safety score before you download it. Built for people who don't code.">
 <meta property="og:title" content="SafeToClone: is this GitHub repo safe to download?">
@@ -22,6 +22,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"SafeToClone","url":"https://safetoclone.com/"}
+</script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"Is it safe to download code from GitHub?","acceptedAnswer":{"@type":"Answer","text":"Most GitHub repos are safe, but some are malware dressed up as free tools. Warning signs include requests to turn off antivirus, password-protected zip files, brand-new accounts and repos that got thousands of stars in days."}},
@@ -193,6 +196,7 @@ footer .wrap { display: grid; gap: 0.5rem; }
       <span class="label">Directory</span>
       <h2>AI tools people keep telling you to install</h2>
       <p class="muted" id="dirNote">Re-checked every night.</p>
+      <p><a href="/repos">See every grade with its full report</a></p>
     </div>
     <div class="filters" role="group" aria-label="Filter by grade">
       <button type="button" aria-pressed="true" data-g="all">All</button>
@@ -251,7 +255,7 @@ footer .wrap { display: grid; gap: 0.5rem; }
 <footer><div class="wrap">
   <p>SafeToClone reads public GitHub data and gives an opinion. It is not antivirus software and can be wrong.</p>
   <p>Questions or a repo you want us to look at? Email <a href="mailto:hello@safetoclone.com">hello@safetoclone.com</a>.</p>
-  <p>Not affiliated with GitHub.</p>
+  <p><a href="/repos">All safety grades</a> · Not affiliated with GitHub.</p>
 </div></footer>
 
 <script type="module">
@@ -354,10 +358,11 @@ document.querySelectorAll("[data-try]").forEach((b) => b.addEventListener("click
 let dirData = [];
 // Older directory files have no level, so work one out from the grade and flags.
 const levelOf = (x) => x.level || ({ A: "trusted", B: "fine", C: "careful" }[x.grade] ?? (x.flags.length ? "dangerous" : "unproven"));
+let dirExample = false;
 function renderDir(filter = "all") {
   const list = dirData.filter((x) => filter === "all" || (filter.length <= 2 ? filter.includes(x.grade) : levelOf(x) === filter));
   $("#dir").innerHTML = list.map((x) => `<article>
-    <span class="name">${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.name)}</a>` : esc(x.name)}</span>
+    <span class="name">${dirExample ? esc(x.name) : `<a href="/repo/${esc(x.name)}">${esc(x.name)}</a>`}</span>
     <span class="grade lvl-${levelOf(x)}">${x.grade}<small>${x.score}</small></span>
     <span class="desc">${esc(x.description)}</span>
     ${x.flags.length ? `<div class="tags">${x.flags.map((f) => `<span>${esc(f)}</span>`).join("")}</div>` : ""}
@@ -368,6 +373,7 @@ document.querySelectorAll(".filters button").forEach((b) => b.addEventListener("
   renderDir(b.dataset.g);
 }));
 fetch("./data/directory.json").then((r) => r.json()).then((d) => {
+  dirExample = d.example;
   dirData = d.repos;
   $("#dirNote").textContent = d.example
     ? "These are made-up examples. Real scores appear after the first nightly update."
