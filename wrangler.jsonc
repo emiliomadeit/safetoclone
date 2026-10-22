@@ -10,8 +10,9 @@
     // link preview) and the pages built for Google in seo.js (/repo/owner/name, /repos, /sitemap.xml).
     "run_worker_first": ["/", "/repo/*", "/repos", "/repos/", "/sitemap.xml"]
   },
-  // Posts today's Instagram post every day at 14:00 UTC (10am Ottawa in summer, 9am in winter).
-  "triggers": { "crons": ["0 14 * * *"] },
+  // Posts today's Instagram post every day at 14:00 UTC (10am Ottawa in summer, 9am in winter),
+  // with a second try at 14:30 in case the first one hit a hiccup.
+  "triggers": { "crons": ["0 14 * * *", "30 14 * * *"] },
   // Storage where instagram.js keeps the renewed Instagram token (KV namespace "safetoclone-instagram").
   "kv_namespaces": [{ "binding": "INSTAGRAM", "id": "c6dcee47a48741efbf4530730b19f4ed" }],
   // Lets Cloudflare build a test copy of the site for every pull request.
