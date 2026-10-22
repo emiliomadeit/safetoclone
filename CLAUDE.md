@@ -19,15 +19,12 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `fonts/` | The site's two own fonts (Archivo for headlines and grades, JetBrains Mono for small labels) and their free licence. Also used by `share-card.js` and `scripts/make-share-images.py` |
 | `report.js` | Draws a result as HTML: the score dial, "What should I do?", warning signs, "Why this grade?" and the directory cards. Used by both `index.html` (in the browser) and `seo.js` (in the Worker) |
 | `score.js` | Scoring engine. **The only source of truth for points, caps, grades and labels**, plus the plain-English text shown with them (`LEVELS` advice, `GROUPS` questions, `WHY` each check matters) |
-| `worker.js` | Cloudflare Worker: link previews for shared results (`/?repo=owner/name`), `/api/subscribe` (Resend), `/mcp` (read-only connector Meta Muse uses to fetch Instagram posts) and old-address redirects |
+| `worker.js` | Cloudflare Worker: link previews for shared results (`/?repo=owner/name`), `/api/subscribe` (Resend), `/mcp` (read-only connector Meta Muse uses to fetch Instagram posts), `/ig-media/` (today's Instagram pictures from HQ) and old-address redirects |
 | `seo.js` | Pages for Google, built by `worker.js` from `data/directory.json`: one page per graded repo (`/repo/owner/name`), the list `/repos`, and `/sitemap.xml` |
 | `share-card.js` | Draws the "Download image" PNG of a result in the visitor's browser |
 | `share/` | Link-preview pictures (one per grade and label, plus `default.png`). Made by `python3 scripts/make-share-images.py` |
 | `instagram.js` | Posts the day's Instagram post through Meta's official API, once a day (cron in `wrangler.jsonc`). Token: `INSTAGRAM_TOKEN` Secret, renewed copy kept in the `INSTAGRAM` KV store. Check it at safetoclone.com/api/instagram/status |
-| `hq.js` | Reads the Instagram post queue and pictures from the private HQ repo (`instagram/posts.json` there) with the read-only `HQ_GITHUB_TOKEN` Secret. `worker.js` serves today's pictures at `/ig-media/...` because Instagram needs a public link. Without the key it falls back to `data/instagram-posts.json` |
-| `data/instagram-posts.json` | OLD copy of the Instagram post queue, used only until `HQ_GITHUB_TOKEN` is set. New posts go in HQ. Was: post queue (date, image or `images` for a carousel of 2 to 10 slides, caption). The daily job posts from it; `/mcp` also serves it. Hand-edited, unlike `directory.json` |
-| `instagram/` | Post images, public at safetoclone.com/instagram/... (Instagram needs a public image URL) |
-| `scripts/make-instagram-images.py` | Makes the post images: `python3 scripts/make-instagram-images.py` |
+| `hq.js` | Reads the Instagram post queue and pictures from the private HQ repo (`instagram/posts.json` there) with the read-only `HQ_GITHUB_TOKEN` Secret. `worker.js` serves today's pictures at `/ig-media/...` because Instagram needs a public link. **Posts, captions and pictures live in HQ, not here** (see `instagram/README.md` in HQ) |
 | `wrangler.jsonc` | Cloudflare settings (what to publish, `previews` for PR test sites) |
 | `repos.txt` | List of repos in the directory, one per line |
 | `scripts/build-directory.mjs` | Scores every repo in `repos.txt` and writes `data/directory.json` |
@@ -53,7 +50,6 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `/api/subscribe` in `worker.js` | The newsletter form's `fetch("/api/subscribe")` in `index.html` |
 | Domain or address | `worker.js` redirects, `SITE` in `seo.js`, `index.html` canonical link and footer, `robots.txt`, `README.md` |
 | `repos.txt` | Nothing until the next nightly run (or run the workflow by hand). Then each new repo gets its own Google page and sitemap entry |
-| `data/instagram-posts.json` | What gets posted next (real posts, public, no undo). Add the image first (edit `CARDS` in the image script, run it), keep dates `YYYY-MM-DD` (Ottawa time), captions under 2200 characters with at most 5 hashtags (Instagram's limit), run `node test/mcp.test.mjs` |
 | `/mcp` tool names in `worker.js` | Any agent connected to it (e.g. Meta Muse) calls them by name |
 | `instagram.js`, `hq.js` or the cron in `wrangler.jsonc` | Real posts on @safetoclone. Run `node test/instagram.test.mjs && node test/hq.test.mjs`. `/ig-media/` must only ever serve pictures of queued posts, never other HQ files. Don't also let Muse post from the queue, or posts double up |
 

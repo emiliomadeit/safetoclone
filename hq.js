@@ -3,7 +3,7 @@
 //
 // Setting in Cloudflare > Workers & Pages > safetoclone:
 //   HQ_GITHUB_TOKEN  (Secret) a GitHub key that can only READ the HQ repo. Without it, the robot
-//                    falls back to the old copy in data/instagram-posts.json.
+//                    has no posts to read.
 const HQ_REPO = "emiliomadeit/safetoclone-hq";
 export const HQ_QUEUE = "instagram/posts.json";
 
