@@ -12,9 +12,9 @@ function fakeInstagram({ existingCaptions = [] } = {}) {
     const reply = (x) => new Response(JSON.stringify(x));
     if (u.pathname.endsWith("/refresh_access_token")) return reply({ access_token: "new-token", expires_in: 5184000 });
     if (u.pathname.endsWith("/me")) return reply({ user_id: "123", username: "safetoclone" });
-    if (u.pathname.endsWith("/123/media") && opts.method === "POST") return reply({ id: "c1" });
+    if (u.pathname.endsWith("/123/media") && opts.method === "POST") return reply({ id: "c" + calls.filter((c) => c.path.endsWith("/123/media") && c.method === "POST").length });
     if (u.pathname.endsWith("/123/media")) return reply({ data: existingCaptions.map((caption) => ({ caption })) });
-    if (u.pathname.endsWith("/c1")) return reply({ status_code: "FINISHED" });
+    if (/\/c\d+$/.test(u.pathname)) return reply({ status_code: "FINISHED" });
     if (u.pathname.endsWith("/123/media_publish")) return reply({ id: "p1" });
     return new Response(JSON.stringify({ error: { message: "unexpected " + u.pathname } }), { status: 400 });
   };
@@ -54,6 +54,22 @@ assert.ok(!calls.some((c) => c.path.endsWith("/media_publish")));
 // Nothing due today: no post.
 calls = fakeInstagram();
 r = await autopost({ INSTAGRAM_TOKEN: "t" }, { ...post, due_today: false });
+assert.ok(!calls.some((c) => c.method === "POST"));
+
+// Carousel: one container per slide, then one that holds them all, then publish that one.
+calls = fakeInstagram();
+const slides = ["a", "b", "c"].map((x) => `https://safetoclone.com/instagram/${x}.jpg`);
+r = await autopost({ INSTAGRAM_TOKEN: "t" }, { ...post, image_url: slides[0], image_urls: slides, alt_texts: ["A", "B", "C"] });
+const made = calls.filter((c) => c.path.endsWith("/123/media") && c.method === "POST").map((c) => c.params);
+assert.deepEqual(made.slice(0, 3).map((p) => [p.image_url, p.is_carousel_item, p.alt_text, p.caption]),
+  slides.map((s, i) => [s, "true", "ABC"[i], undefined]));
+assert.deepEqual([made[3].media_type, made[3].children, made[3].caption], ["CAROUSEL", "c1,c2,c3", post.caption]);
+assert.ok(calls.some((c) => c.path.endsWith("/media_publish") && c.params.creation_id === "c4"));
+assert.equal(r.posted, "p");
+
+// Too many slides: refuses before posting anything.
+calls = fakeInstagram();
+await assert.rejects(autopost({ INSTAGRAM_TOKEN: "t" }, { ...post, image_urls: Array(11).fill(slides[0]) }), /at most 10/);
 assert.ok(!calls.some((c) => c.method === "POST"));
 
 // Status never leaks the token.

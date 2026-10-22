@@ -1,6 +1,6 @@
 {
   "account": "@safetoclone",
-  "note": "Instagram post queue. Claude writes these; Meta Muse reads them through safetoclone.com/mcp and posts them. Images are made by scripts/make-instagram-images.py.",
+  "note": "Instagram post queue. Posted automatically once a day by instagram.js (Meta's official API). A post has one \"image\", or several \"images\" for a carousel. Images are made by scripts/make-instagram-images.py.",
   "posts": [
     {
       "id": "2026-10-23-intro",
@@ -22,6 +22,90 @@
       "image": "instagram/2026-10-27-scripts.jpg",
       "alt": "SafeToClone card: We checked 20 popular AI tools. All got an A, but 6 run a script straight from the internet when you install them.",
       "caption": "We graded 20 of the most popular AI tools on GitHub. All 20 got an A. Good news.\n\nBut 6 of them, including Ollama, n8n and Claude Code, ask you to install by pasting a command that downloads a script and runs it straight away.\n\nThat is normal for big, trusted projects. It is also exactly how scams work. The command looks the same either way.\n\nThe rule: only run a \"paste this in your terminal\" command if it comes from the project's official page, and the project has a track record.\n\nSee all 20 grades free at safetoclone.com (link in bio).\n\n#cybersecurity #github #opensource #aitools #safetoclone"
+    },
+    {
+      "id": "2026-10-29-warning-signs",
+      "date": "2026-10-29",
+      "images": [
+        "instagram/2026-10-29-warning-signs/1.jpg",
+        "instagram/2026-10-29-warning-signs/2.jpg",
+        "instagram/2026-10-29-warning-signs/3.jpg",
+        "instagram/2026-10-29-warning-signs/4.jpg",
+        "instagram/2026-10-29-warning-signs/5.jpg",
+        "instagram/2026-10-29-warning-signs/6.jpg",
+        "instagram/2026-10-29-warning-signs/7.jpg"
+      ],
+      "alts": [
+        "SafeToClone slide 1 of 7: 5 warning signs a GitHub project is malware. Check these before you download any free tool.",
+        "SafeToClone slide 2 of 7: It asks you to turn off your antivirus. Real software never needs this. It is the number one trick malware uses to get past your protection.",
+        "SafeToClone slide 3 of 7: The download is a password-protected zip. The password stops your antivirus from looking inside. That is the whole point.",
+        "SafeToClone slide 4 of 7: It promises free premium, cracks or cheats. Paid software for free is the oldest bait there is.",
+        "SafeToClone slide 5 of 7: Thousands of stars in a few days. Stars can be bought. Real projects usually grow slowly.",
+        "SafeToClone slide 6 of 7: The owner's account is brand new. Scammers make fresh accounts because their old ones get banned.",
+        "SafeToClone slide 7 of 7: Paste the link. We check all 5 for you. Free grade from A to F in seconds. Save this for the next tool someone sends you."
+      ],
+      "caption": "How to tell if a GitHub project is malware before you download it. Look for these 5 warning signs:\n\n1. It asks you to turn off your antivirus.\n2. The download is a password-protected zip.\n3. It promises free premium, cracks or cheats.\n4. It got thousands of stars in a few days.\n5. The owner's account is brand new.\n\nSave this for the next time someone sends you a \"free\" AI tool. Or paste the link at safetoclone.com and we check all 5 for you (link in bio).\n\n#cybersecurity #github #opensource #aitools #safetoclone"
+    },
+    {
+      "id": "2026-10-31-unproven-vs-dangerous",
+      "date": "2026-10-31",
+      "images": [
+        "instagram/2026-10-31-unproven-vs-dangerous/1.jpg",
+        "instagram/2026-10-31-unproven-vs-dangerous/2.jpg",
+        "instagram/2026-10-31-unproven-vs-dangerous/3.jpg",
+        "instagram/2026-10-31-unproven-vs-dangerous/4.jpg",
+        "instagram/2026-10-31-unproven-vs-dangerous/5.jpg",
+        "instagram/2026-10-31-unproven-vs-dangerous/6.jpg"
+      ],
+      "alts": [
+        "SafeToClone slide 1 of 6: Unproven vs Dangerous. What is the difference? A low grade on SafeToClone comes with one of two labels. They mean very different things.",
+        "SafeToClone slide 2 of 6: Nothing looks wrong. It is just too new to trust yet. Too new or too little-known for anyone to have checked it properly.",
+        "SafeToClone slide 3 of 6: Wait a few weeks, or ask someone who codes. For example: a tool a new developer posted last week. It could be great. Nobody knows yet.",
+        "SafeToClone slide 4 of 6: We found tricks that malware uses. For example: it asks you to turn off your antivirus, or ships a password-protected zip.",
+        "SafeToClone slide 5 of 6: Don't download it. Already did? Uninstall it, run a full antivirus scan and change your passwords, starting with email and banking.",
+        "SafeToClone slide 6 of 6: Know which one you are dealing with. Paste any GitHub link. Free, no coding needed."
+      ],
+      "caption": "Unproven vs Dangerous: what is the difference on SafeToClone?\n\nBoth can come with a low grade. They mean very different things.\n\nUnproven: nothing looks wrong, but the project is too new or too little-known to trust yet. Wait a few weeks, or ask someone who codes.\n\nDangerous: we found tricks that malware uses, like asking you to turn off your antivirus. Don't download it.\n\nCheck any GitHub project free at safetoclone.com (link in bio).\n\n#cybersecurity #github #opensource #aitools #safetoclone"
+    },
+    {
+      "id": "2026-11-02-stars",
+      "date": "2026-11-02",
+      "images": [
+        "instagram/2026-11-02-stars/1.jpg",
+        "instagram/2026-11-02-stars/2.jpg",
+        "instagram/2026-11-02-stars/3.jpg",
+        "instagram/2026-11-02-stars/4.jpg",
+        "instagram/2026-11-02-stars/5.jpg"
+      ],
+      "alts": [
+        "SafeToClone slide 1 of 5: Stars can be bought. A project with thousands of stars can still get a low grade from us. Here is why.",
+        "SafeToClone slide 2 of 5: Stars are like bookmarks. Lots of real stars usually means lots of real people have looked at the project.",
+        "SafeToClone slide 3 of 5: Fake stars are cheap. Scammers buy them to make malware look popular and trusted.",
+        "SafeToClone slide 4 of 5: How fast the stars came, and from whom. Thousands of stars in a few days from a brand-new account is a red flag. We grade it down however popular it looks.",
+        "SafeToClone slide 5 of 5: To the friend who picks tools by star count. Check the whole project, not just the number, free at safetoclone.com."
+      ],
+      "caption": "Can you trust a GitHub project because it has lots of stars? Not on its own.\n\nStars are like bookmarks. Real ones usually mean real people have looked at the project. But fake stars are cheap, and scammers buy them to make malware look popular.\n\nThat is why SafeToClone also checks how fast the stars came and who owns the project. Thousands of stars in a few days from a brand-new account gets graded down, however popular it looks.\n\nSend this to the friend who picks tools by star count.\n\n#cybersecurity #github #opensource #aitools #safetoclone"
+    },
+    {
+      "id": "2026-11-04-installed-dangerous",
+      "date": "2026-11-04",
+      "images": [
+        "instagram/2026-11-04-installed-dangerous/1.jpg",
+        "instagram/2026-11-04-installed-dangerous/2.jpg",
+        "instagram/2026-11-04-installed-dangerous/3.jpg",
+        "instagram/2026-11-04-installed-dangerous/4.jpg",
+        "instagram/2026-11-04-installed-dangerous/5.jpg",
+        "instagram/2026-11-04-installed-dangerous/6.jpg"
+      ],
+      "alts": [
+        "SafeToClone slide 1 of 6: Installed something marked Dangerous? Do these 3 things. Don't panic. Do them in this order.",
+        "SafeToClone slide 2 of 6: Uninstall it. Remove the program and delete the folder you downloaded.",
+        "SafeToClone slide 3 of 6: Run a full antivirus scan. A full scan, not a quick one. It takes longer and looks everywhere.",
+        "SafeToClone slide 4 of 6: Change your passwords. Start with your email and your banking, then the rest you use on that computer.",
+        "SafeToClone slide 5 of 6: Tell your IT team right away. Before anything else. They would much rather hear it from you first.",
+        "SafeToClone slide 6 of 6: Check before you clone. Paste any GitHub link before you install it. Free grade from A to F."
+      ],
+      "caption": "What to do if you installed a GitHub project marked Dangerous. Three steps, in this order:\n\n1. Uninstall it.\n2. Run a full antivirus scan (full, not quick).\n3. Change your passwords, starting with email and banking.\n\nOn a work computer? Tell your IT team right away, before anything else.\n\nSave this, and next time check before you clone at safetoclone.com (link in bio).\n\n#cybersecurity #github #opensource #aitools #safetoclone"
     }
   ]
 }
