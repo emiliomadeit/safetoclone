@@ -32,15 +32,23 @@ assert.ok(JSON.parse(scores.result.content[0].text).repos.length > 0);
 const next = await (await call({ jsonrpc: "2.0", id: 4, method: "tools/call", params: { name: "get_next_post", arguments: {} } })).json();
 const post = JSON.parse(next.result.content[0].text);
 assert.ok(post.caption || post.message, "get_next_post returns a post or says the queue is empty");
-if (post.image_url) assert.match(post.image_url, /^https:\/\/safetoclone\.com\/instagram\/.+\.jpg$/);
+if (post.image_url) {
+  assert.match(post.image_url, /^https:\/\/safetoclone\.com\/instagram\/.+\.jpg$/);
+  assert.equal(post.image_urls[0], post.image_url);
+}
 
 const bad = await (await call({ jsonrpc: "2.0", id: 5, method: "nope" })).json();
 assert.equal(bad.error.code, -32601);
 
-// Every queued post must have its image file and a caption Instagram accepts (max 2200 characters).
+// Every queued post must have its image files and a caption Instagram accepts
+// (max 2200 characters, max 5 hashtags). A carousel has 2 to 10 images, each with alt text.
 const queue = JSON.parse(await readFile(new URL("../data/instagram-posts.json", import.meta.url), "utf8"));
 for (const p of queue.posts) {
-  await readFile(new URL("../" + p.image, import.meta.url));
+  const images = p.images || [p.image];
+  assert.ok(images.length >= 1 && images.length <= 10, `${p.id} needs 1 to 10 images`);
+  if (p.images) assert.equal(p.alts?.length, p.images.length, `${p.id} needs one alt text per image`);
+  for (const i of images) await readFile(new URL("../" + i, import.meta.url));
+  assert.ok((p.caption.match(/#\w+/g) || []).length <= 5, `${p.id} has more than 5 hashtags`);
   assert.ok(p.caption.length <= 2200, `${p.id} caption is too long`);
   assert.match(p.date, /^\d{4}-\d{2}-\d{2}$/);
 }

@@ -47,24 +47,46 @@ async function renewIfOld(env, current) {
   return fresh;
 }
 
-// Publish one image post. Returns the new post's id.
-async function publish(token, userId, post) {
-  const create = (params) => ig(`/${userId}/media`, { method: "POST", token, params });
+// Make one media container and wait until Meta has downloaded its image(s). Returns its id.
+async function makeContainer(token, userId, params) {
+  const create = (p) => ig(`/${userId}/media`, { method: "POST", token, params: p });
   let container;
   try {
-    container = await create({ image_url: post.image_url, caption: post.caption, alt_text: post.alt_text || "" });
+    container = await create(params);
   } catch (e) {
+    if (!params.alt_text) throw e;
     // Older API versions reject alt_text. Try once more without it.
-    container = await create({ image_url: post.image_url, caption: post.caption });
+    const { alt_text, ...rest } = params;
+    container = await create(rest);
   }
   // Meta downloads the image first. Wait until it's ready (usually a few seconds).
   for (let i = 0; i < 10; i++) {
     const { status_code } = await ig(`/${container.id}`, { token, params: { fields: "status_code" } });
-    if (status_code === "FINISHED") break;
+    if (status_code === "FINISHED") return container.id;
     if (status_code === "ERROR" || status_code === "EXPIRED") throw new Error(`Meta couldn't use the image: ${status_code}`);
     await new Promise((r) => setTimeout(r, 3000));
   }
-  const done = await ig(`/${userId}/media_publish`, { method: "POST", token, params: { creation_id: container.id } });
+  return container.id;
+}
+
+// Publish one post: a single image, or a carousel (2 to 10 images people swipe through).
+// Returns the new post's id.
+async function publish(token, userId, post) {
+  const urls = post.image_urls?.length ? post.image_urls : [post.image_url];
+  const alts = post.alt_texts || [post.alt_text];
+  let id;
+  if (urls.length === 1) {
+    id = await makeContainer(token, userId, { image_url: urls[0], caption: post.caption, alt_text: alts[0] || "" });
+  } else {
+    if (urls.length > 10) throw new Error(`A carousel can have at most 10 images, this one has ${urls.length}.`);
+    // A carousel is made in two steps: one container per slide, then one container that holds them all.
+    const children = [];
+    for (let i = 0; i < urls.length; i++) {
+      children.push(await makeContainer(token, userId, { image_url: urls[i], is_carousel_item: "true", alt_text: alts[i] || "" }));
+    }
+    id = await makeContainer(token, userId, { media_type: "CAROUSEL", children: children.join(","), caption: post.caption });
+  }
+  const done = await ig(`/${userId}/media_publish`, { method: "POST", token, params: { creation_id: id } });
   return done.id;
 }
 

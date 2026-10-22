@@ -24,7 +24,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `share-card.js` | Draws the "Download image" PNG of a result in the visitor's browser |
 | `share/` | Link-preview pictures (one per grade and label, plus `default.png`). Made by `python3 scripts/make-share-images.py` |
 | `instagram.js` | Posts the day's Instagram post through Meta's official API, once a day (cron in `wrangler.jsonc`). Token: `INSTAGRAM_TOKEN` Secret, renewed copy kept in the `INSTAGRAM` KV store. Check it at safetoclone.com/api/instagram/status |
-| `data/instagram-posts.json` | Instagram post queue (date, image, caption). The daily job posts from it; `/mcp` also serves it. Hand-edited, unlike `directory.json` |
+| `data/instagram-posts.json` | Instagram post queue (date, image or `images` for a carousel of 2 to 10 slides, caption). The daily job posts from it; `/mcp` also serves it. Hand-edited, unlike `directory.json` |
 | `instagram/` | Post images, public at safetoclone.com/instagram/... (Instagram needs a public image URL) |
 | `scripts/make-instagram-images.py` | Makes the post images: `python3 scripts/make-instagram-images.py` |
 | `wrangler.jsonc` | Cloudflare settings (what to publish, `previews` for PR test sites) |
@@ -52,7 +52,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `/api/subscribe` in `worker.js` | The newsletter form's `fetch("/api/subscribe")` in `index.html` |
 | Domain or address | `worker.js` redirects, `SITE` in `seo.js`, `index.html` canonical link and footer, `robots.txt`, `README.md` |
 | `repos.txt` | Nothing until the next nightly run (or run the workflow by hand). Then each new repo gets its own Google page and sitemap entry |
-| `data/instagram-posts.json` | What gets posted next (real posts, public, no undo). Add the image first (edit `CARDS` in the image script, run it), keep dates `YYYY-MM-DD` (Ottawa time), captions under 2200 characters, run `node test/mcp.test.mjs` |
+| `data/instagram-posts.json` | What gets posted next (real posts, public, no undo). Add the image first (edit `CARDS` in the image script, run it), keep dates `YYYY-MM-DD` (Ottawa time), captions under 2200 characters with at most 5 hashtags (Instagram's limit), run `node test/mcp.test.mjs` |
 | `/mcp` tool names in `worker.js` | Any agent connected to it (e.g. Meta Muse) calls them by name |
 | `instagram.js` or the cron in `wrangler.jsonc` | Real posts on @safetoclone. Run `node test/instagram.test.mjs`. Don't also let Muse post from the queue, or posts double up |
 

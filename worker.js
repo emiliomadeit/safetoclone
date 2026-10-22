@@ -37,7 +37,7 @@ const SITE = "https://safetoclone.com";
 const TOOLS = [
   {
     name: "get_next_post",
-    description: "Get the next SafeToClone Instagram post: the one dated today, or the next one coming up. Returns the date, the image URL, the caption to use word for word, and the image alt text.",
+    description: "Get the next SafeToClone Instagram post: the one dated today, or the next one coming up. Returns the date, the image URL (image_urls has every slide when the post is a carousel), the caption to use word for word, and the image alt text.",
     inputSchema: { type: "object", properties: {} },
   },
   {
@@ -53,7 +53,7 @@ const TOOLS = [
 ];
 const MCP_INSTRUCTIONS =
   "SafeToClone grades GitHub projects for safety. Posts for the @safetoclone Instagram account are written by the SafeToClone team. " +
-  "To post: call get_next_post, then publish its image_url with its caption exactly as given. Do not post anything dated in the future.";
+  "To post: call get_next_post, then publish its image_urls (one image, or a carousel in that order) with its caption exactly as given. Do not post anything dated in the future.";
 
 // Today's date where Emile lives (Ottawa), as YYYY-MM-DD.
 const today = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
@@ -73,9 +73,12 @@ async function upcomingPosts(env) {
       id: p.id,
       date: p.date,
       due_today: p.date === now,
-      image_url: `${SITE}/${p.image}`,
+      // A post has one "image", or several "images" for a carousel. image_url is always the first one.
+      image_url: `${SITE}/${p.images?.[0] || p.image}`,
+      image_urls: (p.images || [p.image]).map((i) => `${SITE}/${i}`),
       caption: p.caption,
-      alt_text: p.alt,
+      alt_text: p.alts?.[0] || p.alt,
+      alt_texts: p.alts || [p.alt],
     }));
 }
 
