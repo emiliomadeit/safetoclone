@@ -7,6 +7,7 @@
 // Optional:
 //   RESEND_SEGMENT_ID  (from resend.com > Audience > Segments) to also tag signups with a segment
 import { autopost, status as instagramStatus } from "./instagram.js";
+import { hqFile, hqQueue } from "./hq.js";
 import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath } from "./seo.js";
 
 const json = (body, status = 200) =>
@@ -63,10 +64,25 @@ async function readJson(env, path) {
   return r.ok ? r.json() : null;
 }
 
-async function upcomingPosts(env) {
+// The post queue. It lives in the private HQ repo when the HQ key is set (pictures are then served
+// through /ig-media/..., because Instagram needs a public link). Otherwise, or if GitHub is down,
+// the old copy in this repo is used.
+async function loadQueue(env) {
+  if (env.HQ_GITHUB_TOKEN) {
+    try {
+      return { source: "HQ", posts: (await hqQueue(env)).posts || [], media: `${SITE}/ig-media/` };
+    } catch (e) {
+      console.log("HQ queue unreachable, using the website copy:", e.message);
+    }
+  }
   const data = await readJson(env, "/data/instagram-posts.json");
+  return { source: "website copy", posts: data?.posts || [], media: `${SITE}/` };
+}
+
+async function upcomingPosts(env) {
+  const { posts, media } = await loadQueue(env);
   const now = today();
-  return (data?.posts || [])
+  return posts
     .filter((p) => p.date >= now)
     .sort((a, b) => a.date.localeCompare(b.date))
     .map((p) => ({
@@ -74,12 +90,34 @@ async function upcomingPosts(env) {
       date: p.date,
       due_today: p.date === now,
       // A post has one "image", or several "images" for a carousel. image_url is always the first one.
-      image_url: `${SITE}/${p.images?.[0] || p.image}`,
-      image_urls: (p.images || [p.image]).map((i) => `${SITE}/${i}`),
+      image_url: media + (p.images?.[0] || p.image),
+      image_urls: (p.images || [p.image]).map((i) => media + i),
       caption: p.caption,
       alt_text: p.alts?.[0] || p.alt,
       alt_texts: p.alts || [p.alt],
     }));
+}
+
+// safetoclone.com/ig-media/<path>: hands Instagram a picture from HQ. Only pictures of posts dated
+// yesterday or later are served, so this can never be used to read anything else in the private repo.
+async function igMedia(env, pathname) {
+  if (!env.HQ_GITHUB_TOKEN) return new Response("Not found", { status: 404 });
+  let path = pathname.slice("/ig-media/".length);
+  try { path = decodeURIComponent(path); } catch { return new Response("Not found", { status: 404 }); }
+  const yesterday = new Date(Date.now() - 864e5).toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+  let allowed = false;
+  try {
+    const { posts = [] } = await hqQueue(env);
+    allowed = posts.some((p) => p.date >= yesterday && (p.images || [p.image]).includes(path));
+  } catch (e) {
+    return new Response("HQ unreachable", { status: 502 });
+  }
+  if (!allowed || !/\.(jpe?g|png)$/i.test(path)) return new Response("Not found", { status: 404 });
+  const r = await hqFile(env, path).catch(() => null);
+  if (!r) return new Response("HQ unreachable", { status: 502 });
+  return new Response(r.body, {
+    headers: { "Content-Type": /\.png$/i.test(path) ? "image/png" : "image/jpeg", "Cache-Control": "public, max-age=3600" },
+  });
 }
 
 async function callTool(name, env) {
@@ -230,13 +268,19 @@ export default {
     }
     if (pathname === "/api/subscribe") return subscribe(request, env);
     if (pathname === "/mcp") return mcp(request, env);
-    if (pathname === "/api/instagram/status") return json(await instagramStatus(env));
+    if (pathname === "/api/instagram/status") {
+      const { source } = await loadQueue(env);
+      return json({ ...(await instagramStatus(env)), postQueue: source });
+    }
+    if (pathname.startsWith("/ig-media/") && (request.method === "GET" || request.method === "HEAD")) return igMedia(env, pathname);
     const read = request.method === "GET" || request.method === "HEAD";
     if (pathname === "/" && read) return homePage(request, env, url);
     if (read && (pathname === "/sitemap.xml" || pathname === "/repos" || pathname === "/repos/" || pathname.startsWith("/repo/"))) return seoPage(env, url);
     return env.ASSETS.fetch(request);
   },
   // Runs on the schedule in wrangler.jsonc: posts today's Instagram post, if there is one.
+  // It runs twice (14:00 and 14:30 UTC) so a GitHub or Instagram hiccup at 14:00 gets a second try.
+  // The second run sees the post is already up and does nothing.
   async scheduled(event, env, ctx) {
     const [next] = await upcomingPosts(env);
     const result = await autopost(env, next);
