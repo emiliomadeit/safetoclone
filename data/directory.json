@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T12:41:41.680Z",
+  "updatedAt": "2026-10-22T12:45:39.705Z",
   "example": false,
   "repos": [
     {
@@ -12,7 +12,94 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:28.798Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "141,884 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "16,729 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2.5 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.8 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the GPL-3.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:09.124Z"
     },
     {
       "name": "google-gemini/gemini-cli",
@@ -24,7 +111,94 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:32.849Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "107,505 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "14,754 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2.6 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.5 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "GEMINI.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:14.002Z"
     },
     {
       "name": "Significant-Gravitas/AutoGPT",
@@ -36,7 +210,95 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:33.606Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "187,702 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "45,903 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.5 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the NOASSERTION license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:14.797Z"
     },
     {
       "name": "lobehub/lobehub",
@@ -48,7 +310,95 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:36.253Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "83,414 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "16,011 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.5 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.4 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the NOASSERTION license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "GEMINI.md",
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:17.675Z"
     },
     {
       "name": "mudler/LocalAI",
@@ -60,7 +410,95 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:36.968Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "49,843 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "4,530 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Account created 14.1 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:18.373Z"
     },
     {
       "name": "modelcontextprotocol/servers",
@@ -72,7 +510,95 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:39.031Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "91,477 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "11,838 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2.1 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 3 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.9 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the NOASSERTION license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        ".mcp.json",
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:20.882Z"
     },
     {
       "name": "microsoft/autogen",
@@ -84,7 +610,1269 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:40.278Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "61,526 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "9,302 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 12.9 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 6 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.2 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the CC-BY-4.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:22.340Z"
+    },
+    {
+      "name": "microsoft/markitdown",
+      "url": "https://github.com/microsoft/markitdown",
+      "description": "Python tool for converting files and office documents to Markdown.",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "191,590 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "14,272 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 12.9 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 1 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.9 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:24.450Z"
+    },
+    {
+      "name": "huggingface/transformers",
+      "url": "https://github.com/huggingface/transformers",
+      "description": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training. ",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "167,979 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "34,940 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 9.7 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 8 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:25.826Z"
+    },
+    {
+      "name": "langgenius/dify",
+      "url": "https://github.com/langgenius/dify",
+      "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "159,245 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "25,159 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.6 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.5 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the NOASSERTION license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:26.548Z"
+    },
+    {
+      "name": "vllm-project/vllm",
+      "url": "https://github.com/vllm-project/vllm",
+      "description": "A high-throughput and memory-efficient inference and serving engine for LLMs",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "95,106 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "23,793 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.3 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.7 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:27.977Z"
+    },
+    {
+      "name": "unclecode/crawl4ai",
+      "url": "https://github.com/unclecode/crawl4ai",
+      "description": "Open-source web crawler and scraper for LLMs and AI agents: any website into clean, LLM-ready Markdown. Run it yourself, or use Crawl4AI Cloud with one key. Join our Discord https://discord.gg/VuxzM8mtf",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "86,020 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "8,940 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Account created 11.4 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 1 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 2.5 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:29.258Z"
+    },
+    {
+      "name": "cline/cline",
+      "url": "https://github.com/cline/cline",
+      "description": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "70,714 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "7,721 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 2.3 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:30.088Z"
+    },
+    {
+      "name": "Mintplex-Labs/anything-llm",
+      "url": "https://github.com/Mintplex-Labs/anything-llm",
+      "description": "Stop renting your intelligence. Own it with AnythingLLM. Everything you need for a powerful local-first agent experience ",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "67,435 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "7,557 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.4 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.4 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:30.764Z"
+    },
+    {
+      "name": "upstash/context7",
+      "url": "https://github.com/upstash/context7",
+      "description": "Context7 Platform -- Up-to-date docs for AI agents",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "63,486 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "3,127 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 5.9 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:31.943Z"
+    },
+    {
+      "name": "microsoft/playwright-mcp",
+      "url": "https://github.com/microsoft/playwright-mcp",
+      "description": "Playwright MCP server",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "38,499 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "3,297 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 12.9 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 1 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "CLAUDE.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:35.204Z"
+    },
+    {
+      "name": "continuedev/continue",
+      "url": "https://github.com/continuedev/continue",
+      "description": "open-source coding agent",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "36,288 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "5,503 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.6 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 2 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.4 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:36.518Z"
+    },
+    {
+      "name": "github/github-mcp-server",
+      "url": "https://github.com/github/github-mcp-server",
+      "description": "GitHub's official MCP Server",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "33,852 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "5,213 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 18.5 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:37.876Z"
+    },
+    {
+      "name": "invoke-ai/InvokeAI",
+      "url": "https://github.com/invoke-ai/InvokeAI",
+      "description": "Invoke is a leading creative engine for Stable Diffusion models, empowering professionals, artists, and enthusiasts to generate and create visual media using the latest AI-driven technologies. The solution offers an industry leading WebUI, and serves as the foundation for multiple commercial products.",
+      "score": 100,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "28,813 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "3,071 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 4.1 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 4.2 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:39.037Z"
     },
     {
       "name": "ollama/ollama",
@@ -98,7 +1886,101 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-21T12:41:27.080Z"
+      "warnings": [
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "184,276 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "18,460 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2.9 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.3 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "1 warning sign",
+          "points": 27,
+          "max": 30,
+          "level": "good",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:07.240Z"
     },
     {
       "name": "open-webui/open-webui",
@@ -110,7 +1992,92 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:27.806Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "156,434 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "22,767 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2.7 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the NOASSERTION license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:08.141Z"
     },
     {
       "name": "openai/codex",
@@ -124,7 +2091,98 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-21T12:41:32.113Z"
+      "warnings": [
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "130,419 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "20,563 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 11.1 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.5 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "1 warning sign",
+          "points": 27,
+          "max": 30,
+          "level": "good",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:13.297Z"
     },
     {
       "name": "langchain-ai/langchain",
@@ -136,7 +2194,95 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:34.317Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "148,265 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "24,882 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.6 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 4 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        ".mcp.json",
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:15.570Z"
     },
     {
       "name": "ggml-org/llama.cpp",
@@ -150,7 +2296,101 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-21T12:41:37.687Z"
+      "warnings": [
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "132,010 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "24,673 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.4 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "1 warning sign",
+          "points": 27,
+          "max": 30,
+          "level": "good",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:19.497Z"
     },
     {
       "name": "infiniflow/ragflow",
@@ -162,7 +2402,500 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:41.680Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "92,649 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "11,069 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 6.2 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 2.9 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:23.841Z"
+    },
+    {
+      "name": "ChatGPTNextWeb/NextChat",
+      "url": "https://github.com/ChatGPTNextWeb/NextChat",
+      "description": "✨ Zero-config AI chat assistant. No API key needed — sign up and instantly chat with GPT-5, Claude 4, Gemini 2.5, DeepSeek & 100+ top models. Pay-as-you-go saves you more. Available on Web, iOS, macOS, Android, Linux, Windows.",
+      "score": 97,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "88,883 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "58,747 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2.9 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 2 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:28.710Z"
+    },
+    {
+      "name": "xtekky/gpt4free",
+      "url": "https://github.com/xtekky/gpt4free",
+      "description": "The official gpt4free repository | various collection of powerful language models | opus 4.6 gpt 5.3 kimi 2.5 deepseek v3.2 gemini 3",
+      "score": 97,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [
+        "Runs a script straight from the internet"
+      ],
+      "warnings": [
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "66,920 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "13,464 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Account created 4.7 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the GPL-3.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "1 warning sign",
+          "points": 27,
+          "max": 30,
+          "level": "good",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "SKILL.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:31.359Z"
+    },
+    {
+      "name": "zylon-ai/private-gpt",
+      "url": "https://github.com/zylon-ai/private-gpt",
+      "description": "Complete API layer for private AI applications on local models: RAG, skills, tools, MCP, text-to-sql, and more. Works with any OpenAI-compatible inference server.",
+      "score": 97,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [
+        "Runs a script straight from the internet"
+      ],
+      "warnings": [
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "57,604 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "7,612 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.1 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 2 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.5 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "1 warning sign",
+          "points": 27,
+          "max": 30,
+          "level": "good",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:32.492Z"
+    },
+    {
+      "name": "janhq/jan",
+      "url": "https://github.com/janhq/jan",
+      "description": "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer.",
+      "score": 97,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "45,038 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "3,107 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 4.6 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.2 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the NOASSERTION license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:34.399Z"
     },
     {
       "name": "crewAIInc/crewAI",
@@ -176,7 +2909,488 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-21T12:41:40.991Z"
+      "warnings": [
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "59,981 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "8,832 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2.4 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "1 warning sign",
+          "points": 27,
+          "max": 30,
+          "level": "good",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:23.121Z"
+    },
+    {
+      "name": "openai/whisper",
+      "url": "https://github.com/openai/whisper",
+      "description": "Robust Speech Recognition via Large-Scale Weak Supervision",
+      "score": 94,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "111,056 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "13,451 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 11.1 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 9,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 52 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 4.1 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:27.182Z"
+    },
+    {
+      "name": "Aider-AI/aider",
+      "url": "https://github.com/Aider-AI/aider",
+      "description": "aider is AI pair programming in your terminal",
+      "score": 94,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "49,684 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "5,096 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2.4 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 9,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 153 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.5 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the Apache-2.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:33.599Z"
+    },
+    {
+      "name": "khoj-ai/khoj",
+      "url": "https://github.com/khoj-ai/khoj",
+      "description": "Your AI second brain. Self-hostable. Get answers from the web or your docs. Build custom agents, schedule automations, do deep research. Turn any online or local LLM into your personal, autonomous AI (gpt, claude, gemini, llama, qwen, mistral). Get started - free.",
+      "score": 94,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "37,785 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "2,524 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.4 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 9,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 81 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 5.2 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the AGPL-3.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:35.807Z"
+    },
+    {
+      "name": "TabbyML/tabby",
+      "url": "https://github.com/TabbyML/tabby",
+      "description": "Self-hosted AI coding assistant",
+      "score": 94,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "33,922 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "1,791 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.7 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 9,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 114 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the NOASSERTION license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:37.266Z"
     },
     {
       "name": "n8n-io/n8n",
@@ -191,7 +3405,106 @@
         "Runs a script straight from the internet",
         "Runs code during install"
       ],
-      "checkedAt": "2026-10-21T12:41:34.993Z"
+      "warnings": [
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
+          "severity": "low"
+        },
+        {
+          "label": "Runs code during install",
+          "note": "package.json runs \"node scripts/block-npm-install.js\" the moment you install it.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "208,308 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "61,214 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 7.9 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 7.3 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the NOASSERTION license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "2 warning signs",
+          "points": 23,
+          "max": 30,
+          "level": "warn",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:16.437Z"
     },
     {
       "name": "browser-use/browser-use",
@@ -203,7 +3516,95 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:39.728Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "118,849 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "13,196 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 6,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 1.8 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 2 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 2 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:21.721Z"
     },
     {
       "name": "anthropics/claude-code",
@@ -217,7 +3618,197 @@
       "flags": [
         "Runs a script straight from the internet"
       ],
-      "checkedAt": "2026-10-21T12:41:30.692Z"
+      "warnings": [
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "152,848 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "26,781 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 5.8 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.7 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 0,
+          "max": 5,
+          "level": "warn",
+          "note": "No license. Legally you may not be allowed to use it."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "1 warning sign",
+          "points": 27,
+          "max": 30,
+          "level": "good",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [
+        "CLAUDE.md"
+      ],
+      "checkedAt": "2026-10-22T12:45:11.168Z"
+    },
+    {
+      "name": "Pythagora-io/gpt-pilot",
+      "url": "https://github.com/Pythagora-io/gpt-pilot",
+      "description": "The first real AI developer",
+      "score": 91,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "33,649 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "3,452 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.8 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 9,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 126 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.2 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No official releases. You'd be downloading work in progress."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the NOASSERTION license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:38.391Z"
     },
     {
       "name": "AUTOMATIC1111/stable-diffusion-webui",
@@ -229,7 +3820,92 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:29.414Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "165,095 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "33,275 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Account created 10.2 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 5,
+          "max": 12,
+          "level": "warn",
+          "note": "Last change 234 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 4.2 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the AGPL-3.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:09.804Z"
     },
     {
       "name": "lllyasviel/Fooocus",
@@ -241,7 +3917,189 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:29.910Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "53,620 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "8,605 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Account created 10.4 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 5,
+          "max": 12,
+          "level": "warn",
+          "note": "Last change 325 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.2 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the GPL-3.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:10.420Z"
+    },
+    {
+      "name": "anthropics/skills",
+      "url": "https://github.com/anthropics/skills",
+      "description": "Public repository for Agent Skills",
+      "score": 89,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "182,909 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "21,659 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 5.8 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 13 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.1 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No official releases. You'd be downloading work in progress."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 0,
+          "max": 5,
+          "level": "warn",
+          "note": "No license. Legally you may not be allowed to use it."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:25.032Z"
     },
     {
       "name": "nomic-ai/gpt4all",
@@ -253,7 +4111,294 @@
       "label": "Trusted",
       "verdict": "Looks trustworthy. Still only install what you need.",
       "flags": [],
-      "checkedAt": "2026-10-21T12:41:38.272Z"
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "77,350 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "8,255 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 4.6 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 2,
+          "max": 12,
+          "level": "bad",
+          "note": "Last change 513 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:20.151Z"
+    },
+    {
+      "name": "lllyasviel/stable-diffusion-webui-forge",
+      "url": "https://github.com/lllyasviel/stable-diffusion-webui-forge",
+      "description": "",
+      "score": 87,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Trusted",
+      "verdict": "Looks trustworthy. Still only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "13,075 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "1,766 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Account created 10.4 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 2,
+          "max": 12,
+          "level": "bad",
+          "note": "Last change 448 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 2.8 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the AGPL-3.0 license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:39.704Z"
+    },
+    {
+      "name": "FlowiseAI/Flowise",
+      "url": "https://github.com/FlowiseAI/Flowise",
+      "description": "Build AI Agents, Visually",
+      "score": 84,
+      "grade": "B",
+      "level": "fine",
+      "label": "Probably fine",
+      "verdict": "Probably fine. Read the warnings first.",
+      "flags": [
+        "Runs code during install"
+      ],
+      "warnings": [
+        {
+          "label": "Runs code during install",
+          "note": "package.json runs \"husky install\" the moment you install it.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "55,516 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "25,070 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.6 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 0,
+          "max": 12,
+          "level": "bad",
+          "note": "The owner archived it. Nobody fixes problems anymore."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the NOASSERTION license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "1 warning sign",
+          "points": 26,
+          "max": 30,
+          "level": "good",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-22T12:45:33.064Z"
     }
   ]
 }
