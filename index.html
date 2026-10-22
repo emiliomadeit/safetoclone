@@ -19,284 +19,183 @@
 <meta name="twitter:title" content="SafeToClone: is this GitHub repo safe to download?">
 <meta name="twitter:description" content="A safety score for GitHub repos, written for people who don't code.">
 <link rel="canonical" href="https://safetoclone.com/">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f8a5b'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/site.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"SafeToClone","url":"https://safetoclone.com/"}
 </script>
+<!-- Keep these questions and answers word for word the same as the "Questions people ask" section below. -->
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Does an A mean it's 100% safe?","acceptedAnswer":{"@type":"Answer","text":"No. A grade is a set of warning signs, not a guarantee. An A means the project is well known, looked after, and shows none of the malware tricks we check for. A clever attacker can still pass every check, so only install what you need, and only from the official GitHub page."}},
+{"@type":"Question","name":"What's the difference between Unproven and Dangerous?","acceptedAnswer":{"@type":"Answer","text":"Both can come with a low grade. Dangerous means we found tricks that malware uses, like asking you to turn off your antivirus. Unproven means nothing looks wrong, but the project is too new or too little-known to trust yet."}},
+{"@type":"Question","name":"Why can a repo with lots of stars still get a low grade?","acceptedAnswer":{"@type":"Answer","text":"Stars are only part of the score, and they can be bought. A repo that got thousands of stars in a few days from a young account, or that asks you to turn off your antivirus, gets capped at a low grade however popular it looks."}},
+{"@type":"Question","name":"Can a GitHub repo harm my AI assistant?","acceptedAnswer":{"@type":"Answer","text":"Yes. Files like CLAUDE.md, AGENTS.md, SKILL.md or .cursorrules give instructions to AI coding tools. A malicious one can tell your AI to leak API keys or run commands without asking you. We read these files and flag the ones that try."}},
 {"@type":"Question","name":"Is it safe to download code from GitHub?","acceptedAnswer":{"@type":"Answer","text":"Most GitHub repos are safe, but some are malware dressed up as free tools. Warning signs include requests to turn off antivirus, password-protected zip files, brand-new accounts and repos that got thousands of stars in days."}},
-{"@type":"Question","name":"Can a GitHub repo harm my AI assistant?","acceptedAnswer":{"@type":"Answer","text":"Yes. Files like CLAUDE.md, AGENTS.md, SKILL.md or .cursorrules give instructions to AI coding tools. A malicious one can tell your AI to leak API keys or run commands without asking you."}}]}
+{"@type":"Question","name":"Do you download or run the code?","acceptedAnswer":{"@type":"Answer","text":"No. We only read public information from GitHub: the project page, the owner's profile, the main folder, the release notes and any AI instruction files. Your browser asks GitHub directly."}},
+{"@type":"Question","name":"I already installed something marked Dangerous. What now?","acceptedAnswer":{"@type":"Answer","text":"Uninstall it, run a full scan with your antivirus, and change the passwords you use on that computer, starting with email and banking. If it's a work computer, tell your IT team right away."}},
+{"@type":"Question","name":"Why didn't my check work?","acceptedAnswer":{"@type":"Answer","text":"GitHub lets each visitor do about 12 checks an hour for free. If you hit the limit, wait a few minutes and try again. Some work networks also block GitHub, so try another connection."}}]}
 </script>
-<style>
-/* Layout: an inspection office. One wide check bar up top, the report reads like a stamped certificate, everything else in a calm single column. */
-:root {
-  --paper: #eef1ef;
-  --card: #ffffff;
-  --ink: #15201c;
-  --muted: #56645e;
-  --line: #d3dad6;
-  --accent: #1d6b4c;
-  --accent-ink: #ffffff;
-  --good: #1d7a4f;
-  --warn: #a86a00;
-  --bad: #b3261e;
-  --good-bg: #e3f2e9;
-  --warn-bg: #fbf0d9;
-  --bad-bg: #fbe4e1;
-  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
-  --body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
-}
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --paper: #111a17; --card: #18231f; --ink: #e6ede9; --muted: #9aaaa3; --line: #2b3a34;
-  --accent: #4fc08d; --accent-ink: #0c1512;
-  --good: #5ccf96; --warn: #f0b44c; --bad: #ff7b6e;
-  --good-bg: #173226; --warn-bg: #332712; --bad-bg: #3a1a17; color-scheme: dark; } }
-:root[data-theme="dark"] {
-  --paper: #111a17; --card: #18231f; --ink: #e6ede9; --muted: #9aaaa3; --line: #2b3a34;
-  --accent: #4fc08d; --accent-ink: #0c1512;
-  --good: #5ccf96; --warn: #f0b44c; --bad: #ff7b6e;
-  --good-bg: #173226; --warn-bg: #332712; --bad-bg: #3a1a17; color-scheme: dark; }
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
-body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1rem/1.6 var(--body); }
-.wrap { max-width: 68rem; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-a { color: var(--accent); }
-h1, h2, h3 { font-family: var(--display); font-stretch: 112%; line-height: 1.1; text-wrap: balance; margin: 0; }
-h1 { font-size: clamp(2.1rem, 5.5vw, 3.6rem); font-weight: 800; letter-spacing: -0.01em; }
-h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; }
-h3 { font-size: 1.05rem; font-weight: 600; }
-p { margin: 0; }
-.muted { color: var(--muted); }
-.label { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
-
-header.top { border-bottom: 1px solid var(--line); }
-header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.9rem; flex-wrap: wrap; }
-.brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: var(--ink); font: 800 1.15rem/1 var(--display); font-stretch: 112%; }
-.brand-mark { width: 1.9rem; height: 1.9rem; border: 2.5px solid var(--accent); border-radius: 50%; display: grid; place-items: center; color: var(--accent); font-size: 0.9rem; transform: rotate(-12deg); }
-nav { display: flex; gap: 1.1rem; flex-wrap: wrap; }
-nav a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 0.95rem; }
-nav a:hover { color: var(--ink); }
-
-.hero { padding-block: clamp(2.5rem, 7vw, 4.5rem) 2rem; display: grid; gap: 1.4rem; }
-.hero p.lede { font-size: 1.15rem; max-width: 40rem; color: var(--muted); }
-form.check { display: flex; gap: 0.6rem; flex-wrap: wrap; max-width: 46rem; }
-form.check input { flex: 1 1 18rem; min-width: 0; font: 500 1.05rem var(--mono); padding: 0.95rem 1rem; border: 2px solid var(--ink); border-radius: 10px; background: var(--card); color: var(--ink); }
-button, .btn { font: 600 1rem var(--body); padding: 0.95rem 1.4rem; border-radius: 10px; border: 2px solid var(--accent); background: var(--accent); color: var(--accent-ink); cursor: pointer; text-decoration: none; display: inline-block; }
-button:hover, .btn:hover { filter: brightness(1.08); }
-button[disabled] { opacity: 0.6; cursor: progress; }
-.btn.ghost { background: transparent; color: var(--accent); }
-.tries { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; font-size: 0.9rem; }
-.tries button { padding: 0.35rem 0.7rem; font: 500 0.8rem var(--mono); border-width: 1px; border-color: var(--line); background: var(--card); color: var(--ink); border-radius: 999px; }
-
-/* The report: a certificate with a stamped grade */
-.report { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: clamp(1.1rem, 3vw, 2rem); display: grid; gap: 1.6rem; margin-bottom: 3rem; }
-.report-head { display: grid; grid-template-columns: auto 1fr; gap: 1.5rem; align-items: center; }
-.stamp { width: 7.5rem; height: 7.5rem; border-radius: 50%; border: 5px double currentColor; display: grid; place-items: center; transform: rotate(-8deg); text-align: center; line-height: 1; }
-.stamp b { display: block; font: 800 3.4rem/1 var(--display); font-stretch: 112%; }
-.stamp span { font: 500 0.75rem var(--mono); letter-spacing: 0.06em; }
-.lvl-trusted, .lvl-fine { color: var(--good); } .lvl-careful, .lvl-unproven { color: var(--warn); } .lvl-dangerous { color: var(--bad); }
-.lvl-label { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
-.report-head .meta { min-width: 0; display: grid; gap: 0.35rem; }
-.report-head .meta a { font: 500 1rem var(--mono); word-break: break-all; }
-.verdict { font: 800 1.35rem/1.2 var(--display); font-stretch: 112%; }
-.example-tag { display: inline-block; font: 500 0.7rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; background: var(--warn-bg); color: var(--warn); padding: 0.25rem 0.5rem; border-radius: 4px; justify-self: start; }
-.groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem; }
-.group { border-top: 3px solid var(--line); padding-top: 0.75rem; display: grid; gap: 0.5rem; align-content: start; }
-.group header { display: flex; justify-content: space-between; align-items: baseline; }
-.group .pts { font: 500 0.85rem var(--mono); font-variant-numeric: tabular-nums; }
-.row { display: grid; grid-template-columns: 0.6rem 1fr; gap: 0.6rem; font-size: 0.92rem; }
-.dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-top: 0.45rem; }
-.dot.good { background: var(--good); } .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); }
-.row strong { font-weight: 600; }
-.share { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
-.share button { padding: 0.6rem 1rem; font-size: 0.92rem; }
-.flags { display: grid; gap: 0.6rem; }
-.flag { padding: 0.8rem 1rem; border-radius: 8px; display: grid; gap: 0.2rem; }
-.flag.high { background: var(--bad-bg); } .flag.high strong { color: var(--bad); }
-.flag.medium { background: var(--warn-bg); } .flag.medium strong { color: var(--warn); }
-.flag.low { background: var(--paper); }
-.note { font-size: 0.85rem; color: var(--muted); }
-.error { background: var(--bad-bg); color: var(--ink); border-radius: 10px; padding: 1rem; max-width: 46rem; }
-
-section { padding-block: 3rem; border-top: 1px solid var(--line); }
-section > .wrap { display: grid; gap: 1.5rem; }
-.section-intro { max-width: 42rem; display: grid; gap: 0.6rem; }
-.dir { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1rem; }
-.dir article { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1rem; display: grid; grid-template-columns: 1fr auto; gap: 0.4rem 1rem; align-content: start; }
-.dir .name { font: 500 0.9rem var(--mono); word-break: break-all; min-width: 0; }
-.dir .grade { font: 800 1.6rem/1 var(--display); grid-row: span 2; text-align: right; }
-.dir .grade small { display: block; font: 500 0.75rem var(--mono); }
-.dir .desc { font-size: 0.9rem; color: var(--muted); grid-column: 1; }
-.dir .tags { grid-column: 1 / -1; display: flex; gap: 0.35rem; flex-wrap: wrap; }
-.dir .tags span { font-size: 0.75rem; background: var(--paper); border-radius: 4px; padding: 0.15rem 0.45rem; }
-.filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-.filters button { padding: 0.4rem 0.8rem; font-size: 0.85rem; border-width: 1px; border-color: var(--line); background: var(--card); color: var(--ink); }
-.filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-
-.method { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.2rem; }
-.method div { display: grid; gap: 0.4rem; align-content: start; }
-.method .big { font: 800 2rem/1 var(--display); color: var(--accent); font-variant-numeric: tabular-nums; }
-.method ul { margin: 0; padding-left: 1.1rem; font-size: 0.92rem; color: var(--muted); }
-
-.plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
-.plan { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.3rem; display: grid; gap: 0.8rem; align-content: start; }
-.plan.featured { border: 2px solid var(--accent); }
-.plan .price { font: 800 2rem/1 var(--display); font-variant-numeric: tabular-nums; }
-.plan .price small { font: 500 0.9rem var(--body); color: var(--muted); }
-.plan ul { margin: 0; padding-left: 1.1rem; font-size: 0.92rem; display: grid; gap: 0.3rem; }
-
-form.news { display: flex; gap: 0.6rem; flex-wrap: wrap; max-width: 34rem; }
-form.news input { flex: 1 1 14rem; min-width: 0; font: 400 1rem var(--body); padding: 0.85rem 1rem; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink); }
-footer { border-top: 1px solid var(--line); padding-block: 2rem 3rem; font-size: 0.85rem; color: var(--muted); }
-footer .wrap { display: grid; gap: 0.5rem; }
-
-@media (max-width: 30rem) {
-  .report-head { grid-template-columns: 1fr; }
-  .stamp { width: 6rem; height: 6rem; } .stamp b { font-size: 2.7rem; }
-}
-</style>
 </head>
 <body>
-<header class="top"><div class="wrap">
-  <a class="brand" href="#check"><span class="brand-mark" aria-hidden="true">✓</span>SafeToClone</a>
+<a class="skip" href="#check">Skip to the safety check</a>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="/"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M9 16.5l4.5 4.5L23 11.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>SafeToClone</a>
   <nav aria-label="Main">
     <a href="#directory">Directory</a>
     <a href="#method">How we score</a>
-    <a href="#pricing">Pricing</a>
+    <a href="#faq">Questions</a>
+    <a class="wide-only" href="#pricing">Pricing</a>
     <a href="#newsletter">Newsletter</a>
   </nav>
 </div></header>
 
-<main>
+<main id="main">
   <div class="wrap hero" id="check">
-    <h1>Check a GitHub repo before you download it.</h1>
-    <p class="lede">Paste a link. In a few seconds you get a grade from A to F and a plain-English list of warning signs, including tricks that target your AI assistant.</p>
-    <form class="check" id="checkForm">
-      <label class="label" for="repoInput" style="flex-basis:100%">GitHub link</label>
-      <input id="repoInput" name="repo" placeholder="github.com/owner/repo" autocomplete="off" spellcheck="false" required>
-      <button id="checkBtn" type="submit">Check safety</button>
+    <p class="eyebrow">Free safety check · No sign-up</p>
+    <h1>Is that GitHub repo safe to download?</h1>
+    <p class="lede">Paste a link and get a grade from A to F in seconds, with every warning sign explained in plain English. We also catch tricks aimed at your AI assistant.</p>
+    <form class="checker" id="checkForm" role="search">
+      <label class="sr-only" for="repoInput">GitHub link or owner/name of the repo</label>
+      <input id="repoInput" name="repo" placeholder="Paste a GitHub link here" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="url" enterkeyhint="go" required>
+      <button class="btn" id="checkBtn" type="submit">Check safety</button>
     </form>
-    <div class="tries"><span class="muted">Try:</span>
-      <button type="button" data-try="ollama/ollama">ollama/ollama</button>
-      <button type="button" data-try="comfyanonymous/ComfyUI">ComfyUI</button>
-      <button type="button" data-try="modelcontextprotocol/servers">MCP servers</button>
+    <div class="tries"><span class="muted">Or try:</span>
+      <button type="button" class="chip" data-try="ollama/ollama">Ollama</button>
+      <button type="button" class="chip" data-try="comfyanonymous/ComfyUI">ComfyUI</button>
+      <button type="button" class="chip" data-try="modelcontextprotocol/servers">MCP servers</button>
     </div>
-    <div id="out" aria-live="polite"></div>
+    <ul class="promises">
+      <li>We never download or run the code</li>
+      <li>Every grade explained</li>
+      <li>Re-checked every night</li>
+    </ul>
+    <p class="sr-only" id="status" role="status"></p>
   </div>
 
-  <section id="directory"><div class="wrap">
-    <div class="section-intro">
-      <span class="label">Directory</span>
+  <div class="wrap result" id="out"></div>
+
+  <section class="band white" id="directory"><div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Directory</p>
       <h2>AI tools people keep telling you to install</h2>
-      <p class="muted" id="dirNote">Re-checked every night.</p>
-      <p><a href="/repos">See every grade with its full report</a></p>
+      <p class="lede">Each one is re-checked every night. Open one for its full report, or go straight to its GitHub page.</p>
     </div>
-    <div class="filters" role="group" aria-label="Filter by grade">
-      <button type="button" aria-pressed="true" data-g="all">All</button>
-      <button type="button" aria-pressed="false" data-g="AB">Safe-looking (A–B)</button>
-      <button type="button" aria-pressed="false" data-g="C">Careful (C)</button>
-      <button type="button" aria-pressed="false" data-g="unproven">Unproven</button>
-      <button type="button" aria-pressed="false" data-g="dangerous">Dangerous</button>
+    <div class="controls">
+      <div class="segmented" role="group" aria-label="Show grades">
+        <button type="button" aria-pressed="true" data-g="all">All</button>
+        <button type="button" aria-pressed="false" data-g="AB">A–B</button>
+        <button type="button" aria-pressed="false" data-g="C">C</button>
+        <button type="button" aria-pressed="false" data-g="unproven">Unproven</button>
+        <button type="button" aria-pressed="false" data-g="dangerous">Dangerous</button>
+      </div>
+      <div class="find">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <label class="sr-only" for="dirSearch">Search the directory</label>
+        <input id="dirSearch" type="search" placeholder="Search tools" autocomplete="off">
+      </div>
     </div>
-    <div class="dir" id="dir"></div>
+    <ul class="tools" id="dir"></ul>
+    <div class="dir-foot">
+      <p id="dirNote" role="status">Loading the directory…</p>
+      <p><a href="/repos">See every grade on one page</a></p>
+    </div>
   </div></section>
 
-  <section id="method"><div class="wrap">
-    <div class="section-intro">
-      <span class="label">How we score</span>
-      <h2>100 points, four questions</h2>
-      <p class="muted">We only read public information from GitHub. We never run the code. Some warning signs are so serious they cap the score no matter how popular the repo is.</p>
+  <section class="band" id="method"><div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">How we score</p>
+      <h2>Four questions. 100 points. One grade.</h2>
+      <p class="lede">We only read public information on GitHub. We never download or run the code.</p>
     </div>
-    <div class="method">
-      <div><span class="big">30</span><h3>Do people trust it?</h3><ul><li>How many people starred and copied it</li><li>How long the owner has been on GitHub</li></ul></div>
-      <div><span class="big">25</span><h3>Is anyone looking after it?</h3><ul><li>When it was last updated</li><li>How old it is</li><li>Whether it ships proper releases</li></ul></div>
-      <div><span class="big">15</span><h3>Is it open about itself?</h3><ul><li>A license</li><li>Real instructions</li><li>A way to report security problems</li></ul></div>
-      <div><span class="big">30</span><h3>Any malware tricks?</h3><ul><li>"Turn off your antivirus"</li><li>Password-protected zips, cracks, free premium</li><li>Fake stars, brand-new accounts</li><li>We read the name, topics, README and release notes</li><li>AI instruction files that try to hijack your assistant</li></ul></div>
+    <div class="tiles">
+      <div class="tile"><p class="big">30<small>points</small></p><h3>Do people trust it?</h3><ul><li>How many people starred and copied it</li><li>How long the owner has been on GitHub</li></ul></div>
+      <div class="tile"><p class="big">25<small>points</small></p><h3>Is anyone looking after it?</h3><ul><li>When it was last updated</li><li>How old it is</li><li>Whether it ships proper releases</li></ul></div>
+      <div class="tile"><p class="big">15<small>points</small></p><h3>Is it open about itself?</h3><ul><li>A license</li><li>Real instructions</li><li>A way to report security problems</li></ul></div>
+      <div class="tile"><p class="big">30<small>points</small></p><h3>Any malware tricks?</h3><ul><li>"Turn off your antivirus"</li><li>Password-protected zips, cracks, free premium</li><li>Fake stars, brand-new accounts</li><li>We read the name, topics, README and release notes</li><li>AI instruction files that try to hijack your assistant</li></ul></div>
     </div>
-    <p class="note">A repo needs at least 50 stars to get an A or B. A license and a README take minutes to add, so they can't make an unknown repo look safe on their own.</p>
-    <p class="note">A low grade comes with one of two labels. <strong>Dangerous</strong> means we found malware tricks. <strong>Unproven</strong> means nothing looks wrong, but the project is too new or little-known to trust yet.</p>
-    <p class="note">A score is a set of warning signs, not a guarantee. A clever attacker can pass every check. When in doubt, don't install it on a work computer, and ask your IT team.</p>
+    <h3 class="subhead">What the grades mean</h3>
+    <ul class="scale">
+      <li class="lvl-trusted"><span class="g">A<span class="range">85–100</span></span><span class="pill lvl-trusted">Trusted</span><p>Well known, looked after, no malware tricks found.</p></li>
+      <li class="lvl-fine"><span class="g">B<span class="range">70–84</span></span><span class="pill lvl-fine">Probably fine</span><p>No malware tricks, but missing some signs of a well-run project.</p></li>
+      <li class="lvl-careful"><span class="g">C<span class="range">55–69</span></span><span class="pill lvl-careful">Be careful</span><p>Something is missing or slightly off. Ask someone technical first.</p></li>
+      <li class="lvl-unproven"><span class="g">D–F<span class="range">under 55</span></span><span class="pill lvl-unproven">Unproven</span><p>Nothing looks wrong, but it's too new or little-known to trust yet.</p></li>
+      <li class="lvl-dangerous"><span class="g">Any<span class="range">grade</span></span><span class="pill lvl-dangerous">Dangerous</span><p>We found tricks that malware uses. Don't download it.</p></li>
+    </ul>
+    <div class="notes">
+      <p>Some warning signs are so serious they cap the grade, however popular the repo is. A repo also needs at least 50 stars to get an A or B: a license and a README take minutes to add, so they can't make an unknown repo look safe on their own.</p>
+      <p>A score is a set of warning signs, not a guarantee. A clever attacker can pass every check. When in doubt, don't install it on a work computer, and ask your IT team.</p>
+    </div>
   </div></section>
 
-  <section id="pricing"><div class="wrap">
-    <div class="section-intro">
-      <span class="label">Pricing</span>
+  <section class="band white" id="faq"><div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Questions</p>
+      <h2>Questions people ask</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Does an A mean it's 100% safe?</summary><div><p>No. A grade is a set of warning signs, not a guarantee. An A means the project is well known, looked after, and shows none of the malware tricks we check for. A clever attacker can still pass every check, so only install what you need, and only from the official GitHub page.</p></div></details>
+      <details><summary>What's the difference between Unproven and Dangerous?</summary><div><p>Both can come with a low grade. Dangerous means we found tricks that malware uses, like asking you to turn off your antivirus. Unproven means nothing looks wrong, but the project is too new or too little-known to trust yet.</p></div></details>
+      <details><summary>Why can a repo with lots of stars still get a low grade?</summary><div><p>Stars are only part of the score, and they can be bought. A repo that got thousands of stars in a few days from a young account, or that asks you to turn off your antivirus, gets capped at a low grade however popular it looks.</p></div></details>
+      <details><summary>Can a GitHub repo harm my AI assistant?</summary><div><p>Yes. Files like CLAUDE.md, AGENTS.md, SKILL.md or .cursorrules give instructions to AI coding tools. A malicious one can tell your AI to leak API keys or run commands without asking you. We read these files and flag the ones that try.</p></div></details>
+      <details><summary>Is it safe to download code from GitHub?</summary><div><p>Most GitHub repos are safe, but some are malware dressed up as free tools. Warning signs include requests to turn off antivirus, password-protected zip files, brand-new accounts and repos that got thousands of stars in days.</p></div></details>
+      <details><summary>Do you download or run the code?</summary><div><p>No. We only read public information from GitHub: the project page, the owner's profile, the main folder, the release notes and any AI instruction files. Your browser asks GitHub directly.</p></div></details>
+      <details><summary>I already installed something marked Dangerous. What now?</summary><div><p>Uninstall it, run a full scan with your antivirus, and change the passwords you use on that computer, starting with email and banking. If it's a work computer, tell your IT team right away.</p></div></details>
+      <details><summary>Why didn't my check work?</summary><div><p>GitHub lets each visitor do about 12 checks an hour for free. If you hit the limit, wait a few minutes and try again. Some work networks also block GitHub, so try another connection.</p></div></details>
+    </div>
+  </div></section>
+
+  <section class="band" id="pricing"><div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Pricing</p>
       <h2>Free for one-off checks</h2>
     </div>
     <div class="plans">
       <div class="plan"><h3>Free</h3><p class="price">$0</p><ul><li>Unlimited checks in your browser</li><li>The full directory</li><li>Weekly newsletter</li></ul></div>
-      <div class="plan featured"><h3>Pro</h3><p class="price">$7 <small>/ month</small></p><ul><li>Watchlist: email me if a repo I use turns risky</li><li>Deep check of every file, not just the front page</li><li>Shareable PDF report for your IT team</li></ul><a class="btn" href="#newsletter">Join the waitlist</a></div>
-      <div class="plan"><h3>Team</h3><p class="price">$49 <small>/ month</small></p><ul><li>Approved-tools list for your whole office</li><li>Slack or Teams alerts</li><li>Up to 25 people</li></ul><a class="btn ghost" href="#newsletter">Join the waitlist</a></div>
+      <div class="plan featured"><p class="soon">Coming soon</p><h3>Pro</h3><p class="price">$7 <small>/ month</small></p><ul><li>Watchlist: email me if a repo I use turns risky</li><li>Deep check of every file, not just the front page</li><li>Shareable PDF report for your IT team</li></ul><a class="btn" href="#newsletter">Join the waitlist</a></div>
+      <div class="plan"><p class="soon">Coming soon</p><h3>Team</h3><p class="price">$49 <small>/ month</small></p><ul><li>Approved-tools list for your whole office</li><li>Slack or Teams alerts</li><li>Up to 25 people</li></ul><a class="btn secondary" href="#newsletter">Join the waitlist</a></div>
     </div>
   </div></section>
 
-  <section id="newsletter"><div class="wrap">
-    <div class="section-intro">
-      <span class="label">Newsletter</span>
+  <section class="band white" id="newsletter"><div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow">Newsletter</p>
       <h2>One email a week: the AI tools worth installing, and the ones to avoid</h2>
-      <p class="muted">Written for people who don't code. No spam, unsubscribe in one click.</p>
+      <p class="lede">Written for people who don't code. No spam, unsubscribe in one click.</p>
     </div>
     <form class="news" id="newsForm">
-      <label class="label" for="newsEmail" style="flex-basis:100%">Email</label>
-      <input id="newsEmail" type="email" placeholder="you@example.com" required>
-      <button type="submit">Subscribe</button>
+      <label class="sr-only" for="newsEmail">Your email address</label>
+      <input id="newsEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
+      <button class="btn" type="submit">Subscribe</button>
     </form>
-    <p id="newsMsg" class="note" aria-live="polite"></p>
+    <p id="newsMsg" class="fine" role="status"></p>
   </div></section>
 </main>
 
 <footer><div class="wrap">
+  <nav aria-label="More"><a href="/repos">All safety grades</a><a href="#method">How we score</a><a href="#faq">Questions</a><a href="#pricing">Pricing</a><a href="#newsletter">Newsletter</a></nav>
   <p>SafeToClone reads public GitHub data and gives an opinion. It is not antivirus software and can be wrong.</p>
-  <p>Questions or a repo you want us to look at? Email <a href="mailto:hello@safetoclone.com">hello@safetoclone.com</a>.</p>
-  <p><a href="/repos">All safety grades</a> · Not affiliated with GitHub.</p>
+  <p>Questions or a repo you want us to look at? Email <a href="mailto:hello@safetoclone.com">hello@safetoclone.com</a>. Not affiliated with GitHub.</p>
 </div></footer>
 
 <script type="module">
 import { checkRepo, score } from "./score.js";
 import { shareCard } from "./share-card.js";
+import { reportCard, toolCard, esc, levelOf } from "./report.js";
 
 const $ = (s) => document.querySelector(s);
-const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const out = $("#out");
+const say = (t) => { $("#status").textContent = t; };
+const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function renderReport(r, { example = false } = {}) {
-  const groups = {};
-  for (const c of r.checks) (groups[c.group] ||= []).push(c);
-  const groupHTML = Object.entries(groups).map(([g, list]) => {
-    const got = list.reduce((s, c) => s + c.points, 0), max = list.reduce((s, c) => s + c.max, 0);
-    return `<div class="group"><header><h3>${esc(g)}</h3><span class="pts">${got}/${max}</span></header>
-      ${list.map((c) => `<div class="row"><span class="dot ${c.level}"></span><span><strong>${esc(c.label)}.</strong> ${esc(c.note)}</span></div>`).join("")}</div>`;
-  }).join("");
-  const flagHTML = r.flags.length ? `<div class="flags"><span class="label">Warning signs</span>${r.flags.map((f) =>
-    `<div class="flag ${f.severity}"><strong>${esc(f.label)}</strong><span>${esc(f.note)}</span></div>`).join("")}</div>` : "";
-  const ai = r.aiFilesFound.length ? `<p class="note">AI instruction files we read: ${r.aiFilesFound.map(esc).join(", ")}.</p>` : "";
-  const cap = r.capped ? `<p class="note">Score capped at ${r.capped} because ${esc(r.capReason || "of a serious warning sign")}.</p>` : "";
-  $("#out").innerHTML = `<article class="report">
-    <div class="report-head">
-      <div class="stamp lvl-${r.level}" role="img" aria-label="Grade ${r.grade}, ${r.score} out of 100, ${esc(r.label)}"><div><b>${r.grade}</b><span>${r.score}/100</span></div></div>
-      <div class="meta">
-        ${example ? `<span class="example-tag">Example report, made-up repo</span>` : ""}
-        ${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : `<span style="font-family:var(--mono)">${esc(r.name)}</span>`}
-        <span class="lvl-label lvl-${r.level}">${esc(r.label)}</span>
-        <p class="verdict">${esc(r.verdict)}</p>
-        ${r.description ? `<p class="muted">${esc(r.description)}</p>` : ""}
-      </div>
-    </div>
-    ${example ? "" : `<div class="share" role="group" aria-label="Share this result">
-      <button type="button" class="btn ghost" id="copyLink">Copy link</button>
-      <button type="button" class="btn ghost" id="saveImage">Download image</button>
-      <span class="note" id="shareMsg" aria-live="polite"></span>
-    </div>`}
-    ${flagHTML}
-    <div class="groups">${groupHTML}</div>
-    ${cap}${ai}
-  </article>`;
+function show(r, { example = false } = {}) {
+  const share = `<button type="button" class="btn secondary" id="copyLink">Copy link</button>
+    <button type="button" class="btn secondary" id="saveImage">Download image</button>
+    <span class="fine" id="shareMsg" role="status"></span>`;
+  out.innerHTML = (example ? `<p class="example-intro"><strong>Example report.</strong> This made-up repo shows what we flag when something looks like malware. Paste a real link above to check your own.</p>` : "")
+    + reportCard(r, { example, actions: example ? "" : share, headingId: "reportTitle" });
   if (!example) wireShare(r);
 }
 
@@ -305,9 +204,9 @@ const shareLink = (r) => `${location.origin}/?repo=${r.name}`;
 function wireShare(r) {
   const link = shareLink(r);
   history.replaceState(null, "", `/?repo=${r.name}`);
-  const say = (t) => { $("#shareMsg").textContent = t; };
+  const msg = (t) => { $("#shareMsg").textContent = t; };
   $("#copyLink").addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText(link); say("Link copied. Paste it anywhere."); }
+    try { await navigator.clipboard.writeText(link); msg("Link copied. Paste it anywhere."); }
     catch { window.prompt("Copy this link:", link); }
   });
   $("#saveImage").addEventListener("click", async (e) => {
@@ -318,68 +217,77 @@ function wireShare(r) {
       const a = Object.assign(document.createElement("a"), { href: url, download: `safetoclone-${r.name.replace("/", "-")}.png` });
       document.body.append(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 10000);
-      say("Image saved to your downloads.");
-    } catch { say("Couldn't make the image in this browser. Try a screenshot instead."); }
+      msg("Image saved to your downloads.");
+    } catch { msg("Couldn't make the image in this browser. Try a screenshot instead."); }
     finally { btn.disabled = false; }
   });
 }
 
 // What visitors see before they check anything: a made-up malware repo, scored by the real engine.
 const ago = (d) => new Date(Date.now() - d * 864e5).toISOString();
-renderReport(score({
+show(score({
   repo: { full_name: "example/free-gpt-pro-unlocked", html_url: "", stargazers_count: 1400, forks_count: 3, created_at: ago(9), pushed_at: ago(1), archived: false, license: null, description: "Unlock ChatGPT Plus for free. Free premium unlocked." },
   user: { type: "User", created_at: ago(12) },
   files: [{ name: "Setup.exe", type: "file" }, { name: "README.md", type: "file" }],
   releases: [], readme: "Download Setup.zip, the zip password is 1234. Disable Windows Defender before running.", pkg: "", aiFiles: {},
 }), { example: true });
 
-// Opened from a shared link (?repo=owner/name)? Run that check straight away.
-const sharedRepo = new URLSearchParams(location.search).get("repo");
-if (sharedRepo) setTimeout(() => { $("#repoInput").value = sharedRepo; $("#checkForm").requestSubmit(); });
-
-$("#checkForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const btn = $("#checkBtn"), val = $("#repoInput").value;
+async function runCheck(val) {
+  const btn = $("#checkBtn");
   btn.disabled = true; btn.textContent = "Checking…";
+  out.setAttribute("aria-busy", "true");
+  out.innerHTML = `<div class="report loading"><div class="ring ring-lg"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="track" cx="50" cy="50" r="44"/></svg></div>
+    <div><p class="verdict">Checking ${esc(val)}…</p><p class="muted">Reading its GitHub page, owner, files and release notes. This takes a few seconds.</p><div class="progress"><i></i></div></div></div>`;
+  say(`Checking ${val}. This takes a few seconds.`);
   try {
-    renderReport(await checkRepo(val));
+    const r = await checkRepo(val);
+    show(r);
+    say(`Done. ${r.name} gets ${/^[AEF]/.test(r.grade) ? "an" : "a"} ${r.grade}: ${r.label}. ${r.flags.length ? `${r.flags.length} warning sign${r.flags.length > 1 ? "s" : ""}.` : "No warning signs."}`);
+    $("#reportTitle").focus({ preventScroll: true });
+    out.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
   } catch (err) {
     const msg = err instanceof TypeError
       ? "We couldn't reach GitHub from here. If you're on a work network, it may block this. Try again on another connection."
       : err.message;
-    $("#out").innerHTML = `<p class="error">${esc(msg)}</p>`;
-  } finally { btn.disabled = false; btn.textContent = "Check safety"; }
-});
+    out.innerHTML = `<div class="error" role="alert"><strong>We couldn't check that repo.</strong><p>${esc(msg)}</p></div>`;
+    say("");
+  } finally {
+    btn.disabled = false; btn.textContent = "Check safety";
+    out.removeAttribute("aria-busy");
+  }
+}
+$("#checkForm").addEventListener("submit", (e) => { e.preventDefault(); runCheck($("#repoInput").value); });
 document.querySelectorAll("[data-try]").forEach((b) => b.addEventListener("click", () => {
   $("#repoInput").value = b.dataset.try; $("#checkForm").requestSubmit();
 }));
 
-// Directory
-let dirData = [];
-// Older directory files have no level, so work one out from the grade and flags.
-const levelOf = (x) => x.level || ({ A: "trusted", B: "fine", C: "careful" }[x.grade] ?? (x.flags.length ? "dangerous" : "unproven"));
-let dirExample = false;
-function renderDir(filter = "all") {
-  const list = dirData.filter((x) => filter === "all" || (filter.length <= 2 ? filter.includes(x.grade) : levelOf(x) === filter));
-  $("#dir").innerHTML = list.map((x) => `<article>
-    <span class="name">${dirExample ? esc(x.name) : `<a href="/repo/${esc(x.name)}">${esc(x.name)}</a>`}</span>
-    <span class="grade lvl-${levelOf(x)}">${x.grade}<small>${x.score}</small></span>
-    <span class="desc">${esc(x.description)}</span>
-    ${x.flags.length ? `<div class="tags">${x.flags.map((f) => `<span>${esc(f)}</span>`).join("")}</div>` : ""}
-  </article>`).join("") || `<p class="muted">No repos in this group yet.</p>`;
-}
-document.querySelectorAll(".filters button").forEach((b) => b.addEventListener("click", () => {
-  document.querySelectorAll(".filters button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-  renderDir(b.dataset.g);
-}));
-fetch("./data/directory.json").then((r) => r.json()).then((d) => {
-  dirExample = d.example;
-  dirData = d.repos;
-  $("#dirNote").textContent = d.example
+// Opened from a shared link (?repo=owner/name)? Run that check straight away.
+const sharedRepo = new URLSearchParams(location.search).get("repo");
+if (sharedRepo) setTimeout(() => { $("#repoInput").value = sharedRepo; $("#checkForm").requestSubmit(); });
+
+// Directory: filter by grade, search by name, each card links to its report and to GitHub.
+let dir = { repos: [], example: false };
+let filter = "all";
+function renderDir() {
+  const q = $("#dirSearch").value.trim().toLowerCase();
+  const list = dir.repos.filter((x) => (filter === "all" || (filter.length <= 2 ? filter.includes(x.grade) : levelOf(x) === filter))
+    && (!q || `${x.name} ${x.description || ""}`.toLowerCase().includes(q)));
+  $("#dir").innerHTML = list.map((x) => toolCard(x, { link: !dir.example })).join("");
+  const when = dir.updatedAt && !dir.example ? ` Last update ${new Date(dir.updatedAt).toLocaleDateString("en-CA", { dateStyle: "medium" })}.` : "";
+  $("#dirNote").textContent = dir.example
     ? "These are made-up examples. Real scores appear after the first nightly update."
-    : `Re-checked every night. Last update ${new Date(d.updatedAt).toLocaleDateString("en-CA", { dateStyle: "medium" })}.`;
+    : list.length
+      ? `Showing ${list.length} of ${dir.repos.length} tools.${when}`
+      : `No tools match. To grade one that isn't listed, paste its GitHub link into the check at the top.`;
+}
+document.querySelectorAll(".segmented button").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll(".segmented button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  filter = b.dataset.g;
   renderDir();
-}).catch(() => { $("#dirNote").textContent = "The directory couldn't load right now."; });
+}));
+$("#dirSearch").addEventListener("input", renderDir);
+fetch("./data/directory.json").then((r) => r.json()).then((d) => { dir = d; renderDir(); })
+  .catch(() => { $("#dirNote").textContent = "The directory couldn't load right now. Try refreshing the page."; });
 
 // Newsletter
 $("#newsForm").addEventListener("submit", async (e) => {

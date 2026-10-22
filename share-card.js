@@ -2,12 +2,12 @@
 // Runs only in the visitor's browser (it uses a <canvas>). Nothing is uploaded anywhere.
 
 const C = {
-  paper: "#eef1ef", card: "#ffffff", ink: "#15201c", muted: "#56645e", line: "#d3dad6", accent: "#1d6b4c",
-  trusted: "#1d7a4f", fine: "#1d7a4f", careful: "#a86a00", unproven: "#a86a00", dangerous: "#b3261e",
+  bg: "#f5f5f7", card: "#ffffff", ink: "#1d1d1f", muted: "#6e6e73", track: "#e8e8ed", brand: "#1f8a5b", link: "#0066cc",
+  trusted: "#1a7f37", fine: "#1a7f37", careful: "#a15c00", unproven: "#a15c00", dangerous: "#c9271c",
+  trustedBg: "#e9f6ee", fineBg: "#e9f6ee", carefulBg: "#fdf2e0", unprovenBg: "#fdf2e0", dangerousBg: "#fdeceb",
 };
-const DISPLAY = '"Archivo", "Arial Narrow", system-ui, sans-serif';
-const BODY = '"Public Sans", system-ui, sans-serif';
-const MONO = '"JetBrains Mono", ui-monospace, Menlo, monospace';
+// The same system fonts as the website: Apple's own font on Mac and iPhone, Segoe UI on Windows.
+const FONT = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif';
 export const W = 1200, H = 630;
 
 // Splits text into lines that fit `width`. Cuts with "…" after `max` lines.
@@ -30,12 +30,12 @@ function wrap(ctx, text, width, max) {
 }
 
 // Picks the biggest font size (down to `min`) at which the text fits on one line.
-function fit(ctx, text, weight, family, size, min, width) {
+function fit(ctx, text, weight, size, min, width) {
   for (; size > min; size -= 1) {
-    ctx.font = `${weight} ${size}px ${family}`;
+    ctx.font = `${weight} ${size}px ${FONT}`;
     if (ctx.measureText(text).width <= width) return;
   }
-  ctx.font = `${weight} ${min}px ${family}`;
+  ctx.font = `${weight} ${min}px ${FONT}`;
 }
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -48,58 +48,66 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
+// The logo: a green rounded square with a white tick.
+function logo(ctx, x, y, s) {
+  roundRect(ctx, x, y, s, s, s / 4);
+  ctx.fillStyle = C.brand; ctx.fill();
+  ctx.strokeStyle = "#fff"; ctx.lineWidth = s / 10; ctx.lineCap = "round"; ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(x + s * 0.28, y + s * 0.52); ctx.lineTo(x + s * 0.42, y + s * 0.66); ctx.lineTo(x + s * 0.72, y + s * 0.36);
+  ctx.stroke();
+}
+
 // r = a result from score.js, link = the shareable link. Returns a PNG Blob.
 export async function shareCard(r, link) {
-  // Make sure the website fonts are ready, or the canvas falls back to plain system fonts.
-  await Promise.all([
-    `800 40px ${DISPLAY}`, `400 24px ${BODY}`, `600 24px ${BODY}`, `500 24px ${MONO}`,
-  ].map((f) => document.fonts?.load(f).catch(() => {})));
-
   const canvas = document.createElement("canvas");
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext("2d");
-  const color = C[r.level] || C.accent;
+  const color = C[r.level] || C.muted;
+  const tint = C[r.level + "Bg"] || C.bg;
 
-  ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
-  roundRect(ctx, 32, 32, W - 64, H - 64, 28);
+  ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+  roundRect(ctx, 32, 32, W - 64, H - 64, 36);
   ctx.fillStyle = C.card; ctx.fill();
-  ctx.strokeStyle = C.line; ctx.lineWidth = 2; ctx.stroke();
 
-  // The stamp: tilted double circle with the grade, like on the website.
-  ctx.save();
-  ctx.translate(250, 300);
-  ctx.rotate(-8 * Math.PI / 180);
-  ctx.strokeStyle = color; ctx.fillStyle = color;
-  ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(0, 0, 160, 0, Math.PI * 2); ctx.stroke();
-  ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(0, 0, 142, 0, Math.PI * 2); ctx.stroke();
+  // The score dial: a grey ring, filled in colour up to the score, with the grade in the middle.
+  const cx = 250, cy = 315, rad = 150;
+  ctx.lineWidth = 26; ctx.lineCap = "round";
+  ctx.strokeStyle = C.track; ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.stroke();
+  const pct = Math.max(0, Math.min(100, r.score)) / 100;
+  if (pct > 0) {
+    ctx.strokeStyle = color; ctx.beginPath();
+    ctx.arc(cx, cy, rad, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * pct); ctx.stroke();
+  }
   ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
-  ctx.font = `800 170px ${DISPLAY}`; ctx.fillText(r.grade, 0, 50);
-  ctx.font = `500 30px ${MONO}`; ctx.fillText(`${r.score}/100`, 0, 105);
-  ctx.restore();
+  ctx.fillStyle = color; ctx.font = `700 150px ${FONT}`; ctx.fillText(r.grade, cx, cy + 45);
+  ctx.fillStyle = C.muted; ctx.font = `500 30px ${FONT}`; ctx.fillText(`${r.score}/100`, cx, cy + 95);
 
-  const x = 470, width = W - x - 80;
-  ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+  const x = 480, width = W - x - 80;
+  ctx.textAlign = "left";
 
   // Brand line
-  ctx.strokeStyle = C.accent; ctx.lineWidth = 4;
-  ctx.beginPath(); ctx.arc(x + 22, 100, 20, 0, Math.PI * 2); ctx.stroke();
-  ctx.fillStyle = C.accent; ctx.font = `800 24px ${DISPLAY}`; ctx.textAlign = "center"; ctx.fillText("✓", x + 22, 109);
-  ctx.textAlign = "left"; ctx.fillStyle = C.ink; ctx.font = `800 32px ${DISPLAY}`; ctx.fillText("SafeToClone", x + 56, 112);
+  logo(ctx, x, 78, 44);
+  ctx.fillStyle = C.ink; ctx.font = `600 30px ${FONT}`; ctx.fillText("SafeToClone", x + 58, 111);
 
   // Repo name, label and verdict
-  let y = 180;
-  ctx.fillStyle = C.ink; fit(ctx, r.name, 500, MONO, 32, 18, width); ctx.fillText(r.name, x, y);
-  y += 46;
-  ctx.fillStyle = color; ctx.font = `600 24px ${BODY}`; ctx.fillText(r.label.toUpperCase(), x, y);
-  y += 52;
-  ctx.fillStyle = C.ink; ctx.font = `800 36px ${DISPLAY}`;
-  for (const line of wrap(ctx, r.verdict, width, 3)) { ctx.fillText(line, x, y); y += 44; }
+  let y = 190;
+  ctx.fillStyle = C.ink; fit(ctx, r.name, 600, 34, 18, width); ctx.fillText(r.name, x, y);
+  y += 26;
+  ctx.font = `600 24px ${FONT}`;
+  const pillW = ctx.measureText(r.label).width + 56;
+  roundRect(ctx, x, y, pillW, 44, 22); ctx.fillStyle = tint; ctx.fill();
+  ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x + 24, y + 22, 6, 0, Math.PI * 2); ctx.fill();
+  ctx.fillText(r.label, x + 40, y + 31);
+  y += 96;
+  ctx.fillStyle = C.ink; ctx.font = `700 38px ${FONT}`;
+  for (const line of wrap(ctx, r.verdict, width, 2)) { ctx.fillText(line, x, y); y += 46; }
 
   // Up to three warning signs
-  y += 14;
-  ctx.font = `600 24px ${BODY}`;
+  y += 12;
+  ctx.font = `500 25px ${FONT}`;
   if (!r.flags.length) {
-    ctx.fillStyle = C.trusted; ctx.fillText("✓ No warning signs found", x, y);
+    ctx.fillStyle = C.trusted; ctx.fillText("✓  No warning signs found", x, y);
   } else {
     // Most serious first
     const rank = { high: 0, medium: 1, low: 2 };
@@ -107,17 +115,17 @@ export async function shareCard(r, link) {
     const shown = sorted.slice(0, r.flags.length > 3 ? 2 : 3);
     for (const f of shown) {
       ctx.fillStyle = f.severity === "high" ? C.dangerous : f.severity === "medium" ? C.careful : C.muted;
-      ctx.fillText("● " + wrap(ctx, f.label, width - 30, 1)[0], x, y); y += 34;
+      ctx.fillText("●  " + wrap(ctx, f.label, width - 40, 1)[0], x, y); y += 36;
     }
     if (r.flags.length > shown.length) { ctx.fillStyle = C.muted; ctx.fillText(`+ ${r.flags.length - shown.length} more warning signs`, x, y); }
   }
 
   // Footer: when it was checked and where to see the full report
   const date = new Date(r.checkedAt || Date.now()).toLocaleDateString("en-CA", { dateStyle: "medium" });
-  ctx.fillStyle = C.muted; ctx.font = `400 20px ${BODY}`;
-  ctx.fillText(`Checked ${date}. A set of warning signs, not a guarantee.`, x, H - 104);
-  ctx.fillStyle = C.accent; fit(ctx, link.replace(/^https?:\/\//, ""), 500, MONO, 22, 14, width);
-  ctx.fillText(link.replace(/^https?:\/\//, ""), x, H - 70);
+  ctx.fillStyle = C.muted; ctx.font = `400 21px ${FONT}`;
+  ctx.fillText(`Checked ${date}. A set of warning signs, not a guarantee.`, x, H - 100);
+  ctx.fillStyle = C.link; fit(ctx, link.replace(/^https?:\/\//, ""), 500, 24, 14, width);
+  ctx.fillText(link.replace(/^https?:\/\//, ""), x, H - 66);
 
   return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Couldn't make the image."))), "image/png"));
 }

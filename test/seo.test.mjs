@@ -1,6 +1,7 @@
 // Checks the pages built for Google: /repo/owner/name, /repos and /sitemap.xml. Run with: node test/seo.test.mjs
 import worker from "../worker.js";
 import { repoPage } from "../seo.js";
+import { LEVELS, WHY } from "../score.js";
 import assert from "node:assert";
 import { readFile } from "node:fs/promises";
 
@@ -30,6 +31,10 @@ for (const r of dir.repos) {
   assert.ok(desc.length <= 160 && desc.length > 50, `description length for ${r.name}`);
   // Structured data must be valid JSON.
   for (const [, json] of html.matchAll(/<script type="application\/ld\+json">([^<]*)<\/script>/g)) JSON.parse(json);
+  // Visitors can go straight to the repo on GitHub, and get told what to do.
+  assert.ok(html.includes(`href="${r.url || `https://github.com/${r.name}`}" target="_blank" rel="noopener">View on GitHub`), `GitHub button for ${r.name}`);
+  assert.ok(html.includes(LEVELS[r.level].advice.replace(/'/g, "&#39;")), `advice for ${r.name}`);
+  assert.ok(html.includes('<link rel="stylesheet" href="/site.css">'));
 }
 
 // Wrong upper/lower case or a trailing slash sends you to the one real address.
@@ -65,12 +70,16 @@ const rich = repoPage({
   label: "Dangerous", verdict: "Don't download this. It shows signs of malware.", flags: ["Asks you to turn off antivirus"],
   warnings: [{ label: "Asks you to turn off antivirus", note: "Real software never needs this.", severity: "high" }],
   checks: [{ group: "Reputation", label: "Stars", points: 3, max: 15, level: "bad", note: "12 people starred it." }],
-  capReason: "a serious warning sign", checkedAt: "2026-10-21T07:00:00Z",
+  capReason: "it has a serious warning sign", checkedAt: "2026-10-21T07:00:00Z",
 }, dir);
 assert.ok(rich.includes("Real software never needs this."));
 assert.ok(rich.includes("12 people starred it."));
 assert.ok(rich.includes("A &lt;b&gt;tool&lt;/b&gt;"));
 assert.ok(rich.includes("share/F-dangerous.png"));
+// "Why this grade" explains the score, the cap and why each check matters.
+assert.ok(rich.includes("Why this grade?"));
+assert.ok(rich.includes("but the score is capped at 30 because it has a serious warning sign"));
+assert.ok(rich.includes(WHY.Stars.replace(/'/g, "&#39;")));
 
 // The rest of the site is untouched.
 assert.equal((await get("/robots.txt")).status, 200);

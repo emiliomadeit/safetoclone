@@ -6,7 +6,9 @@ A website that gives non-technical people a safety grade (A to F) for any GitHub
 
 | File | What it does |
 |---|---|
-| `index.html` | The whole website: checker, directory, scoring explainer, pricing, newsletter form |
+| `index.html` | The home page: checker, directory, scoring explainer, questions, pricing, newsletter form |
+| `site.css` | The look of every page (colours, fonts, spacing) |
+| `report.js` | Draws a result (score dial, advice, warning signs, "Why this grade?"), shared by the home page and the Google pages |
 | `score.js` | The scoring engine. Reads public GitHub data and returns a 0–100 score |
 | `data/directory.json` | Scores for the directory. Rewritten every night |
 | `repos.txt` | Which repos the directory covers. Add a line to add a repo |
