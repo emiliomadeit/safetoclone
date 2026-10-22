@@ -42,6 +42,62 @@ const RISKY_FILE = /\.(exe|scr|msi|vbs|jar|dll|apk|dmg|pkg|zip|rar|7z)$/i;
 const DAY = 24 * 60 * 60 * 1000;
 const daysSince = (iso) => (Date.now() - new Date(iso).getTime()) / DAY;
 
+// ---- Plain-English text shown with every result (home page checker and the Google pages both use it) ----
+
+// Grade cut-offs: a score of 85 or more is an A, 70 to 84 a B, and so on.
+export const GRADES = [["A", 85], ["B", 70], ["C", 55], ["D", 40], ["F", 0]];
+
+// Every result gets one of these labels: a short verdict and what the visitor should do next.
+export const LEVELS = {
+  trusted: {
+    label: "Trusted",
+    verdict: "Looks trustworthy. Still only install what you need.",
+    advice: "It's well known, looked after, and shows none of the malware tricks we check for. Download it only from its official GitHub page, never from a copy, a file-sharing site or a link in a video.",
+  },
+  fine: {
+    label: "Probably fine",
+    verdict: "Probably fine. Read the warnings first.",
+    advice: "We found no malware tricks, but it misses some signs of a well-run project. Read the warning signs, and download it only from its official GitHub page.",
+  },
+  careful: {
+    label: "Be careful",
+    verdict: "Be careful. Ask someone technical before installing.",
+    advice: "Something is missing or slightly off. It may be fine, but ask someone technical before you install it, and never put it on a work computer without your IT team's OK.",
+  },
+  unproven: {
+    label: "Unproven",
+    verdict: "No warning signs, but it's too new or little-known to trust yet. Only install it if you know who made it.",
+    advice: "Nothing looks wrong, but it's too new or too little-known to trust yet. Only install it if you know and trust who made it. The grade can go up as more people use it.",
+  },
+  dangerous: {
+    label: "Dangerous",
+    verdict: "Don't download this. It shows signs of malware.",
+    advice: "Don't download it. We found tricks that malware uses, like asking you to turn off your antivirus or hiding files in locked zips. If you already installed it, uninstall it, run a virus scan and change your passwords.",
+  },
+};
+
+// The question each group of checks answers (same wording as "How we score" on the home page).
+export const GROUPS = {
+  Reputation: "Do people trust it?",
+  Upkeep: "Is anyone looking after it?",
+  Transparency: "Is it open about itself?",
+  "Red flags": "Any malware tricks?",
+};
+
+// Why each check matters, for curious visitors. Keyed by the check's label (or its group, for the red flags row).
+export const WHY = {
+  Stars: "Stars are like bookmarks. Malware repos rarely have many real users, and lots of stars means lots of people have looked at it. Stars can be bought, so we also check how fast they came.",
+  Forks: "A fork is a copy another developer made to build on. Real projects get copied; fake ones rarely do.",
+  "Owner history": "Scammers use brand-new accounts that get banned and replaced. An owner who has been around for years has more to lose.",
+  "Recent updates": "Software nobody updates stops getting security fixes.",
+  "Track record": "Older projects have had more time for problems to be spotted and reported.",
+  Releases: "A release is an official, finished version. Without one, you download whatever is in the code that day.",
+  License: "A license says whether you're allowed to use it. Serious projects almost always have one.",
+  Instructions: "A README explains what the project does and how to use it. Malware often has a thin or copied one.",
+  "Security contact": "A security policy tells people how to report problems privately, so they get fixed before attackers use them.",
+  "Red flags": "We look for tricks that keep showing up in malware: requests to turn off antivirus, locked zip files, cracks and free premium, hidden code, and AI instruction files that try to take over your assistant. Serious ones cap the grade, however popular the repo is.",
+};
+
 // Accepts "owner/repo", "github.com/owner/repo" or a full URL.
 export function parseRepo(input) {
   const s = String(input || "").trim().replace(/\.git$/, "").replace(/\/+$/, "");
@@ -114,7 +170,7 @@ export function score(data) {
   const ownerAge = user ? daysSince(user.created_at) : 0;
   const ownerPts = ownerAge > 730 ? 10 : ownerAge > 180 ? 6 : ownerAge > 30 ? 3 : 0;
   add("Reputation", "Owner history", ownerPts, 10, ownerPts >= 6 ? "good" : ownerPts >= 3 ? "warn" : "bad",
-    user ? `${user.type === "Organization" ? "Organization" : "Account"} created ${Math.round(ownerAge / 365 * 10) / 10} years ago.` : "Couldn't read the owner's profile.");
+    user ? `${user.type === "Organization" ? "Organization" : "Account"} created ${ownerAge >= 365 ? Math.round(ownerAge / 365 * 10) / 10 + " years" : Math.round(ownerAge) + " days"} ago.` : "Couldn't read the owner's profile.");
 
   // 2. Upkeep (25)
   const lastPush = daysSince(r.pushed_at);
@@ -185,26 +241,20 @@ export function score(data) {
 
   flagPts = Math.max(0, flagPts);
   add("Red flags", flags.length ? `${flags.length} warning sign${flags.length > 1 ? "s" : ""}` : "No warning signs found", flagPts, 30,
-    flagPts >= 25 ? "good" : flagPts >= 15 ? "warn" : "bad", flags.length ? "See the list below." : "We didn't find any of the common malware tricks.");
+    flagPts >= 25 ? "good" : flagPts >= 15 ? "warn" : "bad", flags.length ? "Each one is explained under Warning signs." : "We didn't find any of the common malware tricks.");
 
   // Paperwork (license, README, security file) takes minutes to add. Without real users, the best grade is C.
   if (stars < 50) softCap("users", 69);
 
   const raw = checks.reduce((s, c) => s + c.points, 0);
   const total = Math.max(0, Math.min(cap, raw));
-  const grade = total >= 85 ? "A" : total >= 70 ? "B" : total >= 55 ? "C" : total >= 40 ? "D" : "F";
+  const grade = GRADES.find(([, min]) => total >= min)[0];
   // A low score can mean two different things. "Dangerous" means we found malware tricks.
   // "Unproven" means nothing looks wrong, the project is just too new or little-known to trust yet.
   const dangerous = flags.some((f) => f.severity === "high") || flagPts <= 15;
   const level = dangerous ? "dangerous"
     : grade === "A" ? "trusted" : grade === "B" ? "fine" : grade === "C" ? "careful" : "unproven";
-  const { label, verdict } = {
-    trusted: { label: "Trusted", verdict: "Looks trustworthy. Still only install what you need." },
-    fine: { label: "Probably fine", verdict: "Probably fine. Read the warnings first." },
-    careful: { label: "Be careful", verdict: "Be careful. Ask someone technical before installing." },
-    unproven: { label: "Unproven", verdict: "No warning signs, but it's too new or little-known to trust yet. Only install it if you know who made it." },
-    dangerous: { label: "Dangerous", verdict: "Don't download this. It shows signs of malware." },
-  }[level];
+  const { label, verdict } = LEVELS[level];
 
   return {
     name: r.full_name,
@@ -216,7 +266,7 @@ export function score(data) {
     label,
     verdict,
     capped: cap < raw ? cap : null,
-    capReason: cap < raw ? { flag: "a serious warning sign", fame: "it got famous suspiciously fast", users: "fewer than 50 people have starred it" }[capReason] : null,
+    capReason: cap < raw ? { flag: "it has a serious warning sign", fame: "it got famous suspiciously fast", users: "fewer than 50 people have starred it" }[capReason] : null,
     checks,
     flags,
     aiFilesFound: aiNames,

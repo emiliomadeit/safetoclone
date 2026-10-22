@@ -1,5 +1,6 @@
 // Checks shared result links (safetoclone.com/?repo=owner/name) get the right link preview. Run with: node test/share.test.mjs
 import worker, { shareRepoName } from "../worker.js";
+import { GRADES } from "../score.js";
 import assert from "node:assert";
 import { readFile, access } from "node:fs/promises";
 
@@ -52,4 +53,19 @@ assert.equal(meta(junk, "og:url"), "https://safetoclone.com/");
 for (const g of ["default", ...["A-trusted", "B-fine", "C-careful", "D-unproven", "F-unproven"], ..."ABCDF".split("").map((x) => `${x}-dangerous`)]) {
   await access(new URL(`../share/${g}.png`, import.meta.url));
 }
+// The home page: Google's question-and-answer data must match the questions people can see, word for word.
+const faq = JSON.parse(home.match(/<script type="application\/ld\+json">\s*(\{"@context":"https:\/\/schema.org","@type":"FAQPage"[\s\S]*?)<\/script>/)[1]);
+for (const q of faq.mainEntity) {
+  assert.ok(home.includes(`<summary>${q.name}</summary>`), `visible question: ${q.name}`);
+  assert.ok(home.includes(`<p>${q.acceptedAnswer.text}</p>`), `visible answer for: ${q.name}`);
+}
+// "What the grades mean" uses the same cut-offs as score.js.
+for (const [g, min] of GRADES.slice(0, 3)) assert.ok(home.includes(`<span class="g">${g}<span class="range">${min}–`), `grade ${g} range`);
+assert.ok(!home.includes("fonts.googleapis.com"), "no outside fonts");
+// The site's own fonts: every font site.css loads must be in fonts/, and nothing comes from another website.
+const css = await readFile(new URL("../site.css", import.meta.url), "utf8");
+const fontFiles = [...css.matchAll(/url\("\/(fonts\/[^"]+)"\)/g)].map((m) => m[1]);
+assert.ok(fontFiles.length >= 2, "site.css loads its fonts from /fonts");
+for (const f of fontFiles) await access(new URL("../" + f, import.meta.url));
+assert.ok(!/url\(["']?https?:/.test(css), "site.css loads nothing from other websites");
 console.log("Share tests passed");
