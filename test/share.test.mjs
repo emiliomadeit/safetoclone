@@ -62,4 +62,10 @@ for (const q of faq.mainEntity) {
 // "What the grades mean" uses the same cut-offs as score.js.
 for (const [g, min] of GRADES.slice(0, 3)) assert.ok(home.includes(`<span class="g">${g}<span class="range">${min}–`), `grade ${g} range`);
 assert.ok(!home.includes("fonts.googleapis.com"), "no outside fonts");
+// The site's own fonts: every font site.css loads must be in fonts/, and nothing comes from another website.
+const css = await readFile(new URL("../site.css", import.meta.url), "utf8");
+const fontFiles = [...css.matchAll(/url\("\/(fonts\/[^"]+)"\)/g)].map((m) => m[1]);
+assert.ok(fontFiles.length >= 2, "site.css loads its fonts from /fonts");
+for (const f of fontFiles) await access(new URL("../" + f, import.meta.url));
+assert.ok(!/url\(["']?https?:/.test(css), "site.css loads nothing from other websites");
 console.log("Share tests passed");

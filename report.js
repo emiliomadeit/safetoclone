@@ -19,12 +19,12 @@ const an = (g) => (/^[AEF]/.test(g) ? "an" : "a");
 const SEVERITY = { high: "Serious", medium: "Warning", low: "Good to know" };
 const MARK = { good: "Good", warn: "So-so", bad: "Poor" };
 
-// The round score dial: the ring fills up to the score, the grade letter sits in the middle.
+// The round score dial: the ring fills up to the score, the grade is stamped in the middle.
 export function ring(r, size = "lg") {
   const score = Math.max(0, Math.min(100, Math.round(Number(r.score) || 0)));
   return `<div class="ring ring-${size} lvl-${levelOf(r)}" role="img" aria-label="Grade ${esc(r.grade)}, ${score} out of 100${r.label ? `, ${esc(r.label)}` : ""}">`
     + `<svg viewBox="0 0 100 100" aria-hidden="true"><circle class="track" cx="50" cy="50" r="44"/><circle class="arc" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="${score} 100"/></svg>`
-    + `<b>${esc(r.grade)}</b><span>${score}/100</span></div>`;
+    + `<div class="stamp"><b>${esc(r.grade)}</b><small>${score}/100</small></div></div>`;
 }
 
 // "85 or more is an A", "70 to 84 is a B", "Under 40 is an F".

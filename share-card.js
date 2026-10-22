@@ -1,13 +1,17 @@
 // Draws the "Download image" share card: a 1200x630 PNG of one result, in the website's style.
 // Runs only in the visitor's browser (it uses a <canvas>). Nothing is uploaded anywhere.
 
+// Same colours as site.css.
 const C = {
-  bg: "#f5f5f7", card: "#ffffff", ink: "#1d1d1f", muted: "#6e6e73", track: "#e8e8ed", brand: "#1f8a5b", link: "#0066cc",
-  trusted: "#1a7f37", fine: "#1a7f37", careful: "#a15c00", unproven: "#a15c00", dangerous: "#c9271c",
-  trustedBg: "#e9f6ee", fineBg: "#e9f6ee", carefulBg: "#fdf2e0", unprovenBg: "#fdf2e0", dangerousBg: "#fdeceb",
+  bg: "#f1f4f2", card: "#ffffff", ink: "#15201c", muted: "#56645e", track: "#e1e8e4", brand: "#1f8a5b", link: "#1d6b4c",
+  trusted: "#1d7a4f", fine: "#1d7a4f", careful: "#9a5800", unproven: "#9a5800", dangerous: "#b8261c",
+  trustedBg: "#e2f2e8", fineBg: "#e2f2e8", carefulBg: "#fcefd9", unprovenBg: "#fcefd9", dangerousBg: "#fce5e2",
 };
-// The same system fonts as the website: Apple's own font on Mac and iPhone, Segoe UI on Windows.
+// The same fonts as the website: the device's own font for text (Apple's on Mac and iPhone),
+// Archivo for the grade and headline, JetBrains Mono for small labels (both loaded by site.css from /fonts).
 const FONT = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif';
+const DISPLAY = `"Archivo Expanded", ${FONT}`;
+const MONO = '"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace';
 export const W = 1200, H = 630;
 
 // Splits text into lines that fit `width`. Cuts with "…" after `max` lines.
@@ -30,12 +34,12 @@ function wrap(ctx, text, width, max) {
 }
 
 // Picks the biggest font size (down to `min`) at which the text fits on one line.
-function fit(ctx, text, weight, size, min, width) {
+function fit(ctx, text, weight, size, min, width, family = FONT) {
   for (; size > min; size -= 1) {
-    ctx.font = `${weight} ${size}px ${FONT}`;
+    ctx.font = `${weight} ${size}px ${family}`;
     if (ctx.measureText(text).width <= width) return;
   }
-  ctx.font = `${weight} ${min}px ${FONT}`;
+  ctx.font = `${weight} ${min}px ${family}`;
 }
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -60,6 +64,8 @@ function logo(ctx, x, y, s) {
 
 // r = a result from score.js, link = the shareable link. Returns a PNG Blob.
 export async function shareCard(r, link) {
+  // Wait for the website's fonts, so the picture uses them. If they can't load, system fonts are used instead.
+  try { await Promise.all([`800 40px ${DISPLAY}`, `500 20px ${MONO}`].map((f) => document.fonts.load(f))); } catch {}
   const canvas = document.createElement("canvas");
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext("2d");
@@ -70,8 +76,10 @@ export async function shareCard(r, link) {
   roundRect(ctx, 32, 32, W - 64, H - 64, 36);
   ctx.fillStyle = C.card; ctx.fill();
 
-  // The score dial: a grey ring, filled in colour up to the score, with the grade in the middle.
+  // The score dial: a grey ring filled in colour up to the score, a tinted middle,
+  // and the grade stamped on at a slight angle, like on the website.
   const cx = 250, cy = 315, rad = 150;
+  ctx.fillStyle = tint; ctx.beginPath(); ctx.arc(cx, cy, rad - 25, 0, Math.PI * 2); ctx.fill();
   ctx.lineWidth = 26; ctx.lineCap = "round";
   ctx.strokeStyle = C.track; ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.stroke();
   const pct = Math.max(0, Math.min(100, r.score)) / 100;
@@ -79,20 +87,23 @@ export async function shareCard(r, link) {
     ctx.strokeStyle = color; ctx.beginPath();
     ctx.arc(cx, cy, rad, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * pct); ctx.stroke();
   }
-  ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
-  ctx.fillStyle = color; ctx.font = `700 150px ${FONT}`; ctx.fillText(r.grade, cx, cy + 45);
-  ctx.fillStyle = C.muted; ctx.font = `500 30px ${FONT}`; ctx.fillText(`${r.score}/100`, cx, cy + 95);
+  ctx.save();
+  ctx.translate(cx, cy); ctx.rotate(-8 * Math.PI / 180);
+  ctx.textAlign = "center"; ctx.textBaseline = "alphabetic"; ctx.fillStyle = color;
+  ctx.font = `800 140px ${DISPLAY}`; ctx.fillText(r.grade, 0, 40);
+  ctx.font = `500 28px ${MONO}`; ctx.fillText(`${r.score}/100`, 0, 88);
+  ctx.restore();
 
   const x = 480, width = W - x - 80;
   ctx.textAlign = "left";
 
   // Brand line
   logo(ctx, x, 78, 44);
-  ctx.fillStyle = C.ink; ctx.font = `600 30px ${FONT}`; ctx.fillText("SafeToClone", x + 58, 111);
+  ctx.fillStyle = C.ink; ctx.font = `800 28px ${DISPLAY}`; ctx.fillText("SafeToClone", x + 58, 110);
 
   // Repo name, label and verdict
   let y = 190;
-  ctx.fillStyle = C.ink; fit(ctx, r.name, 600, 34, 18, width); ctx.fillText(r.name, x, y);
+  ctx.fillStyle = C.ink; fit(ctx, r.name, 500, 32, 16, width, MONO); ctx.fillText(r.name, x, y);
   y += 26;
   ctx.font = `600 24px ${FONT}`;
   const pillW = ctx.measureText(r.label).width + 56;
@@ -100,8 +111,8 @@ export async function shareCard(r, link) {
   ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x + 24, y + 22, 6, 0, Math.PI * 2); ctx.fill();
   ctx.fillText(r.label, x + 40, y + 31);
   y += 96;
-  ctx.fillStyle = C.ink; ctx.font = `700 38px ${FONT}`;
-  for (const line of wrap(ctx, r.verdict, width, 2)) { ctx.fillText(line, x, y); y += 46; }
+  ctx.fillStyle = C.ink; ctx.font = `800 34px ${DISPLAY}`;
+  for (const line of wrap(ctx, r.verdict, width, 2)) { ctx.fillText(line, x, y); y += 44; }
 
   // Up to three warning signs
   y += 12;
@@ -124,7 +135,7 @@ export async function shareCard(r, link) {
   const date = new Date(r.checkedAt || Date.now()).toLocaleDateString("en-CA", { dateStyle: "medium" });
   ctx.fillStyle = C.muted; ctx.font = `400 21px ${FONT}`;
   ctx.fillText(`Checked ${date}. A set of warning signs, not a guarantee.`, x, H - 100);
-  ctx.fillStyle = C.link; fit(ctx, link.replace(/^https?:\/\//, ""), 500, 24, 14, width);
+  ctx.fillStyle = C.link; fit(ctx, link.replace(/^https?:\/\//, ""), 500, 22, 13, width, MONO);
   ctx.fillText(link.replace(/^https?:\/\//, ""), x, H - 66);
 
   return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Couldn't make the image."))), "image/png"));

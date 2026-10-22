@@ -19,9 +19,10 @@
 <meta name="twitter:title" content="SafeToClone: is this GitHub repo safe to download?">
 <meta name="twitter:description" content="A safety score for GitHub repos, written for people who don't code.">
 <link rel="canonical" href="https://safetoclone.com/">
-<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f1f4f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f8a5b'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preload" href="/fonts/archivo-expanded-800.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/site.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"SafeToClone","url":"https://safetoclone.com/"}
@@ -55,7 +56,7 @@
 <main id="main">
   <div class="wrap hero" id="check">
     <p class="eyebrow">Free safety check · No sign-up</p>
-    <h1>Is that GitHub repo safe to download?</h1>
+    <h1>Is that GitHub repo <span class="mark">safe to download?</span></h1>
     <p class="lede">Paste a link and get a grade from A to F in seconds, with every warning sign explained in plain English. We also catch tricks aimed at your AI assistant.</p>
     <form class="checker" id="checkForm" role="search">
       <label class="sr-only" for="repoInput">GitHub link or owner/name of the repo</label>
@@ -107,7 +108,7 @@
   <section class="band" id="method"><div class="wrap">
     <div class="section-head">
       <p class="eyebrow">How we score</p>
-      <h2>Four questions. 100 points. One grade.</h2>
+      <h2>Four questions. 100&nbsp;points. One grade.</h2>
       <p class="lede">We only read public information on GitHub. We never download or run the code.</p>
     </div>
     <div class="tiles">

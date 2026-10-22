@@ -16,6 +16,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 |---|---|
 | `index.html` | The home page (checker, directory, "How we score", questions, pricing, newsletter form) |
 | `site.css` | The look of every page (home and Google pages): colours, fonts, spacing. Change a colour here and it changes everywhere |
+| `fonts/` | The site's two own fonts (Archivo for headlines and grades, JetBrains Mono for small labels) and their free licence. Also used by `share-card.js` and `scripts/make-share-images.py` |
 | `report.js` | Draws a result as HTML: the score dial, "What should I do?", warning signs, "Why this grade?" and the directory cards. Used by both `index.html` (in the browser) and `seo.js` (in the Worker) |
 | `score.js` | Scoring engine. **The only source of truth for points, caps, grades and labels**, plus the plain-English text shown with them (`LEVELS` advice, `GROUPS` questions, `WHY` each check matters) |
 | `worker.js` | Cloudflare Worker: link previews for shared results (`/?repo=owner/name`), `/api/subscribe` (Resend), `/mcp` (read-only connector Meta Muse uses to fetch Instagram posts) and old-address redirects |
@@ -46,7 +47,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | The questions in `index.html` | The FAQ data at the top of `index.html` must match word for word (Google rule). `node test/share.test.mjs` checks it |
 | `seo.js` or the `/repo/`, `/repos`, `/sitemap.xml` routes | `run_worker_first` in `wrangler.jsonc`, the directory links in `index.html`. Run `node test/seo.test.mjs` |
 | `score.js` grades or labels | The share pictures: `SHARE_IMAGES` in `worker.js`, the list in `scripts/make-share-images.py` (rerun it), colours in `share-card.js` |
-| Colours in `site.css` | Keep `share-card.js` and `scripts/make-share-images.py` (rerun it) in the same colours |
+| Colours or fonts in `site.css` | Keep `share-card.js` and `scripts/make-share-images.py` (rerun it) in the same colours and fonts |
 | `/?repo=` share links | `wireShare` and the `?repo=` auto-check in `index.html`, `homePage` in `worker.js`, `run_worker_first` in `wrangler.jsonc`. Run `node test/share.test.mjs` |
 | `/api/subscribe` in `worker.js` | The newsletter form's `fetch("/api/subscribe")` in `index.html` |
 | Domain or address | `worker.js` redirects, `SITE` in `seo.js`, `index.html` canonical link and footer, `robots.txt`, `README.md` |
@@ -60,4 +61,4 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 - The GitHub repo `emiliomadeit/safetoclone` is the only real copy of the code.
 - Every merge to `main` redeploys the site automatically.
 - No build step and no npm packages. Keep it that way unless there's a strong reason.
-- No outside fonts: the site uses each device's own font (Apple's on Mac and iPhone). Keep new UI accessible: visible keyboard focus, text contrast of at least 4.5:1, and real buttons, links and `<details>` instead of clickable divs.
+- No outside fonts: never link Google Fonts or another font service. Headline and label fonts live in `fonts/`; body text uses each device's own font (Apple's on Mac and iPhone). Keep new UI accessible: visible keyboard focus, text contrast of at least 4.5:1, and real buttons, links and `<details>` instead of clickable divs.
