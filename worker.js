@@ -64,9 +64,9 @@ async function readJson(env, path) {
   return r.ok ? r.json() : null;
 }
 
-// The post queue. It lives in the private HQ repo when the HQ key is set (pictures are then served
-// through /ig-media/..., because Instagram needs a public link). Otherwise, or if GitHub is down,
-// the old copy in this repo is used.
+// The post queue lives in the private HQ repo (instagram/posts.json there). Pictures are served
+// through /ig-media/..., because Instagram needs a public link. If GitHub is down, nothing posts
+// and the 14:30 run tries again. The local fallback only matters for tests and PR previews.
 async function loadQueue(env) {
   if (env.HQ_GITHUB_TOKEN) {
     try {
