@@ -38,7 +38,7 @@ const SITE = "https://safetoclone.com";
 const TOOLS = [
   {
     name: "get_next_post",
-    description: "Get the next SafeToClone Instagram post: the one dated today, or the next one coming up. Returns the date, the image URL (image_urls has every slide when the post is a carousel), the caption to use word for word, and the image alt text.",
+    description: "Get the next SafeToClone Instagram post: the one dated today, or the next one coming up. Returns the date, the time (Ottawa) it goes out, the image URL (image_urls has every slide when the post is a carousel), the caption to use word for word, and the image alt text.",
     inputSchema: { type: "object", properties: {} },
   },
   {
@@ -58,6 +58,10 @@ const MCP_INSTRUCTIONS =
 
 // Today's date where Emile lives (Ottawa), as YYYY-MM-DD.
 const today = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+// The time now in Ottawa, as HH:MM (24-hour).
+const nowTime = () => new Date().toLocaleTimeString("en-GB", { timeZone: "America/Toronto", hour: "2-digit", minute: "2-digit", hour12: false });
+// A post goes out at its "time" (Ottawa, HH:MM), or 10:00 if it has none.
+const DEFAULT_TIME = "10:00";
 
 async function readJson(env, path) {
   const r = await env.ASSETS.fetch(new Request(SITE + path));
@@ -82,13 +86,18 @@ async function loadQueue(env) {
 async function upcomingPosts(env) {
   const { posts, media } = await loadQueue(env);
   const now = today();
+  const time = nowTime();
   return posts
     .filter((p) => p.date >= now)
-    .sort((a, b) => a.date.localeCompare(b.date))
+    .map((p) => ({ ...p, time: p.time || DEFAULT_TIME }))
+    .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time))
     .map((p) => ({
       id: p.id,
       date: p.date,
+      time: p.time,
       due_today: p.date === now,
+      // due_now: dated today and its time has come. The robot only posts these.
+      due_now: p.date === now && p.time <= time,
       // A post has one "image", or several "images" for a carousel. image_url is always the first one.
       image_url: media + (p.images?.[0] || p.image),
       image_urls: (p.images || [p.image]).map((i) => media + i),
@@ -279,11 +288,15 @@ export default {
     return env.ASSETS.fetch(request);
   },
   // Runs on the schedule in wrangler.jsonc: posts today's Instagram post, if there is one.
-  // It runs twice (14:00 and 14:30 UTC) so a GitHub or Instagram hiccup at 14:00 gets a second try.
-  // The second run sees the post is already up and does nothing.
+  // It runs every 30 minutes. Each post goes out at the first run after its time, and the
+  // next run is a second try if something hiccuped. Runs after that see the post is up and skip it.
   async scheduled(event, env, ctx) {
-    const [next] = await upcomingPosts(env);
-    const result = await autopost(env, next);
-    console.log("Instagram:", JSON.stringify(result));
+    const due = (await upcomingPosts(env)).filter((p) => p.due_now);
+    if (!due.length) return console.log("Instagram: nothing due now.");
+    // A day can have more than one post (each at its own time). Posts already up are skipped.
+    for (const post of due) {
+      const result = await autopost(env, post).catch((e) => ({ ok: false, post: post.id, error: e.message }));
+      console.log("Instagram:", JSON.stringify(result));
+    }
   },
 };

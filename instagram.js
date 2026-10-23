@@ -102,7 +102,7 @@ export async function autopost(env, post) {
   const current = await getToken(env);
   if (!current) return { ok: false, reason: "INSTAGRAM_TOKEN isn't set in Cloudflare yet." };
   const { token } = await renewIfOld(env, current);
-  if (!post?.due_today) return { ok: true, reason: "Nothing is due today." };
+  if (!(post?.due_now ?? post?.due_today)) return { ok: true, reason: "Nothing is due now." };
   const { user_id: userId } = await ig("/me", { token, params: { fields: "user_id" } });
   if (await alreadyPosted(token, userId, post.caption)) return { ok: true, reason: `${post.id} was already posted.` };
   const id = await publish(token, userId, post);

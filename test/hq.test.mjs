@@ -58,4 +58,29 @@ globalThis.fetch = async () => new Response("Bad Gateway", { status: 502 });
 post = await mcp(env);
 assert.equal(post.id, "local");
 
+// Posting times: two posts today. One is due ("00:00"), one isn't yet ("24:00" never comes).
+// The robot runs every 30 minutes and must post only the due one.
+const timed = JSON.stringify({ posts: [
+  { id: "later", date: today, time: "24:00", image: "instagram/images/later.jpg", alt: "", caption: "Later post" },
+  { id: "now", date: today, time: "00:00", image: "instagram/images/now.jpg", alt: "", caption: "Now post" },
+] });
+const published = [];
+globalThis.fetch = async (url, opts = {}) => {
+  const u = new URL(url);
+  const reply = (x) => new Response(JSON.stringify(x));
+  if (u.hostname === "api.github.com") return new Response(timed);
+  const params = Object.fromEntries(opts.body ? new URLSearchParams(opts.body) : u.searchParams);
+  if (u.pathname.endsWith("/me")) return reply({ user_id: "123" });
+  if (u.pathname.endsWith("/123/media") && opts.method === "POST") { published.push(params.caption); return reply({ id: "c1" }); }
+  if (u.pathname.endsWith("/123/media")) return reply({ data: [] });
+  if (u.pathname.endsWith("/c1")) return reply({ status_code: "FINISHED" });
+  if (u.pathname.endsWith("/media_publish")) return reply({ id: "p1" });
+  return new Response("{}", { status: 400 });
+};
+const list = await worker.fetch(new Request("https://safetoclone.com/mcp", { method: "POST", body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "list_upcoming_posts" } }) }), env);
+const upcoming = JSON.parse((await list.json()).result.content[0].text).posts;
+assert.deepEqual(upcoming.map((p) => [p.id, p.due_now]), [["now", true], ["later", false]]);
+await worker.scheduled({}, { ...env, INSTAGRAM_TOKEN: "t" }, {});
+assert.deepEqual(published, ["Now post"]);
+
 console.log("HQ tests passed");
