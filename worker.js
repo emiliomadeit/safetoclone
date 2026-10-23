@@ -1,5 +1,5 @@
 // Cloudflare Worker: serves the website files, fills in link previews for shared results (/?repo=owner/name),
-// handles the newsletter signup,
+// handles the newsletter signup, counts visits (stats.js, read them at /api/stats),
 // posts to Instagram once a day (instagram.js, status at /api/instagram/status),
 // and runs /mcp, a read-only connector any AI agent (like Meta Muse) can use to read our posts and scores.
 // Needs one setting in Cloudflare > Workers & Pages > safetoclone > Settings > Variables and Secrets:
@@ -9,6 +9,7 @@
 import { autopost, status as instagramStatus } from "./instagram.js";
 import { hqFile, hqQueue } from "./hq.js";
 import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath } from "./seo.js";
+import { count, sourceOf, hit, report as statsReport } from "./stats.js";
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -269,13 +270,24 @@ async function seoPage(env, url) {
 const OLD_HOSTS = ["www.safetoclone.com", "safetoclone.emileantoun10.workers.dev"];
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const { pathname } = url;
+    // Visitor counts (stats.js). Runs after the page is sent, so it never slows a visit down.
+    const track = (event, source = "") => {
+      const job = count(env, request, event, source).catch(() => {});
+      if (ctx?.waitUntil) ctx.waitUntil(job);
+    };
     if (OLD_HOSTS.includes(url.hostname) && (request.method === "GET" || request.method === "HEAD")) {
       return Response.redirect(`https://safetoclone.com${pathname}${url.search}`, 301);
     }
-    if (pathname === "/api/subscribe") return subscribe(request, env);
+    if (pathname === "/api/subscribe") {
+      const res = await subscribe(request, env);
+      if (res.ok) track("signup");
+      return res;
+    }
+    if (pathname === "/api/hit") return hit(request, env);
+    if (pathname === "/api/stats") return statsReport(env);
     if (pathname === "/mcp") return mcp(request, env);
     if (pathname === "/api/instagram/status") {
       const { source } = await loadQueue(env);
@@ -283,6 +295,9 @@ export default {
     }
     if (pathname.startsWith("/ig-media/") && (request.method === "GET" || request.method === "HEAD")) return igMedia(env, pathname);
     const read = request.method === "GET" || request.method === "HEAD";
+    if (pathname === "/" && request.method === "GET") track("home", sourceOf(request));
+    if (pathname.startsWith("/repo/") && request.method === "GET") track("repo_page", sourceOf(request));
+    if (pathname === "/repos" && request.method === "GET") track("repos_page", sourceOf(request));
     if (pathname === "/" && read) return homePage(request, env, url);
     if (read && (pathname === "/sitemap.xml" || pathname === "/repos" || pathname === "/repos/" || pathname.startsWith("/repo/"))) return seoPage(env, url);
     return env.ASSETS.fetch(request);
