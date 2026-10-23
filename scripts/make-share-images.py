@@ -10,7 +10,7 @@ W, H = 1200, 630
 BG, CARD, INK, MUTED, TRACK, BRAND, LINK = "#f1f4f2", "#ffffff", "#15201c", "#56645e", "#e1e8e4", "#1f8a5b", "#1d6b4c"
 COLORS = {"trusted": "#1d7a4f", "fine": "#1d7a4f", "careful": "#9a5800", "unproven": "#9a5800", "dangerous": "#b8261c", "brand": BRAND}
 TINTS = {"trusted": "#e2f2e8", "fine": "#e2f2e8", "careful": "#fcefd9", "unproven": "#fcefd9", "dangerous": "#fce5e2", "brand": "#e2f2e8"}
-LABELS = {"trusted": "Trusted", "fine": "Probably fine", "careful": "Be careful", "unproven": "Unproven", "dangerous": "Dangerous"}
+LABELS = {"trusted": "Strong", "fine": "Probably fine", "careful": "Be careful", "unproven": "Unproven", "dangerous": "Dangerous"}
 FONT_DIR = "/usr/share/fonts/opentype/inter/"
 SITE_FONTS = os.path.join(os.path.dirname(__file__), "..", "fonts")
 OUT = os.path.join(os.path.dirname(__file__), "..", "share")
@@ -110,12 +110,12 @@ if __name__ == "__main__":
          "Is this GitHub repo safe to download?",
          "Paste a link, get a grade from A to F and a plain-English list of warning signs.")
     made = 1
-    # One picture per grade and label. "Dangerous" can come with any grade, the others with one or two.
-    combos = [("A", "trusted"), ("B", "fine"), ("C", "careful"), ("D", "unproven"), ("F", "unproven")]
+    # One picture per grade and label. "Dangerous" can come with any grade, "Be careful" with C, D or F, the others with one or two.
+    combos = [("A", "trusted"), ("B", "fine"), ("C", "careful"), ("D", "careful"), ("F", "careful"), ("D", "unproven"), ("F", "unproven")]
     combos += [(g, "dangerous") for g in "ABCDF"]
     for grade, level in combos:
         headline = {"dangerous": "Shows signs of malware.", "unproven": "Too new or little-known to trust yet.",
-                    "careful": "Be careful before installing.", "fine": "Probably fine.", "trusted": "Looks trustworthy."}[level]
+                    "careful": "Be careful before installing.", "fine": "Probably fine.", "trusted": "Strong on every check."}[level]
         fill = {"A": 0.92, "B": 0.77, "C": 0.62, "D": 0.47, "F": 0.25}[grade]
         card(f"{grade}-{level}", grade, "SAFETY GRADE", level, fill, f"Grade {grade} · {LABELS[level]}",
              headline, "Open the link to see the full report and every warning sign we found.")

@@ -200,7 +200,7 @@ async function mcp(request, env) {
 // If the repo is in our nightly directory, the preview shows its grade. Otherwise it shows a general picture,
 // because we never trust a grade written into the link itself (anyone could fake one).
 const escAttr = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const SHARE_IMAGES = ["A-trusted", "B-fine", "C-careful", "D-unproven", "F-unproven", "A-dangerous", "B-dangerous", "C-dangerous", "D-dangerous", "F-dangerous"];
+const SHARE_IMAGES = ["A-trusted", "B-fine", "C-careful", "D-careful", "F-careful", "D-unproven", "F-unproven", "A-dangerous", "B-dangerous", "C-dangerous", "D-dangerous", "F-dangerous"];
 
 export function shareRepoName(param) {
   // Same rules as parseRepo in score.js: owner/name, letters, numbers, - _ . only.
