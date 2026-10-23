@@ -16,7 +16,7 @@ for (const name of list) {
       // Extra detail for the repo pages Google reads (/repo/owner/name, built in seo.js).
       warnings: r.flags.map(({ label, note, severity }) => ({ label, note, severity })),
       checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, capReason: r.capReason, aiFilesFound: r.aiFilesFound, checkedAt: r.checkedAt });
-    console.log(`${r.grade} ${String(r.score).padStart(3)}  ${r.name}`);
+    console.log(`${r.grade} ${String(r.score).padStart(3)}  ${r.securityChecked ? "scorecard" : "no-scorecard"}  ${r.name}`);
   } catch (e) {
     console.error(`skip ${name}: ${e.message}`);
   }
@@ -24,4 +24,4 @@ for (const name of list) {
 results.sort((a, b) => b.score - a.score);
 await writeFile(new URL("../data/directory.json", import.meta.url),
   JSON.stringify({ updatedAt: new Date().toISOString(), example: false, repos: results }, null, 2) + "\n");
-console.log(`wrote ${results.length} repos`);
+console.log(`wrote ${results.length} repos, ${results.filter((r) => r.securityChecked).length} with OpenSSF Scorecard data`);

@@ -159,13 +159,17 @@ async function getText(url) {
 
 // OpenSSF Scorecard: a free, independent security check of public GitHub projects (scorecard.dev).
 // Returns null when it has no data for this repo or can't be reached. Then "Security habits" shows as not checked.
-async function getScorecard(fullName) {
-  try {
-    const res = await fetch(`https://api.scorecard.dev/projects/github.com/${fullName}`);
-    if (!res.ok) return null;
-    const j = await res.json();
-    return Array.isArray(j.checks) ? { date: j.date, checks: j.checks.map(({ name, score }) => ({ name, score })) } : null;
-  } catch { return null; }
+export async function getScorecard(fullName) {
+  // Scorecard stores some repos in lower case, so try that too.
+  for (const name of [...new Set([fullName, fullName.toLowerCase()])]) {
+    try {
+      const res = await fetch(`https://api.scorecard.dev/projects/github.com/${name}`);
+      if (!res.ok) continue;
+      const j = await res.json();
+      if (Array.isArray(j.checks)) return { date: j.date, checks: j.checks.map(({ name: n, score }) => ({ name: n, score })) };
+    } catch { /* unreachable: treat as no data */ }
+  }
+  return null;
 }
 
 // Collects everything the scorer needs. Kept separate so tests can feed in saved data.
@@ -253,7 +257,7 @@ export function score(data) {
   const sc = (name) => { const c = scorecard?.checks?.find((x) => x.name === name); return c && c.score >= 0 ? c.score : null; };
   const review = sc("Code-Review");
   if (review !== null) {
-    add("Security habits", "Code review", Math.round(review * 0.4), 4, review >= 8 ? "good" : review >= 4 ? "warn" : "bad",
+    add("Security habits", "Code review", Math.round(review * 0.3), 3, review >= 8 ? "good" : review >= 4 ? "warn" : "bad",
       review >= 8 ? "Almost every change is checked by a second person before it goes in."
         : review >= 4 ? "Some changes go in without a second person checking them." : "Most changes go in without anyone else checking them.");
   }
@@ -266,7 +270,7 @@ export function score(data) {
   // Only the clearly dangerous setups count. Loose token permissions are too common to tell projects apart.
   const auto = sc("Dangerous-Workflow");
   if (auto !== null) {
-    add("Security habits", "Safe automation", Math.round(auto * 0.3), 3, auto >= 8 ? "good" : auto >= 4 ? "warn" : "bad",
+    add("Security habits", "Safe automation", Math.round(auto * 0.4), 4, auto >= 8 ? "good" : auto >= 4 ? "warn" : "bad",
       auto >= 8 ? "Its build-and-publish robots are set up safely." : "Its build-and-publish robots are set up in a way attackers have used to take over projects.");
   }
 
@@ -294,7 +298,8 @@ export function score(data) {
   if (riskyRoot.length) flag("Programs sitting in the code", 10, `Ready-to-run files in the main folder: ${riskyRoot.slice(0, 3).join(", ")}. Source code projects rarely do this.`, stars < 100 ? 40 : null);
   if (riskyAssets.length && stars < 100) flag("Unknown programs to download", 8, `Releases offer ${riskyAssets.slice(0, 3).join(", ")} from a little-known project.`);
   if (PIPE_TO_SHELL.test(readme)) flag("Runs a script straight from the internet", 3, "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.");
-  const readmeNoImages = readme.replace(/data:image\/[a-z+]+;base64,[A-Za-z0-9+/=]+/gi, "");
+  // Pictures and badge icons are often stored as encoded text (also inside links, as %2B for "+"). Those are fine.
+  const readmeNoImages = readme.replace(/base64,[A-Za-z0-9+/=%]+/gi, "");
   if (LONG_BASE64.test(readmeNoImages)) flag("Hidden encoded text", 10, "The README contains a long scrambled block of text. That can hide commands.");
   // Big companies launch repos that get famous in days, so only accounts with no long history are suspect.
   // It's a warning, not proof: it keeps the grade at C or below but doesn't mark the repo Dangerous by itself.
@@ -313,7 +318,14 @@ export function score(data) {
   // AI-agent check: instruction files that could hijack your AI assistant.
   const aiNames = Object.keys(aiFiles);
   const injected = aiNames.filter((n) => PROMPT_INJECTION.some((re) => re.test(aiFiles[n])) || LONG_BASE64.test(aiFiles[n]));
-  if (injected.length) flag("Could hijack your AI assistant", 25, `${injected.join(", ")} contains instructions that try to override your AI, hide things from you, or send data away.`, 20);
+  if (injected.length) {
+    // Quote the line we found, so anyone can check our work.
+    const text = aiFiles[injected[0]];
+    const hit = PROMPT_INJECTION.map((re) => text.match(re)).find(Boolean);
+    const line = hit ? text.slice(0, hit.index).split("\n").length : null;
+    const quote = hit ? text.split("\n")[line - 1].trim().slice(0, 140) : "a long block of scrambled text";
+    flag("Could hijack your AI assistant", 25, `${injected.join(", ")} contains instructions that try to override your AI, hide things from you, or send data away. ${hit ? `Line ${line} of ${injected[0]}: "${quote}"` : `It contains ${quote}.`}`, 20);
+  }
   const hidden = aiNames.filter((n) => !injected.includes(n) && HIDDEN_CHARS.test(aiFiles[n].replace(/^\uFEFF/, "")));
   if (hidden.length) flag("Hidden text for your AI", 25, `${hidden.join(", ")} contains invisible characters. Your AI can read them, you can't. This is a known way to hide instructions.`, 20);
 
