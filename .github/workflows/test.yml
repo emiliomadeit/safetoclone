@@ -14,3 +14,4 @@ jobs:
       - run: node test/share.test.mjs
       - run: node test/seo.test.mjs
       - run: node test/hq.test.mjs
+      - run: node test/stats.test.mjs

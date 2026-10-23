@@ -25,13 +25,14 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `share/` | Link-preview pictures (one per grade and label, plus `default.png`). Made by `python3 scripts/make-share-images.py` |
 | `instagram.js` | Posts Instagram posts through Meta's official API. `worker.js` checks every 30 minutes (cron in `wrangler.jsonc`) and posts any post dated today whose `time` (Ottawa, default 10:00) has come. A day can have several posts. Token: `INSTAGRAM_TOKEN` Secret, renewed copy kept in the `INSTAGRAM` KV store. Check it at safetoclone.com/api/instagram/status |
 | `hq.js` | Reads the Instagram post queue and pictures from the private HQ repo (`instagram/posts.json` there) with the read-only `HQ_GITHUB_TOKEN` Secret. `worker.js` serves today's pictures at `/ig-media/...` because Instagram needs a public link. **Posts, captions and pictures live in HQ, not here** (see `instagram/README.md` in HQ) |
+| `stats.js` | Rough visitor counts per day (home, repo pages, checks, shares, signups) and where visitors came from (`?ref=reddit` tags or the linking site). No personal data. Stored in the `INSTAGRAM` KV store as `stats:YYYY-MM-DD`. Read at safetoclone.com/api/stats |
 | `wrangler.jsonc` | Cloudflare settings (what to publish, `previews` for PR test sites) |
 | `repos.txt` | List of repos in the directory, one per line |
 | `scripts/build-directory.mjs` | Scores every repo in `repos.txt` and writes `data/directory.json` |
 | `data/directory.json` | Generated every night. **Never edit by hand** |
 | `.github/workflows/nightly.yml` | Runs the build script at 07:00 UTC and commits the result |
 | `.github/workflows/test.yml` | Runs the tests on every push and PR |
-| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs && node test/share.test.mjs && node test/seo.test.mjs && node test/hq.test.mjs` |
+| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs && node test/share.test.mjs && node test/seo.test.mjs && node test/hq.test.mjs && node test/stats.test.mjs` |
 | `robots.txt` | For search engines. The sitemap is made by `seo.js` (no `sitemap.xml` file) |
 | `README.md` | For humans: what this is and how to deploy |
 

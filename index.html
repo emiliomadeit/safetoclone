@@ -190,6 +190,8 @@ const $ = (s) => document.querySelector(s);
 const out = $("#out");
 const say = (t) => { $("#status").textContent = t; };
 const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+// Tells our visitor counter that something happened (no personal data). Never blocks the page.
+const note = (event) => { try { navigator.sendBeacon("/api/hit", new Blob([JSON.stringify({ event })], { type: "application/json" })); } catch {} };
 
 function show(r, { example = false } = {}) {
   const share = `<button type="button" class="btn secondary" id="copyLink">Copy link</button>
@@ -207,12 +209,14 @@ function wireShare(r) {
   history.replaceState(null, "", `/?repo=${r.name}`);
   const msg = (t) => { $("#shareMsg").textContent = t; };
   $("#copyLink").addEventListener("click", async () => {
+    note("copy_link");
     try { await navigator.clipboard.writeText(link); msg("Link copied. Paste it anywhere."); }
     catch { window.prompt("Copy this link:", link); }
   });
   $("#saveImage").addEventListener("click", async (e) => {
     const btn = e.currentTarget;
     btn.disabled = true;
+    note("image");
     try {
       const url = URL.createObjectURL(await shareCard(r, link));
       const a = Object.assign(document.createElement("a"), { href: url, download: `safetoclone-${r.name.replace("/", "-")}.png` });
@@ -243,6 +247,7 @@ async function runCheck(val) {
   try {
     const r = await checkRepo(val);
     show(r);
+    note("check");
     say(`Done. ${r.name} gets ${/^[AEF]/.test(r.grade) ? "an" : "a"} ${r.grade}: ${r.label}. ${r.flags.length ? `${r.flags.length} warning sign${r.flags.length > 1 ? "s" : ""}.` : "No warning signs."}`);
     $("#reportTitle").focus({ preventScroll: true });
     out.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
