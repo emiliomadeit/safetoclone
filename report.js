@@ -2,7 +2,7 @@
 // Shared by the home page checker (index.html, runs in the visitor's browser) and the Google pages
 // (seo.js, runs in the Worker), so a result looks and reads the same everywhere.
 // Plain functions: data in, HTML text out. Every piece of text that comes from GitHub goes through esc().
-import { GRADES, LEVELS, GROUPS, WHY } from "./score.js";
+import { GRADES, LEVELS, GROUPS, WHY, areaGrades } from "./score.js";
 
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -37,6 +37,38 @@ function gradeRule(grade) {
   return `${min} to ${GRADES[i - 1][1] - 1} is ${an(g)} ${g}.`;
 }
 
+// "Talks to your AI": the files in this repo that give instructions to AI coding tools.
+// Having them is normal. The point is that you know your AI will read them.
+function aiHTML(r) {
+  const found = r.aiFilesFound || [];
+  if (!(r.checks || []).length) return "";
+  const hijack = warningsOf(r).some((w) => /AI/.test(w.label));
+  return `<section class="ai-files">
+  <h3>Talks to your AI <span class="count">${found.length}</span></h3>
+  <p class="muted">${found.length
+    ? `This repo has ${found.length} file${found.length > 1 ? "s" : ""} that AI coding tools like Claude Code, Cursor and Copilot read as instructions when you open the folder: <span class="files">${found.map((f) => `<code>${esc(f)}</code>`).join(", ")}</span>. ${hijack ? "At least one of them tries to take over your AI. See Warning signs." : "We read them and found nothing that tries to take over your AI. It's still worth opening them yourself before you let an AI work in this folder."}`
+    : "We found no files that give instructions to AI coding tools."}</p>
+</section>`;
+}
+
+// "Does it cost money?": free on GitHub doesn't always mean free to use. Doesn't change the grade.
+function costHTML(r) {
+  const c = r.costs;
+  if (!c) return "";
+  const said = c.words?.length ? `Its page mentions ${c.words.map((w) => `“${esc(w)}”`).join(", ")}.` : "";
+  const folder = c.folder ? ` It has a folder called <code>${esc(c.folder)}</code>, which usually holds features only paying customers get.` : "";
+  const account = c.account ? ` It also says: “${esc(c.account)}”.` : "";
+  const body = c.mentionsPaid
+    ? `${said}${folder}${account} The code here may be free, but some features or the service it connects to may cost money. Check their pricing page before you rely on it.`
+    : c.account
+      ? `We found no mention of paid plans, but it says: “${esc(c.account)}”. That account or key may cost money.`
+      : "We found no mention of paid plans or required accounts. Still check before you rely on it.";
+  return `<section class="costs">
+  <h3>Does it cost money?</h3>
+  <p class="muted">${body}</p>
+</section>`;
+}
+
 // r = a result from score.js, or an entry from data/directory.json.
 // Options: example (a made-up repo: no links), actions (extra buttons, HTML), headingId, footnote (HTML).
 export function reportCard(r, { example = false, actions = "", headingId = "", footnote = "" } = {}) {
@@ -58,9 +90,11 @@ export function reportCard(r, { example = false, actions = "", headingId = "", f
   // "Why this grade": one row per question, each opens to show the checks and why they matter.
   const groups = {};
   for (const c of r.checks || []) (groups[c.group] ||= []).push(c);
+  const areas = areaGrades(r.checks || []);
   let whyHTML = "";
   if (Object.keys(groups).length) {
-    const raw = (r.checks || []).reduce((s, c) => s + c.points, 0);
+    const got = (r.checks || []).reduce((s, c) => s + c.points, 0), most = (r.checks || []).reduce((s, c) => s + c.max, 0);
+    const raw = most ? Math.round((100 * got) / most) : 0;
     const summary = r.capReason
       ? `Its checks add up to ${raw} out of 100, but the score is capped at ${esc(r.score)} because ${esc(r.capReason)}. ${gradeRule(r.grade)}`
       : `It scored ${esc(r.score)} out of 100. ${gradeRule(r.grade)}`;
@@ -69,17 +103,18 @@ export function reportCard(r, { example = false, actions = "", headingId = "", f
       : level === "unproven" ? " It's labelled Unproven, not Dangerous, because we found no malware tricks." : "";
     whyHTML = `<section class="why">
   <h3>Why this grade?</h3>
-  <p class="muted">${summary}${labelNote} Open a row to see what we checked.</p>
+  <p class="muted">${summary}${labelNote} Each area gets its own letter, and the overall grade can be at most one letter better than the weakest safety area ("Is it open about itself?" only costs points). Open a row to see what we checked.</p>
   <div class="groups">${Object.entries(groups).map(([g, list]) => {
       const got = list.reduce((s, c) => s + c.points, 0), max = list.reduce((s, c) => s + c.max, 0);
       const pct = max ? Math.round((got / max) * 100) : 0;
-      const tone = pct >= 80 ? "good" : pct >= 50 ? "warn" : "bad";
+      const letter = areas[g]?.grade || "";
+      const tone = { A: "good", B: "good", C: "warn", D: "warn" }[letter] || "bad";
       return `<details>
-    <summary><span class="q">${esc(GROUPS[g] || g)}</span><span class="bar ${tone}" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="pts"><span class="sr-only">, ${got} out of ${max} points</span><span aria-hidden="true">${got}/${max}</span></span></summary>
+    <summary><span class="area-grade ${tone}"><span class="sr-only">Area grade </span>${esc(letter)}</span><span class="q">${esc(GROUPS[g] || g)}</span><span class="bar ${tone}" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="pts"><span class="sr-only">, ${got} out of ${max} points</span><span aria-hidden="true">${got}/${max}</span></span></summary>
     <ul class="checks">${list.map((c) => `<li class="${esc(c.level)}"><span class="icon" aria-hidden="true"></span><div><p><span class="sr-only">${MARK[c.level] || ""}: </span><strong>${esc(c.label)}.</strong> ${esc(c.note)}</p>${WHY[c.label] || WHY[c.group] ? `<p class="list-note">${esc(WHY[c.label] || WHY[c.group])}</p>` : ""}</div></li>`).join("")}</ul>
   </details>`;
     }).join("")}</div>
-  ${r.aiFilesFound?.length ? `<p class="fine">AI instruction files we read: ${r.aiFilesFound.map(esc).join(", ")}.</p>` : ""}
+  ${groups["Security habits"] ? "" : `<p class="fine">${esc(GROUPS["Security habits"])} Not checked: the independent OpenSSF Scorecard check has no data for this repo yet, so the grade uses the other areas.</p>`}
 </section>`;
   }
 
@@ -103,6 +138,8 @@ ${buttons ? `<div class="actions">${buttons}</div>` : ""}
   <h3>Warning signs <span class="count">${warnings.length}</span></h3>
   ${warningsHTML}
 </section>
+${aiHTML(r)}
+${costHTML(r)}
 ${whyHTML}
 <p class="fine">${footnote || `A grade is a set of warning signs, not a guarantee.`} <a href="/#method">How we score</a></p>
 </article>`;

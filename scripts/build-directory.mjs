@@ -15,8 +15,8 @@ for (const name of list) {
       level: r.level, label: r.label, verdict: r.verdict, flags: r.flags.map((f) => f.label),
       // Extra detail for the repo pages Google reads (/repo/owner/name, built in seo.js).
       warnings: r.flags.map(({ label, note, severity }) => ({ label, note, severity })),
-      checks: r.checks, capReason: r.capReason, aiFilesFound: r.aiFilesFound, checkedAt: r.checkedAt });
-    console.log(`${r.grade} ${String(r.score).padStart(3)}  ${r.name}`);
+      checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, costs: r.costs, capReason: r.capReason, aiFilesFound: r.aiFilesFound, checkedAt: r.checkedAt });
+    console.log(`${r.grade} ${String(r.score).padStart(3)}  ${r.securityChecked ? "scorecard" : "no-scorecard"}  ${r.name}`);
   } catch (e) {
     console.error(`skip ${name}: ${e.message}`);
   }
@@ -24,4 +24,9 @@ for (const name of list) {
 results.sort((a, b) => b.score - a.score);
 await writeFile(new URL("../data/directory.json", import.meta.url),
   JSON.stringify({ updatedAt: new Date().toISOString(), example: false, repos: results }, null, 2) + "\n");
-console.log(`wrote ${results.length} repos`);
+// Why some repos have no Scorecard data: print the answer for a few of them.
+for (const r of results.filter((x) => !x.securityChecked).slice(0, 5)) {
+  const res = await fetch(`https://api.scorecard.dev/projects/github.com/${r.name}`).catch((e) => ({ status: e.message, text: async () => "" }));
+  console.log(`scorecard ${r.name}: ${res.status} ${(await res.text()).slice(0, 120)}`);
+}
+console.log(`wrote ${results.length} repos, ${results.filter((r) => r.securityChecked).length} with OpenSSF Scorecard data`);

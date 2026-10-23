@@ -30,14 +30,14 @@
 <!-- Keep these questions and answers word for word the same as the "Questions people ask" section below. -->
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-{"@type":"Question","name":"Does an A mean it's 100% safe?","acceptedAnswer":{"@type":"Answer","text":"No. A grade is a set of warning signs, not a guarantee. An A means the project is well known, looked after, and shows none of the malware tricks we check for. A clever attacker can still pass every check, so only install what you need, and only from the official GitHub page."}},
+{"@type":"Question","name":"Does an A mean it's 100% safe?","acceptedAnswer":{"@type":"Answer","text":"No. A grade is a set of warning signs, not a guarantee. An A means the project is strong in every area we check and shows none of the malware tricks we look for. A clever attacker can still pass every check, so only install what you need, and only from the official GitHub page."}},
 {"@type":"Question","name":"What's the difference between Unproven and Dangerous?","acceptedAnswer":{"@type":"Answer","text":"Both can come with a low grade. Dangerous means we found tricks that malware uses, like asking you to turn off your antivirus. Unproven means nothing looks wrong, but the project is too new or too little-known to trust yet."}},
-{"@type":"Question","name":"Why can a repo with lots of stars still get a low grade?","acceptedAnswer":{"@type":"Answer","text":"Stars are only part of the score, and they can be bought. A repo that got thousands of stars in a few days from a young account, or that asks you to turn off your antivirus, gets capped at a low grade however popular it looks."}},
+{"@type":"Question","name":"Why can a repo with lots of stars still get a low grade?","acceptedAnswer":{"@type":"Answer","text":"Stars are only one of five areas, and they can be bought. The overall grade can be at most one letter better than the weakest area, so a popular repo that nobody updates, or with poor security habits, gets a lower grade. A repo that got thousands of stars in a few days from a young account, or that asks you to turn off your antivirus, is capped at a low grade however popular it looks."}},
 {"@type":"Question","name":"Can a GitHub repo harm my AI assistant?","acceptedAnswer":{"@type":"Answer","text":"Yes. Files like CLAUDE.md, AGENTS.md, SKILL.md or .cursorrules give instructions to AI coding tools. A malicious one can tell your AI to leak API keys or run commands without asking you. We read these files and flag the ones that try."}},
 {"@type":"Question","name":"Is it safe to download code from GitHub?","acceptedAnswer":{"@type":"Answer","text":"Most GitHub repos are safe, but some are malware dressed up as free tools. Warning signs include requests to turn off antivirus, password-protected zip files, brand-new accounts and repos that got thousands of stars in days."}},
-{"@type":"Question","name":"Do you download or run the code?","acceptedAnswer":{"@type":"Answer","text":"No. We only read public information from GitHub: the project page, the owner's profile, the main folder, the release notes and any AI instruction files. Your browser asks GitHub directly."}},
+{"@type":"Question","name":"Do you download or run the code?","acceptedAnswer":{"@type":"Answer","text":"No. We only read public information: the project page, the owner's profile, the main folder, the release notes, any AI instruction files (also in hidden folders like .claude/ and .cursor/) and the independent OpenSSF Scorecard security check. Your browser asks GitHub directly."}},
 {"@type":"Question","name":"I already installed something marked Dangerous. What now?","acceptedAnswer":{"@type":"Answer","text":"Uninstall it, run a full scan with your antivirus, and change the passwords you use on that computer, starting with email and banking. If it's a work computer, tell your IT team right away."}},
-{"@type":"Question","name":"Why didn't my check work?","acceptedAnswer":{"@type":"Answer","text":"GitHub lets each visitor do about 12 checks an hour for free. If you hit the limit, wait a few minutes and try again. Some work networks also block GitHub, so try another connection."}}]}
+{"@type":"Question","name":"Why didn't my check work?","acceptedAnswer":{"@type":"Answer","text":"GitHub lets each visitor do about 8 checks an hour for free. If you hit the limit, wait a few minutes and try again. Some work networks also block GitHub, so try another connection."}}]}
 </script>
 </head>
 <body>
@@ -108,25 +108,27 @@
   <section class="band" id="method"><div class="wrap">
     <div class="section-head">
       <p class="eyebrow">How we score</p>
-      <h2>Four questions. 100&nbsp;points. One grade.</h2>
-      <p class="lede">We only read public information on GitHub. We never download or run the code.</p>
+      <h2>Five questions. A letter for each. One honest grade.</h2>
+      <p class="lede">We only read public information on GitHub and an independent security check. We never download or run the code.</p>
     </div>
     <div class="tiles">
       <div class="tile"><p class="big">30<small>points</small></p><h3>Do people trust it?</h3><ul><li>How many people starred and copied it</li><li>How long the owner has been on GitHub</li></ul></div>
       <div class="tile"><p class="big">25<small>points</small></p><h3>Is anyone looking after it?</h3><ul><li>When it was last updated</li><li>How old it is</li><li>Whether it ships proper releases</li></ul></div>
       <div class="tile"><p class="big">15<small>points</small></p><h3>Is it open about itself?</h3><ul><li>A license</li><li>Real instructions</li><li>A way to report security problems</li></ul></div>
-      <div class="tile"><p class="big">30<small>points</small></p><h3>Any malware tricks?</h3><ul><li>"Turn off your antivirus"</li><li>Password-protected zips, cracks, free premium</li><li>Fake stars, brand-new accounts</li><li>We read the name, topics, README and release notes</li><li>AI instruction files that try to hijack your assistant</li></ul></div>
+      <div class="tile"><p class="big">10<small>points</small></p><h3>Does it have good security habits?</h3><ul><li>Is every change checked by a second person?</li><li>Any known security holes left unfixed?</li><li>Are its build robots set up safely?</li><li>From OpenSSF Scorecard, an independent check</li></ul></div>
+      <div class="tile"><p class="big">30<small>points</small></p><h3>Any malware tricks?</h3><ul><li>"Turn off your antivirus"</li><li>Password-protected zips, cracks, free premium</li><li>Fake stars, brand-new accounts</li><li>We read the name, topics, README and release notes</li><li>AI instruction files, also in hidden folders like .claude/ and .cursor/, that try to hijack your assistant or hide invisible text</li></ul></div>
     </div>
     <h3 class="subhead">What the grades mean</h3>
     <ul class="scale">
-      <li class="lvl-trusted"><span class="g">A<span class="range">85–100</span></span><span class="pill lvl-trusted">Trusted</span><p>Well known, looked after, no malware tricks found.</p></li>
+      <li class="lvl-trusted"><span class="g">A<span class="range">85–100</span></span><span class="pill lvl-trusted">Strong</span><p>Strong in every area, no malware tricks found.</p></li>
       <li class="lvl-fine"><span class="g">B<span class="range">70–84</span></span><span class="pill lvl-fine">Probably fine</span><p>No malware tricks, but missing some signs of a well-run project.</p></li>
-      <li class="lvl-careful"><span class="g">C<span class="range">55–69</span></span><span class="pill lvl-careful">Be careful</span><p>Something is missing or slightly off. Ask someone technical first.</p></li>
+      <li class="lvl-careful"><span class="g">C<span class="range">55–69</span></span><span class="pill lvl-careful">Be careful</span><p>Something is missing or off, like no updates for a long time or poor security habits. Ask someone technical first.</p></li>
       <li class="lvl-unproven"><span class="g">D–F<span class="range">under 55</span></span><span class="pill lvl-unproven">Unproven</span><p>Nothing looks wrong, but it's too new or little-known to trust yet.</p></li>
       <li class="lvl-dangerous"><span class="g">Any<span class="range">grade</span></span><span class="pill lvl-dangerous">Dangerous</span><p>We found tricks that malware uses. Don't download it.</p></li>
     </ul>
     <div class="notes">
-      <p>Some warning signs are so serious they cap the grade, however popular the repo is. A repo also needs at least 50 stars to get an A or B: a license and a README take minutes to add, so they can't make an unknown repo look safe on their own.</p>
+      <p><strong>Weakest link:</strong> the overall grade can be at most one letter better than the weakest safety area (people, upkeep, security habits, malware tricks), so lots of stars can't cover for a project nobody looks after. Missing paperwork only costs points. A few more limits: an archived project gets at most a C, one with no changes for over a year or no license at most a B, and one with fewer than 50 stars at most a C (a license and a README take minutes to add). Serious warning signs cap the grade however popular the repo is.</p>
+      <p>When the independent security check has no data for a repo, we say so and grade the other four areas.</p>
       <p>A score is a set of warning signs, not a guarantee. A clever attacker can pass every check. When in doubt, don't install it on a work computer, and ask your IT team.</p>
     </div>
   </div></section>
@@ -137,14 +139,14 @@
       <h2>Questions people ask</h2>
     </div>
     <div class="faq">
-      <details><summary>Does an A mean it's 100% safe?</summary><div><p>No. A grade is a set of warning signs, not a guarantee. An A means the project is well known, looked after, and shows none of the malware tricks we check for. A clever attacker can still pass every check, so only install what you need, and only from the official GitHub page.</p></div></details>
+      <details><summary>Does an A mean it's 100% safe?</summary><div><p>No. A grade is a set of warning signs, not a guarantee. An A means the project is strong in every area we check and shows none of the malware tricks we look for. A clever attacker can still pass every check, so only install what you need, and only from the official GitHub page.</p></div></details>
       <details><summary>What's the difference between Unproven and Dangerous?</summary><div><p>Both can come with a low grade. Dangerous means we found tricks that malware uses, like asking you to turn off your antivirus. Unproven means nothing looks wrong, but the project is too new or too little-known to trust yet.</p></div></details>
-      <details><summary>Why can a repo with lots of stars still get a low grade?</summary><div><p>Stars are only part of the score, and they can be bought. A repo that got thousands of stars in a few days from a young account, or that asks you to turn off your antivirus, gets capped at a low grade however popular it looks.</p></div></details>
+      <details><summary>Why can a repo with lots of stars still get a low grade?</summary><div><p>Stars are only one of five areas, and they can be bought. The overall grade can be at most one letter better than the weakest area, so a popular repo that nobody updates, or with poor security habits, gets a lower grade. A repo that got thousands of stars in a few days from a young account, or that asks you to turn off your antivirus, is capped at a low grade however popular it looks.</p></div></details>
       <details><summary>Can a GitHub repo harm my AI assistant?</summary><div><p>Yes. Files like CLAUDE.md, AGENTS.md, SKILL.md or .cursorrules give instructions to AI coding tools. A malicious one can tell your AI to leak API keys or run commands without asking you. We read these files and flag the ones that try.</p></div></details>
       <details><summary>Is it safe to download code from GitHub?</summary><div><p>Most GitHub repos are safe, but some are malware dressed up as free tools. Warning signs include requests to turn off antivirus, password-protected zip files, brand-new accounts and repos that got thousands of stars in days.</p></div></details>
-      <details><summary>Do you download or run the code?</summary><div><p>No. We only read public information from GitHub: the project page, the owner's profile, the main folder, the release notes and any AI instruction files. Your browser asks GitHub directly.</p></div></details>
+      <details><summary>Do you download or run the code?</summary><div><p>No. We only read public information: the project page, the owner's profile, the main folder, the release notes, any AI instruction files (also in hidden folders like .claude/ and .cursor/) and the independent OpenSSF Scorecard security check. Your browser asks GitHub directly.</p></div></details>
       <details><summary>I already installed something marked Dangerous. What now?</summary><div><p>Uninstall it, run a full scan with your antivirus, and change the passwords you use on that computer, starting with email and banking. If it's a work computer, tell your IT team right away.</p></div></details>
-      <details><summary>Why didn't my check work?</summary><div><p>GitHub lets each visitor do about 12 checks an hour for free. If you hit the limit, wait a few minutes and try again. Some work networks also block GitHub, so try another connection.</p></div></details>
+      <details><summary>Why didn't my check work?</summary><div><p>GitHub lets each visitor do about 8 checks an hour for free. If you hit the limit, wait a few minutes and try again. Some work networks also block GitHub, so try another connection.</p></div></details>
     </div>
   </div></section>
 

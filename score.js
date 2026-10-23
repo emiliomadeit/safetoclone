@@ -23,16 +23,25 @@ const ARCHIVE_FILE = /\.(zip|rar|7z)$/i;
 const zipPassword = (text) => text.split("\n").some((line) => ARCHIVE_WORD.test(line) && PASSWORD_GIVEN.test(line));
 const PIPE_TO_SHELL = /(curl|wget)[^\n|]*\|\s*(sudo\s+)?(ba|z)?sh\b|iwr[^\n|]*\|\s*iex|Invoke-Expression|irm[^\n|]*\|\s*iex|sh\s+-c\s+"\$\((curl|wget)/i;
 const LONG_BASE64 = /[A-Za-z0-9+/]{400,}={0,2}/;
+// Characters you can't see on screen but an AI still reads: "tag" letters, text-direction tricks, and runs of
+// zero-width spaces. They are used to hide instructions inside files that look harmless.
+const HIDDEN_CHARS = /[\u{E0000}-\u{E007F}]|[\u202A-\u202E\u2066-\u2069]|[\u200B\u200C\u200E\u200F\u2060-\u2064]{3,}/u;
 
 // Files that give instructions to AI coding agents. A bad one can tell your AI to leak keys or run commands.
 const AI_FILES = ["CLAUDE.md", "AGENTS.md", ".cursorrules", "SKILL.md", ".windsurfrules", "GEMINI.md", ".mcp.json", "mcp.json"];
+// Hidden folders where AI tools also look for instructions and settings (.claude/settings.json, .cursor/rules/...).
+const AI_FOLDERS = [".claude", ".cursor", ".github", ".vscode", ".windsurf", ".gemini"];
+const AI_FOLDER_FILE = /^(CLAUDE\.md|AGENTS\.md|GEMINI\.md|copilot-instructions\.md|mcp\.json|settings(\.local)?\.json|.+\.mdc|rules\.md)$/i;
+const AI_SUBFOLDERS = ["rules", "commands", "agents"]; // inside .claude/ and .cursor/
+const AI_FILE_LIMIT = 12;
 const PROMPT_INJECTION = [
   /ignore\s+(all\s+)?(previous|prior|above)\s+instructions/i,
   /do\s+not\s+(tell|inform|mention\s+(this\s+)?to)\s+the\s+user/i,
   /without\s+(asking|telling)\s+the\s+user/i,
   // Only counts when secrets are sent somewhere: "send the API key to https://...".
   /\b(send|upload|post|exfiltrate|forward|transmit)\b[^\n]{0,40}\b(api[_ -]?keys?|tokens?|\.env|credentials|ssh\s+keys?|secrets?)\b[^\n]{0,40}\b(to|at)\s+(https?:\/\/|an?\s+(external|remote)|this\s+(url|endpoint|server))/i,
-  /(webhook\.site|requestbin|pipedream\.net|ngrok\.io|discord(app)?\.com\/api\/webhooks)/i,
+  // Discord webhooks only count with a real numeric ID: projects often document their own as ".../webhooks/xxx".
+  /(webhook\.site|requestbin|pipedream\.net|ngrok\.io|discord(app)?\.com\/api\/webhooks\/\d{6,})/i,
   /\bcat\s+~\/\.(ssh|aws)|\bprintenv\b|process\.env\b[^\n]{0,40}(fetch|post)/i,
 ];
 // Ready-to-run programs and archives. Plain-text launch scripts (.bat, .ps1, .sh) are left out:
@@ -46,13 +55,29 @@ const daysSince = (iso) => (Date.now() - new Date(iso).getTime()) / DAY;
 
 // Grade cut-offs: a score of 85 or more is an A, 70 to 84 a B, and so on.
 export const GRADES = [["A", 85], ["B", 70], ["C", 55], ["D", 40], ["F", 0]];
+export const gradeOf = (pct) => GRADES.find(([, min]) => pct >= min)[0];
+// Highest score each grade allows: an A can be 100, a B at most 84, and so on.
+const TOP = { A: 100, B: 84, C: 69, D: 54, F: 39 };
+const LETTERS = GRADES.map(([g]) => g);
+
+// One letter per group of checks, so a visitor sees which part is strong and which is weak.
+// Works on any list of checks, including older directory entries.
+export function areaGrades(checks = []) {
+  const areas = {};
+  for (const c of checks) {
+    const a = (areas[c.group] ||= { points: 0, max: 0 });
+    a.points += c.points; a.max += c.max;
+  }
+  for (const a of Object.values(areas)) a.grade = gradeOf(a.max ? (100 * a.points) / a.max : 0);
+  return areas;
+}
 
 // Every result gets one of these labels: a short verdict and what the visitor should do next.
 export const LEVELS = {
   trusted: {
-    label: "Trusted",
-    verdict: "Looks trustworthy. Still only install what you need.",
-    advice: "It's well known, looked after, and shows none of the malware tricks we check for. Download it only from its official GitHub page, never from a copy, a file-sharing site or a link in a video.",
+    label: "Strong",
+    verdict: "Strong on every check. No grade is a guarantee, so only install what you need.",
+    advice: "It's widely used, looked after, open about itself, and shows none of the malware tricks we check for. Download it only from its official GitHub page, never from a copy, a file-sharing site or a link in a video.",
   },
   fine: {
     label: "Probably fine",
@@ -81,6 +106,7 @@ export const GROUPS = {
   Reputation: "Do people trust it?",
   Upkeep: "Is anyone looking after it?",
   Transparency: "Is it open about itself?",
+  "Security habits": "Does it have good security habits?",
   "Red flags": "Any malware tricks?",
 };
 
@@ -95,6 +121,9 @@ export const WHY = {
   License: "A license says whether you're allowed to use it. Serious projects almost always have one.",
   Instructions: "A README explains what the project does and how to use it. Malware often has a thin or copied one.",
   "Security contact": "A security policy tells people how to report problems privately, so they get fixed before attackers use them.",
+  "Code review": "When a second person checks every change before it goes in, it's much harder to sneak in something bad. From OpenSSF Scorecard, an independent security check.",
+  "Known security holes": "Security holes that are public but not fixed yet are what attackers look for first. From OpenSSF Scorecard.",
+  "Safe automation": "Most projects use robots that build and publish the software. Robots with loose permissions have been used to slip malware into real, popular projects. From OpenSSF Scorecard.",
   "Red flags": "We look for tricks that keep showing up in malware: requests to turn off antivirus, locked zip files, cracks and free premium, hidden code, and AI instruction files that try to take over your assistant. Serious ones cap the grade, however popular the repo is.",
 };
 
@@ -129,6 +158,21 @@ async function getText(url) {
   } catch { return ""; }
 }
 
+// OpenSSF Scorecard: a free, independent security check of public GitHub projects (scorecard.dev).
+// Returns null when it has no data for this repo or can't be reached. Then "Security habits" shows as not checked.
+export async function getScorecard(fullName) {
+  // Scorecard stores some repos in lower case, so try that too.
+  for (const name of [...new Set([fullName, fullName.toLowerCase()])]) {
+    try {
+      const res = await fetch(`https://api.scorecard.dev/projects/github.com/${name}`);
+      if (!res.ok) continue;
+      const j = await res.json();
+      if (Array.isArray(j.checks)) return { date: j.date, checks: j.checks.map(({ name: n, score }) => ({ name: n, score })) };
+    } catch { /* unreachable: treat as no data */ }
+  }
+  return null;
+}
+
 // Collects everything the scorer needs. Kept separate so tests can feed in saved data.
 export async function collect(owner, repo, { token } = {}) {
   const r = await getJSON(`${API}/repos/${owner}/${repo}`, token);
@@ -150,12 +194,41 @@ export async function collect(owner, repo, { token } = {}) {
     const f = byName(n);
     if (f?.download_url) aiFiles[f.name] = await getText(f.download_url);
   }));
-  return { repo: r, user, files, releases: Array.isArray(releases) ? releases : [], readme, pkg, aiFiles };
+  // AI instructions in hidden folders (.claude/, .cursor/rules/, .github/copilot-instructions.md ...).
+  const list = (path) => getJSON(`${API}/repos/${owner}/${repo}/contents/${path}`, token).then((x) => (Array.isArray(x) ? x : [])).catch(orEmpty([]));
+  const folderFiles = [];
+  for (const dir of AI_FOLDERS.filter((d) => files.some((f) => f.type === "dir" && f.name === d))) {
+    const inside = await list(dir);
+    folderFiles.push(...inside.filter((f) => f.type === "file" && AI_FOLDER_FILE.test(f.name)));
+    if (dir === ".claude" || dir === ".cursor") {
+      for (const sub of inside.filter((f) => f.type === "dir" && AI_SUBFOLDERS.includes(f.name))) {
+        folderFiles.push(...(await list(sub.path)).filter((f) => f.type === "file" && /\.(md|mdc)$/i.test(f.name)));
+      }
+    }
+  }
+  await Promise.all(folderFiles.slice(0, AI_FILE_LIMIT).map(async (f) => {
+    if (f.download_url) aiFiles[f.path] = await getText(f.download_url);
+  }));
+  const scorecard = await getScorecard(r.full_name || `${owner}/${repo}`);
+  return { repo: r, user, files, releases: Array.isArray(releases) ? releases : [], readme, pkg, aiFiles, scorecard };
+}
+
+// "Does it cost money?" Doesn't change the grade. Many projects are free on GitHub with paid extras elsewhere.
+const PAID_WORDS = /\b(pricing|paid (plans?|tiers?|version|features)|pro (plan|version|tier)|premium (plan|features|version|tier)|enterprise (edition|plan|features|license|version)|subscriptions?|upgrade to (pro|premium|plus|a paid)|free (tier|trial|plan)|commercial license|cloud (version|plan)|hosted (version|plan)|\$\d+(\.\d\d)?\s*(\/|per)\s*(mo|month|user|seat))\b/gi;
+const NEEDS_ACCOUNT = /\b(requires?|needs?|you('ll)? need)\s+(an?\s+)?(paid\s+|active\s+)?(\w+\s+)?(account|subscription|api[ _-]?key|license key)\b/i;
+const PAID_FOLDERS = /^(ee|enterprise|premium|pro)$/i;
+
+export function costs({ readme = "", about = "", files = [] }) {
+  const text = about + "\n" + readme.replace(/https?:\/\/\S+/g, "");
+  const words = [...new Set([...text.matchAll(PAID_WORDS)].map((m) => m[0].toLowerCase()))].slice(0, 4);
+  const account = text.match(NEEDS_ACCOUNT)?.[0] || null;
+  const folder = files.find((f) => f.type === "dir" && PAID_FOLDERS.test(f.name))?.name || null;
+  return { mentionsPaid: words.length > 0 || Boolean(folder), words, account, folder };
 }
 
 // Turns collected data into a score. Pure function: same input, same output.
 export function score(data) {
-  const { repo: r, user, files, releases, readme, pkg, aiFiles } = data;
+  const { repo: r, user, files, releases, readme, pkg, aiFiles, scorecard } = data;
   const checks = []; // { group, label, points, max, note, level: good|warn|bad }
   const add = (group, label, points, max, level, note) => checks.push({ group, label, points, max, level, note });
 
@@ -185,8 +258,13 @@ export function score(data) {
     releases.length ? "Publishes versioned releases." : "No official releases. You'd be downloading work in progress.");
 
   // 3. Transparency (15)
-  add("Transparency", "License", r.license ? 5 : 0, 5, r.license ? "good" : "warn",
-    r.license ? `Uses the ${r.license.spdx_id || r.license.name} license.` : "No license. Legally you may not be allowed to use it.");
+  // A standard open-source license, a license file with the owner's own terms (common for company products), or nothing.
+  const standardLicense = r.license && r.license.spdx_id && r.license.spdx_id !== "NOASSERTION";
+  const customLicense = !standardLicense && (r.license || files.some((f) => f.type === "file" && /^(licen[sc]e|copying)(\.|$)/i.test(f.name)));
+  add("Transparency", "License", standardLicense ? 5 : customLicense ? 3 : 0, 5, standardLicense ? "good" : "warn",
+    standardLicense ? `Uses the ${r.license.spdx_id} license.`
+      : customLicense ? "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        : "No license. Legally you may not be allowed to use it.");
   const readmeLen = readme.length;
   add("Transparency", "Instructions", readmeLen > 1500 ? 5 : readmeLen > 300 ? 3 : 0, 5, readmeLen > 1500 ? "good" : "warn",
     readmeLen ? "Has a README that explains the project." : "No README. You can't tell what it does.");
@@ -194,7 +272,28 @@ export function score(data) {
   add("Transparency", "Security contact", hasSecurity ? 5 : 2, 5, hasSecurity ? "good" : "warn",
     hasSecurity ? "Tells people how to report security problems." : "No security policy file.");
 
-  // 4. Red flags (30, deductions). Some are "hard" flags that cap the final score.
+  // 4. Security habits (10), from OpenSSF Scorecard. Scores are 0-10; -1 means Scorecard couldn't tell.
+  const sc = (name) => { const c = scorecard?.checks?.find((x) => x.name === name); return c && c.score >= 0 ? c.score : null; };
+  const review = sc("Code-Review");
+  if (review !== null) {
+    add("Security habits", "Code review", Math.round(review * 0.3), 3, review >= 8 ? "good" : review >= 4 ? "warn" : "bad",
+      review >= 8 ? "Almost every change is checked by a second person before it goes in."
+        : review >= 4 ? "Some changes go in without a second person checking them." : "Most changes go in without anyone else checking them.");
+  }
+  const vulns = sc("Vulnerabilities");
+  if (vulns !== null) {
+    const open = 10 - vulns;
+    add("Security habits", "Known security holes", Math.round(vulns * 0.3), 3, vulns === 10 ? "good" : vulns >= 7 ? "warn" : "bad",
+      vulns === 10 ? "No known security holes left unfixed." : `About ${open} known security hole${open > 1 ? "s" : ""} still unfixed${open >= 10 ? " (10 or more)" : ""}.`);
+  }
+  // Only the clearly dangerous setups count. Loose token permissions are too common to tell projects apart.
+  const auto = sc("Dangerous-Workflow");
+  if (auto !== null) {
+    add("Security habits", "Safe automation", Math.round(auto * 0.4), 4, auto >= 8 ? "good" : auto >= 4 ? "warn" : "bad",
+      auto >= 8 ? "Its build-and-publish robots are set up safely." : "Its build-and-publish robots are set up in a way attackers have used to take over projects.");
+  }
+
+  // 5. Red flags (30, deductions). Some are "hard" flags that cap the final score.
   let flagPts = 30;
   let cap = 100;
   let capReason = null;
@@ -218,8 +317,11 @@ export function score(data) {
   if (riskyRoot.length) flag("Programs sitting in the code", 10, `Ready-to-run files in the main folder: ${riskyRoot.slice(0, 3).join(", ")}. Source code projects rarely do this.`, stars < 100 ? 40 : null);
   if (riskyAssets.length && stars < 100) flag("Unknown programs to download", 8, `Releases offer ${riskyAssets.slice(0, 3).join(", ")} from a little-known project.`);
   if (PIPE_TO_SHELL.test(readme)) flag("Runs a script straight from the internet", 3, "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.");
-  const readmeNoImages = readme.replace(/data:image\/[a-z+]+;base64,[A-Za-z0-9+/=]+/gi, "");
-  if (LONG_BASE64.test(readmeNoImages)) flag("Hidden encoded text", 10, "The README contains a long scrambled block of text. That can hide commands.");
+  // Pictures and badge icons are often stored as encoded text (also inside links, as %2B for "+"). Those are fine.
+  // Diagram links (mermaid.live, kroki) also carry long encoded text inside the address. Links are left out too.
+  const readmeNoImages = readme.replace(/base64,[A-Za-z0-9+/=%]+/gi, "").replace(/https?:\/\/[^\s)"'<>\]]+/gi, "");
+  const encoded = readmeNoImages.match(LONG_BASE64);
+  if (encoded) flag("Hidden encoded text", 10, `The README contains a long scrambled block of text. That can hide commands. It starts with "${encoded[0].slice(0, 40)}…".`);
   // Big companies launch repos that get famous in days, so only accounts with no long history are suspect.
   // It's a warning, not proof: it keeps the grade at C or below but doesn't mark the repo Dangerous by itself.
   const establishedOwner = user && (user.type === "Organization" || ownerAge > 730);
@@ -237,7 +339,16 @@ export function score(data) {
   // AI-agent check: instruction files that could hijack your AI assistant.
   const aiNames = Object.keys(aiFiles);
   const injected = aiNames.filter((n) => PROMPT_INJECTION.some((re) => re.test(aiFiles[n])) || LONG_BASE64.test(aiFiles[n]));
-  if (injected.length) flag("Could hijack your AI assistant", 25, `${injected.join(", ")} contains instructions that try to override your AI, hide things from you, or send data away.`, 20);
+  if (injected.length) {
+    // Quote the line we found, so anyone can check our work.
+    const text = aiFiles[injected[0]];
+    const hit = PROMPT_INJECTION.map((re) => text.match(re)).find(Boolean);
+    const line = hit ? text.slice(0, hit.index).split("\n").length : null;
+    const quote = hit ? text.split("\n")[line - 1].trim().slice(0, 140) : "a long block of scrambled text";
+    flag("Could hijack your AI assistant", 25, `${injected.join(", ")} contains instructions that try to override your AI, hide things from you, or send data away. ${hit ? `Line ${line} of ${injected[0]}: "${quote}"` : `It contains ${quote}.`}`, 20);
+  }
+  const hidden = aiNames.filter((n) => !injected.includes(n) && HIDDEN_CHARS.test(aiFiles[n].replace(/^\uFEFF/, "")));
+  if (hidden.length) flag("Hidden text for your AI", 25, `${hidden.join(", ")} contains invisible characters. Your AI can read them, you can't. This is a known way to hide instructions.`, 20);
 
   flagPts = Math.max(0, flagPts);
   add("Red flags", flags.length ? `${flags.length} warning sign${flags.length > 1 ? "s" : ""}` : "No warning signs found", flagPts, 30,
@@ -245,15 +356,35 @@ export function score(data) {
 
   // Paperwork (license, README, security file) takes minutes to add. Without real users, the best grade is C.
   if (stars < 50) softCap("users", 69);
+  // Nobody fixes an archived project, and a year without changes means no security fixes either.
+  if (r.archived) softCap("archived", 69);
+  else if (lastPush > 365) softCap("stale", 84);
+  // Without a license you may not be allowed to use it at all.
+  if (!standardLicense && !customLicense) softCap("license", 84);
 
-  const raw = checks.reduce((s, c) => s + c.points, 0);
+  // Weakest link: the overall grade can be at most one letter better than the weakest safety area.
+  // So lots of stars can't cover for a project nobody looks after.
+  // "Is it open about itself?" is left out: missing paperwork (license, security file) lowers the points
+  // and a missing license caps at B, but it doesn't make a project unsafe.
+  const areas = areaGrades(checks);
+  const [weakGroup, weak] = Object.entries(areas).filter(([g]) => g !== "Transparency").sort((a, b) => LETTERS.indexOf(b[1].grade) - LETTERS.indexOf(a[1].grade))[0];
+  const weakIdx = LETTERS.indexOf(weak.grade);
+  if (weakIdx >= 2) softCap("weak", TOP[LETTERS[weakIdx - 1]]);
+
+  // Points are out of 100. When the security check had no data, the other areas are scaled up to 100.
+  const got = checks.reduce((s, c) => s + c.points, 0);
+  const max = checks.reduce((s, c) => s + c.max, 0);
+  const raw = Math.round((100 * got) / max);
   const total = Math.max(0, Math.min(cap, raw));
-  const grade = GRADES.find(([, min]) => total >= min)[0];
+  const grade = gradeOf(total);
   // A low score can mean two different things. "Dangerous" means we found malware tricks.
   // "Unproven" means nothing looks wrong, the project is just too new or little-known to trust yet.
   const dangerous = flags.some((f) => f.severity === "high") || flagPts <= 15;
+  // D or F without malware tricks: "Unproven" when the weak spot is that few people use it,
+  // "Be careful" when it's something else (abandoned, poor security habits...).
+  const littleKnown = ["D", "F"].includes(areas.Reputation?.grade) || stars < 50;
   const level = dangerous ? "dangerous"
-    : grade === "A" ? "trusted" : grade === "B" ? "fine" : grade === "C" ? "careful" : "unproven";
+    : grade === "A" ? "trusted" : grade === "B" ? "fine" : grade === "C" || !littleKnown ? "careful" : "unproven";
   const { label, verdict } = LEVELS[level];
 
   return {
@@ -266,10 +397,17 @@ export function score(data) {
     label,
     verdict,
     capped: cap < raw ? cap : null,
-    capReason: cap < raw ? { flag: "it has a serious warning sign", fame: "it got famous suspiciously fast", users: "fewer than 50 people have starred it" }[capReason] : null,
+    capReason: cap < raw ? {
+      flag: "it has a serious warning sign", fame: "it got famous suspiciously fast", users: "fewer than 50 people have starred it",
+      archived: "the owner archived it, so nobody fixes problems anymore", stale: "nobody has changed it in over a year",
+      license: "it has no license", weak: `its weakest area ("${GROUPS[weakGroup] || weakGroup}") only gets ${/^[AEF]/.test(weak.grade) ? "an" : "a"} ${weak.grade}`,
+    }[capReason] : null,
+    areas,
+    securityChecked: Boolean(areas["Security habits"]),
     checks,
     flags,
     aiFilesFound: aiNames,
+    costs: costs({ readme, about, files }),
     checkedAt: new Date().toISOString(),
   };
 }
