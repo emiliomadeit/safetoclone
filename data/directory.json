@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T16:46:10.120Z",
+  "updatedAt": "2026-10-23T16:52:32.290Z",
   "example": false,
   "repos": [
     {
@@ -20,7 +20,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "142,274 people starred it."
+          "note": "142,275 people starred it."
         },
         {
           "group": "Reputation",
@@ -122,7 +122,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:44:09.554Z"
+      "checkedAt": "2026-10-23T16:50:56.643Z"
     },
     {
       "name": "google-gemini/gemini-cli",
@@ -246,256 +246,7 @@
         ".vscode/settings.json",
         ".gemini/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:44:18.523Z"
-    },
-    {
-      "name": "Significant-Gravitas/AutoGPT",
-      "url": "https://github.com/Significant-Gravitas/AutoGPT",
-      "description": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters.",
-      "score": 100,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [],
-      "warnings": [],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "187,718 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "45,903 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Organization created 3.5 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 0 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 8,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 3.6 years old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Tells people how to report security problems."
-        },
-        {
-          "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "We didn't find any of the common malware tricks."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 25,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 15,
-          "max": 15,
-          "grade": "A"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": false,
-      "capReason": null,
-      "aiFilesFound": [
-        "CLAUDE.md",
-        "AGENTS.md",
-        ".github/copilot-instructions.md",
-        ".claude/settings.json"
-      ],
-      "checkedAt": "2026-10-23T16:44:20.589Z"
-    },
-    {
-      "name": "lobehub/lobehub",
-      "url": "https://github.com/lobehub/lobehub",
-      "description": "🤯 LobeHub is your Chief Agent Operator, organizing your agents into 7×24 operations by hiring, scheduling, and reporting on your entire AI team.",
-      "score": 100,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [],
-      "warnings": [],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "83,447 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "16,019 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Organization created 3.5 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 0 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 8,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 3.4 years old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Tells people how to report security problems."
-        },
-        {
-          "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "We didn't find any of the common malware tricks."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 25,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 15,
-          "max": 15,
-          "grade": "A"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": false,
-      "capReason": null,
-      "aiFilesFound": [
-        "GEMINI.md",
-        "AGENTS.md",
-        ".vscode/settings.json"
-      ],
-      "checkedAt": "2026-10-23T16:44:27.017Z"
+      "checkedAt": "2026-10-23T16:51:04.269Z"
     },
     {
       "name": "mudler/LocalAI",
@@ -618,130 +369,7 @@
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:44:28.467Z"
-    },
-    {
-      "name": "modelcontextprotocol/servers",
-      "url": "https://github.com/modelcontextprotocol/servers",
-      "description": "Model Context Protocol Servers",
-      "score": 100,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [],
-      "warnings": [],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "91,518 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "11,848 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Organization created 2.1 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 1 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 8,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 1.9 years old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Tells people how to report security problems."
-        },
-        {
-          "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "We didn't find any of the common malware tricks."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 25,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 15,
-          "max": 15,
-          "grade": "A"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": false,
-      "capReason": null,
-      "aiFilesFound": [
-        ".mcp.json",
-        "AGENTS.md"
-      ],
-      "checkedAt": "2026-10-23T16:44:32.771Z"
+      "checkedAt": "2026-10-23T16:51:13.571Z"
     },
     {
       "name": "microsoft/markitdown",
@@ -761,7 +389,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "191,789 people starred it."
+          "note": "191,790 people starred it."
         },
         {
           "group": "Reputation",
@@ -861,7 +489,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:38.161Z"
+      "checkedAt": "2026-10-23T16:51:21.976Z"
     },
     {
       "name": "huggingface/transformers",
@@ -1006,130 +634,7 @@
         "AGENTS.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:44:40.134Z"
-    },
-    {
-      "name": "langgenius/dify",
-      "url": "https://github.com/langgenius/dify",
-      "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
-      "score": 100,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [],
-      "warnings": [],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "159,359 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "25,176 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Organization created 3.6 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 0 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 8,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 3.5 years old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Tells people how to report security problems."
-        },
-        {
-          "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "We didn't find any of the common malware tricks."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 25,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 15,
-          "max": 15,
-          "grade": "A"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": false,
-      "capReason": null,
-      "aiFilesFound": [
-        "AGENTS.md",
-        ".claude/settings.json"
-      ],
-      "checkedAt": "2026-10-23T16:44:41.795Z"
+      "checkedAt": "2026-10-23T16:51:23.595Z"
     },
     {
       "name": "vllm-project/vllm",
@@ -1251,7 +756,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:44:44.236Z"
+      "checkedAt": "2026-10-23T16:51:27.230Z"
     },
     {
       "name": "unclecode/crawl4ai",
@@ -1374,7 +879,7 @@
         ".claude/settings.local.json",
         ".claude/commands/c4ai-check.md"
       ],
-      "checkedAt": "2026-10-23T16:44:46.722Z"
+      "checkedAt": "2026-10-23T16:51:29.553Z"
     },
     {
       "name": "cline/cline",
@@ -1495,13 +1000,13 @@
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
+        ".claude/settings.json",
         ".claude/commands/hotfix-release.md",
         ".vscode/settings.json",
-        ".claude/commands/release.md",
         ".github/copilot-instructions.md",
-        ".claude/settings.json"
+        ".claude/commands/release.md"
       ],
-      "checkedAt": "2026-10-23T16:44:49.019Z"
+      "checkedAt": "2026-10-23T16:51:31.158Z"
     },
     {
       "name": "Mintplex-Labs/anything-llm",
@@ -1623,7 +1128,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:44:50.464Z"
+      "checkedAt": "2026-10-23T16:51:32.522Z"
     },
     {
       "name": "upstash/context7",
@@ -1743,7 +1248,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:52.603Z"
+      "checkedAt": "2026-10-23T16:51:34.469Z"
     },
     {
       "name": "microsoft/playwright-mcp",
@@ -1865,7 +1370,7 @@
       "aiFilesFound": [
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-10-23T16:44:58.415Z"
+      "checkedAt": "2026-10-23T16:51:39.128Z"
     },
     {
       "name": "continuedev/continue",
@@ -1987,7 +1492,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:45:01.034Z"
+      "checkedAt": "2026-10-23T16:51:41.403Z"
     },
     {
       "name": "github/github-mcp-server",
@@ -2109,7 +1614,7 @@
       "aiFilesFound": [
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:45:03.540Z"
+      "checkedAt": "2026-10-23T16:51:43.530Z"
     },
     {
       "name": "invoke-ai/InvokeAI",
@@ -2232,7 +1737,7 @@
         "AGENTS.md",
         ".github/AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:45:05.892Z"
+      "checkedAt": "2026-10-23T16:51:45.498Z"
     },
     {
       "name": "PrefectHQ/fastmcp",
@@ -2352,11 +1857,11 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
         "CLAUDE.md",
+        "AGENTS.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:45:11.946Z"
+      "checkedAt": "2026-10-23T16:51:51.014Z"
     },
     {
       "name": "GLips/Figma-Context-MCP",
@@ -2479,7 +1984,7 @@
         "CLAUDE.md",
         ".claude/commands/release.md"
       ],
-      "checkedAt": "2026-10-23T16:45:16.713Z"
+      "checkedAt": "2026-10-23T16:51:54.384Z"
     },
     {
       "name": "ChromeDevTools/chrome-devtools-mcp",
@@ -2603,7 +2108,7 @@
         "mcp.json",
         ".gemini/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:45:28.004Z"
+      "checkedAt": "2026-10-23T16:51:58.933Z"
     },
     {
       "name": "davila7/claude-code-templates",
@@ -2723,22 +2228,22 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [
-        ".mcp.json",
         "CLAUDE.md",
-        ".claude/agents/blog-writer.md",
-        ".claude/agents/catalog-generator.md",
+        ".mcp.json",
+        ".claude/agents/agent-expert.md",
+        ".claude/agents/component-researcher.md",
+        ".claude/agents/docusaurus-expert.md",
+        ".claude/agents/build-checker.md",
         ".claude/agents/component-improver.md",
         ".claude/agents/cli-ui-designer.md",
-        ".claude/agents/component-migrator.md",
-        ".claude/agents/component-researcher.md",
-        ".claude/agents/component-reviewer.md",
-        ".claude/agents/agent-expert.md",
-        ".claude/agents/build-checker.md",
-        ".claude/agents/docusaurus-expert.md",
         ".claude/agents/deployer.md",
-        ".claude/agents/command-expert.md"
+        ".claude/agents/component-reviewer.md",
+        ".claude/agents/catalog-generator.md",
+        ".claude/agents/command-expert.md",
+        ".claude/agents/component-migrator.md",
+        ".claude/agents/blog-writer.md"
       ],
-      "checkedAt": "2026-10-23T16:45:47.352Z"
+      "checkedAt": "2026-10-23T16:52:15.294Z"
     },
     {
       "name": "github/spec-kit",
@@ -2860,7 +2365,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:46:00.591Z"
+      "checkedAt": "2026-10-23T16:52:25.112Z"
     },
     {
       "name": "microsoft/autogen",
@@ -3003,7 +2508,502 @@
       "aiFilesFound": [
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:44:34.839Z"
+      "checkedAt": "2026-10-23T16:51:18.860Z"
+    },
+    {
+      "name": "Significant-Gravitas/AutoGPT",
+      "url": "https://github.com/Significant-Gravitas/AutoGPT",
+      "description": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters.",
+      "score": 98,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "187,718 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "45,903 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.5 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 25,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 13,
+          "max": 15,
+          "grade": "A"
+        },
+        "Red flags": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": false,
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".claude/settings.json",
+        ".github/copilot-instructions.md"
+      ],
+      "checkedAt": "2026-10-23T16:51:05.832Z"
+    },
+    {
+      "name": "lobehub/lobehub",
+      "url": "https://github.com/lobehub/lobehub",
+      "description": "🤯 LobeHub is your Chief Agent Operator, organizing your agents into 7×24 operations by hiring, scheduling, and reporting on your entire AI team.",
+      "score": 98,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "83,447 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "16,019 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.5 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.4 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 25,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 13,
+          "max": 15,
+          "grade": "A"
+        },
+        "Red flags": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": false,
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md",
+        "GEMINI.md",
+        ".vscode/settings.json"
+      ],
+      "checkedAt": "2026-10-23T16:51:12.365Z"
+    },
+    {
+      "name": "modelcontextprotocol/servers",
+      "url": "https://github.com/modelcontextprotocol/servers",
+      "description": "Model Context Protocol Servers",
+      "score": 98,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "91,518 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "11,848 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2.1 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 1 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.9 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 25,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 13,
+          "max": 15,
+          "grade": "A"
+        },
+        "Red flags": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": false,
+      "capReason": null,
+      "aiFilesFound": [
+        ".mcp.json",
+        "AGENTS.md"
+      ],
+      "checkedAt": "2026-10-23T16:51:17.072Z"
+    },
+    {
+      "name": "langgenius/dify",
+      "url": "https://github.com/langgenius/dify",
+      "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
+      "score": 98,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "159,360 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "25,176 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.6 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.5 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 25,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 13,
+          "max": 15,
+          "grade": "A"
+        },
+        "Red flags": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": false,
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md",
+        ".claude/settings.json"
+      ],
+      "checkedAt": "2026-10-23T16:51:25.329Z"
     },
     {
       "name": "ollama/ollama",
@@ -3134,127 +3134,7 @@
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:44:06.002Z"
-    },
-    {
-      "name": "open-webui/open-webui",
-      "url": "https://github.com/open-webui/open-webui",
-      "description": "User-friendly AI Interface (Supports Ollama, OpenAI API, ...)",
-      "score": 97,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [],
-      "warnings": [],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "156,567 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "22,783 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Organization created 2.7 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 1 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 8,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 3 years old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 2,
-          "max": 5,
-          "level": "warn",
-          "note": "No security policy file."
-        },
-        {
-          "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "We didn't find any of the common malware tricks."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 25,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 12,
-          "max": 15,
-          "grade": "B"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": false,
-      "capReason": null,
-      "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:07.614Z"
+      "checkedAt": "2026-10-23T16:50:53.784Z"
     },
     {
       "name": "ggml-org/llama.cpp",
@@ -3386,7 +3266,7 @@
         "AGENTS.md",
         ".gemini/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:44:30.150Z"
+      "checkedAt": "2026-10-23T16:51:15.033Z"
     },
     {
       "name": "infiniflow/ragflow",
@@ -3509,7 +3389,7 @@
         "AGENTS.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:44:37.335Z"
+      "checkedAt": "2026-10-23T16:51:20.991Z"
     },
     {
       "name": "ChatGPTNextWeb/NextChat",
@@ -3629,7 +3509,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:45.292Z"
+      "checkedAt": "2026-10-23T16:51:28.314Z"
     },
     {
       "name": "xtekky/gpt4free",
@@ -3760,7 +3640,7 @@
         "SKILL.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:44:51.605Z"
+      "checkedAt": "2026-10-23T16:51:33.468Z"
     },
     {
       "name": "zylon-ai/private-gpt",
@@ -3888,127 +3768,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:53.589Z"
-    },
-    {
-      "name": "janhq/jan",
-      "url": "https://github.com/janhq/jan",
-      "description": "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer.",
-      "score": 97,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [],
-      "warnings": [],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "45,052 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "3,110 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Organization created 4.6 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 0 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 8,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 3.2 years old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 2,
-          "max": 5,
-          "level": "warn",
-          "note": "No security policy file."
-        },
-        {
-          "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "We didn't find any of the common malware tricks."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 25,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 12,
-          "max": 15,
-          "grade": "B"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": false,
-      "capReason": null,
-      "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:56.819Z"
+      "checkedAt": "2026-10-23T16:51:35.373Z"
     },
     {
       "name": "firecrawl/firecrawl-mcp-server",
@@ -4128,132 +3888,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:08.809Z"
-    },
-    {
-      "name": "oraios/serena",
-      "url": "https://github.com/oraios/serena",
-      "description": "A powerful MCP toolkit for coding, providing semantic retrieval and editing capabilities  - the IDE for your agent",
-      "score": 97,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [],
-      "warnings": [],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "30,655 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "2,086 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Organization created 2.1 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 3 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 8,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 1.6 years old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 2,
-          "max": 5,
-          "level": "warn",
-          "note": "No security policy file."
-        },
-        {
-          "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "We didn't find any of the common malware tricks."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 25,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 12,
-          "max": 15,
-          "grade": "B"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": false,
-      "capReason": null,
-      "aiFilesFound": [
-        "AGENTS.md",
-        "CLAUDE.md",
-        ".vscode/settings.json",
-        ".github/copilot-instructions.md"
-      ],
-      "checkedAt": "2026-10-23T16:45:14.363Z"
+      "checkedAt": "2026-10-23T16:51:48.608Z"
     },
     {
       "name": "supabase/mcp",
@@ -4377,7 +4012,7 @@
         "AGENTS.md",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:45:30.227Z"
+      "checkedAt": "2026-10-23T16:52:00.942Z"
     },
     {
       "name": "cloudflare/mcp-server-cloudflare",
@@ -4499,7 +4134,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:45:31.875Z"
+      "checkedAt": "2026-10-23T16:52:02.158Z"
     },
     {
       "name": "obra/superpowers",
@@ -4519,7 +4154,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "304,108 people starred it."
+          "note": "304,110 people starred it."
         },
         {
           "group": "Reputation",
@@ -4622,127 +4257,7 @@
         "AGENTS.md",
         "GEMINI.md"
       ],
-      "checkedAt": "2026-10-23T16:45:39.297Z"
-    },
-    {
-      "name": "hesreallyhim/awesome-claude-code",
-      "url": "https://github.com/hesreallyhim/awesome-claude-code",
-      "description": "A hand-picked collection of the finest of resources for the most awesome of agents, Claude Code, the undisputed champion of coding companions, from the unstoppable team at Anthropic PBC (no affiliation). A delectable showcase of top tier skills, ambidextrous agents, scintillating status lines, top notch developer tooling, and also we have plugins",
-      "score": 97,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [],
-      "warnings": [],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "56,330 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "4,854 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Account created 2.4 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 0 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 8,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 1.5 years old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 2,
-          "max": 5,
-          "level": "warn",
-          "note": "No official releases. You'd be downloading work in progress."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Tells people how to report security problems."
-        },
-        {
-          "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "We didn't find any of the common malware tricks."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 22,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 15,
-          "max": 15,
-          "grade": "A"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": false,
-      "capReason": null,
-      "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:41.796Z"
+      "checkedAt": "2026-10-23T16:52:08.948Z"
     },
     {
       "name": "ruvnet/ruflo",
@@ -4873,20 +4388,20 @@
         "SKILL.md",
         "AGENTS.md",
         "CLAUDE.md",
-        ".claude/settings.json",
+        ".claude/agents/typescript-specialist.md",
+        ".claude/agents/security-auditor.md",
         ".claude/mcp.json",
         ".claude/agents/base-template-generator.md",
-        ".claude/agents/typescript-specialist.md",
-        ".claude/commands/claude-flow-help.md",
-        ".claude/agents/MIGRATION_SUMMARY.md",
         ".claude/agents/python-specialist.md",
-        ".claude/agents/security-auditor.md",
-        ".claude/agents/database-specialist.md",
+        ".claude/commands/claude-flow-swarm.md",
+        ".claude/agents/MIGRATION_SUMMARY.md",
         ".claude/commands/claude-flow-memory.md",
+        ".claude/settings.json",
+        ".claude/agents/database-specialist.md",
         ".claude/agents/project-coordinator.md",
-        ".claude/commands/claude-flow-swarm.md"
+        ".claude/commands/claude-flow-help.md"
       ],
-      "checkedAt": "2026-10-23T16:45:52.406Z"
+      "checkedAt": "2026-10-23T16:52:19.185Z"
     },
     {
       "name": "musistudio/claude-code-router",
@@ -5006,7 +4521,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:53.531Z"
+      "checkedAt": "2026-10-23T16:52:20.092Z"
     },
     {
       "name": "thedotmack/claude-mem",
@@ -5034,7 +4549,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "102,491 people starred it."
+          "note": "102,492 people starred it."
         },
         {
           "group": "Reputation",
@@ -5135,11 +4650,11 @@
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
-        ".claude/commands/anti-pattern-czar.md",
+        ".claude/settings.json",
         ".github/copilot-instructions.md",
-        ".claude/settings.json"
+        ".claude/commands/anti-pattern-czar.md"
       ],
-      "checkedAt": "2026-10-23T16:46:05.815Z"
+      "checkedAt": "2026-10-23T16:52:28.905Z"
     },
     {
       "name": "langchain-ai/langchain",
@@ -5280,17 +4795,17 @@
       "securityChecked": true,
       "capReason": null,
       "aiFilesFound": [
-        ".mcp.json",
         "AGENTS.md",
+        ".mcp.json",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:44:21.964Z"
+      "checkedAt": "2026-10-23T16:51:07.587Z"
     },
     {
-      "name": "bmad-code-org/BMAD-METHOD",
-      "url": "https://github.com/bmad-code-org/BMAD-METHOD",
-      "description": "Breakthrough Method for Agile Ai Driven Development",
-      "score": 96,
+      "name": "open-webui/open-webui",
+      "url": "https://github.com/open-webui/open-webui",
+      "description": "User-friendly AI Interface (Supports Ollama, OpenAI API, ...)",
+      "score": 95,
       "grade": "A",
       "level": "trusted",
       "label": "Strong",
@@ -5304,7 +4819,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "54,480 people starred it."
+          "note": "156,567 people starred it."
         },
         {
           "group": "Reputation",
@@ -5312,15 +4827,15 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "6,097 copies made by other developers."
+          "note": "22,783 copies made by other developers."
         },
         {
           "group": "Reputation",
           "label": "Owner history",
-          "points": 6,
+          "points": 10,
           "max": 10,
           "level": "good",
-          "note": "Organization created 1.2 years ago."
+          "note": "Organization created 2.7 years ago."
         },
         {
           "group": "Upkeep",
@@ -5328,7 +4843,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 4 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -5336,7 +4851,7 @@
           "points": 8,
           "max": 8,
           "level": "good",
-          "note": "Repo is 1.5 years old."
+          "note": "Repo is 3 years old."
         },
         {
           "group": "Upkeep",
@@ -5349,10 +4864,138 @@
         {
           "group": "Transparency",
           "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "Uses the NOASSERTION license."
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 25,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 10,
+          "max": 15,
+          "grade": "C"
+        },
+        "Red flags": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": false,
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-23T16:50:54.844Z"
+    },
+    {
+      "name": "anthropics/claude-code",
+      "url": "https://github.com/anthropics/claude-code",
+      "description": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.",
+      "score": 95,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [
+        "Runs a script straight from the internet"
+      ],
+      "warnings": [
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "153,129 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "26,806 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 5.8 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 1 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.7 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
         },
         {
           "group": "Transparency",
@@ -5372,16 +5015,16 @@
         },
         {
           "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
+          "label": "1 warning sign",
+          "points": 27,
           "max": 30,
           "level": "good",
-          "note": "We didn't find any of the common malware tricks."
+          "note": "Each one is explained under Warning signs."
         }
       ],
       "areas": {
         "Reputation": {
-          "points": 26,
+          "points": 30,
           "max": 30,
           "grade": "A"
         },
@@ -5391,9 +5034,134 @@
           "grade": "A"
         },
         "Transparency": {
-          "points": 15,
+          "points": 13,
           "max": 15,
           "grade": "A"
+        },
+        "Red flags": {
+          "points": 27,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": false,
+      "capReason": null,
+      "aiFilesFound": [
+        "CLAUDE.md",
+        ".claude/commands/commit-push-pr.md",
+        ".claude/commands/dedupe.md",
+        ".claude/commands/triage-issue.md"
+      ],
+      "checkedAt": "2026-10-23T16:51:00.269Z"
+    },
+    {
+      "name": "janhq/jan",
+      "url": "https://github.com/janhq/jan",
+      "description": "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer.",
+      "score": 95,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "45,052 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "3,110 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 4.6 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.2 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 25,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 10,
+          "max": 15,
+          "grade": "C"
         },
         "Red flags": {
           "points": 30,
@@ -5403,10 +5171,8 @@
       },
       "securityChecked": false,
       "capReason": null,
-      "aiFilesFound": [
-        "AGENTS.md"
-      ],
-      "checkedAt": "2026-10-23T16:46:02.005Z"
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-23T16:51:38.019Z"
     },
     {
       "name": "awslabs/mcp",
@@ -5555,7 +5321,252 @@
       "securityChecked": true,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:07.853Z"
+      "checkedAt": "2026-10-23T16:51:47.487Z"
+    },
+    {
+      "name": "oraios/serena",
+      "url": "https://github.com/oraios/serena",
+      "description": "A powerful MCP toolkit for coding, providing semantic retrieval and editing capabilities  - the IDE for your agent",
+      "score": 95,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "30,655 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "2,086 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 2.1 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 3 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 25,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 10,
+          "max": 15,
+          "grade": "C"
+        },
+        "Red flags": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": false,
+      "capReason": null,
+      "aiFilesFound": [
+        "CLAUDE.md",
+        "AGENTS.md",
+        ".vscode/settings.json",
+        ".github/copilot-instructions.md"
+      ],
+      "checkedAt": "2026-10-23T16:51:53.078Z"
+    },
+    {
+      "name": "hesreallyhim/awesome-claude-code",
+      "url": "https://github.com/hesreallyhim/awesome-claude-code",
+      "description": "A hand-picked collection of the finest of resources for the most awesome of agents, Claude Code, the undisputed champion of coding companions, from the unstoppable team at Anthropic PBC (no affiliation). A delectable showcase of top tier skills, ambidextrous agents, scintillating status lines, top notch developer tooling, and also we have plugins",
+      "score": 95,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "56,331 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "4,854 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Account created 2.4 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 1.5 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No official releases. You'd be downloading work in progress."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 22,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 13,
+          "max": 15,
+          "grade": "A"
+        },
+        "Red flags": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": false,
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-23T16:52:10.923Z"
     },
     {
       "name": "crewAIInc/crewAI",
@@ -5591,7 +5602,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "8,852 copies made by other developers."
+          "note": "8,853 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -5685,7 +5696,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:44:36.014Z"
+      "checkedAt": "2026-10-23T16:51:19.838Z"
     },
     {
       "name": "Aider-AI/aider",
@@ -5805,7 +5816,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:55.729Z"
+      "checkedAt": "2026-10-23T16:51:37.156Z"
     },
     {
       "name": "khoj-ai/khoj",
@@ -5927,127 +5938,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:44:59.674Z"
-    },
-    {
-      "name": "TabbyML/tabby",
-      "url": "https://github.com/TabbyML/tabby",
-      "description": "Self-hosted AI coding assistant",
-      "score": 94,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [],
-      "warnings": [],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "33,924 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "1,791 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Organization created 3.7 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 9,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 115 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 8,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 3.6 years old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 2,
-          "max": 5,
-          "level": "warn",
-          "note": "No security policy file."
-        },
-        {
-          "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "We didn't find any of the common malware tricks."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 22,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 12,
-          "max": 15,
-          "grade": "B"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": false,
-      "capReason": null,
-      "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:02.219Z"
+      "checkedAt": "2026-10-23T16:51:40.202Z"
     },
     {
       "name": "makenotion/notion-mcp-server",
@@ -6169,7 +6060,7 @@
       "aiFilesFound": [
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-10-23T16:45:19.276Z"
+      "checkedAt": "2026-10-23T16:51:56.461Z"
     },
     {
       "name": "exa-labs/exa-mcp-server",
@@ -6291,7 +6182,7 @@
       "aiFilesFound": [
         "mcp.json"
       ],
-      "checkedAt": "2026-10-23T16:45:33.046Z"
+      "checkedAt": "2026-10-23T16:52:03.243Z"
     },
     {
       "name": "idosal/git-mcp",
@@ -6411,7 +6302,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:35.096Z"
+      "checkedAt": "2026-10-23T16:52:05.210Z"
     },
     {
       "name": "punkpeye/awesome-mcp-servers",
@@ -6531,7 +6422,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:37.794Z"
+      "checkedAt": "2026-10-23T16:52:07.856Z"
     },
     {
       "name": "wshobson/agents",
@@ -6559,7 +6450,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "4,409 copies made by other developers."
+          "note": "4,410 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -6651,18 +6542,18 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
         "CLAUDE.md",
-        ".cursor/rules/010-python-tooling.mdc",
+        "AGENTS.md",
         ".cursor/rules/000-project-conventions.mdc",
+        ".cursor/rules/010-python-tooling.mdc",
         ".cursor/rules/020-agent-skill-authoring.mdc"
       ],
-      "checkedAt": "2026-10-23T16:45:40.925Z"
+      "checkedAt": "2026-10-23T16:52:10.198Z"
     },
     {
-      "name": "eyaltoledano/claude-task-master",
-      "url": "https://github.com/eyaltoledano/claude-task-master",
-      "description": "An AI-powered task-management system you can drop into Cursor, Lovable, Windsurf, Roo, and others.",
+      "name": "bmad-code-org/BMAD-METHOD",
+      "url": "https://github.com/bmad-code-org/BMAD-METHOD",
+      "description": "Breakthrough Method for Agile Ai Driven Development",
       "score": 94,
       "grade": "A",
       "level": "trusted",
@@ -6677,7 +6568,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "28,269 people starred it."
+          "note": "54,480 people starred it."
         },
         {
           "group": "Reputation",
@@ -6685,23 +6576,23 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "2,615 copies made by other developers."
+          "note": "6,097 copies made by other developers."
         },
         {
           "group": "Reputation",
           "label": "Owner history",
-          "points": 10,
+          "points": 6,
           "max": 10,
           "level": "good",
-          "note": "Account created 13.8 years ago."
+          "note": "Organization created 1.2 years ago."
         },
         {
           "group": "Upkeep",
           "label": "Recent updates",
-          "points": 9,
+          "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 178 days ago."
+          "note": "Last change 4 days ago."
         },
         {
           "group": "Upkeep",
@@ -6709,7 +6600,7 @@
           "points": 8,
           "max": 8,
           "level": "good",
-          "note": "Repo is 1.6 years old."
+          "note": "Repo is 1.5 years old."
         },
         {
           "group": "Upkeep",
@@ -6722,159 +6613,10 @@
         {
           "group": "Transparency",
           "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 2,
+          "points": 3,
           "max": 5,
           "level": "warn",
-          "note": "No security policy file."
-        },
-        {
-          "group": "Red flags",
-          "label": "No warning signs found",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "We didn't find any of the common malware tricks."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 22,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 12,
-          "max": 15,
-          "grade": "B"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": false,
-      "capReason": null,
-      "aiFilesFound": [
-        ".mcp.json",
-        "CLAUDE.md",
-        ".cursor/rules/ai_providers.mdc",
-        ".claude/commands/dedupe.md",
-        ".cursor/mcp.json",
-        ".cursor/rules/ai_services.mdc",
-        ".cursor/rules/context_gathering.mdc",
-        ".cursor/rules/changeset.mdc",
-        ".cursor/rules/architecture.mdc",
-        ".cursor/rules/dev_workflow.mdc",
-        ".cursor/commands/goham.md",
-        ".cursor/rules/cursor_rules.mdc",
-        ".cursor/rules/dependencies.mdc",
-        ".cursor/rules/commands.mdc"
-      ],
-      "checkedAt": "2026-10-23T16:45:56.898Z"
-    },
-    {
-      "name": "n8n-io/n8n",
-      "url": "https://github.com/n8n-io/n8n",
-      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
-      "score": 93,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [
-        "Runs a script straight from the internet",
-        "Runs code during install"
-      ],
-      "warnings": [
-        {
-          "label": "Runs a script straight from the internet",
-          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
-          "severity": "low"
-        },
-        {
-          "label": "Runs code during install",
-          "note": "package.json runs \"node scripts/block-npm-install.js\" the moment you install it.",
-          "severity": "low"
-        }
-      ],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "208,394 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "61,213 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Organization created 7.9 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 0 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 8,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 7.3 years old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
         },
         {
           "group": "Transparency",
@@ -6893,33 +6635,17 @@
           "note": "Tells people how to report security problems."
         },
         {
-          "group": "Security habits",
-          "label": "Code review",
-          "points": 3,
-          "max": 3,
-          "level": "good",
-          "note": "Almost every change is checked by a second person before it goes in."
-        },
-        {
-          "group": "Security habits",
-          "label": "Safe automation",
-          "points": 4,
-          "max": 4,
-          "level": "good",
-          "note": "Its build-and-publish robots are set up safely."
-        },
-        {
           "group": "Red flags",
-          "label": "2 warning signs",
-          "points": 23,
+          "label": "No warning signs found",
+          "points": 30,
           "max": 30,
-          "level": "warn",
-          "note": "Each one is explained under Warning signs."
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
         }
       ],
       "areas": {
         "Reputation": {
-          "points": 30,
+          "points": 26,
           "max": 30,
           "grade": "A"
         },
@@ -6929,30 +6655,22 @@
           "grade": "A"
         },
         "Transparency": {
-          "points": 15,
+          "points": 13,
           "max": 15,
           "grade": "A"
         },
-        "Security habits": {
-          "points": 7,
-          "max": 7,
-          "grade": "A"
-        },
         "Red flags": {
-          "points": 23,
+          "points": 30,
           "max": 30,
-          "grade": "B"
+          "grade": "A"
         }
       },
-      "securityChecked": true,
+      "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
-        "AGENTS.md",
-        ".claude/settings.json",
-        ".github/CLAUDE.md"
+        "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:44:23.652Z"
+      "checkedAt": "2026-10-23T16:52:26.097Z"
     },
     {
       "name": "browser-use/browser-use",
@@ -7072,10 +6790,10 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
-        "CLAUDE.md"
+        "CLAUDE.md",
+        "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:44:33.821Z"
+      "checkedAt": "2026-10-23T16:51:18.028Z"
     },
     {
       "name": "openai/whisper",
@@ -7216,7 +6934,7 @@
       "securityChecked": true,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:42.784Z"
+      "checkedAt": "2026-10-23T16:51:26.090Z"
     },
     {
       "name": "wonderwhy-er/DesktopCommanderMCP",
@@ -7353,7 +7071,287 @@
         ".mcp.json",
         ".claude/settings.local.json"
       ],
-      "checkedAt": "2026-10-23T16:45:36.703Z"
+      "checkedAt": "2026-10-23T16:52:06.831Z"
+    },
+    {
+      "name": "n8n-io/n8n",
+      "url": "https://github.com/n8n-io/n8n",
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+      "score": 92,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [
+        "Runs a script straight from the internet",
+        "Runs code during install"
+      ],
+      "warnings": [
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
+          "severity": "low"
+        },
+        {
+          "label": "Runs code during install",
+          "note": "package.json runs \"node scripts/block-npm-install.js\" the moment you install it.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "208,394 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "61,213 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 7.9 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 7.3 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Security habits",
+          "label": "Code review",
+          "points": 3,
+          "max": 3,
+          "level": "good",
+          "note": "Almost every change is checked by a second person before it goes in."
+        },
+        {
+          "group": "Security habits",
+          "label": "Safe automation",
+          "points": 4,
+          "max": 4,
+          "level": "good",
+          "note": "Its build-and-publish robots are set up safely."
+        },
+        {
+          "group": "Red flags",
+          "label": "2 warning signs",
+          "points": 23,
+          "max": 30,
+          "level": "warn",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 25,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 13,
+          "max": 15,
+          "grade": "A"
+        },
+        "Security habits": {
+          "points": 7,
+          "max": 7,
+          "grade": "A"
+        },
+        "Red flags": {
+          "points": 23,
+          "max": 30,
+          "grade": "B"
+        }
+      },
+      "securityChecked": true,
+      "capReason": null,
+      "aiFilesFound": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".claude/settings.json",
+        ".github/CLAUDE.md"
+      ],
+      "checkedAt": "2026-10-23T16:51:09.072Z"
+    },
+    {
+      "name": "TabbyML/tabby",
+      "url": "https://github.com/TabbyML/tabby",
+      "description": "Self-hosted AI coding assistant",
+      "score": 92,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [],
+      "warnings": [],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "33,924 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "1,791 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Organization created 3.7 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 9,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 115 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 8,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 3.6 years old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 3,
+          "max": 5,
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 2,
+          "max": 5,
+          "level": "warn",
+          "note": "No security policy file."
+        },
+        {
+          "group": "Red flags",
+          "label": "No warning signs found",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "We didn't find any of the common malware tricks."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 22,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 10,
+          "max": 15,
+          "grade": "C"
+        },
+        "Red flags": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": false,
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-23T16:51:42.495Z"
     },
     {
       "name": "SuperClaude-Org/SuperClaude_Framework",
@@ -7481,17 +7479,17 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
         "AGENTS.md",
+        "CLAUDE.md",
         ".claude/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:45:49.188Z"
+      "checkedAt": "2026-10-23T16:52:16.594Z"
     },
     {
-      "name": "Pythagora-io/gpt-pilot",
-      "url": "https://github.com/Pythagora-io/gpt-pilot",
-      "description": "The first real AI developer",
-      "score": 91,
+      "name": "eyaltoledano/claude-task-master",
+      "url": "https://github.com/eyaltoledano/claude-task-master",
+      "description": "An AI-powered task-management system you can drop into Cursor, Lovable, Windsurf, Roo, and others.",
+      "score": 92,
       "grade": "A",
       "level": "trusted",
       "label": "Strong",
@@ -7505,7 +7503,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "33,646 people starred it."
+          "note": "28,269 people starred it."
         },
         {
           "group": "Reputation",
@@ -7513,7 +7511,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,452 copies made by other developers."
+          "note": "2,615 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -7521,7 +7519,7 @@
           "points": 10,
           "max": 10,
           "level": "good",
-          "note": "Organization created 3.8 years ago."
+          "note": "Account created 13.8 years ago."
         },
         {
           "group": "Upkeep",
@@ -7529,7 +7527,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 127 days ago."
+          "note": "Last change 178 days ago."
         },
         {
           "group": "Upkeep",
@@ -7537,23 +7535,23 @@
           "points": 8,
           "max": 8,
           "level": "good",
-          "note": "Repo is 3.2 years old."
+          "note": "Repo is 1.6 years old."
         },
         {
           "group": "Upkeep",
           "label": "Releases",
-          "points": 2,
+          "points": 5,
           "max": 5,
-          "level": "warn",
-          "note": "No official releases. You'd be downloading work in progress."
+          "level": "good",
+          "note": "Publishes versioned releases."
         },
         {
           "group": "Transparency",
           "label": "License",
-          "points": 5,
+          "points": 3,
           "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
         },
         {
           "group": "Transparency",
@@ -7587,14 +7585,14 @@
           "grade": "A"
         },
         "Upkeep": {
-          "points": 19,
+          "points": 22,
           "max": 25,
-          "grade": "B"
+          "grade": "A"
         },
         "Transparency": {
-          "points": 12,
+          "points": 10,
           "max": 15,
-          "grade": "B"
+          "grade": "C"
         },
         "Red flags": {
           "points": 30,
@@ -7604,8 +7602,23 @@
       },
       "securityChecked": false,
       "capReason": null,
-      "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:04.431Z"
+      "aiFilesFound": [
+        "CLAUDE.md",
+        ".mcp.json",
+        ".claude/commands/dedupe.md",
+        ".cursor/rules/ai_services.mdc",
+        ".cursor/rules/context_gathering.mdc",
+        ".cursor/rules/commands.mdc",
+        ".cursor/commands/goham.md",
+        ".cursor/mcp.json",
+        ".cursor/rules/changeset.mdc",
+        ".cursor/rules/architecture.mdc",
+        ".cursor/rules/dependencies.mdc",
+        ".cursor/rules/cursor_rules.mdc",
+        ".cursor/rules/dev_workflow.mdc",
+        ".cursor/rules/ai_providers.mdc"
+      ],
+      "checkedAt": "2026-10-23T16:52:22.155Z"
     },
     {
       "name": "ahujasid/mcp-for-blender",
@@ -7733,7 +7746,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:17.937Z"
+      "checkedAt": "2026-10-23T16:51:55.470Z"
     },
     {
       "name": "PatrickJS/awesome-cursorrules",
@@ -7853,7 +7866,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:59.606Z"
+      "checkedAt": "2026-10-23T16:52:24.078Z"
     },
     {
       "name": "AUTOMATIC1111/stable-diffusion-webui",
@@ -7973,7 +7986,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:10.706Z"
+      "checkedAt": "2026-10-23T16:50:57.730Z"
     },
     {
       "name": "lllyasviel/Fooocus",
@@ -8093,7 +8106,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:11.721Z"
+      "checkedAt": "2026-10-23T16:50:58.773Z"
     },
     {
       "name": "tadata-org/fastapi_mcp",
@@ -8213,7 +8226,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:13.046Z"
+      "checkedAt": "2026-10-23T16:51:51.964Z"
     },
     {
       "name": "hangwin/mcp-chrome",
@@ -8333,7 +8346,7 @@
       "securityChecked": false,
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:20.474Z"
+      "checkedAt": "2026-10-23T16:51:57.521Z"
     },
     {
       "name": "VoltAgent/awesome-claude-code-subagents",
@@ -8456,27 +8469,19 @@
         "CLAUDE.md",
         ".claude/settings.local.json"
       ],
-      "checkedAt": "2026-10-23T16:45:58.427Z"
+      "checkedAt": "2026-10-23T16:52:23.142Z"
     },
     {
-      "name": "anthropics/claude-code",
-      "url": "https://github.com/anthropics/claude-code",
-      "description": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.",
-      "score": 84,
-      "grade": "B",
-      "level": "fine",
-      "label": "Probably fine",
-      "verdict": "Probably fine. Read the warnings first.",
-      "flags": [
-        "Runs a script straight from the internet"
-      ],
-      "warnings": [
-        {
-          "label": "Runs a script straight from the internet",
-          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.",
-          "severity": "low"
-        }
-      ],
+      "name": "Pythagora-io/gpt-pilot",
+      "url": "https://github.com/Pythagora-io/gpt-pilot",
+      "description": "The first real AI developer",
+      "score": 89,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [],
+      "warnings": [],
       "checks": [
         {
           "group": "Reputation",
@@ -8484,7 +8489,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "153,127 people starred it."
+          "note": "33,646 people starred it."
         },
         {
           "group": "Reputation",
@@ -8492,7 +8497,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "26,806 copies made by other developers."
+          "note": "3,452 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -8500,15 +8505,15 @@
           "points": 10,
           "max": 10,
           "level": "good",
-          "note": "Organization created 5.8 years ago."
+          "note": "Organization created 3.8 years ago."
         },
         {
           "group": "Upkeep",
           "label": "Recent updates",
-          "points": 12,
+          "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 1 days ago."
+          "note": "Last change 127 days ago."
         },
         {
           "group": "Upkeep",
@@ -8516,23 +8521,23 @@
           "points": 8,
           "max": 8,
           "level": "good",
-          "note": "Repo is 1.7 years old."
+          "note": "Repo is 3.2 years old."
         },
         {
           "group": "Upkeep",
           "label": "Releases",
-          "points": 5,
+          "points": 2,
           "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
+          "level": "warn",
+          "note": "No official releases. You'd be downloading work in progress."
         },
         {
           "group": "Transparency",
           "label": "License",
-          "points": 0,
+          "points": 3,
           "max": 5,
           "level": "warn",
-          "note": "No license. Legally you may not be allowed to use it."
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
         },
         {
           "group": "Transparency",
@@ -8545,18 +8550,18 @@
         {
           "group": "Transparency",
           "label": "Security contact",
-          "points": 5,
+          "points": 2,
           "max": 5,
-          "level": "good",
-          "note": "Tells people how to report security problems."
+          "level": "warn",
+          "note": "No security policy file."
         },
         {
           "group": "Red flags",
-          "label": "1 warning sign",
-          "points": 27,
+          "label": "No warning signs found",
+          "points": 30,
           "max": 30,
           "level": "good",
-          "note": "Each one is explained under Warning signs."
+          "note": "We didn't find any of the common malware tricks."
         }
       ],
       "areas": {
@@ -8566,9 +8571,9 @@
           "grade": "A"
         },
         "Upkeep": {
-          "points": 25,
+          "points": 19,
           "max": 25,
-          "grade": "A"
+          "grade": "B"
         },
         "Transparency": {
           "points": 10,
@@ -8576,20 +8581,15 @@
           "grade": "C"
         },
         "Red flags": {
-          "points": 27,
+          "points": 30,
           "max": 30,
           "grade": "A"
         }
       },
       "securityChecked": false,
-      "capReason": "it has no license",
-      "aiFilesFound": [
-        "CLAUDE.md",
-        ".claude/commands/commit-push-pr.md",
-        ".claude/commands/triage-issue.md",
-        ".claude/commands/dedupe.md"
-      ],
-      "checkedAt": "2026-10-23T16:44:13.426Z"
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-10-23T16:51:44.269Z"
     },
     {
       "name": "openai/codex",
@@ -8740,7 +8740,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:44:16.085Z"
+      "checkedAt": "2026-10-23T16:51:02.409Z"
     },
     {
       "name": "nomic-ai/gpt4all",
@@ -8860,7 +8860,7 @@
       "securityChecked": false,
       "capReason": "nobody has changed it in over a year",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:31.160Z"
+      "checkedAt": "2026-10-23T16:51:15.939Z"
     },
     {
       "name": "anthropics/skills",
@@ -8980,7 +8980,7 @@
       "securityChecked": false,
       "capReason": "it has no license",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:38.869Z"
+      "checkedAt": "2026-10-23T16:51:22.597Z"
     },
     {
       "name": "lllyasviel/stable-diffusion-webui-forge",
@@ -9100,7 +9100,7 @@
       "securityChecked": false,
       "capReason": "nobody has changed it in over a year",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:06.766Z"
+      "checkedAt": "2026-10-23T16:51:46.418Z"
     },
     {
       "name": "executeautomation/mcp-playwright",
@@ -9220,7 +9220,7 @@
       "securityChecked": false,
       "capReason": "its weakest area (\"Is anyone looking after it?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:09.863Z"
+      "checkedAt": "2026-10-23T16:51:49.432Z"
     },
     {
       "name": "ComposioHQ/awesome-claude-skills",
@@ -9340,7 +9340,7 @@
       "securityChecked": false,
       "capReason": "it has no license",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:44.474Z"
+      "checkedAt": "2026-10-23T16:52:13.121Z"
     },
     {
       "name": "coleam00/context-engineering-intro",
@@ -9461,17 +9461,17 @@
       "capReason": "its weakest area (\"Is anyone looking after it?\") only gets a C",
       "aiFilesFound": [
         "CLAUDE.md",
-        ".claude/commands/execute-prp.md",
         ".claude/settings.local.json",
+        ".claude/commands/execute-prp.md",
         ".claude/commands/generate-prp.md"
       ],
-      "checkedAt": "2026-10-23T16:46:03.638Z"
+      "checkedAt": "2026-10-23T16:52:27.164Z"
     },
     {
       "name": "ccusage/ccusage",
       "url": "https://github.com/ccusage/ccusage",
       "description": "npx ccusage",
-      "score": 81,
+      "score": 79,
       "grade": "B",
       "level": "fine",
       "label": "Probably fine",
@@ -9538,10 +9538,10 @@
         {
           "group": "Transparency",
           "label": "License",
-          "points": 5,
+          "points": 3,
           "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
         },
         {
           "group": "Transparency",
@@ -9580,9 +9580,9 @@
           "grade": "A"
         },
         "Transparency": {
-          "points": 7,
+          "points": 5,
           "max": 15,
-          "grade": "D"
+          "grade": "F"
         },
         "Red flags": {
           "points": 26,
@@ -9598,7 +9598,7 @@
         ".claude/settings.json",
         ".claude/AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:46:08.071Z"
+      "checkedAt": "2026-10-23T16:52:30.875Z"
     },
     {
       "name": "FlowiseAI/Flowise",
@@ -9671,10 +9671,10 @@
         {
           "group": "Transparency",
           "label": "License",
-          "points": 5,
+          "points": 3,
           "max": 5,
-          "level": "good",
-          "note": "Uses the NOASSERTION license."
+          "level": "warn",
+          "note": "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
         },
         {
           "group": "Transparency",
@@ -9713,7 +9713,7 @@
           "grade": "D"
         },
         "Transparency": {
-          "points": 15,
+          "points": 13,
           "max": 15,
           "grade": "A"
         },
@@ -9726,7 +9726,7 @@
       "securityChecked": false,
       "capReason": "the owner archived it, so nobody fixes problems anymore",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:44:54.697Z"
+      "checkedAt": "2026-10-23T16:51:36.331Z"
     },
     {
       "name": "browserbase/mcp-server-browserbase",
@@ -9846,7 +9846,7 @@
       "securityChecked": false,
       "capReason": "the owner archived it, so nobody fixes problems anymore",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:45:34.062Z"
+      "checkedAt": "2026-10-23T16:52:04.256Z"
     },
     {
       "name": "steipete/claude-code-mcp",
@@ -9968,11 +9968,11 @@
       "aiFilesFound": [
         "CLAUDE.md",
         ".windsurfrules",
-        ".github/copilot-instructions.md",
         ".cursor/rules/agent.mdc",
+        ".github/copilot-instructions.md",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:46:10.120Z"
+      "checkedAt": "2026-10-23T16:52:32.290Z"
     }
   ]
 }
