@@ -294,7 +294,13 @@ document.querySelectorAll(".segmented button").forEach((b) => b.addEventListener
   renderDir();
 }));
 $("#dirSearch").addEventListener("input", renderDir);
-fetch("./data/directory.json").then((r) => r.json()).then((d) => { dir = d; renderDir(); })
+// Opened with a section link (like /#method from a repo page)? The directory fills in above that section
+// a moment after the page loads and pushes it down, so jump back to the section once the list is in.
+const keepSectionInView = () => {
+  const target = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (target && performance.now() < 8000) target.scrollIntoView({ behavior: "auto" });
+};
+fetch("./data/directory.json").then((r) => r.json()).then((d) => { dir = d; renderDir(); keepSectionInView(); })
   .catch(() => { $("#dirNote").textContent = "The directory couldn't load right now. Try refreshing the page."; });
 
 // Newsletter
