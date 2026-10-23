@@ -245,8 +245,13 @@ export function score(data) {
     releases.length ? "Publishes versioned releases." : "No official releases. You'd be downloading work in progress.");
 
   // 3. Transparency (15)
-  add("Transparency", "License", r.license ? 5 : 0, 5, r.license ? "good" : "warn",
-    r.license ? `Uses the ${r.license.spdx_id || r.license.name} license.` : "No license. Legally you may not be allowed to use it.");
+  // A standard open-source license, a license file with the owner's own terms (common for company products), or nothing.
+  const standardLicense = r.license && r.license.spdx_id && r.license.spdx_id !== "NOASSERTION";
+  const customLicense = !standardLicense && (r.license || files.some((f) => f.type === "file" && /^(licen[sc]e|copying)(\.|$)/i.test(f.name)));
+  add("Transparency", "License", standardLicense ? 5 : customLicense ? 3 : 0, 5, standardLicense ? "good" : "warn",
+    standardLicense ? `Uses the ${r.license.spdx_id} license.`
+      : customLicense ? "Has its own license, not a standard open-source one. Read its terms before using it at work or in a product."
+        : "No license. Legally you may not be allowed to use it.");
   const readmeLen = readme.length;
   add("Transparency", "Instructions", readmeLen > 1500 ? 5 : readmeLen > 300 ? 3 : 0, 5, readmeLen > 1500 ? "good" : "warn",
     readmeLen ? "Has a README that explains the project." : "No README. You can't tell what it does.");
@@ -342,7 +347,7 @@ export function score(data) {
   if (r.archived) softCap("archived", 69);
   else if (lastPush > 365) softCap("stale", 84);
   // Without a license you may not be allowed to use it at all.
-  if (!r.license) softCap("license", 84);
+  if (!standardLicense && !customLicense) softCap("license", 84);
 
   // Weakest link: the overall grade can be at most one letter better than the weakest safety area.
   // So lots of stars can't cover for a project nobody looks after.

@@ -158,6 +158,14 @@ const blob = "eNqVk".repeat(100);
 assert(!repoWith({ readme: `\n[diagram](https://mermaid.live/edit#pako:${blob})` }).flags.length, "diagram link");
 assert(repoWith({ readme: `\n${blob}` }).flags.some((f) => f.label === "Hidden encoded text"), "loose encoded block");
 
+// A company product with its own license file (e.g. "All rights reserved, see our terms") isn't "no license".
+const custom = score({
+  repo: { full_name: "co/product", name: "product", html_url: "", stargazers_count: 40000, forks_count: 3000, created_at: ago(600), pushed_at: ago(2), archived: false, license: null },
+  user: { type: "Organization", created_at: ago(3000) }, files: [{ name: "LICENSE.md", type: "file" }, { name: "SECURITY.md", type: "file" }], releases: [{}], readme: "Docs. ".repeat(400), pkg: "", aiFiles: {},
+});
+assert(custom.grade === "A" && /its own license/.test(custom.checks.find((c) => c.label === "License").note), `custom license got ${custom.grade}`);
+assert(/its own license/.test(repoWith({ repo: { license: { spdx_id: "NOASSERTION", name: "Other" } } }).checks.find((c) => c.label === "License").note));
+
 // If GitHub's hourly limit hits after the first call, the check must stop, not score a repo with its files missing.
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (url) => /\/repos\/[^/]+\/[^/]+$/.test(url)
