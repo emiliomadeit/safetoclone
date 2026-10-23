@@ -23,7 +23,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `seo.js` | Pages for Google, built by `worker.js` from `data/directory.json`: one page per graded repo (`/repo/owner/name`), the list `/repos`, and `/sitemap.xml` |
 | `share-card.js` | Draws the "Download image" PNG of a result in the visitor's browser |
 | `share/` | Link-preview pictures (one per grade and label, plus `default.png`). Made by `python3 scripts/make-share-images.py` |
-| `instagram.js` | Posts the day's Instagram post through Meta's official API, once a day (cron in `wrangler.jsonc`). Token: `INSTAGRAM_TOKEN` Secret, renewed copy kept in the `INSTAGRAM` KV store. Check it at safetoclone.com/api/instagram/status |
+| `instagram.js` | Posts Instagram posts through Meta's official API. `worker.js` checks every 30 minutes (cron in `wrangler.jsonc`) and posts any post dated today whose `time` (Ottawa, default 10:00) has come. A day can have several posts. Token: `INSTAGRAM_TOKEN` Secret, renewed copy kept in the `INSTAGRAM` KV store. Check it at safetoclone.com/api/instagram/status |
 | `hq.js` | Reads the Instagram post queue and pictures from the private HQ repo (`instagram/posts.json` there) with the read-only `HQ_GITHUB_TOKEN` Secret. `worker.js` serves today's pictures at `/ig-media/...` because Instagram needs a public link. **Posts, captions and pictures live in HQ, not here** (see `instagram/README.md` in HQ) |
 | `wrangler.jsonc` | Cloudflare settings (what to publish, `previews` for PR test sites) |
 | `repos.txt` | List of repos in the directory, one per line |
