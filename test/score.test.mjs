@@ -166,6 +166,12 @@ const custom = score({
 assert(custom.grade === "A" && /its own license/.test(custom.checks.find((c) => c.label === "License").note), `custom license got ${custom.grade}`);
 assert(/its own license/.test(repoWith({ repo: { license: { spdx_id: "NOASSERTION", name: "Other" } } }).checks.find((c) => c.label === "License").note));
 
+// "Does it cost money?" notes paid plans without changing the grade.
+const paid = repoWith({ readme: "\nSee our Pricing page. The Enterprise Edition adds SSO. Requires an OpenAI API key." });
+assert(paid.costs.mentionsPaid && paid.costs.words.includes("pricing") && paid.costs.words.includes("enterprise edition") && /API key/i.test(paid.costs.account), JSON.stringify(paid.costs));
+assert(paid.grade === "A" && !paid.flags.length, "paid plans don't change the grade");
+assert(!repoWith().costs.mentionsPaid && !repoWith().costs.account);
+
 // If GitHub's hourly limit hits after the first call, the check must stop, not score a repo with its files missing.
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (url) => /\/repos\/[^/]+\/[^/]+$/.test(url)

@@ -51,6 +51,24 @@ function aiHTML(r) {
 </section>`;
 }
 
+// "Does it cost money?": free on GitHub doesn't always mean free to use. Doesn't change the grade.
+function costHTML(r) {
+  const c = r.costs;
+  if (!c) return "";
+  const said = c.words?.length ? `Its page mentions ${c.words.map((w) => `“${esc(w)}”`).join(", ")}.` : "";
+  const folder = c.folder ? ` It has a folder called <code>${esc(c.folder)}</code>, which usually holds features only paying customers get.` : "";
+  const account = c.account ? ` It also says: “${esc(c.account)}”.` : "";
+  const body = c.mentionsPaid
+    ? `${said}${folder}${account} The code here may be free, but some features or the service it connects to may cost money. Check their pricing page before you rely on it.`
+    : c.account
+      ? `We found no mention of paid plans, but it says: “${esc(c.account)}”. That account or key may cost money.`
+      : "We found no mention of paid plans or required accounts. Still check before you rely on it.";
+  return `<section class="costs">
+  <h3>Does it cost money?</h3>
+  <p class="muted">${body}</p>
+</section>`;
+}
+
 // r = a result from score.js, or an entry from data/directory.json.
 // Options: example (a made-up repo: no links), actions (extra buttons, HTML), headingId, footnote (HTML).
 export function reportCard(r, { example = false, actions = "", headingId = "", footnote = "" } = {}) {
@@ -121,6 +139,7 @@ ${buttons ? `<div class="actions">${buttons}</div>` : ""}
   ${warningsHTML}
 </section>
 ${aiHTML(r)}
+${costHTML(r)}
 ${whyHTML}
 <p class="fine">${footnote || `A grade is a set of warning signs, not a guarantee.`} <a href="/#method">How we score</a></p>
 </article>`;

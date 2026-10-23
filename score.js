@@ -213,6 +213,19 @@ export async function collect(owner, repo, { token } = {}) {
   return { repo: r, user, files, releases: Array.isArray(releases) ? releases : [], readme, pkg, aiFiles, scorecard };
 }
 
+// "Does it cost money?" Doesn't change the grade. Many projects are free on GitHub with paid extras elsewhere.
+const PAID_WORDS = /\b(pricing|paid (plans?|tiers?|version|features)|pro (plan|version|tier)|premium (plan|features|version|tier)|enterprise (edition|plan|features|license|version)|subscriptions?|upgrade to (pro|premium|plus|a paid)|free (tier|trial|plan)|commercial license|cloud (version|plan)|hosted (version|plan)|\$\d+(\.\d\d)?\s*(\/|per)\s*(mo|month|user|seat))\b/gi;
+const NEEDS_ACCOUNT = /\b(requires?|needs?|you('ll)? need)\s+(an?\s+)?(paid\s+|active\s+)?(\w+\s+)?(account|subscription|api[ _-]?key|license key)\b/i;
+const PAID_FOLDERS = /^(ee|enterprise|premium|pro)$/i;
+
+export function costs({ readme = "", about = "", files = [] }) {
+  const text = about + "\n" + readme.replace(/https?:\/\/\S+/g, "");
+  const words = [...new Set([...text.matchAll(PAID_WORDS)].map((m) => m[0].toLowerCase()))].slice(0, 4);
+  const account = text.match(NEEDS_ACCOUNT)?.[0] || null;
+  const folder = files.find((f) => f.type === "dir" && PAID_FOLDERS.test(f.name))?.name || null;
+  return { mentionsPaid: words.length > 0 || Boolean(folder), words, account, folder };
+}
+
 // Turns collected data into a score. Pure function: same input, same output.
 export function score(data) {
   const { repo: r, user, files, releases, readme, pkg, aiFiles, scorecard } = data;
@@ -394,6 +407,7 @@ export function score(data) {
     checks,
     flags,
     aiFilesFound: aiNames,
+    costs: costs({ readme, about, files }),
     checkedAt: new Date().toISOString(),
   };
 }

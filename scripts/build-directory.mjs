@@ -15,7 +15,7 @@ for (const name of list) {
       level: r.level, label: r.label, verdict: r.verdict, flags: r.flags.map((f) => f.label),
       // Extra detail for the repo pages Google reads (/repo/owner/name, built in seo.js).
       warnings: r.flags.map(({ label, note, severity }) => ({ label, note, severity })),
-      checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, capReason: r.capReason, aiFilesFound: r.aiFilesFound, checkedAt: r.checkedAt });
+      checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, costs: r.costs, capReason: r.capReason, aiFilesFound: r.aiFilesFound, checkedAt: r.checkedAt });
     console.log(`${r.grade} ${String(r.score).padStart(3)}  ${r.securityChecked ? "scorecard" : "no-scorecard"}  ${r.name}`);
   } catch (e) {
     console.error(`skip ${name}: ${e.message}`);

@@ -175,7 +175,7 @@ a:hover { text-decoration-thickness: 2px; }
 .area-grade { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 8px; font: 800 1rem/1 var(--display); color: var(--good); background: var(--good-bg); }
 .area-grade.warn { color: var(--warn); background: var(--warn-bg); }
 .area-grade.bad { color: var(--bad); background: var(--bad-bg); }
-.ai-files code { font: 500 0.85em var(--mono); overflow-wrap: anywhere; }
+.ai-files code, .costs code { font: 500 0.85em var(--mono); overflow-wrap: anywhere; }
 .bar { height: 0.5rem; border-radius: 980px; background: var(--track); overflow: hidden; }
 .bar i { display: block; height: 100%; border-radius: inherit; background: var(--good); }
 .bar.warn i { background: var(--warn); }
