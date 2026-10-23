@@ -40,7 +40,8 @@ const PROMPT_INJECTION = [
   /without\s+(asking|telling)\s+the\s+user/i,
   // Only counts when secrets are sent somewhere: "send the API key to https://...".
   /\b(send|upload|post|exfiltrate|forward|transmit)\b[^\n]{0,40}\b(api[_ -]?keys?|tokens?|\.env|credentials|ssh\s+keys?|secrets?)\b[^\n]{0,40}\b(to|at)\s+(https?:\/\/|an?\s+(external|remote)|this\s+(url|endpoint|server))/i,
-  /(webhook\.site|requestbin|pipedream\.net|ngrok\.io|discord(app)?\.com\/api\/webhooks)/i,
+  // Discord webhooks only count with a real numeric ID: projects often document their own as ".../webhooks/xxx".
+  /(webhook\.site|requestbin|pipedream\.net|ngrok\.io|discord(app)?\.com\/api\/webhooks\/\d{6,})/i,
   /\bcat\s+~\/\.(ssh|aws)|\bprintenv\b|process\.env\b[^\n]{0,40}(fetch|post)/i,
 ];
 // Ready-to-run programs and archives. Plain-text launch scripts (.bat, .ps1, .sh) are left out:
@@ -299,8 +300,10 @@ export function score(data) {
   if (riskyAssets.length && stars < 100) flag("Unknown programs to download", 8, `Releases offer ${riskyAssets.slice(0, 3).join(", ")} from a little-known project.`);
   if (PIPE_TO_SHELL.test(readme)) flag("Runs a script straight from the internet", 3, "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.");
   // Pictures and badge icons are often stored as encoded text (also inside links, as %2B for "+"). Those are fine.
-  const readmeNoImages = readme.replace(/base64,[A-Za-z0-9+/=%]+/gi, "");
-  if (LONG_BASE64.test(readmeNoImages)) flag("Hidden encoded text", 10, "The README contains a long scrambled block of text. That can hide commands.");
+  // Diagram links (mermaid.live, kroki) also carry long encoded text inside the address. Links are left out too.
+  const readmeNoImages = readme.replace(/base64,[A-Za-z0-9+/=%]+/gi, "").replace(/https?:\/\/[^\s)"'<>\]]+/gi, "");
+  const encoded = readmeNoImages.match(LONG_BASE64);
+  if (encoded) flag("Hidden encoded text", 10, `The README contains a long scrambled block of text. That can hide commands. It starts with "${encoded[0].slice(0, 40)}…".`);
   // Big companies launch repos that get famous in days, so only accounts with no long history are suspect.
   // It's a warning, not proof: it keeps the grade at C or below but doesn't mark the repo Dangerous by itself.
   const establishedOwner = user && (user.type === "Organization" || ownerAge > 730);
@@ -341,10 +344,12 @@ export function score(data) {
   // Without a license you may not be allowed to use it at all.
   if (!r.license) softCap("license", 84);
 
-  // Weakest link: the overall grade can be at most one letter better than the weakest area.
+  // Weakest link: the overall grade can be at most one letter better than the weakest safety area.
   // So lots of stars can't cover for a project nobody looks after.
+  // "Is it open about itself?" is left out: missing paperwork (license, security file) lowers the points
+  // and a missing license caps at B, but it doesn't make a project unsafe.
   const areas = areaGrades(checks);
-  const [weakGroup, weak] = Object.entries(areas).sort((a, b) => LETTERS.indexOf(b[1].grade) - LETTERS.indexOf(a[1].grade))[0];
+  const [weakGroup, weak] = Object.entries(areas).filter(([g]) => g !== "Transparency").sort((a, b) => LETTERS.indexOf(b[1].grade) - LETTERS.indexOf(a[1].grade))[0];
   const weakIdx = LETTERS.indexOf(weak.grade);
   if (weakIdx >= 2) softCap("weak", TOP[LETTERS[weakIdx - 1]]);
 

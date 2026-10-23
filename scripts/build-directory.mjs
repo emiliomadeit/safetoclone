@@ -24,4 +24,9 @@ for (const name of list) {
 results.sort((a, b) => b.score - a.score);
 await writeFile(new URL("../data/directory.json", import.meta.url),
   JSON.stringify({ updatedAt: new Date().toISOString(), example: false, repos: results }, null, 2) + "\n");
+// Why some repos have no Scorecard data: print the answer for a few of them.
+for (const r of results.filter((x) => !x.securityChecked).slice(0, 5)) {
+  const res = await fetch(`https://api.scorecard.dev/projects/github.com/${r.name}`).catch((e) => ({ status: e.message, text: async () => "" }));
+  console.log(`scorecard ${r.name}: ${res.status} ${(await res.text()).slice(0, 120)}`);
+}
 console.log(`wrote ${results.length} repos, ${results.filter((r) => r.securityChecked).length} with OpenSSF Scorecard data`);

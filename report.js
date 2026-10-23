@@ -85,7 +85,7 @@ export function reportCard(r, { example = false, actions = "", headingId = "", f
       : level === "unproven" ? " It's labelled Unproven, not Dangerous, because we found no malware tricks." : "";
     whyHTML = `<section class="why">
   <h3>Why this grade?</h3>
-  <p class="muted">${summary}${labelNote} Each area gets its own letter, and the overall grade can be at most one letter better than the weakest one. Open a row to see what we checked.</p>
+  <p class="muted">${summary}${labelNote} Each area gets its own letter, and the overall grade can be at most one letter better than the weakest safety area ("Is it open about itself?" only costs points). Open a row to see what we checked.</p>
   <div class="groups">${Object.entries(groups).map(([g, list]) => {
       const got = list.reduce((s, c) => s + c.points, 0), max = list.reduce((s, c) => s + c.max, 0);
       const pct = max ? Math.round((got / max) * 100) : 0;
