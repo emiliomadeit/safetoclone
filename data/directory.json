@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T12:45:39.705Z",
+  "updatedAt": "2026-10-23T12:23:51.206Z",
   "example": false,
   "repos": [
     {
@@ -20,7 +20,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "141,884 people starred it."
+          "note": "142,200 people starred it."
         },
         {
           "group": "Reputation",
@@ -28,7 +28,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "16,729 copies made by other developers."
+          "note": "16,768 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -99,7 +99,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:09.124Z"
+      "checkedAt": "2026-10-23T12:23:11.892Z"
     },
     {
       "name": "google-gemini/gemini-cli",
@@ -119,7 +119,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "107,505 people starred it."
+          "note": "107,557 people starred it."
         },
         {
           "group": "Reputation",
@@ -127,7 +127,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "14,754 copies made by other developers."
+          "note": "14,766 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -198,7 +198,7 @@
       "aiFilesFound": [
         "GEMINI.md"
       ],
-      "checkedAt": "2026-10-22T12:45:14.002Z"
+      "checkedAt": "2026-10-23T12:23:17.130Z"
     },
     {
       "name": "Significant-Gravitas/AutoGPT",
@@ -218,7 +218,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "187,702 people starred it."
+          "note": "187,716 people starred it."
         },
         {
           "group": "Reputation",
@@ -226,7 +226,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "45,903 copies made by other developers."
+          "note": "45,905 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -298,7 +298,7 @@
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:14.797Z"
+      "checkedAt": "2026-10-23T12:23:18.107Z"
     },
     {
       "name": "lobehub/lobehub",
@@ -318,7 +318,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "83,414 people starred it."
+          "note": "83,441 people starred it."
         },
         {
           "group": "Reputation",
@@ -326,7 +326,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "16,011 copies made by other developers."
+          "note": "16,017 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -395,10 +395,10 @@
       ],
       "capReason": null,
       "aiFilesFound": [
-        "GEMINI.md",
-        "AGENTS.md"
+        "AGENTS.md",
+        "GEMINI.md"
       ],
-      "checkedAt": "2026-10-22T12:45:17.675Z"
+      "checkedAt": "2026-10-23T12:23:22.512Z"
     },
     {
       "name": "mudler/LocalAI",
@@ -418,7 +418,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "49,843 people starred it."
+          "note": "49,871 people starred it."
         },
         {
           "group": "Reputation",
@@ -426,7 +426,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "4,530 copies made by other developers."
+          "note": "4,533 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -498,7 +498,7 @@
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:18.373Z"
+      "checkedAt": "2026-10-23T12:23:23.555Z"
     },
     {
       "name": "modelcontextprotocol/servers",
@@ -518,7 +518,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "91,477 people starred it."
+          "note": "91,511 people starred it."
         },
         {
           "group": "Reputation",
@@ -526,7 +526,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "11,838 copies made by other developers."
+          "note": "11,846 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -542,7 +542,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 3 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -598,7 +598,7 @@
         ".mcp.json",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:20.882Z"
+      "checkedAt": "2026-10-23T12:23:26.905Z"
     },
     {
       "name": "microsoft/autogen",
@@ -618,7 +618,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "61,526 people starred it."
+          "note": "61,535 people starred it."
         },
         {
           "group": "Reputation",
@@ -626,7 +626,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "9,302 copies made by other developers."
+          "note": "9,311 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -642,7 +642,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 6 days ago."
+          "note": "Last change 7 days ago."
         },
         {
           "group": "Upkeep",
@@ -695,7 +695,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:22.340Z"
+      "checkedAt": "2026-10-23T12:23:28.592Z"
     },
     {
       "name": "microsoft/markitdown",
@@ -715,7 +715,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "191,590 people starred it."
+          "note": "191,752 people starred it."
         },
         {
           "group": "Reputation",
@@ -723,7 +723,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "14,272 copies made by other developers."
+          "note": "14,292 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -792,7 +792,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:24.450Z"
+      "checkedAt": "2026-10-23T12:23:31.384Z"
     },
     {
       "name": "huggingface/transformers",
@@ -812,7 +812,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "167,979 people starred it."
+          "note": "168,024 people starred it."
         },
         {
           "group": "Reputation",
@@ -820,7 +820,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "34,940 copies made by other developers."
+          "note": "34,949 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -892,7 +892,7 @@
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:25.826Z"
+      "checkedAt": "2026-10-23T12:23:32.963Z"
     },
     {
       "name": "langgenius/dify",
@@ -912,7 +912,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "159,245 people starred it."
+          "note": "159,344 people starred it."
         },
         {
           "group": "Reputation",
@@ -920,7 +920,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "25,159 copies made by other developers."
+          "note": "25,171 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -991,7 +991,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:26.548Z"
+      "checkedAt": "2026-10-23T12:23:34.128Z"
     },
     {
       "name": "vllm-project/vllm",
@@ -1011,7 +1011,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "95,106 people starred it."
+          "note": "95,215 people starred it."
         },
         {
           "group": "Reputation",
@@ -1019,7 +1019,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "23,793 copies made by other developers."
+          "note": "23,836 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1027,7 +1027,7 @@
           "points": 10,
           "max": 10,
           "level": "good",
-          "note": "Organization created 3.3 years ago."
+          "note": "Organization created 3.4 years ago."
         },
         {
           "group": "Upkeep",
@@ -1090,7 +1090,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:27.977Z"
+      "checkedAt": "2026-10-23T12:23:36.122Z"
     },
     {
       "name": "unclecode/crawl4ai",
@@ -1110,7 +1110,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "86,020 people starred it."
+          "note": "86,091 people starred it."
         },
         {
           "group": "Reputation",
@@ -1118,7 +1118,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "8,940 copies made by other developers."
+          "note": "8,947 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1187,7 +1187,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:29.258Z"
+      "checkedAt": "2026-10-23T12:23:37.706Z"
     },
     {
       "name": "cline/cline",
@@ -1207,7 +1207,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "70,714 people starred it."
+          "note": "70,768 people starred it."
         },
         {
           "group": "Reputation",
@@ -1215,7 +1215,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "7,721 copies made by other developers."
+          "note": "7,724 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1286,7 +1286,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:30.088Z"
+      "checkedAt": "2026-10-23T12:23:38.720Z"
     },
     {
       "name": "Mintplex-Labs/anything-llm",
@@ -1306,7 +1306,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "67,435 people starred it."
+          "note": "67,480 people starred it."
         },
         {
           "group": "Reputation",
@@ -1314,7 +1314,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "7,557 copies made by other developers."
+          "note": "7,561 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1383,7 +1383,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:30.764Z"
+      "checkedAt": "2026-10-23T12:23:39.568Z"
     },
     {
       "name": "upstash/context7",
@@ -1403,7 +1403,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "63,486 people starred it."
+          "note": "63,538 people starred it."
         },
         {
           "group": "Reputation",
@@ -1411,7 +1411,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,127 copies made by other developers."
+          "note": "3,128 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1480,7 +1480,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:31.943Z"
+      "checkedAt": "2026-10-23T12:23:41.206Z"
     },
     {
       "name": "microsoft/playwright-mcp",
@@ -1500,7 +1500,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "38,499 people starred it."
+          "note": "38,540 people starred it."
         },
         {
           "group": "Reputation",
@@ -1508,7 +1508,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,297 copies made by other developers."
+          "note": "3,302 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1579,7 +1579,7 @@
       "aiFilesFound": [
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-10-22T12:45:35.204Z"
+      "checkedAt": "2026-10-23T12:23:45.474Z"
     },
     {
       "name": "continuedev/continue",
@@ -1599,7 +1599,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "36,288 people starred it."
+          "note": "36,293 people starred it."
         },
         {
           "group": "Reputation",
@@ -1607,7 +1607,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "5,503 copies made by other developers."
+          "note": "5,509 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1623,7 +1623,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 2 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -1676,7 +1676,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:36.518Z"
+      "checkedAt": "2026-10-23T12:23:47.212Z"
     },
     {
       "name": "github/github-mcp-server",
@@ -1696,7 +1696,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "33,852 people starred it."
+          "note": "33,886 people starred it."
         },
         {
           "group": "Reputation",
@@ -1704,7 +1704,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "5,213 copies made by other developers."
+          "note": "5,220 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1773,7 +1773,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:37.876Z"
+      "checkedAt": "2026-10-23T12:23:48.929Z"
     },
     {
       "name": "invoke-ai/InvokeAI",
@@ -1793,7 +1793,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "28,813 people starred it."
+          "note": "28,834 people starred it."
         },
         {
           "group": "Reputation",
@@ -1801,7 +1801,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,071 copies made by other developers."
+          "note": "3,075 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1872,7 +1872,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:39.037Z"
+      "checkedAt": "2026-10-23T12:23:50.413Z"
     },
     {
       "name": "ollama/ollama",
@@ -1900,7 +1900,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "184,276 people starred it."
+          "note": "184,422 people starred it."
         },
         {
           "group": "Reputation",
@@ -1908,7 +1908,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "18,460 copies made by other developers."
+          "note": "18,491 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1977,10 +1977,10 @@
       ],
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
-        "CLAUDE.md"
+        "CLAUDE.md",
+        "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:07.240Z"
+      "checkedAt": "2026-10-23T12:23:09.360Z"
     },
     {
       "name": "open-webui/open-webui",
@@ -2000,7 +2000,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "156,434 people starred it."
+          "note": "156,542 people starred it."
         },
         {
           "group": "Reputation",
@@ -2008,7 +2008,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "22,767 copies made by other developers."
+          "note": "22,781 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2077,7 +2077,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:08.141Z"
+      "checkedAt": "2026-10-23T12:23:10.377Z"
     },
     {
       "name": "openai/codex",
@@ -2105,7 +2105,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "130,419 people starred it."
+          "note": "130,570 people starred it."
         },
         {
           "group": "Reputation",
@@ -2113,7 +2113,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "20,563 copies made by other developers."
+          "note": "20,586 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2182,7 +2182,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:13.297Z"
+      "checkedAt": "2026-10-23T12:23:16.106Z"
     },
     {
       "name": "langchain-ai/langchain",
@@ -2202,7 +2202,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "148,265 people starred it."
+          "note": "148,316 people starred it."
         },
         {
           "group": "Reputation",
@@ -2210,7 +2210,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "24,882 copies made by other developers."
+          "note": "24,893 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2282,7 +2282,7 @@
         ".mcp.json",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:15.570Z"
+      "checkedAt": "2026-10-23T12:23:19.338Z"
     },
     {
       "name": "ggml-org/llama.cpp",
@@ -2310,7 +2310,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "132,010 people starred it."
+          "note": "132,109 people starred it."
         },
         {
           "group": "Reputation",
@@ -2318,7 +2318,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "24,673 copies made by other developers."
+          "note": "24,723 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2387,10 +2387,10 @@
       ],
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
-        "AGENTS.md"
+        "AGENTS.md",
+        "CLAUDE.md"
       ],
-      "checkedAt": "2026-10-22T12:45:19.497Z"
+      "checkedAt": "2026-10-23T12:23:24.555Z"
     },
     {
       "name": "infiniflow/ragflow",
@@ -2410,7 +2410,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "92,649 people starred it."
+          "note": "92,722 people starred it."
         },
         {
           "group": "Reputation",
@@ -2418,7 +2418,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "11,069 copies made by other developers."
+          "note": "11,082 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2489,7 +2489,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:23.841Z"
+      "checkedAt": "2026-10-23T12:23:30.592Z"
     },
     {
       "name": "ChatGPTNextWeb/NextChat",
@@ -2509,7 +2509,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "88,883 people starred it."
+          "note": "88,889 people starred it."
         },
         {
           "group": "Reputation",
@@ -2517,7 +2517,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "58,747 copies made by other developers."
+          "note": "58,738 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2533,7 +2533,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 2 days ago."
+          "note": "Last change 3 days ago."
         },
         {
           "group": "Upkeep",
@@ -2586,7 +2586,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:28.710Z"
+      "checkedAt": "2026-10-23T12:23:36.970Z"
     },
     {
       "name": "xtekky/gpt4free",
@@ -2614,7 +2614,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "66,920 people starred it."
+          "note": "66,925 people starred it."
         },
         {
           "group": "Reputation",
@@ -2622,7 +2622,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "13,464 copies made by other developers."
+          "note": "13,461 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2693,7 +2693,7 @@
       "aiFilesFound": [
         "SKILL.md"
       ],
-      "checkedAt": "2026-10-22T12:45:31.359Z"
+      "checkedAt": "2026-10-23T12:23:40.406Z"
     },
     {
       "name": "zylon-ai/private-gpt",
@@ -2721,7 +2721,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "57,604 people starred it."
+          "note": "57,607 people starred it."
         },
         {
           "group": "Reputation",
@@ -2745,7 +2745,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 2 days ago."
+          "note": "Last change 0 days ago."
         },
         {
           "group": "Upkeep",
@@ -2798,7 +2798,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:32.492Z"
+      "checkedAt": "2026-10-23T12:23:41.985Z"
     },
     {
       "name": "janhq/jan",
@@ -2818,7 +2818,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "45,038 people starred it."
+          "note": "45,050 people starred it."
         },
         {
           "group": "Reputation",
@@ -2826,7 +2826,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,107 copies made by other developers."
+          "note": "3,110 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2895,7 +2895,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:34.399Z"
+      "checkedAt": "2026-10-23T12:23:44.564Z"
     },
     {
       "name": "crewAIInc/crewAI",
@@ -2923,7 +2923,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "59,981 people starred it."
+          "note": "60,026 people starred it."
         },
         {
           "group": "Reputation",
@@ -2931,7 +2931,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "8,832 copies made by other developers."
+          "note": "8,850 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3002,7 +3002,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:23.121Z"
+      "checkedAt": "2026-10-23T12:23:29.584Z"
     },
     {
       "name": "openai/whisper",
@@ -3022,7 +3022,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "111,056 people starred it."
+          "note": "111,112 people starred it."
         },
         {
           "group": "Reputation",
@@ -3030,7 +3030,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "13,451 copies made by other developers."
+          "note": "13,452 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3046,7 +3046,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 52 days ago."
+          "note": "Last change 53 days ago."
         },
         {
           "group": "Upkeep",
@@ -3099,7 +3099,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:27.182Z"
+      "checkedAt": "2026-10-23T12:23:34.903Z"
     },
     {
       "name": "Aider-AI/aider",
@@ -3119,7 +3119,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "49,684 people starred it."
+          "note": "49,712 people starred it."
         },
         {
           "group": "Reputation",
@@ -3127,7 +3127,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "5,096 copies made by other developers."
+          "note": "5,100 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3143,7 +3143,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 153 days ago."
+          "note": "Last change 154 days ago."
         },
         {
           "group": "Upkeep",
@@ -3196,7 +3196,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:33.599Z"
+      "checkedAt": "2026-10-23T12:23:43.631Z"
     },
     {
       "name": "khoj-ai/khoj",
@@ -3216,7 +3216,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "37,785 people starred it."
+          "note": "37,796 people starred it."
         },
         {
           "group": "Reputation",
@@ -3240,7 +3240,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 81 days ago."
+          "note": "Last change 82 days ago."
         },
         {
           "group": "Upkeep",
@@ -3293,7 +3293,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:35.807Z"
+      "checkedAt": "2026-10-23T12:23:46.363Z"
     },
     {
       "name": "TabbyML/tabby",
@@ -3313,7 +3313,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "33,922 people starred it."
+          "note": "33,924 people starred it."
         },
         {
           "group": "Reputation",
@@ -3337,7 +3337,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 114 days ago."
+          "note": "Last change 115 days ago."
         },
         {
           "group": "Upkeep",
@@ -3390,7 +3390,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:37.266Z"
+      "checkedAt": "2026-10-23T12:23:48.169Z"
     },
     {
       "name": "n8n-io/n8n",
@@ -3424,7 +3424,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "208,308 people starred it."
+          "note": "208,381 people starred it."
         },
         {
           "group": "Reputation",
@@ -3432,7 +3432,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "61,214 copies made by other developers."
+          "note": "61,216 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3501,10 +3501,10 @@
       ],
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
-        "CLAUDE.md"
+        "CLAUDE.md",
+        "AGENTS.md"
       ],
-      "checkedAt": "2026-10-22T12:45:16.437Z"
+      "checkedAt": "2026-10-23T12:23:20.714Z"
     },
     {
       "name": "browser-use/browser-use",
@@ -3524,7 +3524,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "118,849 people starred it."
+          "note": "118,944 people starred it."
         },
         {
           "group": "Reputation",
@@ -3532,7 +3532,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "13,196 copies made by other developers."
+          "note": "13,209 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3548,7 +3548,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 2 days ago."
+          "note": "Last change 0 days ago."
         },
         {
           "group": "Upkeep",
@@ -3604,7 +3604,7 @@
         "AGENTS.md",
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-10-22T12:45:21.721Z"
+      "checkedAt": "2026-10-23T12:23:27.800Z"
     },
     {
       "name": "anthropics/claude-code",
@@ -3632,7 +3632,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "152,848 people starred it."
+          "note": "152,971 people starred it."
         },
         {
           "group": "Reputation",
@@ -3640,7 +3640,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "26,781 copies made by other developers."
+          "note": "26,776 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3656,7 +3656,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 0 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -3711,7 +3711,7 @@
       "aiFilesFound": [
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-10-22T12:45:11.168Z"
+      "checkedAt": "2026-10-23T12:23:14.406Z"
     },
     {
       "name": "Pythagora-io/gpt-pilot",
@@ -3731,7 +3731,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "33,649 people starred it."
+          "note": "33,647 people starred it."
         },
         {
           "group": "Reputation",
@@ -3755,7 +3755,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 126 days ago."
+          "note": "Last change 127 days ago."
         },
         {
           "group": "Upkeep",
@@ -3808,7 +3808,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:38.391Z"
+      "checkedAt": "2026-10-23T12:23:49.598Z"
     },
     {
       "name": "AUTOMATIC1111/stable-diffusion-webui",
@@ -3828,7 +3828,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "165,095 people starred it."
+          "note": "165,118 people starred it."
         },
         {
           "group": "Reputation",
@@ -3836,7 +3836,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "33,275 copies made by other developers."
+          "note": "33,271 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3852,7 +3852,7 @@
           "points": 5,
           "max": 12,
           "level": "warn",
-          "note": "Last change 234 days ago."
+          "note": "Last change 235 days ago."
         },
         {
           "group": "Upkeep",
@@ -3905,7 +3905,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:09.804Z"
+      "checkedAt": "2026-10-23T12:23:12.759Z"
     },
     {
       "name": "lllyasviel/Fooocus",
@@ -3925,7 +3925,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "53,620 people starred it."
+          "note": "53,649 people starred it."
         },
         {
           "group": "Reputation",
@@ -3933,7 +3933,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "8,605 copies made by other developers."
+          "note": "8,607 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3949,7 +3949,7 @@
           "points": 5,
           "max": 12,
           "level": "warn",
-          "note": "Last change 325 days ago."
+          "note": "Last change 326 days ago."
         },
         {
           "group": "Upkeep",
@@ -4002,7 +4002,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:10.420Z"
+      "checkedAt": "2026-10-23T12:23:13.554Z"
     },
     {
       "name": "anthropics/skills",
@@ -4022,7 +4022,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "182,909 people starred it."
+          "note": "183,178 people starred it."
         },
         {
           "group": "Reputation",
@@ -4030,7 +4030,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "21,659 copies made by other developers."
+          "note": "21,690 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -4046,7 +4046,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 13 days ago."
+          "note": "Last change 14 days ago."
         },
         {
           "group": "Upkeep",
@@ -4099,7 +4099,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:25.032Z"
+      "checkedAt": "2026-10-23T12:23:32.039Z"
     },
     {
       "name": "nomic-ai/gpt4all",
@@ -4119,7 +4119,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "77,350 people starred it."
+          "note": "77,355 people starred it."
         },
         {
           "group": "Reputation",
@@ -4143,7 +4143,7 @@
           "points": 2,
           "max": 12,
           "level": "bad",
-          "note": "Last change 513 days ago."
+          "note": "Last change 514 days ago."
         },
         {
           "group": "Upkeep",
@@ -4196,7 +4196,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:20.151Z"
+      "checkedAt": "2026-10-23T12:23:25.400Z"
     },
     {
       "name": "lllyasviel/stable-diffusion-webui-forge",
@@ -4216,7 +4216,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "13,075 people starred it."
+          "note": "13,079 people starred it."
         },
         {
           "group": "Reputation",
@@ -4224,7 +4224,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "1,766 copies made by other developers."
+          "note": "1,769 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -4240,7 +4240,7 @@
           "points": 2,
           "max": 12,
           "level": "bad",
-          "note": "Last change 448 days ago."
+          "note": "Last change 449 days ago."
         },
         {
           "group": "Upkeep",
@@ -4293,7 +4293,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:39.704Z"
+      "checkedAt": "2026-10-23T12:23:51.205Z"
     },
     {
       "name": "FlowiseAI/Flowise",
@@ -4321,7 +4321,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "55,516 people starred it."
+          "note": "55,520 people starred it."
         },
         {
           "group": "Reputation",
@@ -4329,7 +4329,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "25,070 copies made by other developers."
+          "note": "25,074 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -4398,7 +4398,7 @@
       ],
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-22T12:45:33.064Z"
+      "checkedAt": "2026-10-23T12:23:42.884Z"
     }
   ]
 }
