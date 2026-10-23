@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T16:52:32.290Z",
+  "updatedAt": "2026-10-23T16:54:13.467Z",
   "example": false,
   "repos": [
     {
@@ -20,7 +20,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "142,275 people starred it."
+          "note": "142,276 people starred it."
         },
         {
           "group": "Reputation",
@@ -118,11 +118,19 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "cloud version"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:50:56.643Z"
+      "checkedAt": "2026-10-23T16:52:57.427Z"
     },
     {
       "name": "google-gemini/gemini-cli",
@@ -240,13 +248,22 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "paid tier",
+          "enterprise features"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "GEMINI.md",
-        ".vscode/settings.json",
-        ".gemini/settings.json"
+        ".gemini/settings.json",
+        ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:04.269Z"
+      "checkedAt": "2026-10-23T16:53:04.175Z"
     },
     {
       "name": "mudler/LocalAI",
@@ -266,7 +283,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "49,879 people starred it."
+          "note": "49,880 people starred it."
         },
         {
           "group": "Reputation",
@@ -364,12 +381,18 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
-        "AGENTS.md"
+        "AGENTS.md",
+        "CLAUDE.md"
       ],
-      "checkedAt": "2026-10-23T16:51:13.571Z"
+      "checkedAt": "2026-10-23T16:53:11.752Z"
     },
     {
       "name": "microsoft/markitdown",
@@ -487,9 +510,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "pricing"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:21.976Z"
+      "checkedAt": "2026-10-23T16:53:18.288Z"
     },
     {
       "name": "huggingface/transformers",
@@ -628,13 +659,19 @@
         }
       },
       "securityChecked": true,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
         "AGENTS.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:51:23.595Z"
+      "checkedAt": "2026-10-23T16:53:19.649Z"
     },
     {
       "name": "vllm-project/vllm",
@@ -752,11 +789,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:51:27.230Z"
+      "checkedAt": "2026-10-23T16:53:22.718Z"
     },
     {
       "name": "unclecode/crawl4ai",
@@ -776,7 +819,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "86,107 people starred it."
+          "note": "86,108 people starred it."
         },
         {
           "group": "Reputation",
@@ -874,12 +917,20 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "pricing"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         ".claude/settings.local.json",
         ".claude/commands/c4ai-check.md"
       ],
-      "checkedAt": "2026-10-23T16:51:29.553Z"
+      "checkedAt": "2026-10-23T16:53:24.579Z"
     },
     {
       "name": "cline/cline",
@@ -997,16 +1048,22 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
         ".claude/settings.json",
         ".claude/commands/hotfix-release.md",
+        ".claude/commands/release.md",
         ".vscode/settings.json",
-        ".github/copilot-instructions.md",
-        ".claude/commands/release.md"
+        ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:51:31.158Z"
+      "checkedAt": "2026-10-23T16:53:25.870Z"
     },
     {
       "name": "Mintplex-Labs/anything-llm",
@@ -1124,11 +1181,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:32.522Z"
+      "checkedAt": "2026-10-23T16:53:26.800Z"
     },
     {
       "name": "upstash/context7",
@@ -1246,9 +1309,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:34.469Z"
+      "checkedAt": "2026-10-23T16:53:28.357Z"
     },
     {
       "name": "microsoft/playwright-mcp",
@@ -1268,7 +1337,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "38,545 people starred it."
+          "note": "38,546 people starred it."
         },
         {
           "group": "Reputation",
@@ -1366,11 +1435,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-10-23T16:51:39.128Z"
+      "checkedAt": "2026-10-23T16:53:32.319Z"
     },
     {
       "name": "continuedev/continue",
@@ -1488,11 +1563,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:41.403Z"
+      "checkedAt": "2026-10-23T16:53:34.239Z"
     },
     {
       "name": "github/github-mcp-server",
@@ -1610,11 +1691,19 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "subscription"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:51:43.530Z"
+      "checkedAt": "2026-10-23T16:53:35.911Z"
     },
     {
       "name": "invoke-ai/InvokeAI",
@@ -1732,12 +1821,18 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
         ".github/AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:51:45.498Z"
+      "checkedAt": "2026-10-23T16:53:37.476Z"
     },
     {
       "name": "PrefectHQ/fastmcp",
@@ -1855,13 +1950,19 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
         "AGENTS.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:51:51.014Z"
+      "checkedAt": "2026-10-23T16:53:41.906Z"
     },
     {
       "name": "GLips/Figma-Context-MCP",
@@ -1979,12 +2080,18 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
         ".claude/commands/release.md"
       ],
-      "checkedAt": "2026-10-23T16:51:54.384Z"
+      "checkedAt": "2026-10-23T16:53:44.720Z"
     },
     {
       "name": "ChromeDevTools/chrome-devtools-mcp",
@@ -2102,13 +2209,19 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
         "mcp.json",
         ".gemini/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:58.933Z"
+      "checkedAt": "2026-10-23T16:53:48.879Z"
     },
     {
       "name": "davila7/claude-code-templates",
@@ -2226,24 +2339,30 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
         ".mcp.json",
-        ".claude/agents/agent-expert.md",
-        ".claude/agents/component-researcher.md",
-        ".claude/agents/docusaurus-expert.md",
+        "CLAUDE.md",
+        ".claude/agents/blog-writer.md",
         ".claude/agents/build-checker.md",
+        ".claude/agents/agent-expert.md",
+        ".claude/agents/component-reviewer.md",
+        ".claude/agents/command-expert.md",
+        ".claude/agents/docusaurus-expert.md",
+        ".claude/agents/deployer.md",
+        ".claude/agents/component-researcher.md",
+        ".claude/agents/catalog-generator.md",
         ".claude/agents/component-improver.md",
         ".claude/agents/cli-ui-designer.md",
-        ".claude/agents/deployer.md",
-        ".claude/agents/component-reviewer.md",
-        ".claude/agents/catalog-generator.md",
-        ".claude/agents/command-expert.md",
-        ".claude/agents/component-migrator.md",
-        ".claude/agents/blog-writer.md"
+        ".claude/agents/component-migrator.md"
       ],
-      "checkedAt": "2026-10-23T16:52:15.294Z"
+      "checkedAt": "2026-10-23T16:53:59.614Z"
     },
     {
       "name": "github/spec-kit",
@@ -2361,11 +2480,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:52:25.112Z"
+      "checkedAt": "2026-10-23T16:54:07.745Z"
     },
     {
       "name": "microsoft/autogen",
@@ -2504,11 +2629,17 @@
         }
       },
       "securityChecked": true,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:51:18.860Z"
+      "checkedAt": "2026-10-23T16:53:15.822Z"
     },
     {
       "name": "Significant-Gravitas/AutoGPT",
@@ -2626,14 +2757,23 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "pricing",
+          "paid plan"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
         "CLAUDE.md",
-        ".claude/settings.json",
-        ".github/copilot-instructions.md"
+        "AGENTS.md",
+        ".github/copilot-instructions.md",
+        ".claude/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:05.832Z"
+      "checkedAt": "2026-10-23T16:53:05.354Z"
     },
     {
       "name": "lobehub/lobehub",
@@ -2751,13 +2891,21 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "hosted version"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
         "GEMINI.md",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:12.365Z"
+      "checkedAt": "2026-10-23T16:53:10.450Z"
     },
     {
       "name": "modelcontextprotocol/servers",
@@ -2875,12 +3023,18 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        ".mcp.json",
-        "AGENTS.md"
+        "AGENTS.md",
+        ".mcp.json"
       ],
-      "checkedAt": "2026-10-23T16:51:17.072Z"
+      "checkedAt": "2026-10-23T16:53:14.399Z"
     },
     {
       "name": "langgenius/dify",
@@ -2998,12 +3152,20 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "pricing"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
         ".claude/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:25.329Z"
+      "checkedAt": "2026-10-23T16:53:20.822Z"
     },
     {
       "name": "ollama/ollama",
@@ -3031,7 +3193,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "184,453 people starred it."
+          "note": "184,454 people starred it."
         },
         {
           "group": "Reputation",
@@ -3129,12 +3291,18 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:50:53.784Z"
+      "checkedAt": "2026-10-23T16:52:55.275Z"
     },
     {
       "name": "ggml-org/llama.cpp",
@@ -3260,13 +3428,19 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
         "AGENTS.md",
+        "CLAUDE.md",
         ".gemini/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:15.033Z"
+      "checkedAt": "2026-10-23T16:53:12.746Z"
     },
     {
       "name": "infiniflow/ragflow",
@@ -3384,12 +3558,18 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:51:20.991Z"
+      "checkedAt": "2026-10-23T16:53:17.483Z"
     },
     {
       "name": "ChatGPTNextWeb/NextChat",
@@ -3507,9 +3687,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "enterprise edition"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:28.314Z"
+      "checkedAt": "2026-10-23T16:53:23.601Z"
     },
     {
       "name": "xtekky/gpt4free",
@@ -3635,12 +3823,18 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "SKILL.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:51:33.468Z"
+      "checkedAt": "2026-10-23T16:53:27.636Z"
     },
     {
       "name": "zylon-ai/private-gpt",
@@ -3766,9 +3960,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:35.373Z"
+      "checkedAt": "2026-10-23T16:53:29.124Z"
     },
     {
       "name": "firecrawl/firecrawl-mcp-server",
@@ -3886,9 +4086,18 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "free tier",
+          "pricing"
+        ],
+        "account": "requires API key",
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:48.608Z"
+      "checkedAt": "2026-10-23T16:53:39.807Z"
     },
     {
       "name": "supabase/mcp",
@@ -4006,13 +4215,21 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "subscription"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
         "AGENTS.md",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:52:00.942Z"
+      "checkedAt": "2026-10-23T16:53:50.543Z"
     },
     {
       "name": "cloudflare/mcp-server-cloudflare",
@@ -4032,7 +4249,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "4,409 people starred it."
+          "note": "4,408 people starred it."
         },
         {
           "group": "Reputation",
@@ -4130,11 +4347,20 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "paid features",
+          "subscription"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:52:02.158Z"
+      "checkedAt": "2026-10-23T16:53:51.426Z"
     },
     {
       "name": "obra/superpowers",
@@ -4252,12 +4478,18 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
-        "GEMINI.md"
+        "GEMINI.md",
+        "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:52:08.948Z"
+      "checkedAt": "2026-10-23T16:53:55.849Z"
     },
     {
       "name": "ruvnet/ruflo",
@@ -4383,25 +4615,31 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        "SKILL.md",
         "AGENTS.md",
         "CLAUDE.md",
-        ".claude/agents/typescript-specialist.md",
-        ".claude/agents/security-auditor.md",
+        "SKILL.md",
+        ".claude/commands/claude-flow-memory.md",
         ".claude/mcp.json",
         ".claude/agents/base-template-generator.md",
-        ".claude/agents/python-specialist.md",
-        ".claude/commands/claude-flow-swarm.md",
-        ".claude/agents/MIGRATION_SUMMARY.md",
-        ".claude/commands/claude-flow-memory.md",
-        ".claude/settings.json",
-        ".claude/agents/database-specialist.md",
         ".claude/agents/project-coordinator.md",
-        ".claude/commands/claude-flow-help.md"
+        ".claude/agents/typescript-specialist.md",
+        ".claude/commands/claude-flow-swarm.md",
+        ".claude/agents/database-specialist.md",
+        ".claude/agents/security-auditor.md",
+        ".claude/agents/python-specialist.md",
+        ".claude/agents/MIGRATION_SUMMARY.md",
+        ".claude/commands/claude-flow-help.md",
+        ".claude/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:52:19.185Z"
+      "checkedAt": "2026-10-23T16:54:02.752Z"
     },
     {
       "name": "musistudio/claude-code-router",
@@ -4519,9 +4757,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:52:20.092Z"
+      "checkedAt": "2026-10-23T16:54:03.686Z"
     },
     {
       "name": "thedotmack/claude-mem",
@@ -4647,14 +4891,22 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "free trial"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
-        ".claude/settings.json",
         ".github/copilot-instructions.md",
-        ".claude/commands/anti-pattern-czar.md"
+        ".claude/commands/anti-pattern-czar.md",
+        ".claude/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:52:28.905Z"
+      "checkedAt": "2026-10-23T16:54:10.704Z"
     },
     {
       "name": "langchain-ai/langchain",
@@ -4793,13 +5045,19 @@
         }
       },
       "securityChecked": true,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
         ".mcp.json",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:07.587Z"
+      "checkedAt": "2026-10-23T16:53:06.338Z"
     },
     {
       "name": "open-webui/open-webui",
@@ -4917,9 +5175,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "enterprise plan"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:50:54.844Z"
+      "checkedAt": "2026-10-23T16:52:56.062Z"
     },
     {
       "name": "anthropics/claude-code",
@@ -5045,6 +5311,12 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
@@ -5052,7 +5324,7 @@
         ".claude/commands/dedupe.md",
         ".claude/commands/triage-issue.md"
       ],
-      "checkedAt": "2026-10-23T16:51:00.269Z"
+      "checkedAt": "2026-10-23T16:53:00.497Z"
     },
     {
       "name": "janhq/jan",
@@ -5170,9 +5442,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:38.019Z"
+      "checkedAt": "2026-10-23T16:53:31.399Z"
     },
     {
       "name": "awslabs/mcp",
@@ -5319,9 +5597,18 @@
         }
       },
       "securityChecked": true,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "pricing",
+          "free tier"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:47.487Z"
+      "checkedAt": "2026-10-23T16:53:39.019Z"
     },
     {
       "name": "oraios/serena",
@@ -5439,14 +5726,22 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "free trial"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
         "AGENTS.md",
+        "CLAUDE.md",
         ".vscode/settings.json",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-10-23T16:51:53.078Z"
+      "checkedAt": "2026-10-23T16:53:43.639Z"
     },
     {
       "name": "hesreallyhim/awesome-claude-code",
@@ -5466,7 +5761,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "56,331 people starred it."
+          "note": "56,333 people starred it."
         },
         {
           "group": "Reputation",
@@ -5564,9 +5859,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "subscription"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:52:10.923Z"
+      "checkedAt": "2026-10-23T16:53:57.465Z"
     },
     {
       "name": "crewAIInc/crewAI",
@@ -5692,11 +5995,19 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "enterprise features"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:51:19.838Z"
+      "checkedAt": "2026-10-23T16:53:16.627Z"
     },
     {
       "name": "Aider-AI/aider",
@@ -5814,9 +6125,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:37.156Z"
+      "checkedAt": "2026-10-23T16:53:30.598Z"
     },
     {
       "name": "khoj-ai/khoj",
@@ -5934,11 +6251,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:40.202Z"
+      "checkedAt": "2026-10-23T16:53:33.214Z"
     },
     {
       "name": "makenotion/notion-mcp-server",
@@ -6056,11 +6379,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-10-23T16:51:56.461Z"
+      "checkedAt": "2026-10-23T16:53:46.500Z"
     },
     {
       "name": "exa-labs/exa-mcp-server",
@@ -6178,11 +6507,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "mcp.json"
       ],
-      "checkedAt": "2026-10-23T16:52:03.243Z"
+      "checkedAt": "2026-10-23T16:53:52.113Z"
     },
     {
       "name": "idosal/git-mcp",
@@ -6300,9 +6635,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:52:05.210Z"
+      "checkedAt": "2026-10-23T16:53:53.395Z"
     },
     {
       "name": "punkpeye/awesome-mcp-servers",
@@ -6420,9 +6761,19 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "pricing",
+          "free tier",
+          "subscriptions"
+        ],
+        "account": "need no API key",
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:52:07.856Z"
+      "checkedAt": "2026-10-23T16:53:55.090Z"
     },
     {
       "name": "wshobson/agents",
@@ -6540,6 +6891,12 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
@@ -6548,7 +6905,7 @@
         ".cursor/rules/010-python-tooling.mdc",
         ".cursor/rules/020-agent-skill-authoring.mdc"
       ],
-      "checkedAt": "2026-10-23T16:52:10.198Z"
+      "checkedAt": "2026-10-23T16:53:56.825Z"
     },
     {
       "name": "bmad-code-org/BMAD-METHOD",
@@ -6666,11 +7023,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:52:26.097Z"
+      "checkedAt": "2026-10-23T16:54:08.582Z"
     },
     {
       "name": "browser-use/browser-use",
@@ -6788,12 +7151,20 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "pricing"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:51:18.028Z"
+      "checkedAt": "2026-10-23T16:53:15.075Z"
     },
     {
       "name": "openai/whisper",
@@ -6932,9 +7303,15 @@
         }
       },
       "securityChecked": true,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:26.090Z"
+      "checkedAt": "2026-10-23T16:53:21.541Z"
     },
     {
       "name": "wonderwhy-er/DesktopCommanderMCP",
@@ -7066,12 +7443,21 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "subscriptions",
+          "subscription"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         ".mcp.json",
         ".claude/settings.local.json"
       ],
-      "checkedAt": "2026-10-23T16:52:06.831Z"
+      "checkedAt": "2026-10-23T16:53:54.462Z"
     },
     {
       "name": "n8n-io/n8n",
@@ -7105,7 +7491,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "208,394 people starred it."
+          "note": "208,395 people starred it."
         },
         {
           "group": "Reputation",
@@ -7224,6 +7610,14 @@
         }
       },
       "securityChecked": true,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "enterprise license"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
@@ -7231,7 +7625,7 @@
         ".claude/settings.json",
         ".github/CLAUDE.md"
       ],
-      "checkedAt": "2026-10-23T16:51:09.072Z"
+      "checkedAt": "2026-10-23T16:53:08.026Z"
     },
     {
       "name": "TabbyML/tabby",
@@ -7349,9 +7743,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [],
+        "account": null,
+        "folder": "ee"
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:42.495Z"
+      "checkedAt": "2026-10-23T16:53:35.042Z"
     },
     {
       "name": "SuperClaude-Org/SuperClaude_Framework",
@@ -7477,13 +7877,21 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "subscription"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
         "CLAUDE.md",
+        "AGENTS.md",
         ".claude/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:52:16.594Z"
+      "checkedAt": "2026-10-23T16:54:00.618Z"
     },
     {
       "name": "eyaltoledano/claude-task-master",
@@ -7601,24 +8009,33 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "pricing",
+          "subscription"
+        ],
+        "account": "require a separate API key",
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
         ".mcp.json",
+        "CLAUDE.md",
         ".claude/commands/dedupe.md",
-        ".cursor/rules/ai_services.mdc",
-        ".cursor/rules/context_gathering.mdc",
-        ".cursor/rules/commands.mdc",
-        ".cursor/commands/goham.md",
+        ".cursor/rules/dev_workflow.mdc",
         ".cursor/mcp.json",
-        ".cursor/rules/changeset.mdc",
-        ".cursor/rules/architecture.mdc",
+        ".cursor/rules/ai_providers.mdc",
+        ".cursor/rules/ai_services.mdc",
+        ".cursor/commands/goham.md",
+        ".cursor/rules/commands.mdc",
         ".cursor/rules/dependencies.mdc",
         ".cursor/rules/cursor_rules.mdc",
-        ".cursor/rules/dev_workflow.mdc",
-        ".cursor/rules/ai_providers.mdc"
+        ".cursor/rules/changeset.mdc",
+        ".cursor/rules/context_gathering.mdc",
+        ".cursor/rules/architecture.mdc"
       ],
-      "checkedAt": "2026-10-23T16:52:22.155Z"
+      "checkedAt": "2026-10-23T16:54:05.252Z"
     },
     {
       "name": "ahujasid/mcp-for-blender",
@@ -7744,9 +8161,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:55.470Z"
+      "checkedAt": "2026-10-23T16:53:45.651Z"
     },
     {
       "name": "PatrickJS/awesome-cursorrules",
@@ -7864,9 +8287,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:52:24.078Z"
+      "checkedAt": "2026-10-23T16:54:06.982Z"
     },
     {
       "name": "AUTOMATIC1111/stable-diffusion-webui",
@@ -7886,7 +8315,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "165,124 people starred it."
+          "note": "165,125 people starred it."
         },
         {
           "group": "Reputation",
@@ -7984,9 +8413,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:50:57.730Z"
+      "checkedAt": "2026-10-23T16:52:58.380Z"
     },
     {
       "name": "lllyasviel/Fooocus",
@@ -8006,7 +8441,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "53,653 people starred it."
+          "note": "53,654 people starred it."
         },
         {
           "group": "Reputation",
@@ -8104,9 +8539,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:50:58.773Z"
+      "checkedAt": "2026-10-23T16:52:59.299Z"
     },
     {
       "name": "tadata-org/fastapi_mcp",
@@ -8224,9 +8665,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:51.964Z"
+      "checkedAt": "2026-10-23T16:53:42.644Z"
     },
     {
       "name": "hangwin/mcp-chrome",
@@ -8344,9 +8791,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:57.521Z"
+      "checkedAt": "2026-10-23T16:53:47.413Z"
     },
     {
       "name": "VoltAgent/awesome-claude-code-subagents",
@@ -8464,12 +8917,20 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "pricing"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
         ".claude/settings.local.json"
       ],
-      "checkedAt": "2026-10-23T16:52:23.142Z"
+      "checkedAt": "2026-10-23T16:54:06.288Z"
     },
     {
       "name": "Pythagora-io/gpt-pilot",
@@ -8587,9 +9048,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:44.269Z"
+      "checkedAt": "2026-10-23T16:53:36.601Z"
     },
     {
       "name": "openai/codex",
@@ -8625,7 +9092,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "20,593 copies made by other developers."
+          "note": "20,594 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -8736,11 +9203,19 @@
         }
       },
       "securityChecked": true,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "enterprise plan"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:51:02.409Z"
+      "checkedAt": "2026-10-23T16:53:02.442Z"
     },
     {
       "name": "nomic-ai/gpt4all",
@@ -8858,9 +9333,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": "nobody has changed it in over a year",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:15.939Z"
+      "checkedAt": "2026-10-23T16:53:13.425Z"
     },
     {
       "name": "anthropics/skills",
@@ -8880,7 +9361,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "183,224 people starred it."
+          "note": "183,225 people starred it."
         },
         {
           "group": "Reputation",
@@ -8888,7 +9369,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "21,695 copies made by other developers."
+          "note": "21,696 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -8978,9 +9459,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "paid plans"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": "it has no license",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:22.597Z"
+      "checkedAt": "2026-10-23T16:53:18.844Z"
     },
     {
       "name": "lllyasviel/stable-diffusion-webui-forge",
@@ -9098,9 +9587,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": "nobody has changed it in over a year",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:46.418Z"
+      "checkedAt": "2026-10-23T16:53:38.095Z"
     },
     {
       "name": "executeautomation/mcp-playwright",
@@ -9218,9 +9713,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": "its weakest area (\"Is anyone looking after it?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:49.432Z"
+      "checkedAt": "2026-10-23T16:53:40.610Z"
     },
     {
       "name": "ComposioHQ/awesome-claude-skills",
@@ -9338,9 +9839,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "subscriptions"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": "it has no license",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:52:13.121Z"
+      "checkedAt": "2026-10-23T16:53:58.165Z"
     },
     {
       "name": "coleam00/context-engineering-intro",
@@ -9458,14 +9967,20 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": "its weakest area (\"Is anyone looking after it?\") only gets a C",
       "aiFilesFound": [
         "CLAUDE.md",
         ".claude/settings.local.json",
-        ".claude/commands/execute-prp.md",
-        ".claude/commands/generate-prp.md"
+        ".claude/commands/generate-prp.md",
+        ".claude/commands/execute-prp.md"
       ],
-      "checkedAt": "2026-10-23T16:52:27.164Z"
+      "checkedAt": "2026-10-23T16:54:09.480Z"
     },
     {
       "name": "ccusage/ccusage",
@@ -9591,14 +10106,20 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": null,
       "aiFilesFound": [
-        ".mcp.json",
         "AGENTS.md",
+        ".mcp.json",
         ".claude/settings.json",
         ".claude/AGENTS.md"
       ],
-      "checkedAt": "2026-10-23T16:52:30.875Z"
+      "checkedAt": "2026-10-23T16:54:12.242Z"
     },
     {
       "name": "FlowiseAI/Flowise",
@@ -9724,9 +10245,15 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": "the owner archived it, so nobody fixes problems anymore",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:51:36.331Z"
+      "checkedAt": "2026-10-23T16:53:29.858Z"
     },
     {
       "name": "browserbase/mcp-server-browserbase",
@@ -9844,9 +10371,17 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "hosted version"
+        ],
+        "account": null,
+        "folder": null
+      },
       "capReason": "the owner archived it, so nobody fixes problems anymore",
       "aiFilesFound": [],
-      "checkedAt": "2026-10-23T16:52:04.256Z"
+      "checkedAt": "2026-10-23T16:53:52.826Z"
     },
     {
       "name": "steipete/claude-code-mcp",
@@ -9964,15 +10499,21 @@
         }
       },
       "securityChecked": false,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
       "capReason": "the owner archived it, so nobody fixes problems anymore",
       "aiFilesFound": [
-        "CLAUDE.md",
         ".windsurfrules",
-        ".cursor/rules/agent.mdc",
+        "CLAUDE.md",
         ".github/copilot-instructions.md",
+        ".cursor/rules/agent.mdc",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-10-23T16:52:32.290Z"
+      "checkedAt": "2026-10-23T16:54:13.467Z"
     }
   ]
 }
