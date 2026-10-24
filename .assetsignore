@@ -17,4 +17,5 @@ README.md
 .wrangler
 CLAUDE.md
 stats.js
+batch.js
 .hallmark

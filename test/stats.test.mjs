@@ -5,7 +5,9 @@ import assert from "node:assert";
 
 const store = new Map();
 const kv = { get: async (k, t) => (store.has(k) ? (t === "json" ? JSON.parse(store.get(k)) : store.get(k)) : null), put: async (k, v) => store.set(k, v) };
-const env = { INSTAGRAM: kv, ASSETS: { fetch: async () => new Response("<html><title>x</title></html>", { headers: { "Content-Type": "text/html" } }) } };
+const env = { INSTAGRAM: kv, ASSETS: { fetch: async (req) => new URL(req.url).pathname === "/data/directory.json"
+  ? new Response(JSON.stringify({ repos: [] }))
+  : new Response("<html><title>x</title></html>", { headers: { "Content-Type": "text/html" } }) } };
 const jobs = [];
 const ctx = { waitUntil: (p) => jobs.push(p) };
 const visit = async (path, headers = {}, init = {}) => {
@@ -27,7 +29,13 @@ await visit("/api/hit", { "Content-Type": "application/json" }, { method: "POST"
 const bad = await visit("/api/hit", {}, { method: "POST", body: JSON.stringify({ event: "home" }) });
 assert.equal(bad.status, 400); // the browser can only report on-page events, not fake page views
 
+// An AI agent checking grades through /mcp counts as agent_mcp, even when it looks like a bot.
+await visit("/mcp", { "User-Agent": "python-httpx/0.27", "Content-Type": "application/json" }, { method: "POST", body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "get_safety_scores" } }) });
+// Asking about posts is not a repo check.
+await visit("/mcp", { "Content-Type": "application/json" }, { method: "POST", body: JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/call", params: { name: "list_upcoming_posts" } }) });
+
 const stats = await (await visit("/api/stats")).json();
+assert.equal(stats.total.events.agent_mcp, 1);
 assert.equal(stats.total.events.home, 2);
 assert.equal(stats.total.events.check, 1);
 assert.deepEqual(stats.total.sources, { reddit: 1, "news.ycombinator.com": 1 });

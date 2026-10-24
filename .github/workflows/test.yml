@@ -15,3 +15,4 @@ jobs:
       - run: node test/seo.test.mjs
       - run: node test/hq.test.mjs
       - run: node test/stats.test.mjs
+      - run: node test/batch.test.mjs
