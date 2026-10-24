@@ -122,7 +122,7 @@ export function reportCard(r, { example = false, actions = "", headingId = "", f
 <header class="report-head">
   ${ring(r)}
   <div class="report-title">
-    ${example ? `<p class="tag">Example · made-up repo</p>` : ""}
+    ${example ? `<p class="tag">Example: a made-up repo</p>` : ""}
     <h2 class="repo-name"${headingId ? ` id="${headingId}" tabindex="-1"` : ""}>${title}</h2>
     <p><span class="pill lvl-${level}">${esc(r.label || L.label)}</span></p>
     <p class="verdict">${esc(r.verdict || L.verdict)}</p>
@@ -145,6 +145,9 @@ ${whyHTML}
 </article>`;
 }
 
+// A card shows the start of a long description, cut at a word (the full text is on the report page).
+const short = (t, max = 110) => (t.length <= max ? t : `${t.slice(0, t.lastIndexOf(" ", max) > 60 ? t.lastIndexOf(" ", max) : max).replace(/[\s,.;:]+$/, "")}…`);
+
 // One tool in a list: dial, name, label, short description, a link to its full report and one to GitHub.
 // link = false for made-up example data (there is no report page to link to).
 export function toolCard(x, { link = true, headingLevel = 3 } = {}) {
@@ -157,7 +160,7 @@ export function toolCard(x, { link = true, headingLevel = 3 } = {}) {
   <div class="tool-body">
     <${h} class="tool-name">${link ? `<a class="stretch" href="/repo/${esc(x.name)}">${label}</a>` : label}</${h}>
     <p class="tool-meta"><span class="pill lvl-${levelOf(x)}">${esc(x.label || LEVELS[levelOf(x)]?.label)}</span> ${warnings.length ? `<span class="muted">${warnings.length} warning sign${warnings.length > 1 ? "s" : ""}</span>` : `<span class="muted">No warning signs</span>`}</p>
-    ${x.description ? `<p class="tool-desc">${esc(x.description)}</p>` : ""}
+    ${x.description ? `<p class="tool-desc">${esc(short(x.description))}</p>` : ""}
     <p class="tool-links">${link ? `<span class="more" aria-hidden="true">Full report</span>` : ""}<a class="gh" href="${esc(githubUrl(x))}" target="_blank" rel="noopener">GitHub<span class="ext" aria-hidden="true">↗</span><span class="sr-only"> page for ${esc(x.name)} (opens in a new tab)</span></a></p>
   </div>
 </li>`;

@@ -1,0 +1,34 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "page",
+  "shape": "Workbench",
+  "theme": "brand",
+  "axes": "light/display-heavy/chromatic-green",
+  "hero": "Stage",
+  "nav": "edge-aligned",
+  "footer": "mast",
+  "imagery": "product (the real engine output)",
+  "photos": [],
+  "entry": "stamp",
+  "fingerprint": "stage-split/report-rail/index-cards/bento-table/rows-faq/deep-band/plans",
+  "sections": [
+   "Hero: checker + grade stamp",
+   "Report with promises rail",
+   "Directory index",
+   "How we score bento + grades table",
+   "Questions rows",
+   "Newsletter band",
+   "Pricing plans",
+   "Footer mast"
+  ],
+  "signature": "the tilted grade stamp in its score ring, set huge in the hero",
+  "waived": [
+   "38iii",
+   "72"
+  ],
+  "prompt": "a free safety check that grades GitHub repos A to F for people who do not code",
+  "date": "2026-10-24"
+ }
+]

@@ -43,7 +43,7 @@
 <body>
 <a class="skip" href="#check">Skip to the safety check</a>
 <header class="topbar"><div class="wrap">
-  <a class="brand" href="/"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M9 16.5l4.5 4.5L23 11.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>SafeToClone</a>
+  <a class="brand" href="/"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M9 16.5l4.5 4.5L23 11.5" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>SafeToClone</a>
   <nav aria-label="Main">
     <a href="#directory">Directory</a>
     <a href="#method">How we score</a>
@@ -54,40 +54,51 @@
 </div></header>
 
 <main id="main">
-  <div class="wrap hero" id="check">
-    <p class="eyebrow">Free safety check · No sign-up</p>
-    <h1>Is that GitHub repo <span class="mark">safe to download?</span></h1>
-    <p class="lede">Paste a link and get a grade from A to F in seconds, with every warning sign explained in plain English. We also catch tricks aimed at your AI assistant.</p>
-    <form class="checker" id="checkForm" role="search">
-      <label class="sr-only" for="repoInput">GitHub link or owner/name of the repo</label>
-      <input id="repoInput" name="repo" placeholder="Paste a GitHub link here" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="url" enterkeyhint="go" required>
-      <button class="btn" id="checkBtn" type="submit">Check safety</button>
-    </form>
-    <div class="tries"><span class="muted">Or try:</span>
-      <button type="button" class="chip" data-try="ollama/ollama">Ollama</button>
-      <button type="button" class="chip" data-try="comfyanonymous/ComfyUI">ComfyUI</button>
-      <button type="button" class="chip" data-try="modelcontextprotocol/servers">MCP servers</button>
+  <section class="hero" id="check" aria-labelledby="heroTitle"><div class="wrap hero-grid">
+    <div class="hero-text">
+      <h1 id="heroTitle">Is that GitHub repo <span class="mark">safe to download?</span></h1>
+      <p class="lead">Paste a link and get a grade from A to F in seconds, with every warning sign explained in plain English.</p>
+      <form class="checker" id="checkForm" role="search">
+        <label class="sr-only" for="repoInput">GitHub link or owner/name of the repo</label>
+        <input id="repoInput" name="repo" placeholder="Paste a GitHub link here" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="url" enterkeyhint="go" required>
+        <button class="btn" id="checkBtn" type="submit">Check safety</button>
+      </form>
+      <div class="tries"><span class="muted">Or try:</span>
+        <button type="button" class="chip" data-try="ollama/ollama">Ollama</button>
+        <button type="button" class="chip" data-try="comfyanonymous/ComfyUI">ComfyUI</button>
+        <button type="button" class="chip" data-try="modelcontextprotocol/servers">MCP servers</button>
+      </div>
+      <p class="sr-only" id="status" role="status"></p>
     </div>
+    <figure class="specimen" id="specimen">
+      <div class="ring ring-xl lvl-dangerous" role="img" aria-label="Grade F, 15 out of 100, Dangerous"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="track" cx="50" cy="50" r="44"/><circle class="arc" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="15 100"/></svg><div class="stamp"><b>F</b><small>15/100</small></div></div>
+      <figcaption>
+        <p class="tag">Example: a made-up repo</p>
+        <p class="fine"><a href="#out">Read the example report</a></p>
+      </figcaption>
+    </figure>
+  </div></section>
+
+  <section class="report-band" aria-label="Safety report"><div class="wrap report-grid">
     <ul class="promises">
+      <li>Free, no sign-up</li>
       <li>We never download or run the code</li>
       <li>Every grade explained</li>
+      <li>We also catch tricks aimed at your AI assistant</li>
       <li>Re-checked every night</li>
     </ul>
-    <p class="sr-only" id="status" role="status"></p>
-  </div>
+    <div class="result" id="out"></div>
+  </div></section>
 
-  <div class="wrap result" id="out"></div>
-
-  <section class="band white" id="directory"><div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Directory</p>
-      <h2>AI tools people keep telling you to install</h2>
-      <p class="lede">Each one is re-checked every night. Open one for its full report, or go straight to its GitHub page.</p>
+  <section class="band paper-2" id="directory" aria-labelledby="dirTitle"><div class="wrap">
+    <div class="section-head split">
+      <h2 id="dirTitle">AI tools people keep telling you to install</h2>
+      <p class="lead">Each one is re-checked every night. Open one for its full report, or go straight to its GitHub page.</p>
     </div>
     <div class="controls">
       <div class="segmented" role="group" aria-label="Show grades">
         <button type="button" aria-pressed="true" data-g="all">All</button>
-        <button type="button" aria-pressed="false" data-g="AB">A–B</button>
+        <button type="button" aria-pressed="false" data-g="AB">A or B</button>
         <button type="button" aria-pressed="false" data-g="C">C</button>
         <button type="button" aria-pressed="false" data-g="unproven">Unproven</button>
         <button type="button" aria-pressed="false" data-g="dangerous">Dangerous</button>
@@ -99,31 +110,31 @@
       </div>
     </div>
     <ul class="tools" id="dir"></ul>
+    <div class="dir-more"><button type="button" class="btn secondary" id="dirMore" hidden>Show every tool</button></div>
     <div class="dir-foot">
       <p id="dirNote" role="status">Loading the directory…</p>
       <p><a href="/repos">See every grade on one page</a></p>
     </div>
   </div></section>
 
-  <section class="band" id="method"><div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">How we score</p>
-      <h2>Five questions. A letter for each. One honest grade.</h2>
-      <p class="lede">We only read public information on GitHub and an independent security check. We never download or run the code.</p>
+  <section class="band" id="method" aria-labelledby="methodTitle"><div class="wrap">
+    <div class="section-head split">
+      <h2 id="methodTitle">Five questions. A letter for each. One honest grade.</h2>
+      <p class="lead">We only read public information on GitHub and an independent security check. We never download or run the code.</p>
     </div>
     <div class="tiles">
-      <div class="tile"><p class="big">30<small>points</small></p><h3>Do people trust it?</h3><ul><li>How many people starred and copied it</li><li>How long the owner has been on GitHub</li></ul></div>
+      <div class="tile lead-tile"><p class="big">30<small>points</small></p><h3>Any malware tricks?</h3><ul><li>“Turn off your antivirus”</li><li>Password-protected zips, cracks, free premium</li><li>Fake stars, brand-new accounts</li><li>We read the name, topics, README and release notes</li><li>AI instruction files, also in hidden folders like .claude/ and .cursor/, that try to hijack your assistant or hide invisible text</li></ul></div>
+      <div class="tile wide-tile"><p class="big">30<small>points</small></p><h3>Do people trust it?</h3><ul><li>How many people starred and copied it</li><li>How long the owner has been on GitHub</li></ul></div>
       <div class="tile"><p class="big">25<small>points</small></p><h3>Is anyone looking after it?</h3><ul><li>When it was last updated</li><li>How old it is</li><li>Whether it ships proper releases</li></ul></div>
       <div class="tile"><p class="big">15<small>points</small></p><h3>Is it open about itself?</h3><ul><li>A license</li><li>Real instructions</li><li>A way to report security problems</li></ul></div>
       <div class="tile"><p class="big">10<small>points</small></p><h3>Does it have good security habits?</h3><ul><li>Is every change checked by a second person?</li><li>Any known security holes left unfixed?</li><li>Are its build robots set up safely?</li><li>From OpenSSF Scorecard, an independent check</li></ul></div>
-      <div class="tile"><p class="big">30<small>points</small></p><h3>Any malware tricks?</h3><ul><li>"Turn off your antivirus"</li><li>Password-protected zips, cracks, free premium</li><li>Fake stars, brand-new accounts</li><li>We read the name, topics, README and release notes</li><li>AI instruction files, also in hidden folders like .claude/ and .cursor/, that try to hijack your assistant or hide invisible text</li></ul></div>
     </div>
     <h3 class="subhead">What the grades mean</h3>
     <ul class="scale">
       <li class="lvl-trusted"><span class="g">A<span class="range">85–100</span></span><span class="pill lvl-trusted">Strong</span><p>Strong in every area, no malware tricks found.</p></li>
       <li class="lvl-fine"><span class="g">B<span class="range">70–84</span></span><span class="pill lvl-fine">Probably fine</span><p>No malware tricks, but missing some signs of a well-run project.</p></li>
       <li class="lvl-careful"><span class="g">C<span class="range">55–69</span></span><span class="pill lvl-careful">Be careful</span><p>Something is missing or off, like no updates for a long time or poor security habits. Ask someone technical first.</p></li>
-      <li class="lvl-unproven"><span class="g">D–F<span class="range">under 55</span></span><span class="pill lvl-unproven">Unproven</span><p>Nothing looks wrong, but it's too new or little-known to trust yet.</p></li>
+      <li class="lvl-unproven"><span class="g">D to F<span class="range">under 55</span></span><span class="pill lvl-unproven">Unproven</span><p>Nothing looks wrong, but it's too new or little-known to trust yet.</p></li>
       <li class="lvl-dangerous"><span class="g">Any<span class="range">grade</span></span><span class="pill lvl-dangerous">Dangerous</span><p>We found tricks that malware uses. Don't download it.</p></li>
     </ul>
     <div class="notes">
@@ -133,11 +144,8 @@
     </div>
   </div></section>
 
-  <section class="band white" id="faq"><div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Questions</p>
-      <h2>Questions people ask</h2>
-    </div>
+  <section class="band paper-2" id="faq" aria-labelledby="faqTitle"><div class="wrap faq-grid">
+    <h2 id="faqTitle">Questions people ask</h2>
     <div class="faq">
       <details><summary>Does an A mean it's 100% safe?</summary><div><p>No. A grade is a set of warning signs, not a guarantee. An A means the project is strong in every area we check and shows none of the malware tricks we look for. A clever attacker can still pass every check, so only install what you need, and only from the official GitHub page.</p></div></details>
       <details><summary>What's the difference between Unproven and Dangerous?</summary><div><p>Both can come with a low grade. Dangerous means we found tricks that malware uses, like asking you to turn off your antivirus. Unproven means nothing looks wrong, but the project is too new or too little-known to trust yet.</p></div></details>
@@ -150,34 +158,35 @@
     </div>
   </div></section>
 
-  <section class="band" id="pricing"><div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Pricing</p>
-      <h2>Free for one-off checks</h2>
+  <section class="band deep" id="newsletter" aria-labelledby="newsTitle"><div class="wrap news-grid">
+    <div>
+      <h2 id="newsTitle">One email a week: the AI tools worth installing, and the ones to avoid</h2>
+      <p class="lead">Written for people who don't code. No spam, unsubscribe in one click.</p>
     </div>
-    <div class="plans">
-      <div class="plan"><h3>Free</h3><p class="price">$0</p><ul><li>Unlimited checks in your browser</li><li>The full directory</li><li>Weekly newsletter</li></ul></div>
-      <div class="plan featured"><p class="soon">Coming soon</p><h3>Pro</h3><p class="price">$7 <small>/ month</small></p><ul><li>Watchlist: email me if a repo I use turns risky</li><li>Deep check of every file, not just the front page</li><li>Shareable PDF report for your IT team</li></ul><a class="btn" href="#newsletter">Join the waitlist</a></div>
-      <div class="plan"><p class="soon">Coming soon</p><h3>Team</h3><p class="price">$49 <small>/ month</small></p><ul><li>Approved-tools list for your whole office</li><li>Slack or Teams alerts</li><li>Up to 25 people</li></ul><a class="btn secondary" href="#newsletter">Join the waitlist</a></div>
+    <div>
+      <form class="news" id="newsForm">
+        <label class="sr-only" for="newsEmail">Your email address</label>
+        <input id="newsEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
+        <button class="btn" type="submit">Subscribe</button>
+      </form>
+      <p id="newsMsg" class="fine" role="status"></p>
     </div>
   </div></section>
 
-  <section class="band white" id="newsletter"><div class="wrap">
-    <div class="section-head center">
-      <p class="eyebrow">Newsletter</p>
-      <h2>One email a week: the AI tools worth installing, and the ones to avoid</h2>
-      <p class="lede">Written for people who don't code. No spam, unsubscribe in one click.</p>
+  <section class="band" id="pricing" aria-labelledby="pricingTitle"><div class="wrap">
+    <div class="section-head">
+      <h2 id="pricingTitle">Free for one-off checks</h2>
     </div>
-    <form class="news" id="newsForm">
-      <label class="sr-only" for="newsEmail">Your email address</label>
-      <input id="newsEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
-      <button class="btn" type="submit">Subscribe</button>
-    </form>
-    <p id="newsMsg" class="fine" role="status"></p>
+    <div class="plans">
+      <div class="plan"><h3>Free</h3><p class="price">$0</p><ul><li>Unlimited checks in your browser</li><li>The full directory</li><li>Weekly newsletter</li></ul><a class="btn secondary" href="#check">Check a repo</a></div>
+      <div class="plan featured"><h3>Pro</h3><p class="price">$7 <small>/ month</small></p><p class="soon">Coming soon</p><ul><li>Watchlist: email me if a repo I use turns risky</li><li>Deep check of every file, not just the front page</li><li>Shareable PDF report for your IT team</li></ul><a class="btn" href="#newsletter">Join the waitlist</a></div>
+      <div class="plan"><h3>Team</h3><p class="price">$49 <small>/ month</small></p><p class="soon">Coming soon</p><ul><li>Approved-tools list for your whole office</li><li>Slack or Teams alerts</li><li>Up to 25 people</li></ul><a class="btn secondary" href="#newsletter">Join the waitlist</a></div>
+    </div>
   </div></section>
 </main>
 
 <footer><div class="wrap">
+  <p class="mast">SafeToClone</p>
   <nav aria-label="More"><a href="/repos">All safety grades</a><a href="#method">How we score</a><a href="#faq">Questions</a><a href="#pricing">Pricing</a><a href="#newsletter">Newsletter</a></nav>
   <p>SafeToClone reads public GitHub data and gives an opinion. It is not antivirus software and can be wrong.</p>
   <p>Questions or a repo you want us to look at? Email <a href="mailto:hello@safetoclone.com">hello@safetoclone.com</a>. Not affiliated with GitHub.</p>
@@ -186,7 +195,7 @@
 <script type="module">
 import { checkRepo, score } from "./score.js";
 import { shareCard } from "./share-card.js";
-import { reportCard, toolCard, esc, levelOf } from "./report.js";
+import { reportCard, toolCard, esc, levelOf, ring } from "./report.js";
 
 const $ = (s) => document.querySelector(s);
 const out = $("#out");
@@ -232,12 +241,16 @@ function wireShare(r) {
 
 // What visitors see before they check anything: a made-up malware repo, scored by the real engine.
 const ago = (d) => new Date(Date.now() - d * 864e5).toISOString();
-show(score({
+const example = score({
   repo: { full_name: "example/free-gpt-pro-unlocked", html_url: "", stargazers_count: 1400, forks_count: 3, created_at: ago(9), pushed_at: ago(1), archived: false, license: null, description: "Unlock ChatGPT Plus for free. Free premium unlocked." },
   user: { type: "User", created_at: ago(12) },
   files: [{ name: "Setup.exe", type: "file" }, { name: "README.md", type: "file" }],
   releases: [], readme: "Download Setup.zip, the zip password is 1234. Disable Windows Defender before running.", pkg: "", aiFiles: {},
-}), { example: true });
+});
+show(example, { example: true });
+// The big grade stamp in the hero shows the same example, straight from the engine (the HTML holds a copy for when scripts are off).
+$("#specimen .ring").outerHTML = ring(example, "xl");
+
 
 async function runCheck(val) {
   const btn = $("#checkBtn");
@@ -276,16 +289,24 @@ if (sharedRepo) setTimeout(() => { $("#repoInput").value = sharedRepo; $("#check
 // Directory: filter by grade, search by name, each card links to its report and to GitHub.
 let dir = { repos: [], example: false };
 let filter = "all";
+// With no filter or search, show the first few tools and a button for the rest, so the page stays short.
+const FIRST = 9;
+let showAll = false;
 function renderDir() {
   const q = $("#dirSearch").value.trim().toLowerCase();
   const list = dir.repos.filter((x) => (filter === "all" || (filter.length <= 2 ? filter.includes(x.grade) : levelOf(x) === filter))
     && (!q || `${x.name} ${x.description || ""}`.toLowerCase().includes(q)));
-  $("#dir").innerHTML = list.map((x) => toolCard(x, { link: !dir.example })).join("");
+  const shown = showAll || filter !== "all" || q ? list : list.slice(0, FIRST);
+  // Every card stays in the page (for search engines and screen-reader users' link lists); the extra ones wait behind the button.
+  $("#dir").innerHTML = list.map((x, i) => toolCard(x, { link: !dir.example }).replace('<li class="tool">', i < shown.length ? '<li class="tool">' : '<li class="tool" hidden>')).join("");
+  const more = $("#dirMore");
+  more.hidden = shown.length === list.length;
+  more.textContent = `Show all ${list.length} tools`;
   const when = dir.updatedAt && !dir.example ? ` Last update ${new Date(dir.updatedAt).toLocaleDateString("en-CA", { dateStyle: "medium" })}.` : "";
   $("#dirNote").textContent = dir.example
     ? "These are made-up examples. Real scores appear after the first nightly update."
     : list.length
-      ? `Showing ${list.length} of ${dir.repos.length} tools.${when}`
+      ? `Showing ${shown.length} of ${dir.repos.length} tools.${when}`
       : `No tools match. To grade one that isn't listed, paste its GitHub link into the check at the top.`;
 }
 document.querySelectorAll(".segmented button").forEach((b) => b.addEventListener("click", () => {
@@ -294,6 +315,11 @@ document.querySelectorAll(".segmented button").forEach((b) => b.addEventListener
   renderDir();
 }));
 $("#dirSearch").addEventListener("input", renderDir);
+$("#dirMore").addEventListener("click", () => {
+  showAll = true;
+  renderDir();
+  $("#dir").children[FIRST]?.querySelector("a")?.focus();
+});
 // Opened with a section link (like /#method from a repo page)? The directory fills in above that section
 // a moment after the page loads and pushes it down, so jump back to the section once the list is in.
 const keepSectionInView = () => {

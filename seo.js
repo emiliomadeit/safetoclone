@@ -25,7 +25,7 @@ export const repoPath = (name) => `/repo/${name}`;
 export const findRepo = (dir, name) => (dir?.repos || []).find((r) => r.name.toLowerCase() === String(name).toLowerCase());
 
 // Same logo and tab icon as the home page.
-const LOGO = `<svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M9 16.5l4.5 4.5L23 11.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const LOGO = `<svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M9 16.5l4.5 4.5L23 11.5" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const ICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f8a5b'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E";
 
 function layout({ title, description, canonical, image = "default", imageAlt = "SafeToClone safety grade from A to F", noindex = false, wide = false, body, data = [] }) {
