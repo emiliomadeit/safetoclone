@@ -1,5 +1,5 @@
 // Checks the Instagram approval lock (batch.js). Run with: node test/batch.test.mjs
-import { fingerprint, checkBatch, postProblem, readDailyCheck, latestCheck, dueNow, mondayOf, addDays, timeIn } from "../batch.js";
+import { checkClaim, claimsProblem, fingerprint, checkBatch, postProblem, readDailyCheck, latestCheck, dueNow, mondayOf, addDays, timeIn } from "../batch.js";
 import assert from "node:assert";
 
 // 1. The fingerprint must equal the one HQ's Python tools make (instagram/_tools/common.py), or no approved
@@ -86,5 +86,31 @@ assert.equal(dueNow(post, at("2026-11-11T15:05:00Z")), false); // another day
 assert.equal(mondayOf("2026-11-15"), "2026-11-09");
 assert.equal(mondayOf("2026-11-09"), "2026-11-09");
 assert.equal(addDays("2026-10-31", 2), "2026-11-02");
+
+// 7. The recheck right before posting must judge claims exactly like HQ's check_claim() in common.py.
+// These verdicts were made with the Python code on 2026-10-25.
+const DIR = { repos: [
+  { name: "a/one", grade: "A", label: "Strong", flags: ["Runs a script straight from the internet"] },
+  { name: "b/Two", grade: "C", label: "Be careful", flags: [] },
+  { name: "c/three", grade: "F", label: "Dangerous", flags: ["Hides code"] },
+] };
+const GROUPS = { g3: ["a/one", "b/two", "c/three"], gx: ["a/one", "x/missing"] };
+const CLAIMS = [{ kind: "grade", repo: "A/ONE", expect: "A" }, { kind: "grade", repo: "b/two", expect: "B" },
+  { kind: "label", repo: "c/three", expect: "Dangerous" }, { kind: "flag", repo: "a/one", value: "Runs a script", expect: true },
+  { kind: "flag", repo: "b/two", value: "Runs a script", expect: true }, { kind: "flag", repo: "b/two", value: "Hides code", expect: false },
+  { kind: "count", group: "g3", field: "grade", value: "A", expect: 1 }, { kind: "count", group: "g3", field: "flag", value: "Hides", expect: "2" },
+  { kind: "count", group: "gx", field: "grade", value: "A", expect: 1 }, { kind: "count", group: "nope", field: "grade", value: "A", expect: 1 },
+  { kind: "count", group: "g3", field: "stars", value: "A", expect: 1 }, { kind: "grade", repo: "z/none", expect: "A" }, { kind: "fact", text: "x" }, { kind: "weird" }];
+const PY_VERDICTS = [true, false, true, true, false, true, true, false, false, false, false, false, null, false];
+assert.deepEqual(CLAIMS.map((c) => checkClaim(c, DIR, GROUPS).ok), PY_VERDICTS);
+
+// A post goes out only if all its claims still hold and no repo it names turned Dangerous or Unproven.
+const ok = { repo: "a/one", claims: [{ kind: "grade", repo: "a/one", expect: "A", text: "It gets an A" }, { kind: "fact", text: "news" }] };
+assert.equal(claimsProblem(ok, DIR, GROUPS), "");
+assert.match(claimsProblem({ claims: [{ kind: "grade", repo: "b/two", expect: "A", text: "Two gets an A" }] }, DIR, GROUPS), /"Two gets an A" is no longer true \(expected A, now C\)/);
+assert.match(claimsProblem({ repo: "c/three", claims: [] }, DIR, GROUPS), /now graded F \(Dangerous\)/);
+assert.equal(claimsProblem({ repo: "c/three", claims: [{ kind: "label", repo: "c/three", expect: "Dangerous", text: "It is Dangerous" }] }, DIR, GROUPS), "");
+assert.equal(claimsProblem({ repo: "not/listed", claims: [] }, DIR, GROUPS), ""); // a news post may name a repo we don't grade
+assert.match(claimsProblem(ok, null, GROUPS), /couldn't read/); // no grades, no post
 
 console.log("batch tests passed");

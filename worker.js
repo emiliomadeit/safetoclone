@@ -8,8 +8,8 @@
 //   RESEND_SEGMENT_ID  (from resend.com > Audience > Segments) to also tag signups with a segment
 //   ALERT_EMAIL        where the robot's alert emails go (default hello@safetoclone.com)
 import { autopost, status as instagramStatus, listing as igListing, metrics as igMetrics } from "./instagram.js";
-import { hqFile, hqText, batchPath, checkPath } from "./hq.js";
-import { checkBatch, postProblem, latestCheck, dueNow, dateIn, timeIn, addDays, mondayOf, sha256, DEFAULT_TIME, LATE_MINUTES } from "./batch.js";
+import { hqFile, hqText, hqJson, batchPath, checkPath } from "./hq.js";
+import { checkBatch, postProblem, claimsProblem, latestCheck, dueNow, dateIn, timeIn, addDays, mondayOf, sha256, DEFAULT_TIME, LATE_MINUTES } from "./batch.js";
 import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
 
@@ -183,7 +183,16 @@ async function postDue(env, now = new Date()) {
     for (const s of due) await tell(s.p, `${check.reason}. Posts only go out while the daily check in HQ (ops/nightly) has passed in the last 36 hours`);
     return console.log("Instagram: skipped, daily check:", check.reason);
   }
+  // Today's grades (deployed with the site after each nightly build) and HQ's named repo groups, for the recheck.
+  const dir = await readJson(env, "/data/directory.json").catch(() => null);
+  const groups = await hqJson(env, "instagram/_shared/groups.json").catch(() => null);
   for (const s of due) {
+    const claims = s.p.claims?.some((c) => c.kind === "count") && !groups ? "couldn't read the repo groups from HQ" : claimsProblem(s.p, dir, groups || {});
+    if (claims) {
+      await tell(s.p, claims);
+      console.log(`Instagram: ${s.p.id} skipped (${claims})`);
+      continue;
+    }
     const pictures = await picturesProblem(env, s.p);
     if (pictures.problem) {
       if (pictures.changed) await tell(s.p, pictures.problem);
