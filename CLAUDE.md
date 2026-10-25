@@ -21,20 +21,21 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `fonts/` | The site's two own fonts (Archivo for headlines and grades, JetBrains Mono for small labels) and their free licence. Also used by `share-card.js` and `scripts/make-share-images.py` |
 | `report.js` | Draws a result as HTML: the score dial, "What should I do?", warning signs, "Why this grade?" and the directory cards. Used by both `index.html` (in the browser) and `seo.js` (in the Worker) |
 | `score.js` | Scoring engine. **The only source of truth for points, caps, grades and labels**, plus the plain-English text shown with them (`LEVELS` advice, `GROUPS` questions, `WHY` each check matters). Five areas, each with its own letter (`areaGrades`); the overall grade is at most one letter better than the weakest area. "Security habits" comes from OpenSSF Scorecard (api.scorecard.dev); with no data that area is left out, not counted as zero |
-| `worker.js` | Cloudflare Worker: link previews for shared results (`/?repo=owner/name`), `/api/subscribe` (Resend), `/mcp` (read-only connector Meta Muse uses to fetch Instagram posts), `/ig-media/` (today's Instagram pictures from HQ) and old-address redirects |
+| `worker.js` | Cloudflare Worker: link previews for shared results (`/?repo=owner/name`), `/api/subscribe` (Resend), `/mcp` (read-only connector: grades for AI agents, approved posts for Meta Muse to see), the Instagram robot (every 30 minutes, posts only what `batch.js` allows, emails `ALERT_EMAIL` or hello@ through Resend when it skips a post Emile should know about), `/ig-media/` (approved Instagram pictures from HQ), `/api/instagram/status`, `/api/instagram/results` (numbers for HQ's daily task, kept 30 minutes) and old-address redirects |
 | `seo.js` | Pages for Google, built by `worker.js` from `data/directory.json`: one page per graded repo (`/repo/owner/name`), the list `/repos`, and `/sitemap.xml` |
 | `share-card.js` | Draws the "Download image" PNG of a result in the visitor's browser |
 | `share/` | Link-preview pictures (one per grade and label, plus `default.png`). Made by `python3 scripts/make-share-images.py` |
-| `instagram.js` | Posts Instagram posts through Meta's official API. `worker.js` checks every 30 minutes (cron in `wrangler.jsonc`) and posts any post dated today whose `time` (Ottawa, default 10:00) has come. A day can have several posts. Token: `INSTAGRAM_TOKEN` Secret, renewed copy kept in the `INSTAGRAM` KV store. Check it at safetoclone.com/api/instagram/status |
-| `hq.js` | Reads the Instagram post queue and pictures from the private HQ repo (`instagram/posts.json` there) with the read-only `HQ_GITHUB_TOKEN` Secret. `worker.js` serves today's pictures at `/ig-media/...` because Instagram needs a public link. **Posts, captions and pictures live in HQ, not here** (see `instagram/README.md` in HQ) |
-| `stats.js` | Rough visitor counts per day (home, repo pages, checks, shares, signups) and where visitors came from (`?ref=reddit` tags or the linking site). No personal data. Stored in the `INSTAGRAM` KV store as `stats:YYYY-MM-DD`. Read at safetoclone.com/api/stats |
+| `batch.js` | **The Instagram approval lock.** A post goes out only from an approved week in HQ (`instagram/batches/<Monday>.json`) with Emile's recorded tap, whose fingerprint (SHA-256 of what people see) and picture fingerprints still match, not paused, held or dropped, while HQ's daily check (`ops/nightly/<date>.md`, `pass`) is under 36 hours old, from the post's time until 3 hours after. `fingerprint()` must stay identical to HQ's `instagram/_tools/common.py` |
+| `instagram.js` | Posts to Instagram through Meta's official API (single pictures and carousels) and reads results (`listing`, `metrics`; needs the `instagram_business_manage_insights` permission). Token: `INSTAGRAM_TOKEN` Secret, renewed weekly into the `INSTAGRAM` KV store; a newly pasted Secret replaces the renewed copy. Check it at safetoclone.com/api/instagram/status |
+| `hq.js` | Reads the weekly batches, the daily check and pictures from the private HQ repo with the read-only `HQ_GITHUB_TOKEN` Secret. If GitHub is down nothing posts; there is no fallback copy, on purpose. **Posts, captions and pictures live in HQ, not here** (see `instagram/README.md` in HQ) |
+| `stats.js` | Rough visitor counts per day (home, repo pages, checks, shares, signups, `agent_mcp` = AI agents asking `/mcp` for grades) and where visitors came from (`?ref=reddit`, `?ref=ig` tags or the linking site). No personal data. Stored in the `INSTAGRAM` KV store as `stats:YYYY-MM-DD`. Read at safetoclone.com/api/stats |
 | `wrangler.jsonc` | Cloudflare settings (what to publish, `previews` for PR test sites) |
 | `repos.txt` | List of repos in the directory, one per line |
 | `scripts/build-directory.mjs` | Scores every repo in `repos.txt` and writes `data/directory.json` |
 | `data/directory.json` | Generated every night. **Never edit by hand** |
 | `.github/workflows/nightly.yml` | Runs the build script at 07:00 UTC and commits the result |
 | `.github/workflows/test.yml` | Runs the tests on every push and PR |
-| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs && node test/share.test.mjs && node test/seo.test.mjs && node test/hq.test.mjs && node test/stats.test.mjs` |
+| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs && node test/share.test.mjs && node test/seo.test.mjs && node test/hq.test.mjs && node test/stats.test.mjs && node test/batch.test.mjs` |
 | `robots.txt` | For search engines. The sitemap is made by `seo.js` (no `sitemap.xml` file) |
 | `README.md` | For humans: what this is and how to deploy |
 
@@ -54,7 +55,9 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | Domain or address | `worker.js` redirects, `SITE` in `seo.js`, `index.html` canonical link and footer, `robots.txt`, `README.md` |
 | `repos.txt` | Nothing until the next nightly run (or run the workflow by hand). Then each new repo gets its own Google page and sitemap entry |
 | `/mcp` tool names in `worker.js` | Any agent connected to it (e.g. Meta Muse) calls them by name |
-| `instagram.js`, `hq.js` or the cron in `wrangler.jsonc` | Real posts on @safetoclone. Run `node test/instagram.test.mjs && node test/hq.test.mjs`. `/ig-media/` must only ever serve pictures of queued posts, never other HQ files. Don't also let Muse post from the queue, or posts double up |
+| `batch.js`, `instagram.js`, `hq.js` or the cron in `wrangler.jsonc` | Real posts on @safetoclone. Run `node test/batch.test.mjs && node test/instagram.test.mjs && node test/hq.test.mjs`. Never loosen the lock in `batch.js` without Emile's OK. `/ig-media/` must only ever serve pictures of approved posts, never other HQ files. Don't also let Muse post from the batches, or posts double up |
+| `fingerprint()` in `batch.js` | HQ's `instagram/_tools/common.py` must change the same way in the same week, or approved weeks stop posting. `test/batch.test.mjs` holds a fingerprint made by the Python code |
+| `/api/instagram/results` or the `/api/stats` event names | HQ's `instagram/_tools/pull_results.py` reads them every day |
 
 ## Ground rules
 

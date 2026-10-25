@@ -3,7 +3,10 @@
 // Kept in the INSTAGRAM KV store under keys "stats:YYYY-MM-DD". Read them at safetoclone.com/api/stats.
 // Counts are rough: two visits in the same instant can overwrite each other. Good enough to compare sources.
 
-export const EVENTS = ["home", "repo_page", "repos_page", "check", "copy_link", "image", "signup"];
+export const EVENTS = ["home", "repo_page", "repos_page", "check", "copy_link", "image", "signup", "agent_mcp", "agent_api"];
+// AI agents checking a repo: agent_mcp is a get_safety_scores call on /mcp. agent_api is kept for the
+// check API, which doesn't exist yet. Agents often look like bots, so these two skip the bot filter.
+const AGENT_EVENTS = ["agent_mcp", "agent_api"];
 const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|embedly|curl|wget|python|headless/i;
 const day = (d = new Date()) => d.toISOString().slice(0, 10);
 
@@ -21,7 +24,7 @@ export function sourceOf(request) {
 
 export async function count(env, request, event, source = "") {
   if (!env?.INSTAGRAM || !EVENTS.includes(event)) return;
-  if (BOT.test(request.headers.get("User-Agent") || "")) return;
+  if (!AGENT_EVENTS.includes(event) && BOT.test(request.headers.get("User-Agent") || "")) return;
   const key = `stats:${day()}`;
   const s = (await env.INSTAGRAM.get(key, "json")) || { events: {}, sources: {} };
   s.events[event] = (s.events[event] || 0) + 1;
@@ -49,6 +52,6 @@ export async function report(env) {
     days.push({ day: d, ...s });
     for (const part of ["events", "sources"]) for (const [k, v] of Object.entries(s[part])) total[part][k] = (total[part][k] || 0) + v;
   }
-  return new Response(JSON.stringify({ note: "Rough counts, no personal data. Bots are left out.", total, days }, null, 2),
+  return new Response(JSON.stringify({ note: "Rough counts, no personal data. Bots are left out, except agent_ counts (AI agents checking repos).", total, days }, null, 2),
     { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
 }

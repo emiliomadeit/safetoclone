@@ -1,13 +1,15 @@
 // Cloudflare Worker: serves the website files, fills in link previews for shared results (/?repo=owner/name),
 // handles the newsletter signup, counts visits (stats.js, read them at /api/stats),
-// posts to Instagram once a day (instagram.js, status at /api/instagram/status),
-// and runs /mcp, a read-only connector any AI agent (like Meta Muse) can use to read our posts and scores.
+// posts approved Instagram posts (batch.js decides, instagram.js posts; status at /api/instagram/status,
+// numbers at /api/instagram/results), and runs /mcp, a read-only connector any AI agent can use.
 // Needs one setting in Cloudflare > Workers & Pages > safetoclone > Settings > Variables and Secrets:
-//   RESEND_API_KEY     (Secret, from resend.com > API keys, "Full access")
+//   RESEND_API_KEY     (Secret, from resend.com > API keys, "Full access"). Also sends the robot's alert emails.
 // Optional:
 //   RESEND_SEGMENT_ID  (from resend.com > Audience > Segments) to also tag signups with a segment
-import { autopost, status as instagramStatus } from "./instagram.js";
-import { hqFile, hqQueue } from "./hq.js";
+//   ALERT_EMAIL        where the robot's alert emails go (default hello@safetoclone.com)
+import { autopost, status as instagramStatus, listing as igListing, metrics as igMetrics } from "./instagram.js";
+import { hqFile, hqText, batchPath, checkPath } from "./hq.js";
+import { checkBatch, postProblem, latestCheck, dueNow, dateIn, timeIn, addDays, mondayOf, sha256, DEFAULT_TIME, LATE_MINUTES } from "./batch.js";
 import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
 
@@ -33,18 +35,18 @@ async function subscribe(request, env) {
 }
 
 // ---- /mcp: a small read-only MCP server (https://modelcontextprotocol.io) ----
-// Meta Muse adds it as a custom connector, then calls get_next_post to find what to post on Instagram.
-// Everything it returns is already public on the site, so it needs no password.
+// Any AI agent can add it as a custom connector: to check grades before installing a repo, or (Meta Muse)
+// to see which approved posts are coming. It only returns approved posts and public grades, so it needs no password.
 const SITE = "https://safetoclone.com";
 const TOOLS = [
   {
     name: "get_next_post",
-    description: "Get the next SafeToClone Instagram post: the one dated today, or the next one coming up. Returns the date, the time (Ottawa) it goes out, the image URL (image_urls has every slide when the post is a carousel), the caption to use word for word, and the image alt text.",
+    description: "Get the next approved SafeToClone Instagram post: the one dated today, or the next one coming up. The website posts it by itself at its time, so don't publish it. Returns the date, the time (Ottawa) it goes out, the image URL (image_urls has every slide when the post is a carousel), the caption and the image alt text.",
     inputSchema: { type: "object", properties: {} },
   },
   {
     name: "list_upcoming_posts",
-    description: "List every SafeToClone Instagram post dated today or later, in order.",
+    description: "List every approved SafeToClone Instagram post dated today or later, in order. The website posts them by itself.",
     inputSchema: { type: "object", properties: {} },
   },
   {
@@ -54,89 +56,235 @@ const TOOLS = [
   },
 ];
 const MCP_INSTRUCTIONS =
-  "SafeToClone grades GitHub projects for safety. Posts for the @safetoclone Instagram account are written by the SafeToClone team. " +
-  "To post: call get_next_post, then publish its image_urls (one image, or a carousel in that order) with its caption exactly as given. Do not post anything dated in the future.";
-
-// Today's date where Emile lives (Ottawa), as YYYY-MM-DD.
-const today = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
-// The time now in Ottawa, as HH:MM (24-hour).
-const nowTime = () => new Date().toLocaleTimeString("en-GB", { timeZone: "America/Toronto", hour: "2-digit", minute: "2-digit", hour12: false });
-// A post goes out at its "time" (Ottawa, HH:MM), or 10:00 if it has none.
-const DEFAULT_TIME = "10:00";
+  "SafeToClone grades GitHub projects for safety. Before installing a GitHub repo, call get_safety_scores to see its grade. " +
+  "The website posts to the @safetoclone Instagram account by itself, only from weeks the owner approved. " +
+  "get_next_post and list_upcoming_posts show what is coming. Never publish those posts yourself, or they would go out twice.";
 
 async function readJson(env, path) {
   const r = await env.ASSETS.fetch(new Request(SITE + path));
   return r.ok ? r.json() : null;
 }
 
-// The post queue lives in the private HQ repo (instagram/posts.json there). Pictures are served
-// through /ig-media/..., because Instagram needs a public link. If GitHub is down, nothing posts
-// and the 14:30 run tries again. The local fallback only matters for tests and PR previews.
-async function loadQueue(env) {
-  if (env.HQ_GITHUB_TOKEN) {
-    try {
-      return { source: "HQ", posts: (await hqQueue(env)).posts || [], media: `${SITE}/ig-media/` };
-    } catch (e) {
-      console.log("HQ queue unreachable, using the website copy:", e.message);
+// ---- Instagram: what may post (the rules are in batch.js) ----
+// Posts live in the private HQ repo, one file per week (instagram/batches/<Monday>.json). Pictures are
+// served through /ig-media/..., because Instagram needs a public link. If GitHub can't be reached, nothing
+// posts and the next run (30 minutes later) tries again. There is no other copy to fall back on, on purpose.
+const MEDIA = `${SITE}/ig-media/`;
+
+// The weeks that matter now: last week (for yesterday's pictures), this week and next week.
+async function loadWeeks(env) {
+  if (!env.HQ_GITHUB_TOKEN) return [];
+  const now = dateIn();
+  const mondays = [...new Set([mondayOf(addDays(now, -1)), mondayOf(now), addDays(mondayOf(now), 7)])];
+  return Promise.all(mondays.map(async (week) => {
+    const text = await hqText(env, batchPath(week)); // throws if GitHub is down
+    if (text === null) return { week, batch: null, check: { ok: false, reason: "no batch file" } };
+    let batch;
+    try { batch = JSON.parse(text); } catch { return { week, batch: null, check: { ok: false, changed: true, reason: "the batch file isn't valid JSON" } }; }
+    return { week, batch, check: await checkBatch(batch) };
+  }));
+}
+
+// Every post in those weeks, in time order, with the reason it can't go out ("" means it can).
+function slots(weeks) {
+  const out = [];
+  for (const { batch, check } of weeks) {
+    for (const p of batch?.posts || []) {
+      out.push({ p, problem: check.ok ? postProblem(batch, p) : check.reason, changed: Boolean(check.changed) });
     }
   }
-  const data = await readJson(env, "/data/instagram-posts.json");
-  return { source: "website copy", posts: data?.posts || [], media: `${SITE}/` };
+  const key = (s) => `${s.p.date || ""} ${s.p.time || DEFAULT_TIME}`;
+  return out.sort((a, b) => key(a).localeCompare(key(b)));
+}
+
+// A post the way the robot (and /mcp) hands it out.
+function forRobot(p, now = new Date()) {
+  return {
+    id: p.id,
+    date: p.date,
+    time: p.time || DEFAULT_TIME,
+    due_today: p.date === dateIn(now),
+    // due_now: its time has come, less than 3 hours ago. The robot only posts these.
+    due_now: dueNow(p, now),
+    image_url: MEDIA + p.images[0],
+    image_urls: p.images.map((i) => MEDIA + i),
+    caption: p.caption,
+    alt_text: p.alts?.[0] || "",
+    alt_texts: p.images.map((_, i) => p.alts?.[i] || ""),
+  };
 }
 
 async function upcomingPosts(env) {
-  const { posts, media } = await loadQueue(env);
-  const now = today();
-  const time = nowTime();
-  return posts
-    .filter((p) => p.date >= now)
-    .map((p) => ({ ...p, time: p.time || DEFAULT_TIME }))
-    .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time))
-    .map((p) => ({
-      id: p.id,
-      date: p.date,
-      time: p.time,
-      due_today: p.date === now,
-      // due_now: dated today and its time has come. The robot only posts these.
-      due_now: p.date === now && p.time <= time,
-      // A post has one "image", or several "images" for a carousel. image_url is always the first one.
-      image_url: media + (p.images?.[0] || p.image),
-      image_urls: (p.images || [p.image]).map((i) => media + i),
-      caption: p.caption,
-      alt_text: p.alts?.[0] || p.alt,
-      alt_texts: p.alts || [p.alt],
-    }));
+  const now = new Date();
+  const today = dateIn(now);
+  return slots(await loadWeeks(env))
+    .filter((s) => !s.problem && s.p.date >= today)
+    .map((s) => forRobot(s.p, now));
 }
 
-// safetoclone.com/ig-media/<path>: hands Instagram a picture from HQ. Only pictures of posts dated
-// yesterday or later are served, so this can never be used to read anything else in the private repo.
-async function igMedia(env, pathname) {
-  if (!env.HQ_GITHUB_TOKEN) return new Response("Not found", { status: 404 });
-  let path = pathname.slice("/ig-media/".length);
-  try { path = decodeURIComponent(path); } catch { return new Response("Not found", { status: 404 }); }
-  const yesterday = new Date(Date.now() - 864e5).toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
-  let allowed = false;
-  try {
-    const { posts = [] } = await hqQueue(env);
-    allowed = posts.some((p) => p.date >= yesterday && (p.images || [p.image]).includes(path));
-  } catch (e) {
-    return new Response("HQ unreachable", { status: 502 });
+// The newest passing daily check (ops/nightly/<date>.md in HQ), from the last 3 days.
+async function dailyCheck(env, now = new Date()) {
+  const today = dateIn(now);
+  const texts = await Promise.all([0, 1, 2].map((d) => hqText(env, checkPath(addDays(today, -d)))));
+  return latestCheck(texts.filter(Boolean), now.getTime());
+}
+
+// Do the pictures in HQ still match the ones Emile approved?
+async function picturesProblem(env, p) {
+  for (let i = 0; i < p.images.length; i++) {
+    const r = await hqFile(env, p.images[i]).catch(() => null);
+    if (!r) return { problem: `couldn't read picture ${i + 1} from HQ` };
+    if ((await sha256(await r.arrayBuffer())) !== p.image_hashes[i]) return { problem: `picture ${i + 1} changed after approval`, changed: true };
   }
-  if (!allowed || !/\.(jpe?g|png)$/i.test(path)) return new Response("Not found", { status: 404 });
+  return { problem: "" };
+}
+
+// Emails Emile (through Resend, which the newsletter already uses) when the robot skips a post for a reason
+// he should know about. At most once per post per day, so a problem doesn't send an email every 30 minutes.
+async function alert(env, key, subject, text) {
+  if (!env.RESEND_API_KEY || !env.INSTAGRAM) return false;
+  if (await env.INSTAGRAM.get(key)) return false;
+  const r = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ from: "SafeToClone robot <robot@safetoclone.com>", to: [env.ALERT_EMAIL || "hello@safetoclone.com"], subject, text }),
+  }).catch(() => null);
+  if (!r?.ok) return false;
+  await env.INSTAGRAM.put(key, "1", { expirationTtl: 3 * 86400 });
+  return true;
+}
+
+// The last 20 posting errors, shown on the status page so the daily check can see them.
+async function recordError(env, entry) {
+  if (!env.INSTAGRAM) return;
+  const list = (await env.INSTAGRAM.get("errors", "json")) || [];
+  await env.INSTAGRAM.put("errors", JSON.stringify([entry, ...list].slice(0, 20)));
+}
+
+// One run of the robot (every 30 minutes, see wrangler.jsonc).
+async function postDue(env, now = new Date()) {
+  let weeks;
+  try { weeks = await loadWeeks(env); } catch (e) { return console.log("Instagram: couldn't read HQ, nothing posts this run:", e.message); }
+  const open = slots(weeks).filter((s) => dueNow(s.p, now));
+  if (!open.length) return console.log("Instagram: nothing due now.");
+  const today = dateIn(now);
+  const tell = (p, why) => alert(env, `alert:${today}:${p.id}`, `Instagram: ${p.id} did not post`,
+    `The robot skipped the post ${p.id} (${p.date} at ${p.time || DEFAULT_TIME}, Ottawa) because ${why}.\n\n` +
+    `It tries again every 30 minutes until 3 hours after the post's time. Status: ${SITE}/api/instagram/status`);
+  for (const s of open) {
+    if (s.changed) await tell(s.p, s.problem); // approved, then edited: it never posts until approved again
+    if (s.problem) console.log(`Instagram: ${s.p.id} skipped (${s.problem})`);
+  }
+  const due = open.filter((s) => !s.problem);
+  if (!due.length) return;
+  let check;
+  try { check = await dailyCheck(env, now); } catch (e) { return console.log("Instagram: couldn't read the daily check, nothing posts:", e.message); }
+  if (!check.ok) {
+    for (const s of due) await tell(s.p, `${check.reason}. Posts only go out while the daily check in HQ (ops/nightly) has passed in the last 36 hours`);
+    return console.log("Instagram: skipped, daily check:", check.reason);
+  }
+  for (const s of due) {
+    const pictures = await picturesProblem(env, s.p);
+    if (pictures.problem) {
+      if (pictures.changed) await tell(s.p, pictures.problem);
+      console.log(`Instagram: ${s.p.id} skipped (${pictures.problem})`);
+      continue;
+    }
+    const result = await autopost(env, forRobot(s.p, now)).catch((e) => ({ ok: false, post: s.p.id, error: e.message }));
+    console.log("Instagram:", JSON.stringify(result));
+    if (!result.ok) await recordError(env, { post: s.p.id, at: now.toISOString(), error: result.error || result.reason });
+  }
+}
+
+// What the robot sees, for /api/instagram/status. Weeks that aren't approved only show their status.
+async function postingStatus(env) {
+  if (!env.HQ_GITHUB_TOKEN) return { error: "HQ_GITHUB_TOKEN isn't set, so nothing can post." };
+  try {
+    const now = new Date();
+    const today = dateIn(now);
+    const weeks = await loadWeeks(env);
+    const daily = await dailyCheck(env, now);
+    const ok = slots(weeks).filter((s) => !s.problem);
+    const next = ok.find((s) => s.p.date > today || (s.p.date === today && (s.p.time || DEFAULT_TIME) > timeIn(now)));
+    return {
+      rule: `Posts only from approved weeks whose fingerprint still matches, while the daily check is under 36 hours old, from each post's time until ${LATE_MINUTES / 60} hours after.`,
+      dailyCheck: daily,
+      weeks: weeks.filter((w) => w.batch || w.check.changed).map(({ week, batch, check }) => (!batch ? { week, status: "unreadable", canPost: false, problem: check.reason } : batch.status === "approved" ? {
+        week, status: batch.status, canPost: check.ok, problem: check.ok ? null : check.reason,
+        paused: Boolean(batch.pause?.paused), pauseReason: batch.pause?.reason || null, posts: batch.posts.length,
+        onHold: batch.posts.filter((p) => p.hold).map((p) => ({ id: p.id, reason: p.hold_reason || "" })),
+        dropped: batch.approval?.dropped || [],
+      } : { week, status: batch.status, canPost: false, problem: check.reason, posts: batch.posts?.length || 0 })),
+      // Slots open right now (posted already, or about to be), then the next one coming up.
+      openNow: ok.filter((s) => dueNow(s.p, now)).map((s) => s.p.id),
+      next: next ? { id: next.p.id, date: next.p.date, time: next.p.time || DEFAULT_TIME } : null,
+      recentErrors: env.INSTAGRAM ? (await env.INSTAGRAM.get("errors", "json")) || [] : [],
+    };
+  } catch (e) {
+    return { error: `Couldn't read HQ: ${e.message}` };
+  }
+}
+
+// safetoclone.com/ig-media/<path>: hands Instagram a picture from HQ. Only pictures of approved posts dated
+// yesterday or later, and only if the picture is still the one Emile approved. So this can never be used
+// to read anything else in the private repo.
+async function igMedia(env, pathname) {
+  const notFound = () => new Response("Not found", { status: 404 });
+  if (!env.HQ_GITHUB_TOKEN) return notFound();
+  let path = pathname.slice("/ig-media/".length);
+  try { path = decodeURIComponent(path); } catch { return notFound(); }
+  if (!/\.(jpe?g|png)$/i.test(path)) return notFound();
+  let weeks;
+  try { weeks = await loadWeeks(env); } catch { return new Response("HQ unreachable", { status: 502 }); }
+  const yesterday = addDays(dateIn(), -1);
+  let want = null;
+  for (const { p, problem } of slots(weeks)) {
+    if (problem || p.date < yesterday) continue;
+    const i = p.images.indexOf(path);
+    if (i >= 0) want = p.image_hashes[i];
+  }
+  if (!want) return notFound();
   const r = await hqFile(env, path).catch(() => null);
   if (!r) return new Response("HQ unreachable", { status: 502 });
-  return new Response(r.body, {
+  const bytes = await r.arrayBuffer();
+  if ((await sha256(bytes)) !== want) return new Response("This picture changed after it was approved", { status: 409 });
+  return new Response(bytes, {
     headers: { "Content-Type": /\.png$/i.test(path) ? "image/png" : "image/jpeg", "Cache-Control": "public, max-age=3600" },
   });
 }
 
-async function callTool(name, env) {
-  if (name === "get_next_post") {
-    const [next] = await upcomingPosts(env);
-    return next || { message: "No posts are queued. Nothing to post." };
+// safetoclone.com/api/instagram/results: numbers for the daily task in HQ (pull_results.py).
+//   no ?ids   follower count and our latest 50 posts (id, time, start of caption)
+//   ?ids=1,2  reach, saves, shares and so on for up to 20 of those posts
+// Only numbers, never the key. Answers are kept for 30 minutes so nobody can make us call Instagram over and over.
+async function igResults(env, url, ctx) {
+  const ids = (url.searchParams.get("ids") || "").split(",").filter((x) => /^\d{1,30}$/.test(x)).slice(0, 20);
+  const key = new Request(`${SITE}/api/instagram/results${ids.length ? "?ids=" + ids.join(",") : ""}`);
+  const cache = globalThis.caches?.default;
+  const kept = cache ? await cache.match(key) : null;
+  if (kept) return kept;
+  let body;
+  try { body = ids.length ? await igMetrics(env, ids) : await igListing(env); } catch (e) { body = { error: e.message }; }
+  const res = new Response(JSON.stringify(body, null, 2), {
+    status: body.error ? 502 : 200,
+    headers: { "Content-Type": "application/json", "Cache-Control": body.error ? "no-store" : "public, max-age=1800" },
+  });
+  if (cache && !body.error) {
+    const job = cache.put(key, res.clone());
+    if (ctx?.waitUntil) ctx.waitUntil(job); else await job;
   }
-  if (name === "list_upcoming_posts") return { today: today(), posts: await upcomingPosts(env) };
+  return res;
+}
+
+async function callTool(name, env, track) {
+  if (name === "get_next_post" || name === "list_upcoming_posts") {
+    let posts;
+    try { posts = await upcomingPosts(env); } catch { return { error: "Couldn't read the posts right now. Try again later." }; }
+    if (name === "list_upcoming_posts") return { today: dateIn(), posts };
+    return posts[0] || { message: "No approved posts are coming up." };
+  }
   if (name === "get_safety_scores") {
+    track?.("agent_mcp");
     const d = await readJson(env, "/data/directory.json");
     return {
       updated: d?.updatedAt,
@@ -146,7 +294,7 @@ async function callTool(name, env) {
   return null;
 }
 
-async function rpc(msg, env) {
+async function rpc(msg, env, track) {
   const { id, method, params } = msg || {};
   if (id === undefined || id === null) return null; // a notification: no reply needed
   const ok = (result) => ({ jsonrpc: "2.0", id, result });
@@ -162,7 +310,7 @@ async function rpc(msg, env) {
   if (method === "ping") return ok({});
   if (method === "tools/list") return ok({ tools: TOOLS });
   if (method === "tools/call") {
-    const out = await callTool(params?.name, env);
+    const out = await callTool(params?.name, env, track);
     if (!out) return fail(-32602, `Unknown tool: ${params?.name}`);
     return ok({ content: [{ type: "text", text: JSON.stringify(out, null, 2) }] });
   }
@@ -175,7 +323,7 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type, Accept, Authorization, Mcp-Session-Id, Mcp-Protocol-Version",
 };
 
-async function mcp(request, env) {
+async function mcp(request, env, track) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
   // We never push messages to the client, so there is no event stream to open.
   if (request.method !== "POST") return new Response("Use POST", { status: 405, headers: { ...CORS, Allow: "POST" } });
@@ -186,8 +334,8 @@ async function mcp(request, env) {
     });
   }
   const replies = Array.isArray(body)
-    ? (await Promise.all(body.map((m) => rpc(m, env)))).filter(Boolean)
-    : [await rpc(body, env)].filter(Boolean);
+    ? (await Promise.all(body.map((m) => rpc(m, env, track)))).filter(Boolean)
+    : [await rpc(body, env, track)].filter(Boolean);
   if (!replies.length) return new Response(null, { status: 202, headers: CORS });
   return new Response(JSON.stringify(Array.isArray(body) ? replies : replies[0]), {
     headers: { ...CORS, "Content-Type": "application/json" },
@@ -288,11 +436,12 @@ export default {
     }
     if (pathname === "/api/hit") return hit(request, env);
     if (pathname === "/api/stats") return statsReport(env);
-    if (pathname === "/mcp") return mcp(request, env);
+    if (pathname === "/mcp") return mcp(request, env, (event) => track(event));
     if (pathname === "/api/instagram/status") {
-      const { source } = await loadQueue(env);
-      return json({ ...(await instagramStatus(env)), postQueue: source });
+      const [account, posting] = await Promise.all([instagramStatus(env), postingStatus(env)]);
+      return new Response(JSON.stringify({ ...account, posting }, null, 2), { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
     }
+    if (pathname === "/api/instagram/results" && request.method === "GET") return igResults(env, url, ctx);
     if (pathname.startsWith("/ig-media/") && (request.method === "GET" || request.method === "HEAD")) return igMedia(env, pathname);
     const read = request.method === "GET" || request.method === "HEAD";
     if (pathname === "/" && request.method === "GET") track("home", sourceOf(request));
@@ -302,16 +451,9 @@ export default {
     if (read && (pathname === "/sitemap.xml" || pathname === "/repos" || pathname === "/repos/" || pathname.startsWith("/repo/"))) return seoPage(env, url);
     return env.ASSETS.fetch(request);
   },
-  // Runs on the schedule in wrangler.jsonc: posts today's Instagram post, if there is one.
-  // It runs every 30 minutes. Each post goes out at the first run after its time, and the
-  // next run is a second try if something hiccuped. Runs after that see the post is up and skip it.
+  // Runs on the schedule in wrangler.jsonc, every 30 minutes. Each approved post goes out at the first run
+  // after its time; the next runs (up to 3 hours later) are second tries, and see the post is up and skip it.
   async scheduled(event, env, ctx) {
-    const due = (await upcomingPosts(env)).filter((p) => p.due_now);
-    if (!due.length) return console.log("Instagram: nothing due now.");
-    // A day can have more than one post (each at its own time). Posts already up are skipped.
-    for (const post of due) {
-      const result = await autopost(env, post).catch((e) => ({ ok: false, post: post.id, error: e.message }));
-      console.log("Instagram:", JSON.stringify(result));
-    }
+    await postDue(env);
   },
 };

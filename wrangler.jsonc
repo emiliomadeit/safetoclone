@@ -1,4 +1,4 @@
-// Tells Cloudflare how to run the site. The pages are plain files; worker.js handles /api/*, /mcp and the daily Instagram post.
+// Tells Cloudflare how to run the site. The pages are plain files; worker.js handles /api/*, /mcp and the Instagram robot.
 {
   "name": "safetoclone",
   "main": "worker.js",

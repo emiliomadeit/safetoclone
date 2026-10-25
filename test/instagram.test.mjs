@@ -1,5 +1,5 @@
 // Checks the daily Instagram poster without touching the real Instagram. Run with: node test/instagram.test.mjs
-import { autopost, status } from "../instagram.js";
+import { autopost, status, listing, metrics } from "../instagram.js";
 import assert from "node:assert";
 
 // A fake Instagram API that remembers what it was asked.
@@ -77,5 +77,70 @@ fakeInstagram();
 const s = await status({ INSTAGRAM_TOKEN: "secret-token" });
 assert.equal(s.connectedAs, "@safetoclone");
 assert.ok(!JSON.stringify(s).includes("secret-token"));
+
+// Renewal remembers when the key runs out, so the daily check can warn a week before.
+fakeInstagram();
+kv = fakeKV();
+await autopost({ INSTAGRAM_TOKEN: "old-token", INSTAGRAM: kv }, post);
+const saved = JSON.parse(kv.store.token);
+assert.ok(Date.parse(saved.expiresAt) > Date.now() + 59 * 864e5);
+assert.ok(saved.from && !saved.from.includes("old-token"));
+
+// A new Secret pasted in Cloudflare (for example a key with more permissions) replaces the renewed copy.
+calls = fakeInstagram();
+kv = fakeKV({ token: JSON.stringify({ ...saved, token: "kv-copy", savedAt: new Date().toISOString() }) });
+await autopost({ INSTAGRAM_TOKEN: "brand-new-secret", INSTAGRAM: kv }, post);
+assert.ok(calls.some((c) => c.path.endsWith("/refresh_access_token") && c.params.access_token === "brand-new-secret"));
+assert.ok(!calls.some((c) => c.params.access_token === "kv-copy"));
+assert.notEqual(JSON.parse(kv.store.token).from, saved.from); // the renewed copy now comes from the new Secret
+// The same Secret as before keeps using the renewed copy.
+calls = fakeInstagram();
+kv = fakeKV({ token: JSON.stringify({ ...saved, token: "renewed", savedAt: new Date().toISOString() }) });
+await autopost({ INSTAGRAM_TOKEN: "old-token", INSTAGRAM: kv }, post);
+assert.ok(calls.filter((c) => c.path.endsWith("/media")).every((c) => c.params.access_token === "renewed"));
+// Copies saved before this check existed are kept, and stamped once.
+fakeInstagram();
+kv = fakeKV({ token: JSON.stringify({ token: "older-copy", savedAt: new Date().toISOString() }) });
+assert.equal((await status({ INSTAGRAM_TOKEN: "old-token", INSTAGRAM: kv })).tokenSource, "renewed copy");
+assert.equal(JSON.parse(kv.store.token).from, saved.from);
+
+// Results: the post list and the numbers. A number Instagram refuses is left out with the reason, never 0.
+globalThis.fetch = async (url) => {
+  const u = new URL(url);
+  const reply = (x, status = 200) => new Response(JSON.stringify(x), { status });
+  if (u.pathname.endsWith("/me")) return reply({ user_id: "123", username: "safetoclone", followers_count: 42, media_count: 3 });
+  if (u.pathname.endsWith("/123/media")) return reply({ data: [
+    { id: "111", caption: "x".repeat(200), timestamp: "2026-11-10T15:00:05+0000", media_type: "CAROUSEL_ALBUM", media_product_type: "FEED" },
+    { id: "222", caption: "Reel", timestamp: "2026-11-10T20:00:05+0000", media_type: "VIDEO", media_product_type: "REELS" },
+  ] });
+  if (u.pathname.endsWith("/insights")) {
+    const asked = u.searchParams.get("metric").split(",");
+    if (asked.includes("follows")) return reply({ error: { message: "(#100) follows is not supported" } }, 400);
+    return reply({ data: asked.map((name, i) => ({ name, values: [{ value: 10 + i }] })) });
+  }
+  return reply({ error: { message: "unexpected" } }, 400);
+};
+const env = { INSTAGRAM_TOKEN: "t" };
+const l = await listing(env);
+assert.deepEqual(l.account, { username: "@safetoclone", followers: 42, posts: 3 });
+assert.equal(l.media[0].caption_start.length, 120);
+assert.equal(l.media[1].product, "REELS");
+const m = (await metrics(env, ["111", "222", "999"])).metrics;
+assert.equal(m["111"].reach, 10);
+assert.equal(m["111"].follows, undefined);
+assert.match(m["111"].errors.follows, /not supported/);
+assert.ok("views" in m["111"] && "profile_visits" in m["111"]);
+assert.ok("ig_reels_avg_watch_time" in m["222"] && !("ig_reels_avg_watch_time" in m["111"]));
+assert.ok(m["999"].errors.all, "only our own posts");
+// No permission for results: one clear reason, no retries.
+let insightCalls = 0;
+const before = globalThis.fetch;
+globalThis.fetch = async (url, o) => {
+  if (new URL(url).pathname.endsWith("/insights")) { insightCalls++; return new Response(JSON.stringify({ error: { message: "(#10) Application does not have permission for this action" } }), { status: 400 }); }
+  return before(url, o);
+};
+const denied = (await metrics(env, ["111"])).metrics["111"];
+assert.match(denied.errors.all, /permission/);
+assert.equal(insightCalls, 1);
 
 console.log("Instagram tests passed");

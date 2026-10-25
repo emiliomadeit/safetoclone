@@ -1,11 +1,16 @@
-// Posts to the @safetoclone Instagram account through Meta's official API ("Instagram API with Instagram Login").
-// worker.js runs autopost() once a day (see "triggers" in wrangler.jsonc).
+// Posts to the @safetoclone Instagram account through Meta's official API ("Instagram API with Instagram Login"),
+// and reads back each post's results. worker.js decides what may post (batch.js) and calls autopost().
 //
 // Settings in Cloudflare > Workers & Pages > safetoclone:
 //   INSTAGRAM_TOKEN  (Secret) the 60-day access token from the Meta app dashboard. Only needed once:
 //                    after the first run the worker keeps its own renewed copy in the INSTAGRAM KV store.
+//                    If you paste a new one here (for example a key with more permissions), the worker
+//                    notices it changed and switches to it.
 //   INSTAGRAM        (KV namespace binding, set in wrangler.jsonc) where the renewed token is kept.
 //                    Without it posting still works, but the token dies after 60 days.
+// Reading results needs the instagram_business_manage_insights permission on the key.
+import { sha256 } from "./batch.js";
+
 const API = "https://graph.instagram.com/v23.0";
 const RENEW_AFTER_DAYS = 7; // renew the token once a week, long before its 60 days run out
 
@@ -20,11 +25,24 @@ async function ig(path, { method = "GET", token, params = {} } = {}) {
   return data;
 }
 
-// The token to use: the renewed one in KV if there is one, otherwise the Secret.
+// A short fingerprint of the Secret, so we can tell when it was replaced without storing it twice.
+const secretTag = async (secret) => (await sha256("instagram-secret:" + secret)).slice(0, 16);
+
+// The token to use: the renewed one in KV, unless the Secret was replaced since that copy was made.
 async function getToken(env) {
   const saved = env.INSTAGRAM ? await env.INSTAGRAM.get("token", "json") : null;
-  if (saved?.token) return saved;
-  return env.INSTAGRAM_TOKEN ? { token: env.INSTAGRAM_TOKEN, savedAt: null } : null;
+  const tag = env.INSTAGRAM_TOKEN ? await secretTag(env.INSTAGRAM_TOKEN) : null;
+  if (saved?.token) {
+    if (!tag || saved.from === tag) return { ...saved, source: "renewed copy" };
+    if (!saved.from) {
+      // Copies made before this check existed: remember which Secret they came from, once.
+      const stamped = { ...saved, from: tag };
+      await env.INSTAGRAM.put("token", JSON.stringify(stamped));
+      return { ...stamped, source: "renewed copy" };
+    }
+    return { token: env.INSTAGRAM_TOKEN, savedAt: null, from: tag, source: "new Secret" };
+  }
+  return env.INSTAGRAM_TOKEN ? { token: env.INSTAGRAM_TOKEN, savedAt: null, from: tag, source: "Secret" } : null;
 }
 
 async function renewIfOld(env, current) {
@@ -42,7 +60,12 @@ async function renewIfOld(env, current) {
     console.log("Token not renewed:", e.message);
     return current;
   }
-  const fresh = { token: r.access_token, savedAt: new Date().toISOString() };
+  const fresh = {
+    token: r.access_token,
+    savedAt: new Date().toISOString(),
+    expiresAt: r.expires_in ? new Date(Date.now() + r.expires_in * 1000).toISOString() : null,
+    from: current.from || null,
+  };
   await env.INSTAGRAM.put("token", JSON.stringify(fresh));
   return fresh;
 }
@@ -116,7 +139,9 @@ export async function status(env) {
   const out = {
     tokenSet: Boolean(current),
     tokenStore: env.INSTAGRAM ? "KV (renews itself)" : "Secret only (will expire after 60 days)",
+    tokenSource: current?.source || null,
     tokenSavedAt: current?.savedAt || null,
+    tokenExpiresAt: current?.expiresAt || null,
   };
   if (!current) return out;
   try {
@@ -127,4 +152,67 @@ export async function status(env) {
   }
   if (env.INSTAGRAM) out.lastPost = await env.INSTAGRAM.get("last", "json");
   return out;
+}
+
+// ---- Results, for /api/instagram/results (the daily task in HQ copies them into results/posts.csv) ----
+// Only numbers come out of here, never the token.
+const METRICS = ["reach", "views", "likes", "comments", "saved", "shares", "follows", "profile_visits"];
+const CORE = ["reach", "likes", "comments", "saved", "shares"];
+const NO_RETRY = /permission|access token|OAuth|session|#10\b|#190\b/i;
+
+// The account's follower count and its latest posts (id, time, start of caption).
+export async function listing(env, limit = 50) {
+  const current = await getToken(env);
+  if (!current) return { error: "INSTAGRAM_TOKEN isn't set in Cloudflare yet." };
+  const me = await ig("/me", { token: current.token, params: { fields: "user_id,username,followers_count,media_count" } });
+  const { data = [] } = await ig(`/${me.user_id}/media`, {
+    token: current.token,
+    params: { fields: "id,caption,timestamp,media_type,media_product_type,permalink", limit: String(limit) },
+  });
+  return {
+    account: { username: "@" + me.username, followers: me.followers_count ?? null, posts: me.media_count ?? null },
+    media: data.map((m) => ({
+      ig_id: m.id, posted_at: m.timestamp, caption_start: (m.caption || "").slice(0, 120),
+      media_type: m.media_type, product: m.media_product_type || null, permalink: m.permalink || null,
+    })),
+  };
+}
+
+async function insights(token, id, names) {
+  const { data = [] } = await ig(`/${id}/insights`, { token, params: { metric: names.join(",") } });
+  const out = {};
+  for (const m of data) out[m.name] = m.values?.[0]?.value ?? m.total_value?.value ?? null;
+  return out;
+}
+
+// Numbers for up to 20 of our own posts. A number Instagram won't give is left out (with the reason in
+// `errors`), never set to 0. Asks for everything at once; if Instagram refuses, asks again in smaller parts.
+export async function metrics(env, ids) {
+  const current = await getToken(env);
+  if (!current) return { error: "INSTAGRAM_TOKEN isn't set in Cloudflare yet." };
+  const { media = [] } = await listing(env);
+  const ours = new Map(media.map((m) => [m.ig_id, m]));
+  const out = {};
+  for (const id of ids.slice(0, 20)) {
+    const m = ours.get(id);
+    if (!m) { out[id] = { errors: { all: "not one of our latest 50 posts" } }; continue; }
+    const wanted = m.product === "REELS" ? [...METRICS, "ig_reels_avg_watch_time"] : METRICS;
+    const values = {};
+    const errors = {};
+    try {
+      Object.assign(values, await insights(current.token, id, wanted));
+    } catch (e) {
+      if (NO_RETRY.test(e.message)) {
+        errors.all = e.message;
+      } else {
+        const parts = [CORE, ...wanted.filter((n) => !CORE.includes(n)).map((n) => [n])];
+        for (const part of parts) {
+          try { Object.assign(values, await insights(current.token, id, part)); }
+          catch (err) { for (const n of part) errors[n] = err.message; }
+        }
+      }
+    }
+    out[id] = Object.keys(errors).length ? { ...values, errors } : values;
+  }
+  return { metrics: out };
 }
