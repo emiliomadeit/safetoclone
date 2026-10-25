@@ -16,3 +16,4 @@ jobs:
       - run: node test/hq.test.mjs
       - run: node test/stats.test.mjs
       - run: node test/batch.test.mjs
+      - run: node test/newsletter.test.mjs
