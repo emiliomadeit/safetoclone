@@ -28,7 +28,8 @@ async function approve(batch) {
   return batch;
 }
 // This week: a (10:00, due now), b (10:00, on hold), c (18:00, later today).
-const week = await approve({ week: "2026-11-09", status: "approved", pause: { paused: false }, posts: [await post(1, "a", "10:00"), await post(2, "b", "10:00", { hold: true, hold_reason: "grade changed" }), await post(3, "c", "18:00")] });
+const claimA = { kind: "grade", repo: "ollama/ollama", expect: "A", text: "Ollama gets an A" };
+const week = await approve({ week: "2026-11-09", status: "approved", pause: { paused: false }, posts: [await post(1, "a", "10:00", { repo: "ollama/ollama", claims: [claimA] }), await post(2, "b", "10:00", { hold: true, hold_reason: "grade changed" }), await post(3, "c", "18:00")] });
 // Next week: made but not approved yet.
 const nextWeek = { week: "2026-11-16", status: "ready", posts: [{ n: 1, id: "draft", date: "2026-11-16", time: "10:00", images: ["instagram/images/2026-11-16/draft/1.jpg"], image_hashes: ["x"], alts: ["x"], caption: "Draft" }] };
 const freshCheck = "pass\nchecked_at: 2026-11-10T13:31:00Z\nAll fine.";
@@ -69,7 +70,11 @@ globalThis.fetch = async (url, opts = {}) => {
   return reply({ error: { message: "unexpected " + u.pathname } }, 400);
 };
 const kv = () => { const store = {}; return { store, async get(k, t) { const v = store[k]; return v === undefined ? null : t === "json" ? JSON.parse(v) : v; }, async put(k, v) { store[k] = v; } }; };
-const makeEnv = () => ({ HQ_GITHUB_TOKEN: "hq-key", INSTAGRAM_TOKEN: "ig", RESEND_API_KEY: "re", INSTAGRAM: kv(), ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } });
+// The site's own copy of today's grades (data/directory.json), which the robot rechecks right before posting.
+let directory;
+const gradeA = () => { directory = { repos: [{ name: "ollama/ollama", grade: "A", label: "Strong", flags: [] }] }; };
+gradeA();
+const makeEnv = () => ({ HQ_GITHUB_TOKEN: "hq-key", INSTAGRAM_TOKEN: "ig", RESEND_API_KEY: "re", INSTAGRAM: kv(), ASSETS: { fetch: async (req) => new URL(req.url).pathname === "/data/directory.json" ? new Response(JSON.stringify(directory)) : new Response("Not found", { status: 404 }) } });
 const get = (path, env) => worker.fetch(new Request("https://safetoclone.com" + path), env);
 const tool = async (name, env) => {
   const r = await worker.fetch(new Request("https://safetoclone.com/mcp", { method: "POST", body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name } }) }), env);
@@ -195,6 +200,26 @@ for (const change of [(b) => { b.pause = { paused: true, reason: "Emile said sto
   await run(makeEnv());
   assert.deepEqual([published, emails], [[], []]);
 }
+
+// The grade changed after the morning check: a doesn't post, and Emile gets an email saying why.
+reset();
+env = makeEnv();
+directory = { repos: [{ name: "ollama/ollama", grade: "C", label: "Be careful", flags: [] }] };
+await run(env);
+assert.deepEqual(published, []);
+assert.match(emails[0].text, /"Ollama gets an A" is no longer true \(expected A, now C\)/);
+// Or the repo it names turned Dangerous.
+reset();
+directory = { repos: [{ name: "ollama/ollama", grade: "A", label: "Strong", flags: [] }] };
+const badRepo = structuredClone(week);
+badRepo.posts[0].claims = [];
+hq["instagram/batches/2026-11-09.json"] = JSON.stringify(badRepo);
+directory.repos[0] = { ...directory.repos[0], grade: "F", label: "Dangerous" };
+forgetHq();
+await run(makeEnv());
+assert.deepEqual(published, []);
+assert.match(emails[0].text, /now graded F \(Dangerous\)/);
+gradeA();
 
 // Missed slots never post late: at 13:30, a (10:00) is more than 3 hours old.
 reset();

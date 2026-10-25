@@ -10,6 +10,8 @@
 // 4. Every picture's own fingerprint still matches (checked again when Instagram downloads it).
 // 5. The daily check in HQ (ops/nightly/<date>.md) says "pass" and is less than 36 hours old.
 // 6. Its time (Ottawa) has come, but not more than 3 hours ago, so a missed slot never posts late in a bunch.
+// 7. Right before posting, every grade, label, warning sign and count in it is still true in today's
+//    directory, and no repo it names has turned Dangerous or Unproven (claimsProblem below).
 
 export const DEFAULT_TIME = "10:00";
 export const CHECK_MAX_HOURS = 36;
@@ -105,4 +107,54 @@ export function dueNow(p, now = new Date()) {
   if (p.date !== dateIn(now)) return false;
   const late = minutes(timeIn(now)) - minutes(p.time || DEFAULT_TIME);
   return late >= 0 && late <= LATE_MINUTES;
+}
+
+// ---- The recheck right before posting ----
+// Same rules as check_claim() in HQ's instagram/_tools/common.py: the daily check uses that one, the robot
+// uses this one at post time, so a grade that changed after the morning check still stops the post.
+const findRepo = (dir, name) => (dir?.repos || []).find((r) => r.name.toLowerCase() === String(name || "").toLowerCase());
+const hasFlag = (r, value) => (r.flags || []).some((f) => String(f).includes(value ?? ""));
+export const LOW_LABELS = ["Dangerous", "Unproven"];
+
+// Is this claim still true? { ok, now }. ok is null for "fact" claims, which a script can't check.
+export function checkClaim(claim, dir, groups = {}) {
+  const kind = claim?.kind;
+  if (kind === "fact") return { ok: null, now: null };
+  if (kind === "grade" || kind === "label" || kind === "flag") {
+    const r = findRepo(dir, claim.repo);
+    if (!r) return { ok: false, now: "not in the directory" };
+    if (kind === "flag") {
+      const now = hasFlag(r, claim.value);
+      return { ok: now === Boolean(claim.expect), now };
+    }
+    const now = kind === "grade" ? r.grade : r.label;
+    return { ok: String(now) === String(claim.expect), now };
+  }
+  if (kind === "count") {
+    const names = groups?.[claim.group] || [];
+    if (!names.length) return { ok: false, now: `unknown group ${claim.group}` };
+    const rows = names.map((n) => findRepo(dir, n));
+    const missing = names.filter((n, i) => !rows[i]);
+    if (missing.length) return { ok: false, now: `not in the directory: ${missing.join(", ")}` };
+    const test = { grade: (r) => r.grade === claim.value, label: (r) => r.label === claim.value, flag: (r) => hasFlag(r, claim.value) }[claim.field];
+    if (!test) return { ok: false, now: `unknown field ${claim.field}` };
+    const now = rows.filter(test).length;
+    return { ok: now === Number.parseInt(claim.expect, 10), now };
+  }
+  return { ok: false, now: `unknown kind ${kind}` };
+}
+
+// "" when every claim in the post still holds, otherwise why it must not post.
+export function claimsProblem(p, dir, groups = {}) {
+  if (!dir?.repos) return "couldn't read today's grades";
+  for (const c of p.claims || []) {
+    const { ok, now } = checkClaim(c, dir, groups);
+    if (ok === false) return `"${c.text}" is no longer true (expected ${c.expect}, now ${now})`;
+  }
+  const r = p.repo && findRepo(dir, p.repo);
+  if (r && LOW_LABELS.includes(r.label)) {
+    const expected = (p.claims || []).some((c) => c.kind === "label" && findRepo(dir, c.repo) === r && c.expect === r.label);
+    if (!expected) return `${r.name} is now graded ${r.grade} (${r.label})`;
+  }
+  return "";
 }
