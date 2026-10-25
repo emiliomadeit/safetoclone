@@ -27,6 +27,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `share/` | Link-preview pictures (one per grade and label, plus `default.png`). Made by `python3 scripts/make-share-images.py` |
 | `batch.js` | **The Instagram approval lock.** A post goes out only from an approved week in HQ (`instagram/batches/<Monday>.json`) with Emile's recorded tap, whose fingerprint (SHA-256 of what people see) and picture fingerprints still match, not paused, held or dropped, while HQ's daily check (`ops/nightly/<date>.md`, `pass`) is under 36 hours old, from the post's time until 3 hours after, and right before posting every grade, label, warning sign and count in the post is still true in today's `data/directory.json` (`claimsProblem`). `fingerprint()` and `checkClaim()` must stay identical to HQ's `instagram/_tools/common.py` |
 | `instagram.js` | Posts to Instagram through Meta's official API (single pictures and carousels) and reads results (`listing`, `metrics`; needs the `instagram_business_manage_insights` permission). Token: `INSTAGRAM_TOKEN` Secret, renewed weekly into the `INSTAGRAM` KV store; a newly pasted Secret replaces the renewed copy. Check it at safetoclone.com/api/instagram/status |
+| `newsletter.js` | The newsletter robot's rules and the email's look. The Sunday issue lives in HQ (`newsletter/issues/<date>.json`, see `newsletter/README.md` there). `worker.js` emails Emile one test copy of a `ready` issue, then sends an approved one once through Resend Broadcasts in its window (time, Ottawa, default 09:00, up to 3 hours late), only if it's unchanged since his yes and its grades still hold. Status at `/api/newsletter/status`. Optional Secret/variable `RESEND_SEGMENT_ID` picks the Resend segment (otherwise the only one) |
 | `hq.js` | Reads the weekly batches, the daily check and pictures from the private HQ repo with the read-only `HQ_GITHUB_TOKEN` Secret. If GitHub is down nothing posts; there is no fallback copy, on purpose. **Posts, captions and pictures live in HQ, not here** (see `instagram/README.md` in HQ) |
 | `stats.js` | Rough visitor counts per day (home, repo pages, checks, shares, signups, `agent_mcp` = AI agents asking `/mcp` for grades) and where visitors came from (`?ref=reddit`, `?ref=ig` tags or the linking site). No personal data. Stored in the `INSTAGRAM` KV store as `stats:YYYY-MM-DD`. Read at safetoclone.com/api/stats |
 | `wrangler.jsonc` | Cloudflare settings (what to publish, `previews` for PR test sites) |
@@ -35,7 +36,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `data/directory.json` | Generated every night. **Never edit by hand** |
 | `.github/workflows/nightly.yml` | Runs the build script at 07:00 UTC and commits the result |
 | `.github/workflows/test.yml` | Runs the tests on every push and PR |
-| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs && node test/share.test.mjs && node test/seo.test.mjs && node test/hq.test.mjs && node test/stats.test.mjs && node test/batch.test.mjs` |
+| `test/*.test.mjs` | Tests: `node test/score.test.mjs && node test/mcp.test.mjs && node test/instagram.test.mjs && node test/share.test.mjs && node test/seo.test.mjs && node test/hq.test.mjs && node test/stats.test.mjs && node test/batch.test.mjs && node test/newsletter.test.mjs` |
 | `robots.txt` | For search engines. The sitemap is made by `seo.js` (no `sitemap.xml` file) |
 | `README.md` | For humans: what this is and how to deploy |
 
@@ -51,7 +52,8 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `score.js` grades or labels | The share pictures: `SHARE_IMAGES` in `worker.js`, the list in `scripts/make-share-images.py` (rerun it), colours in `share-card.js` |
 | Colours or fonts in `tokens.css` or `site.css` | Keep `share-card.js` and `scripts/make-share-images.py` (rerun it) in the same colours and fonts |
 | `/?repo=` share links | `wireShare` and the `?repo=` auto-check in `index.html`, `homePage` in `worker.js`, `run_worker_first` in `wrangler.jsonc`. Run `node test/share.test.mjs` |
-| `/api/subscribe` in `worker.js` | The newsletter form's `fetch("/api/subscribe")` in `index.html` |
+| `/api/subscribe` in `worker.js` | The newsletter form's `fetch("/api/subscribe")` in `index.html`. New signups must land in the segment the newsletter robot sends to |
+| `newsletter.js` or `sendNewsletter` in `worker.js` | Real emails to every subscriber. Run `node test/newsletter.test.mjs`. The fingerprint must match HQ's `newsletter/_tools/issue.py`. Never send without Emile's recorded yes, never twice |
 | Domain or address | `worker.js` redirects, `SITE` in `seo.js`, `index.html` canonical link and footer, `robots.txt`, `README.md` |
 | `repos.txt` | Nothing until the next nightly run (or run the workflow by hand). Then each new repo gets its own Google page and sitemap entry |
 | `/mcp` tool names in `worker.js` | Any agent connected to it (e.g. Meta Muse) calls them by name |

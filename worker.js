@@ -1,7 +1,8 @@
 // Cloudflare Worker: serves the website files, fills in link previews for shared results (/?repo=owner/name),
 // handles the newsletter signup, counts visits (stats.js, read them at /api/stats),
 // posts approved Instagram posts (batch.js decides, instagram.js posts; status at /api/instagram/status,
-// numbers at /api/instagram/results), and runs /mcp, a read-only connector any AI agent can use.
+// numbers at /api/instagram/results), sends the approved Sunday newsletter (newsletter.js decides; status at
+// /api/newsletter/status), and runs /mcp, a read-only connector any AI agent can use.
 // Needs one setting in Cloudflare > Workers & Pages > safetoclone > Settings > Variables and Secrets:
 //   RESEND_API_KEY     (Secret, from resend.com > API keys, "Full access"). Also sends the robot's alert emails.
 // Optional:
@@ -12,6 +13,7 @@ import { hqFile, hqText, hqJson, batchPath, checkPath } from "./hq.js";
 import { checkBatch, postProblem, claimsProblem, latestCheck, dueNow, dateIn, timeIn, addDays, mondayOf, sha256, DEFAULT_TIME, LATE_MINUTES } from "./batch.js";
 import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
+import { checkIssue, fingerprint as issueFingerprint, sendWindowOpen, issueClaimsProblem, issuePath, renderHtml, renderText, FROM, NEWSLETTER_TIME } from "./newsletter.js";
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -422,6 +424,117 @@ async function seoPage(env, url) {
   return html(repoPage(known, dir));
 }
 
+// ---- Newsletter: sends the approved Sunday issue (the rules are in newsletter.js) ----
+// The issue lives in HQ (newsletter/issues/<date>.json). Every 30 minutes the robot looks at today's file:
+// a "ready" issue gets one test copy emailed to Emile; an approved one is sent once through Resend
+// Broadcasts in its window. What was sent is remembered in the INSTAGRAM KV store (it's the robot's notebook).
+// Optional setting: RESEND_SEGMENT_ID, the Resend segment to send to. Without it, the robot uses the
+// account's only segment, and refuses if there are several.
+const resend = (env, path, body) => fetch(`https://api.resend.com${path}`, {
+  method: body === undefined ? "GET" : "POST",
+  headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+  body: body === undefined ? undefined : JSON.stringify(body),
+});
+
+let segmentsKept = null;
+async function segments(env, fresh = false) {
+  if (!fresh && segmentsKept && Date.now() - segmentsKept.at < 10 * 60e3) return segmentsKept.list;
+  const r = await resend(env, "/segments");
+  if (!r.ok) throw new Error(`Resend said ${r.status} when listing segments`);
+  const list = ((await r.json()).data || []).map((x) => ({ id: x.id, name: x.name }));
+  segmentsKept = { at: Date.now(), list };
+  return list;
+}
+
+// The send itself always asks Resend fresh; the status page may use a 10-minute-old answer.
+async function pickSegment(env, fresh = false) {
+  if (env.RESEND_SEGMENT_ID) return { id: env.RESEND_SEGMENT_ID, how: "RESEND_SEGMENT_ID" };
+  const list = await segments(env, fresh);
+  if (list.length === 1) return { id: list[0].id, name: list[0].name, how: "the only segment" };
+  throw new Error(list.length ? `Resend has ${list.length} segments, so set RESEND_SEGMENT_ID to pick one` : "Resend has no segment to send to");
+}
+
+const sentKey = (date) => `newsletter:sent:${date}`;
+
+async function sendNewsletter(env, now = new Date()) {
+  if (!env.RESEND_API_KEY || !env.HQ_GITHUB_TOKEN || !env.INSTAGRAM) return;
+  const date = dateIn(now);
+  let issue;
+  try { issue = await hqJson(env, issuePath(date)); } catch (e) { return console.log("Newsletter: couldn't read HQ:", e.message); }
+  if (!issue) return;
+  const fp = await issueFingerprint(issue);
+  const tell = (key, subject, text) => alert(env, `alert:newsletter:${date}:${key}`, subject, `${text}\n\nStatus: ${SITE}/api/newsletter/status`);
+
+  // A ready issue: email Emile one test copy of this exact version.
+  if (issue.status === "ready" && !(await env.INSTAGRAM.get(`newsletter:test:${fp}`))) {
+    const banner = `Test copy for Emile, version ${fp.slice(0, 8)}. Subscribers get exactly this. If it looks right, say "yes" in your to-do thread.`;
+    const r = await resend(env, "/emails", {
+      from: FROM, to: [env.ALERT_EMAIL || "hello@safetoclone.com"], subject: `[Test] ${issue.subject}`,
+      html: renderHtml(issue, { unsubscribe: SITE, banner }), text: `${banner}\n\n${renderText(issue, { unsubscribe: SITE })}`,
+    }).catch(() => null);
+    if (r?.ok) await env.INSTAGRAM.put(`newsletter:test:${fp}`, now.toISOString(), { expirationTtl: 14 * 86400 });
+    return console.log("Newsletter: test copy", r?.ok ? "sent" : "failed");
+  }
+
+  const check = await checkIssue(issue);
+  if (!check.ok) {
+    if (check.changed) await tell(fp.slice(0, 8), "Newsletter: not sent, it changed after approval", `Today's issue was edited after you said yes, so it won't go out until you approve the new version.`);
+    return console.log("Newsletter:", check.reason);
+  }
+  if (!sendWindowOpen(issue, now)) return;
+  if (await env.INSTAGRAM.get(sentKey(date))) return; // already sent (or tried): never twice
+  const dir = await readJson(env, "/data/directory.json").catch(() => null);
+  const claims = issueClaimsProblem(issue, dir);
+  if (claims) return tell("claims", "Newsletter: not sent, a grade changed", `Today's issue wasn't sent because ${claims}. Ask Claude to update it, then approve again.`);
+  let segment;
+  try { segment = await pickSegment(env, true); } catch (e) {
+    return tell("segment", "Newsletter: not sent, no list to send to", `Today's issue wasn't sent: ${e.message}.`);
+  }
+
+  // Write down "sending" first, so a crash halfway can never lead to a second copy.
+  await env.INSTAGRAM.put(sentKey(date), JSON.stringify({ state: "sending", at: now.toISOString(), version: fp.slice(0, 8) }));
+  const made = await resend(env, "/broadcasts", {
+    segment_id: segment.id, from: FROM, reply_to: "hello@safetoclone.com", name: `Newsletter ${date}`,
+    subject: issue.subject, html: renderHtml(issue), text: renderText(issue),
+  }).catch((e) => ({ ok: false, status: e.message }));
+  const id = made.ok ? (await made.json()).id : null;
+  if (!id) {
+    // Nothing went out, so the next run (30 minutes later) may try again.
+    await env.INSTAGRAM.delete(sentKey(date));
+    await recordError(env, { post: `newsletter-${date}`, at: now.toISOString(), error: `create broadcast: ${made.status}` });
+    await tell("create", "Newsletter: not sent yet", `Resend said ${made.status} when the robot tried to make today's broadcast. Nothing went out. It tries again every 30 minutes until 3 hours after the send time.`);
+    return console.log("Newsletter: couldn't create the broadcast:", made.status);
+  }
+  const sent = await resend(env, `/broadcasts/${id}/send`, {}).catch((e) => ({ ok: false, status: e.message }));
+  const record = { state: sent.ok ? "sent" : "unsure", at: new Date().toISOString(), broadcast: id, version: fp.slice(0, 8), segment: segment.name || segment.how };
+  await env.INSTAGRAM.put(sentKey(date), JSON.stringify(record));
+  console.log("Newsletter:", JSON.stringify(record));
+  if (sent.ok) await tell("sent", `Newsletter sent: ${issue.subject}`, `Today's issue went out through Resend (broadcast ${id}). Check your inbox, and spam.`);
+  else await tell("unsure", "Newsletter: check Resend", `The robot made today's broadcast (${id}) but Resend said ${sent.status} when asked to send it. It won't try again, so nobody gets two copies. Open Resend > Broadcasts and see whether it went out; if it's still a draft, click Send.`);
+}
+
+async function newsletterStatus(env, url) {
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(url.searchParams.get("date") || "") ? url.searchParams.get("date") : dateIn();
+  const out = { rule: `Sends the approved issue for a date once, from its time (Ottawa, default ${NEWSLETTER_TIME}) until 3 hours after, if nothing changed since Emile's yes and its grades still hold. A "ready" issue gets one test copy to Emile first.`, date };
+  if (!env.RESEND_API_KEY) out.problem = "RESEND_API_KEY isn't set";
+  else if (!env.HQ_GITHUB_TOKEN) out.problem = "HQ_GITHUB_TOKEN isn't set";
+  try {
+    const issue = await hqJson(env, issuePath(date));
+    if (!issue) out.issue = null;
+    else {
+      const fp = await issueFingerprint(issue);
+      const check = await checkIssue(issue);
+      out.issue = { status: issue.status || null, subject: issue.subject || null, time: issue.time || NEWSLETTER_TIME, version: fp.slice(0, 8), canSend: check.ok, problem: check.ok ? null : check.reason,
+        testCopySent: env.INSTAGRAM ? await env.INSTAGRAM.get(`newsletter:test:${fp}`) : null };
+    }
+  } catch (e) { out.issue = { problem: `Couldn't read HQ: ${e.message}` }; }
+  out.sent = env.INSTAGRAM ? await env.INSTAGRAM.get(sentKey(date), "json") : null;
+  if (env.RESEND_API_KEY) {
+    try { const s = await pickSegment(env); out.sendsTo = s.name || s.how; } catch (e) { out.sendsTo = null; out.segmentProblem = e.message; }
+  }
+  return new Response(JSON.stringify(out, null, 2), { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
+}
+
 // Old addresses that should send visitors to the main one.
 // Pull request previews use other workers.dev names, so they are left alone.
 const OLD_HOSTS = ["www.safetoclone.com", "safetoclone.emileantoun10.workers.dev"];
@@ -450,6 +563,7 @@ export default {
       const [account, posting] = await Promise.all([instagramStatus(env), postingStatus(env)]);
       return new Response(JSON.stringify({ ...account, posting }, null, 2), { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
     }
+    if (pathname === "/api/newsletter/status" && request.method === "GET") return newsletterStatus(env, url);
     if (pathname === "/api/instagram/results" && request.method === "GET") return igResults(env, url, ctx);
     if (pathname.startsWith("/ig-media/") && (request.method === "GET" || request.method === "HEAD")) return igMedia(env, pathname);
     const read = request.method === "GET" || request.method === "HEAD";
@@ -464,5 +578,6 @@ export default {
   // after its time; the next runs (up to 3 hours later) are second tries, and see the post is up and skip it.
   async scheduled(event, env, ctx) {
     await postDue(env);
+    await sendNewsletter(env).catch((e) => console.log("Newsletter:", e.message));
   },
 };
