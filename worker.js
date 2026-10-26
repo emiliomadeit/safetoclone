@@ -505,12 +505,20 @@ async function sendNewsletter(env, now = new Date()) {
     await tell("create", "Newsletter: not sent yet", `Resend said ${made.status} when the robot tried to make today's broadcast. Nothing went out. It tries again every 30 minutes until 3 hours after the send time.`);
     return console.log("Newsletter: couldn't create the broadcast:", made.status);
   }
-  const sent = await resend(env, `/broadcasts/${id}/send`, {}).catch((e) => ({ ok: false, status: e.message }));
-  const record = { state: sent.ok ? "sent" : "unsure", at: new Date().toISOString(), broadcast: id, version: fp.slice(0, 8), segment: segment.name || segment.how };
+  // Resend allows about 2 requests a second. "429 too many requests" means it did nothing, so waiting and
+  // asking again is safe. Any other refusal is never retried, so nobody can get two copies.
+  let sent;
+  for (let i = 0; i < 3; i++) {
+    await new Promise((res) => setTimeout(res, 1500));
+    sent = await resend(env, `/broadcasts/${id}/send`, {}).catch((e) => ({ ok: false, status: e.message, text: async () => "" }));
+    if (sent.status !== 429) break;
+  }
+  const said = sent.ok ? "" : `${sent.status} ${(await sent.text().catch(() => "")).slice(0, 300)}`.trim();
+  const record = { state: sent.ok ? "sent" : "unsure", at: new Date().toISOString(), broadcast: id, version: fp.slice(0, 8), segment: segment.name || segment.how, ...(said ? { resendSaid: said } : {}) };
   await env.INSTAGRAM.put(sentKey(date), JSON.stringify(record));
   console.log("Newsletter:", JSON.stringify(record));
   if (sent.ok) await tell("sent", `Newsletter sent: ${issue.subject}`, `Today's issue went out through Resend (broadcast ${id}). Check your inbox, and spam.`);
-  else await tell("unsure", "Newsletter: check Resend", `The robot made today's broadcast (${id}) but Resend said ${sent.status} when asked to send it. It won't try again, so nobody gets two copies. Open Resend > Broadcasts and see whether it went out; if it's still a draft, click Send.`);
+  else await tell("unsure", "Newsletter: check Resend", `The robot made today's broadcast (${id}) but Resend said "${said}" when asked to send it. It won't try again, so nobody gets two copies. Open Resend > Broadcasts and see whether it went out; if it's still a draft, click Send.`);
 }
 
 async function newsletterStatus(env, url) {

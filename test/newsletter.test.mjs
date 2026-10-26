@@ -53,7 +53,7 @@ globalThis.Date = class extends RealDate {
   constructor(...args) { super(...(args.length ? args : [clock])); }
   static now() { return clock; }
 };
-let hq, calls, segmentsList, failSend;
+let hq, calls, segmentsList, failSend, busy = 0;
 globalThis.fetch = async (url, opts = {}) => {
   const u = new URL(url);
   const reply = (x, status = 200) => new Response(JSON.stringify(x), { status });
@@ -65,6 +65,7 @@ globalThis.fetch = async (url, opts = {}) => {
     calls.push({ path: u.pathname, body: opts.body ? JSON.parse(opts.body) : null });
     if (u.pathname === "/segments") return reply({ data: segmentsList });
     if (u.pathname === "/broadcasts") return reply({ id: "b1" });
+    if (u.pathname.endsWith("/send") && busy > 0) { busy--; return reply({ message: "Too many requests" }, 429); }
     if (u.pathname.endsWith("/send")) return failSend ? reply({ message: "oops" }, 500) : reply({ id: "b1" });
     return reply({ id: "e1" });
   }
@@ -159,7 +160,19 @@ await run(e, "2026-10-25T17:00:00Z");
 await run(e, "2026-10-25T17:30:00Z");
 assert.equal(sends().length, 1);
 assert.equal(JSON.parse(e.INSTAGRAM.store["newsletter:sent:2026-10-25"]).state, "unsure");
-assert.ok(mails().some((m) => /check Resend/.test(m.subject)));
+assert.match(JSON.parse(e.INSTAGRAM.store["newsletter:sent:2026-10-25"]).resendSaid, /^500 .*oops/);
+assert.ok(mails().some((m) => /check Resend/.test(m.subject) && /500/.test(m.text)));
+assert.equal(calls.filter((c) => c.path === "/broadcasts/b1/send").length, 1); // a real refusal is never retried
+
+// Resend says "too many requests" once: it waits and asks again, and the issue goes out once.
+reset();
+put(await approve(issue0));
+busy = 1;
+e = env();
+await run(e, "2026-10-25T17:00:00Z");
+assert.equal(calls.filter((c) => c.path === "/broadcasts/b1/send").length, 2);
+assert.equal(JSON.parse(e.INSTAGRAM.store["newsletter:sent:2026-10-25"]).state, "sent");
+assert.equal(sends().length, 1);
 
 // No issue file today: nothing at all.
 reset();
