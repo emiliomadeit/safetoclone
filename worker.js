@@ -6,7 +6,8 @@
 // Needs one setting in Cloudflare > Workers & Pages > safetoclone > Settings > Variables and Secrets:
 //   RESEND_API_KEY     (Secret, from resend.com > API keys, "Full access"). Also sends the robot's alert emails.
 // Optional:
-//   RESEND_SEGMENT_ID  (from resend.com > Audience > Segments) to also tag signups with a segment
+//   RESEND_SEGMENT_ID  (from resend.com > Audience > Segments) the list signups join and the newsletter goes to
+//                      (without it: the account's only segment)
 //   ALERT_EMAIL        where the robot's alert emails go (default hello@safetoclone.com)
 import { autopost, status as instagramStatus, listing as igListing, metrics as igMetrics } from "./instagram.js";
 import { hqFile, hqText, hqJson, batchPath, checkPath } from "./hq.js";
@@ -24,14 +25,14 @@ async function subscribe(request, env) {
   const email = String(raw || "").trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "That email address doesn't look right." }, 400);
   if (!env.RESEND_API_KEY) return json({ error: "Newsletter isn't connected yet." }, 503);
+  // Every signup goes into the segment the newsletter robot sends to (RESEND_SEGMENT_ID, or the account's
+  // only segment). Without this, contacts landed outside it and the Oct 26 issue had nobody to go to.
+  const segment = await pickSegment(env, true).catch(() => null);
   const contact = { email, unsubscribed: false };
-  if (env.RESEND_SEGMENT_ID) contact.segments = [{ id: env.RESEND_SEGMENT_ID }];
-  const r = await fetch("https://api.resend.com/contacts", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify(contact),
-  });
-  // 409 = this email is already on the list, which is fine.
+  if (segment) contact.segments = [{ id: segment.id }];
+  const r = await resend(env, "/contacts", contact);
+  // 409 = this email is already a contact, which is fine; make sure it's in the segment too.
+  if (r.status === 409 && segment) await resend(env, `/contacts/${encodeURIComponent(email)}/segments/${segment.id}`, {}).catch(() => {});
   if (!r.ok && r.status !== 409) return json({ error: "Couldn't save your email. Try again later." }, 502);
   return json({ ok: true });
 }
@@ -505,12 +506,20 @@ async function sendNewsletter(env, now = new Date()) {
     await tell("create", "Newsletter: not sent yet", `Resend said ${made.status} when the robot tried to make today's broadcast. Nothing went out. It tries again every 30 minutes until 3 hours after the send time.`);
     return console.log("Newsletter: couldn't create the broadcast:", made.status);
   }
-  const sent = await resend(env, `/broadcasts/${id}/send`, {}).catch((e) => ({ ok: false, status: e.message }));
-  const record = { state: sent.ok ? "sent" : "unsure", at: new Date().toISOString(), broadcast: id, version: fp.slice(0, 8), segment: segment.name || segment.how };
+  // Resend allows about 2 requests a second. "429 too many requests" means it did nothing, so waiting and
+  // asking again is safe. Any other refusal is never retried, so nobody can get two copies.
+  let sent;
+  for (let i = 0; i < 3; i++) {
+    await new Promise((res) => setTimeout(res, 1500));
+    sent = await resend(env, `/broadcasts/${id}/send`, {}).catch((e) => ({ ok: false, status: e.message, text: async () => "" }));
+    if (sent.status !== 429) break;
+  }
+  const said = sent.ok ? "" : `${sent.status} ${(await sent.text().catch(() => "")).slice(0, 300)}`.trim();
+  const record = { state: sent.ok ? "sent" : "unsure", at: new Date().toISOString(), broadcast: id, version: fp.slice(0, 8), segment: segment.name || segment.how, ...(said ? { resendSaid: said } : {}) };
   await env.INSTAGRAM.put(sentKey(date), JSON.stringify(record));
   console.log("Newsletter:", JSON.stringify(record));
   if (sent.ok) await tell("sent", `Newsletter sent: ${issue.subject}`, `Today's issue went out through Resend (broadcast ${id}). Check your inbox, and spam.`);
-  else await tell("unsure", "Newsletter: check Resend", `The robot made today's broadcast (${id}) but Resend said ${sent.status} when asked to send it. It won't try again, so nobody gets two copies. Open Resend > Broadcasts and see whether it went out; if it's still a draft, click Send.`);
+  else await tell("unsure", "Newsletter: check Resend", `The robot made today's broadcast (${id}) but Resend said "${said}" when asked to send it. It won't try again, so nobody gets two copies. Open Resend > Broadcasts and see whether it went out; if it's still a draft, click Send.`);
 }
 
 async function newsletterStatus(env, url) {

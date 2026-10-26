@@ -53,7 +53,7 @@ globalThis.Date = class extends RealDate {
   constructor(...args) { super(...(args.length ? args : [clock])); }
   static now() { return clock; }
 };
-let hq, calls, segmentsList, failSend;
+let hq, calls, segmentsList, failSend, busy = 0, contactExists = false;
 globalThis.fetch = async (url, opts = {}) => {
   const u = new URL(url);
   const reply = (x, status = 200) => new Response(JSON.stringify(x), { status });
@@ -65,6 +65,8 @@ globalThis.fetch = async (url, opts = {}) => {
     calls.push({ path: u.pathname, body: opts.body ? JSON.parse(opts.body) : null });
     if (u.pathname === "/segments") return reply({ data: segmentsList });
     if (u.pathname === "/broadcasts") return reply({ id: "b1" });
+    if (u.pathname === "/contacts" && contactExists) return reply({ message: "Contact already exists" }, 409);
+    if (u.pathname.endsWith("/send") && busy > 0) { busy--; return reply({ message: "Too many requests" }, 429); }
     if (u.pathname.endsWith("/send")) return failSend ? reply({ message: "oops" }, 500) : reply({ id: "b1" });
     return reply({ id: "e1" });
   }
@@ -159,13 +161,51 @@ await run(e, "2026-10-25T17:00:00Z");
 await run(e, "2026-10-25T17:30:00Z");
 assert.equal(sends().length, 1);
 assert.equal(JSON.parse(e.INSTAGRAM.store["newsletter:sent:2026-10-25"]).state, "unsure");
-assert.ok(mails().some((m) => /check Resend/.test(m.subject)));
+assert.match(JSON.parse(e.INSTAGRAM.store["newsletter:sent:2026-10-25"]).resendSaid, /^500 .*oops/);
+assert.ok(mails().some((m) => /check Resend/.test(m.subject) && /500/.test(m.text)));
+assert.equal(calls.filter((c) => c.path === "/broadcasts/b1/send").length, 1); // a real refusal is never retried
+
+// Resend says "too many requests" once: it waits and asks again, and the issue goes out once.
+reset();
+put(await approve(issue0));
+busy = 1;
+e = env();
+await run(e, "2026-10-25T17:00:00Z");
+assert.equal(calls.filter((c) => c.path === "/broadcasts/b1/send").length, 2);
+assert.equal(JSON.parse(e.INSTAGRAM.store["newsletter:sent:2026-10-25"]).state, "sent");
+assert.equal(sends().length, 1);
 
 // No issue file today: nothing at all.
 reset();
 hq = {};
 await run(env(), "2026-10-25T17:00:00Z");
 assert.equal(calls.length, 0);
+
+// 5. Signups join the segment the newsletter goes to, even without RESEND_SEGMENT_ID.
+const signup = (e) => worker.fetch(new Request("https://safetoclone.com/api/subscribe", { method: "POST", body: JSON.stringify({ email: "New@Example.com" }) }), e);
+reset();
+let res = await signup(env());
+assert.equal(res.status, 200);
+let c = calls.find((x) => x.path === "/contacts").body;
+assert.equal(c.email, "new@example.com");
+assert.deepEqual(c.segments, [{ id: "seg1" }]);
+// Already a contact: it still gets added to the segment.
+reset();
+contactExists = true;
+res = await signup(env());
+assert.equal(res.status, 200);
+assert.ok(calls.some((x) => x.path === "/contacts/new%40example.com/segments/seg1"));
+contactExists = false;
+// RESEND_SEGMENT_ID wins.
+reset();
+await signup(env({ RESEND_SEGMENT_ID: "segX" }));
+assert.deepEqual(calls.find((x) => x.path === "/contacts").body.segments, [{ id: "segX" }]);
+// Resend can't list segments: the signup is still saved.
+reset();
+segmentsList = [];
+res = await signup(env());
+assert.equal(res.status, 200);
+assert.equal(calls.find((x) => x.path === "/contacts").body.segments, undefined);
 
 globalThis.Date = RealDate;
 console.log("newsletter tests passed");
