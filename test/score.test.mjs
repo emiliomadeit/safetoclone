@@ -210,10 +210,13 @@ assert(!repoWith().costs.mentionsPaid && !repoWith().costs.account);
   });
   const clean = withDeps({ files: ["package-lock.json"], parts: 400, vulnerable: [] });
   const hole = clean.checks.find((c) => c.label === "Known security holes");
-  assert(clean.grade === "A" && clean.securityChecked && hole.points === 3 && /None of the 400 parts/.test(hole.note), hole?.note);
-  const many = withDeps({ files: ["package-lock.json"], parts: 400, vulnerable: Array.from({ length: 8 }, (_, i) => ({ part: `p${i}@1.0.0`, ids: ["X"] })) });
-  assert(many.areas["Security habits"].grade === "F" && many.grade === "D" && many.level === "careful", `many holes got ${many.grade}/${many.level}`);
-  assert(/8 of the 400 parts it uses have a known security hole \(for example p0@1.0.0, p1@1.0.0\)/.test(many.checks.find((c) => c.label === "Known security holes").note));
+  assert(clean.grade === "A" && clean.securityChecked && hole.points === 5 && /None of the 400 parts/.test(hole.note), hole?.note);
+  const parts = (n) => withDeps({ files: ["package-lock.json"], parts: 400, vulnerable: Array.from({ length: n }, (_, i) => ({ part: `p${i}@1.0.0`, ids: ["X"] })) });
+  // A few holes cost a little; many keep the grade at B at best, never lower (OSV can't tell which ones matter).
+  const few = parts(2), many = parts(40);
+  assert(few.areas["Security habits"].grade === "B" && few.grade === "A", `few holes got ${few.grade}`);
+  assert(many.areas["Security habits"].grade === "C" && many.grade === "B" && many.level === "fine" && /weakest area/.test(many.capReason), `many holes got ${many.grade}/${many.level}`);
+  assert(/40 of the 400 parts it uses have a known security hole \(for example p0@1.0.0, p1@1.0.0\)/.test(many.checks.find((c) => c.label === "Known security holes").note));
   // Scorecard's answer wins when it has one, so the check is never counted twice.
   const both = withDeps({ files: ["package-lock.json"], parts: 10, vulnerable: [] }, { checks: [{ name: "Vulnerabilities", score: 4 }] });
   assert.equal(both.checks.filter((c) => c.label === "Known security holes").length, 1);

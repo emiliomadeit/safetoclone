@@ -391,14 +391,16 @@ export function score(data) {
     add("Security habits", "Known security holes", Math.round(vulns * 0.3), 3, vulns === 10 ? "good" : vulns >= 7 ? "warn" : "bad",
       vulns === 10 ? "No known security holes left unfixed." : `About ${open} known security hole${open > 1 ? "s" : ""} still unfixed${open >= 10 ? " (10 or more)" : ""}.`);
   }
-  // No Scorecard answer: use our own lookup of the project's parts in OSV (same 0-10 scale as Scorecard).
+  // No Scorecard answer: use our own lookup of the project's parts in OSV.
+  // Gentler than Scorecard's version on purpose: big projects use hundreds of parts, OSV lists every known
+  // hole however minor, and we can't tell which ones the project actually reaches. So a few holes cost a
+  // little, many make this area a C, which keeps the overall grade at B at best (weakest-link rule). Never lower.
   if (vulns === null && deps) {
     const n = deps.vulnerable.length;
-    const v = Math.max(0, 10 - n);
     const first = deps.vulnerable.slice(0, 2).map((x) => x.part).join(", ");
-    add("Security habits", "Known security holes", Math.round(v * 0.3), 3, n === 0 ? "good" : v >= 7 ? "warn" : "bad",
+    add("Security habits", "Known security holes", n === 0 ? 5 : n < 5 ? 4 : 3, 5, n === 0 ? "good" : "warn",
       n === 0 ? `None of the ${deps.parts.toLocaleString("en")} parts it uses has a known security hole.`
-        : `${n} of the ${deps.parts.toLocaleString("en")} parts it uses ${n > 1 ? "have" : "has"} a known security hole (for example ${first}). The owner can fix this by updating them.`);
+        : `${n} of the ${deps.parts.toLocaleString("en")} parts it uses ${n > 1 ? "have" : "has"} a known security hole (for example ${first}). Not every hole affects you, but the owner should update them.`);
   }
   // Only the clearly dangerous setups count. Loose token permissions are too common to tell projects apart.
   const auto = sc("Dangerous-Workflow");
