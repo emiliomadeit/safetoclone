@@ -20,7 +20,10 @@ const PASSWORD_GIVEN = /\b(password|pwd|pass)\s*(is|:|=)\s*(?!(required|optional
 const ARCHIVE_WORD = /\b(zip|rar|7z|archive|extract|unzip)\b/i;
 const ARCHIVE_FILE = /\.(zip|rar|7z)$/i;
 // True when a line mentions an archive and also hands out a password.
-const zipPassword = (text) => text.split("\n").some((line) => ARCHIVE_WORD.test(line) && PASSWORD_GIVEN.test(line));
+// Returns that line, so the warning can quote it.
+const zipPassword = (text) => text.split("\n").find((line) => ARCHIVE_WORD.test(line) && PASSWORD_GIVEN.test(line));
+// A short piece of text around a match, on one line, for quoting in a warning.
+const around = (text, m) => text.slice(Math.max(0, m.index - 40), m.index + m[0].length + 40).replace(/\s+/g, " ").trim();
 const PIPE_TO_SHELL = /(curl|wget)[^\n|]*\|\s*(sudo\s+)?(ba|z)?sh\b|iwr[^\n|]*\|\s*iex|Invoke-Expression|irm[^\n|]*\|\s*iex|sh\s+-c\s+"\$\((curl|wget)/i;
 const LONG_BASE64 = /[A-Za-z0-9+/]{400,}={0,2}/;
 // Characters you can't see on screen but an AI still reads: "tag" letters, text-direction tricks, and runs of
@@ -423,11 +426,13 @@ export function score(data) {
   const releaseNotes = releases.map((x) => x.body || "").join("\n");
   const about = [r.name, r.description, ...(r.topics || [])].filter(Boolean).join(" ").replace(/[-_.]+/g, " ");
   const text = about + "\n" + readme + "\n" + releaseNotes;
-  if (SCAM_WORDS.some((re) => re.test(text))) flag("Scam-style wording", 15, "Mentions cracks, cheats, keygens or free premium. Most malware on GitHub looks like this.", 35);
+  const scam = SCAM_WORDS.map((re) => text.match(re)).find(Boolean);
+  if (scam) flag("Scam-style wording", 15, `Mentions cracks, cheats, keygens or free premium. Most malware on GitHub looks like this. We found: "…${around(text, scam)}…"`, 35);
   if (DISABLE_AV.test(text)) flag("Asks you to turn off antivirus", 30, "Real software never needs this. This is the #1 sign of malware.", 15);
   // A password in the notes of a release that offers an archive counts too, even if the notes never say "zip".
-  const lockedRelease = releases.some((x) => (x.assets || []).some((a) => ARCHIVE_FILE.test(a.name || "")) && PASSWORD_GIVEN.test(x.body || ""));
-  if (zipPassword(text) || lockedRelease) flag("Password-protected download", 15, "Passwords on zip files stop antivirus from looking inside.", 30);
+  const lockedRelease = releases.find((x) => (x.assets || []).some((a) => ARCHIVE_FILE.test(a.name || "")) && PASSWORD_GIVEN.test(x.body || ""));
+  const pwLine = zipPassword(text) || (lockedRelease && around(lockedRelease.body, lockedRelease.body.match(PASSWORD_GIVEN)));
+  if (pwLine) flag("Password-protected download", 15, `Passwords on zip files stop antivirus from looking inside. We found: "${pwLine.trim().slice(0, 140)}"`, 30);
   const riskyRoot = files.filter((f) => f.type === "file" && RISKY_FILE.test(f.name)).map((f) => f.name);
   const riskyAssets = releases.flatMap((x) => (x.assets || []).map((a) => a.name)).filter((n) => RISKY_FILE.test(n));
   if (riskyRoot.length) flag("Programs sitting in the code", 10, `Ready-to-run files in the main folder: ${riskyRoot.slice(0, 3).join(", ")}. Source code projects rarely do this.`, stars < 100 ? 40 : null);

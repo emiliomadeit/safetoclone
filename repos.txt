@@ -135,3 +135,9 @@ haris-musa/excel-mcp-server
 stickerdaniel/linkedin-mcp-server
 bytebase/dbhub
 0x4m4/hexstrike-ai
+# TEMP for testing on this branch only
+morluto/rea
+iOfficeAI/AionUi
+Panniantong/Agent-Reach
+harry0703/MoneyPrinterTurbo
+DeusData/codebase-memory-mcp
