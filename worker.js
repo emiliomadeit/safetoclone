@@ -544,6 +544,25 @@ async function newsletterStatus(env, url) {
   return new Response(JSON.stringify(out, null, 2), { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
 }
 
+// The checker on the home page asks OSV (osv.dev, Google's free database of known security holes) about the parts
+// a project uses. Browsers can't always call OSV directly, so this passes the question on, unchanged.
+// Only OSV's batch lookup, only POST, only a small JSON list of parts. It never forwards anything else.
+const OSV_BATCH = "https://api.osv.dev/v1/querybatch";
+export async function osvProxy(request, fetcher = fetch) {
+  if (request.method !== "POST") return json({ error: "POST only" }, 405);
+  const text = await request.text();
+  if (text.length > 400000) return json({ error: "Too many parts" }, 413);
+  let body;
+  try { body = JSON.parse(text); } catch { return json({ error: "Not JSON" }, 400); }
+  const queries = body?.queries;
+  const ok = Array.isArray(queries) && queries.length > 0 && queries.length <= 1000 && queries.every((q) =>
+    q && typeof q.version === "string" && typeof q.package?.name === "string" && typeof q.package?.ecosystem === "string");
+  if (!ok) return json({ error: "Expected { queries: [{ package: { name, ecosystem }, version }] }, at most 1000" }, 400);
+  const clean = queries.map((q) => ({ package: { name: q.package.name, ecosystem: q.package.ecosystem }, version: q.version }));
+  const res = await fetcher(OSV_BATCH, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ queries: clean }) });
+  return new Response(await res.text(), { status: res.status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
+}
+
 // Old addresses that should send visitors to the main one.
 // Pull request previews use other workers.dev names, so they are left alone.
 const OLD_HOSTS = ["www.safetoclone.com", "safetoclone.emileantoun10.workers.dev"];
@@ -566,6 +585,7 @@ export default {
       return res;
     }
     if (pathname === "/api/hit") return hit(request, env);
+    if (pathname === "/api/osv") return osvProxy(request);
     if (pathname === "/api/stats") return statsReport(env);
     if (pathname === "/mcp") return mcp(request, env, (event) => track(event));
     if (pathname === "/api/instagram/status") {
