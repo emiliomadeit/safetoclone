@@ -92,12 +92,10 @@ lidge-jun/opencodex
 BerriAI/litellm
 NousResearch/hermes-agent
 affaan-m/ECC
-morluto/rea
 DietrichGebert/ponytail
 addyosmani/agent-skills
 paperclipai/paperclip
 stablyai/orca
-Panniantong/Agent-Reach
 Egonex-AI/Understand-Anything
 Graphify-Labs/graphify
 JuliusBrussee/caveman
@@ -111,7 +109,6 @@ Yeachan-Heo/oh-my-claudecode
 nanocoai/nanoclaw
 jarrodwatts/claude-hud
 manaflow-ai/cmux
-iOfficeAI/AionUi
 chatboxai/chatbox
 citrolabs/ego-lite
 AgriciDaniel/claude-seo
@@ -121,14 +118,12 @@ bytedance/deer-flow
 bytedance/UI-TARS-desktop
 firecrawl/firecrawl
 D4Vinci/Scrapling
-harry0703/MoneyPrinterTurbo
 unslothai/unsloth
 mem0ai/mem0
 MemPalace/mempalace
 tinyhumansai/openhuman
 assafelovic/gpt-researcher
 activepieces/activepieces
-DeusData/codebase-memory-mcp
 DayuanJiang/next-ai-draw-io
 mksglu/context-mode
 czlonkowski/n8n-mcp
