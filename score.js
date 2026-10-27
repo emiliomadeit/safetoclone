@@ -431,8 +431,10 @@ export function score(data) {
   const about = [r.name, r.description, ...(r.topics || [])].filter(Boolean).join(" ").replace(/[-_.]+/g, " ");
   const text = about + "\n" + readme + "\n" + releaseNotes;
   // A sentence that forbids or warns against cracks ("cracked copies are not allowed") isn't offering one.
-  const NEGATED = /\b(not\s+(allowed|permitted|supported)|prohibited|forbidden|illegal|never|don'?t|do\s+not|violat\w*|against\s+(our|the)\s+(terms|rules|license))\b/i;
-  const scamSentence = text.split(/(?<=[.!?])\s+|\n/).find((sentence) => SCAM_WORDS.some((re) => re.test(sentence)) && !NEGATED.test(sentence));
+  const NEGATED = /\b(not\s+(allowed|permitted|supported|authori[sz]ed)|unauthori[sz]ed|prohibited|forbidden|illegal|never|don'?t|do\s+not|violat\w*|against\s+(our|the)\s+(terms|rules|license))\b/i;
+  // Sentences often wrap across lines in a README, so join wrapped lines first (not lists or headings).
+  const joined = text.replace(/([^\n])\n(?!\n|\s*([-*+>#|]|\d+\.))/g, "$1 ");
+  const scamSentence = joined.split(/(?<=[.!?])\s+|\n/).find((sentence) => SCAM_WORDS.some((re) => re.test(sentence)) && !NEGATED.test(sentence));
   const scam = scamSentence && SCAM_WORDS.map((re) => scamSentence.match(re)).find(Boolean);
   if (scam) flag("Scam-style wording", 15, `Mentions cracks, cheats, keygens or free premium. Most malware on GitHub looks like this. We found: "…${around(scamSentence, scam)}…"`, 35);
   if (DISABLE_AV.test(text)) flag("Asks you to turn off antivirus", 30, "Real software never needs this. This is the #1 sign of malware.", 15);

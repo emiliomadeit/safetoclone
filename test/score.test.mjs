@@ -228,6 +228,7 @@ assert(!repoWith().costs.mentionsPaid && !repoWith().costs.account);
 // Real lines from popular repos that were wrongly marked Dangerous (2026-10-27). Each must stay clean.
 for (const words of [
   "\nLicense terms apply, including sharing restrictions. Cracked copies, stolen keys, unauthorized key sharing, and bypassing activation are prohibited.",
+  "\nTrials and demos remain subject to vendor terms, including user, feature, automation, and\noutput sharing restrictions. Cracked copies, stolen keys, unauthorized key\nsharing, and bypassing license restrictions are not authorized. This guidance\ndoes not amend MIT or third-party licenses.",
   "\n<strong>AionUi × Kimi Partnership</strong>: Free premium <strong>Kimi \"Allegretto\"</strong> plans ($39/mo) for contributors.",
   "\n- `add` gives a finished result: missing prerequisites are installed without an admin password: uv (official script), ffmpeg, unzip.",
   "\nRelease zip notes - Fixed Redis URLs when no password is configured.",
