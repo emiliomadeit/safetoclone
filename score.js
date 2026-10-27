@@ -122,7 +122,7 @@ export const WHY = {
   Instructions: "A README explains what the project does and how to use it. Malware often has a thin or copied one.",
   "Security contact": "A security policy tells people how to report problems privately, so they get fixed before attackers use them.",
   "Code review": "When a second person checks every change before it goes in, it's much harder to sneak in something bad. From OpenSSF Scorecard, an independent security check.",
-  "Known security holes": "Security holes that are public but not fixed yet are what attackers look for first. From OpenSSF Scorecard.",
+  "Known security holes": "Security holes that are public but not fixed yet are what attackers look for first. From OpenSSF Scorecard, or, when it has no data, from the project's list of parts (its lock file) looked up in OSV, Google's free public database of known security holes.",
   "Safe automation": "Most projects use robots that build and publish the software. Robots with loose permissions have been used to slip malware into real, popular projects. From OpenSSF Scorecard.",
   "Red flags": "We look for tricks that keep showing up in malware: requests to turn off antivirus, locked zip files, cracks and free premium, hidden code, and AI instruction files that try to take over your assistant. Serious ones cap the grade, however popular the repo is.",
 };
@@ -149,13 +149,108 @@ async function getJSON(url, token) {
   return res.json();
 }
 
-async function getText(url) {
+async function getText(url, limit = 200000) {
   try {
     const res = await fetch(url);
     if (!res.ok) return "";
     const t = await res.text();
-    return t.slice(0, 200000);
+    return t.slice(0, limit);
   } catch { return ""; }
+}
+
+// ---- Known security holes in the parts a project uses (its "dependencies") ----
+// Most projects are built from hundreds of parts other people wrote. A "lock file" in the main folder lists
+// every part and its exact version. We look those up in OSV (osv.dev), Google's free public database of
+// known security holes. Only used when OpenSSF Scorecard has no answer for this repo.
+export const OSV_URL = "https://api.osv.dev/v1/querybatch";
+const LOCK_LIMIT = 8000000; // bigger lock files are skipped
+const MAX_PARTS = 3000;
+// File name -> how to read it. Each returns [{ name, version, ecosystem }].
+const LOCKFILES = {
+  "package-lock.json": (t) => {
+    const j = JSON.parse(t);
+    const out = [];
+    if (j.packages) {
+      for (const [path, p] of Object.entries(j.packages)) {
+        // "" is the project itself. Parts only used while building it ("dev") never reach your computer as running code.
+        if (!path || p.dev || p.link || !p.version) continue;
+        out.push({ name: p.name || path.split("node_modules/").pop(), version: p.version, ecosystem: "npm" });
+      }
+    } else if (j.dependencies) {
+      const walk = (deps) => {
+        for (const [name, p] of Object.entries(deps || {})) {
+          if (p.dev || !p.version) continue;
+          out.push({ name, version: p.version, ecosystem: "npm" });
+          walk(p.dependencies);
+        }
+      };
+      walk(j.dependencies);
+    }
+    return out;
+  },
+  "requirements.txt": (t) => t.split("\n").map((l) => l.replace(/#.*/, "").trim().match(/^([A-Za-z0-9][A-Za-z0-9._-]*)(\[[^\]]*\])?\s*==\s*([A-Za-z0-9._+!-]+)/))
+    .filter(Boolean).map((m) => ({ name: m[1], version: m[3], ecosystem: "PyPI" })),
+  "poetry.lock": (t) => tomlPackages(t, "PyPI"),
+  "uv.lock": (t) => tomlPackages(t, "PyPI", { skipLocal: true }),
+  "Cargo.lock": (t) => tomlPackages(t, "crates.io", { skipLocal: true }),
+  "go.mod": (t) => [...t.matchAll(/^\s*(?:require\s+)?([a-z0-9.-]+\.[a-z]{2,}\/[^\s]+)\s+(v[0-9][^\s]*)/gim)]
+    .map((m) => ({ name: m[1], version: m[2], ecosystem: "Go" })),
+};
+// poetry.lock, uv.lock and Cargo.lock list parts as [[package]] blocks with name = "..." and version = "...".
+// Parts that live inside the project itself (no "source", or a local folder) aren't looked up.
+function tomlPackages(text, ecosystem, { skipLocal = false } = {}) {
+  return text.split(/^\[\[package\]\]\s*$/m).slice(1).map((block) => {
+    const head = block.split(/^\[(?!\[package\]\])/m)[0];
+    const name = head.match(/^name\s*=\s*"([^"]+)"/m)?.[1];
+    const version = head.match(/^version\s*=\s*"([^"]+)"/m)?.[1];
+    const source = head.match(/^source\s*=\s*(.+)$/m)?.[1] || "";
+    if (!name || !version) return null;
+    if (skipLocal && (!source || /editable|virtual|directory|path\s*=/.test(source))) return null;
+    if (/^category\s*=\s*"dev"/m.test(head)) return null;
+    return { name, version, ecosystem };
+  }).filter(Boolean);
+}
+
+// Reads the lock files found in the main folder. Returns { files, parts } or null when there are none.
+export function readLockfiles(texts) {
+  const files = [];
+  const seen = new Map();
+  for (const [file, text] of Object.entries(texts)) {
+    const read = LOCKFILES[file];
+    if (!read || !text) continue;
+    let parts;
+    try { parts = read(text); } catch { continue; } // cut off or broken file: skip it
+    if (!parts.length) continue;
+    files.push(file);
+    for (const p of parts) seen.set(`${p.ecosystem}:${p.name.toLowerCase()}@${p.version}`, p);
+  }
+  return files.length ? { files, parts: [...seen.values()].slice(0, MAX_PARTS) } : null;
+}
+
+// Asks OSV which of these parts have known security holes. Returns null if OSV can't be reached,
+// so a network problem never looks like a clean result.
+export async function getKnownHoles(lock, osvUrl = OSV_URL) {
+  if (!lock) return null;
+  const vulnerable = new Map(); // part name -> hole ids
+  try {
+    for (let i = 0; i < lock.parts.length; i += 1000) {
+      const batch = lock.parts.slice(i, i + 1000);
+      const res = await fetch(osvUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ queries: batch.map((p) => ({ package: { name: p.name, ecosystem: p.ecosystem }, version: p.version })) }),
+      });
+      if (!res.ok) return null;
+      const j = await res.json();
+      if (!Array.isArray(j.results)) return null;
+      j.results.forEach((r, k) => {
+        if (!r?.vulns?.length) return;
+        const key = `${batch[k].name}@${batch[k].version}`;
+        vulnerable.set(key, [...new Set([...(vulnerable.get(key) || []), ...r.vulns.map((v) => v.id)])]);
+      });
+    }
+  } catch { return null; }
+  return { files: lock.files, parts: lock.parts.length, vulnerable: [...vulnerable].map(([part, ids]) => ({ part, ids: ids.slice(0, 5) })) };
 }
 
 // OpenSSF Scorecard: a free, independent security check of public GitHub projects (scorecard.dev).
@@ -174,7 +269,7 @@ export async function getScorecard(fullName) {
 }
 
 // Collects everything the scorer needs. Kept separate so tests can feed in saved data.
-export async function collect(owner, repo, { token } = {}) {
+export async function collect(owner, repo, { token, osvUrl } = {}) {
   const r = await getJSON(`${API}/repos/${owner}/${repo}`, token);
   if (!r) { const e = new Error("That repo doesn't exist or is private."); e.code = "NOT_FOUND"; throw e; }
   // If GitHub's hourly limit hits halfway, stop. Scoring with missing files could make a bad repo look clean.
@@ -210,7 +305,17 @@ export async function collect(owner, repo, { token } = {}) {
     if (f.download_url) aiFiles[f.path] = await getText(f.download_url);
   }));
   const scorecard = await getScorecard(r.full_name || `${owner}/${repo}`);
-  return { repo: r, user, files, releases: Array.isArray(releases) ? releases : [], readme, pkg, aiFiles, scorecard };
+  // Known security holes: only needed when Scorecard didn't already answer that question.
+  let deps = null;
+  if (!scorecard?.checks?.some((c) => c.name === "Vulnerabilities" && c.score >= 0)) {
+    const lockTexts = {};
+    await Promise.all(Object.keys(LOCKFILES).map(async (n) => {
+      const f = files.find((x) => x.type === "file" && x.name === n);
+      if (f?.download_url && (f.size || 0) <= LOCK_LIMIT) lockTexts[n] = await getText(f.download_url, LOCK_LIMIT);
+    }));
+    deps = await getKnownHoles(readLockfiles(lockTexts), osvUrl);
+  }
+  return { repo: r, user, files, releases: Array.isArray(releases) ? releases : [], readme, pkg, aiFiles, scorecard, deps };
 }
 
 // "Does it cost money?" Doesn't change the grade. Many projects are free on GitHub with paid extras elsewhere.
@@ -228,7 +333,7 @@ export function costs({ readme = "", about = "", files = [] }) {
 
 // Turns collected data into a score. Pure function: same input, same output.
 export function score(data) {
-  const { repo: r, user, files, releases, readme, pkg, aiFiles, scorecard } = data;
+  const { repo: r, user, files, releases, readme, pkg, aiFiles, scorecard, deps } = data;
   const checks = []; // { group, label, points, max, note, level: good|warn|bad }
   const add = (group, label, points, max, level, note) => checks.push({ group, label, points, max, level, note });
 
@@ -285,6 +390,15 @@ export function score(data) {
     const open = 10 - vulns;
     add("Security habits", "Known security holes", Math.round(vulns * 0.3), 3, vulns === 10 ? "good" : vulns >= 7 ? "warn" : "bad",
       vulns === 10 ? "No known security holes left unfixed." : `About ${open} known security hole${open > 1 ? "s" : ""} still unfixed${open >= 10 ? " (10 or more)" : ""}.`);
+  }
+  // No Scorecard answer: use our own lookup of the project's parts in OSV (same 0-10 scale as Scorecard).
+  if (vulns === null && deps) {
+    const n = deps.vulnerable.length;
+    const v = Math.max(0, 10 - n);
+    const first = deps.vulnerable.slice(0, 2).map((x) => x.part).join(", ");
+    add("Security habits", "Known security holes", Math.round(v * 0.3), 3, n === 0 ? "good" : v >= 7 ? "warn" : "bad",
+      n === 0 ? `None of the ${deps.parts.toLocaleString("en")} parts it uses has a known security hole.`
+        : `${n} of the ${deps.parts.toLocaleString("en")} parts it uses ${n > 1 ? "have" : "has"} a known security hole (for example ${first}). The owner can fix this by updating them.`);
   }
   // Only the clearly dangerous setups count. Loose token permissions are too common to tell projects apart.
   const auto = sc("Dangerous-Workflow");

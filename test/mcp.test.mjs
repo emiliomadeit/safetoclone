@@ -1,5 +1,5 @@
 // Checks the /mcp connector that Meta Muse uses. Run with: node test/mcp.test.mjs
-import worker from "../worker.js";
+import worker, { osvProxy } from "../worker.js";
 import assert from "node:assert";
 import { readFile } from "node:fs/promises";
 
@@ -39,5 +39,22 @@ if (post.image_url) {
 
 const bad = await (await call({ jsonrpc: "2.0", id: 5, method: "nope" })).json();
 assert.equal(bad.error.code, -32601);
+
+// /api/osv only passes a clean list of parts on to OSV's batch lookup, nothing else.
+{
+  let forwarded;
+  const fakeOsv = async (url, opts) => { forwarded = { url, body: JSON.parse(opts.body) }; return new Response('{"results":[{}]}'); };
+  const post = (body) => new Request("https://safetoclone.com/api/osv", { method: "POST", body: typeof body === "string" ? body : JSON.stringify(body) });
+  const res = await osvProxy(post({ queries: [{ package: { name: "lodash", ecosystem: "npm", purl: "x" }, version: "4.17.15", extra: 1 }] }), fakeOsv);
+  assert.equal(res.status, 200);
+  assert.equal(forwarded.url, "https://api.osv.dev/v1/querybatch");
+  assert.deepStrictEqual(forwarded.body, { queries: [{ package: { name: "lodash", ecosystem: "npm" }, version: "4.17.15" }] });
+  forwarded = null;
+  assert.equal((await osvProxy(new Request("https://safetoclone.com/api/osv"), fakeOsv)).status, 405);
+  assert.equal((await osvProxy(post("nope"), fakeOsv)).status, 400);
+  assert.equal((await osvProxy(post({ queries: [] }), fakeOsv)).status, 400);
+  assert.equal((await osvProxy(post({ queries: [{ package: { name: "a" }, version: "1" }] }), fakeOsv)).status, 400);
+  assert.equal(forwarded, null, "bad requests are never sent on");
+}
 
 console.log("MCP tests passed");

@@ -16,7 +16,7 @@ for (const name of list) {
       // Extra detail for the repo pages Google reads (/repo/owner/name, built in seo.js).
       warnings: r.flags.map(({ label, note, severity }) => ({ label, note, severity })),
       checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, costs: r.costs, capReason: r.capReason, aiFilesFound: r.aiFilesFound, checkedAt: r.checkedAt });
-    console.log(`${r.grade} ${String(r.score).padStart(3)}  ${r.securityChecked ? "scorecard" : "no-scorecard"}  ${r.name}`);
+    console.log(`${r.grade} ${String(r.score).padStart(3)}  ${r.securityChecked ? (r.checks.some((c) => c.group === "Security habits" && c.label !== "Known security holes") ? "scorecard" : "osv-only  ") : "not-checked"}  ${r.name}`);
   } catch (e) {
     console.error(`skip ${name}: ${e.message}`);
   }
@@ -29,4 +29,4 @@ for (const r of results.filter((x) => !x.securityChecked).slice(0, 5)) {
   const res = await fetch(`https://api.scorecard.dev/projects/github.com/${r.name}`).catch((e) => ({ status: e.message, text: async () => "" }));
   console.log(`scorecard ${r.name}: ${res.status} ${(await res.text()).slice(0, 120)}`);
 }
-console.log(`wrote ${results.length} repos, ${results.filter((r) => r.securityChecked).length} with OpenSSF Scorecard data`);
+console.log(`wrote ${results.length} repos, ${results.filter((r) => r.securityChecked).length} with security data (Scorecard or OSV), ${results.filter((r) => r.checks.some((c) => c.label === "Known security holes")).length} checked for known security holes`);

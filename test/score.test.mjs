@@ -1,5 +1,5 @@
 // Run with: node test/score.test.mjs
-import { score, parseRepo, collect } from "../score.js";
+import { score, parseRepo, collect, readLockfiles, getKnownHoles } from "../score.js";
 import assert from "node:assert";
 const ago = (d) => new Date(Date.now() - d * 864e5).toISOString();
 
@@ -171,6 +171,56 @@ const paid = repoWith({ readme: "\nSee our Pricing page. The Enterprise Edition 
 assert(paid.costs.mentionsPaid && paid.costs.words.includes("pricing") && paid.costs.words.includes("enterprise edition") && /API key/i.test(paid.costs.account), JSON.stringify(paid.costs));
 assert(paid.grade === "A" && !paid.flags.length, "paid plans don't change the grade");
 assert(!repoWith().costs.mentionsPaid && !repoWith().costs.account);
+
+// Known security holes from the project's lock file, looked up in OSV, when Scorecard has no answer.
+{
+  const lock = readLockfiles({
+    "package-lock.json": JSON.stringify({ lockfileVersion: 3, packages: { "": { name: "me" }, "node_modules/lodash": { version: "4.17.15" },
+      "node_modules/jest": { version: "29.0.0", dev: true }, "node_modules/a/node_modules/lodash": { version: "4.17.15" }, "node_modules/@x/y": { version: "1.0.0" } } }),
+    "requirements.txt": "# pinned\nrequests==2.19.0\nflask>=2  # not pinned, skipped\nuvicorn[standard]==0.20.0\n",
+    "Cargo.lock": '[[package]]\nname = "mine"\nversion = "0.1.0"\n\n[[package]]\nname = "serde"\nversion = "1.0.1"\nsource = "registry+https://github.com/rust-lang/crates.io-index"\n',
+    "uv.lock": '[[package]]\nname = "app"\nversion = "0.1.0"\nsource = { editable = "." }\n\n[[package]]\nname = "httpx"\nversion = "0.27.0"\nsource = { registry = "https://pypi.org/simple" }\n[package.optional-dependencies]\nname = "x"\n',
+    "go.mod": "module example.com/me\n\ngo 1.22\n\nrequire (\n\tgithub.com/gin-gonic/gin v1.9.0\n\tgolang.org/x/net v0.17.0 // indirect\n)\nrequire github.com/a/b v0.1.0\n",
+    "poetry.lock": "not [[valid",
+    "README.md": "ignored",
+  });
+  const names = lock.parts.map((p) => `${p.ecosystem}:${p.name}@${p.version}`).sort();
+  assert.deepStrictEqual(names, ["Go:github.com/a/b@v0.1.0", "Go:github.com/gin-gonic/gin@v1.9.0", "Go:golang.org/x/net@v0.17.0",
+    "PyPI:httpx@0.27.0", "PyPI:requests@2.19.0", "PyPI:uvicorn@0.20.0", "crates.io:serde@1.0.1", "npm:@x/y@1.0.0", "npm:lodash@4.17.15"], names.join(" "));
+  assert(readLockfiles({ "package-lock.json": '{"packages": {"node_mod' }) === null, "a cut-off lock file is skipped, not a crash");
+
+  const realFetch = globalThis.fetch;
+  let sent;
+  globalThis.fetch = async (url, opts) => {
+    sent = { url, body: JSON.parse(opts.body) };
+    return new Response(JSON.stringify({ results: sent.body.queries.map((q) => q.package.name === "lodash" ? { vulns: [{ id: "GHSA-1" }, { id: "GHSA-2" }] } : {}) }));
+  };
+  const holes = await getKnownHoles(lock, "/api/osv");
+  assert.equal(sent.url, "/api/osv");
+  assert.deepStrictEqual(sent.body.queries.find((q) => q.package.name === "requests"), { package: { name: "requests", ecosystem: "PyPI" }, version: "2.19.0" });
+  assert.deepStrictEqual(holes.vulnerable, [{ part: "lodash@4.17.15", ids: ["GHSA-1", "GHSA-2"] }]);
+  globalThis.fetch = async () => new Response("down", { status: 500 });
+  assert.equal(await getKnownHoles(lock), null, "OSV down must not look like a clean result");
+  globalThis.fetch = realFetch;
+
+  const withDeps = (deps, scorecard) => score({
+    repo: { full_name: "t/t", name: "t", html_url: "", stargazers_count: 5000, forks_count: 900, created_at: ago(1500), pushed_at: ago(5), archived: false, license: { spdx_id: "MIT" } },
+    user: { type: "User", created_at: ago(2000) }, files: [{ name: "SECURITY.md", type: "file" }], releases: [{ assets: [] }],
+    readme: "Docs. ".repeat(400), pkg: "", aiFiles: {}, scorecard, deps,
+  });
+  const clean = withDeps({ files: ["package-lock.json"], parts: 400, vulnerable: [] });
+  const hole = clean.checks.find((c) => c.label === "Known security holes");
+  assert(clean.grade === "A" && clean.securityChecked && hole.points === 3 && /None of the 400 parts/.test(hole.note), hole?.note);
+  const many = withDeps({ files: ["package-lock.json"], parts: 400, vulnerable: Array.from({ length: 8 }, (_, i) => ({ part: `p${i}@1.0.0`, ids: ["X"] })) });
+  assert(many.areas["Security habits"].grade === "F" && many.grade === "D" && many.level === "careful", `many holes got ${many.grade}/${many.level}`);
+  assert(/8 of the 400 parts it uses have a known security hole \(for example p0@1.0.0, p1@1.0.0\)/.test(many.checks.find((c) => c.label === "Known security holes").note));
+  // Scorecard's answer wins when it has one, so the check is never counted twice.
+  const both = withDeps({ files: ["package-lock.json"], parts: 10, vulnerable: [] }, { checks: [{ name: "Vulnerabilities", score: 4 }] });
+  assert.equal(both.checks.filter((c) => c.label === "Known security holes").length, 1);
+  assert(/About 6 known/.test(both.checks.find((c) => c.label === "Known security holes").note));
+  // No lock file (or OSV unreachable): nothing is added and the grade uses the other areas, as before.
+  assert(!withDeps(null).securityChecked);
+}
 
 // If GitHub's hourly limit hits after the first call, the check must stop, not score a repo with its files missing.
 const realFetch = globalThis.fetch;
