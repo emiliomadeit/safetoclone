@@ -225,6 +225,23 @@ assert(!repoWith().costs.mentionsPaid && !repoWith().costs.account);
   assert(!withDeps(null).securityChecked);
 }
 
+// Real lines from popular repos that were wrongly marked Dangerous (2026-10-27). Each must stay clean.
+for (const words of [
+  "\nLicense terms apply, including sharing restrictions. Cracked copies, stolen keys, unauthorized key sharing, and bypassing activation are prohibited.",
+  "\nTrials and demos remain subject to vendor terms, including user, feature, automation, and\noutput sharing restrictions. Cracked copies, stolen keys, unauthorized key\nsharing, and bypassing license restrictions are not authorized. This guidance\ndoes not amend MIT or third-party licenses.",
+  "\n<strong>AionUi × Kimi Partnership</strong>: Free premium <strong>Kimi \"Allegretto\"</strong> plans ($39/mo) for contributors.",
+  "\n- `add` gives a finished result: missing prerequisites are installed without an admin password: uv (official script), ffmpeg, unzip.",
+  "\nRelease zip notes - Fixed Redis URLs when no password is configured.",
+  "\nDownload the zip. The complexity pass is independent of worker id order (#2079).",
+]) assert(!repoWith({ readme: words }).flags.length, "false alarm on: " + words);
+// The real thing is still caught, and the warning quotes it.
+const cracked = repoWith({ readme: "\nDownload the cracked version here, works 100%." });
+assert(cracked.flags[0]?.label === "Scam-style wording" && /cracked version/.test(cracked.flags[0].note), JSON.stringify(cracked.flags));
+assert(repoWith({ readme: "\nGet free premium unlocked now!" }).flags.length === 1, "free premium unlocked");
+const lockedZip = repoWith({ readme: "\nExtract the zip, pass: 1234" });
+assert(lockedZip.flags[0]?.label === "Password-protected download" && /pass: 1234/.test(lockedZip.flags[0].note), JSON.stringify(lockedZip.flags));
+assert(repoWith({ readme: "\nUnzip it. The password is infected" }).flags.length === 1, "password is <word>");
+
 // If GitHub's hourly limit hits after the first call, the check must stop, not score a repo with its files missing.
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (url) => /\/repos\/[^/]+\/[^/]+$/.test(url)

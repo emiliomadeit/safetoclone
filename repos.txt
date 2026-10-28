@@ -135,3 +135,9 @@ haris-musa/excel-mcp-server
 stickerdaniel/linkedin-mcp-server
 bytebase/dbhub
 0x4m4/hexstrike-ai
+# Added back 2026-10-27 after fixing the warning rules that wrongly called them Dangerous.
+morluto/rea
+iOfficeAI/AionUi
+Panniantong/Agent-Reach
+harry0703/MoneyPrinterTurbo
+DeusData/codebase-memory-mcp

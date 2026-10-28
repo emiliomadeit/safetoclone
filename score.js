@@ -11,16 +11,23 @@ const SCAM_WORDS = [
   /\bcrack\s+(version|download|for|full)\b/i, /\bcracked\b(?!\s+(passwords?|hash(es)?))/i, /\bkeygen\b/i,
   /\bfree\s+robux\b/i, /\b(roblox|script)\s+executor\b/i,
   /\bcheat\s*(engine|menu|codes?)\b/i, /\b[Cc]heats?\s+(for|in)\s+[A-Z0-9]/, /\b(free|undetected|working)\s+cheats?\b/i, /\bmod\s+menu\b/i,
-  /\bunlocked?\s+(premium|pro|full)\b/i, /\bfree\s+(premium|pro|full\s+version)\b/i,
+  /\bunlocked?\s+(premium|pro|full)\b/i,
+  // "Free premium" offers, but not a real company's promo ("free premium Kimi plans", "free pro trial").
+  /\bfree\s+(premium|pro|full\s+version)\b(?!(\s+[^\s.]+){0,3}\s+(plans?|trials?|months?|credits?|tiers?|subscriptions?|seats?)\b)/i,
   /\bspoofer\b/i, /\baimbot\b/i, /\bwallet\s+drainer\b/i,
 ];
 const DISABLE_AV = /(disable|turn\s+off|deactivate)\s+(your\s+)?(anti-?virus|windows\s+defender|defender|real-?time\s+protection|smartscreen)/i;
 // A password that is actually given out ("password: 1234", "the password is abc"), not just the word "password".
-const PASSWORD_GIVEN = /\b(password|pwd|pass)\s*(is|:|=)\s*(?!(required|optional|needed|not|the|your|a|an|set|stored|saved|hashed|empty|blank)\b)["'`*]*[^\s"'`*]{2,}/i;
+// "pass" only counts as "pass:" or "pass=" ("the tests pass is..." is not a password), and "no password is
+// configured" or "without an admin password: ..." don't count either.
+const PASSWORD_GIVEN = /(?<!\b(no|without|any)\s+(an?\s+)?((admin|root|sudo|user|account)\s+)?)\b(?:(password|pwd)\s*(is|:|=)|pass\s*[:=])\s*(?!(required|optional|needed|not|the|your|a|an|set|stored|saved|hashed|empty|blank|configured|now|changed|reset|missing|wrong|incorrect|invalid)\b)["'`*]*[^\s"'`*]{2,}/i;
 const ARCHIVE_WORD = /\b(zip|rar|7z|archive|extract|unzip)\b/i;
 const ARCHIVE_FILE = /\.(zip|rar|7z)$/i;
 // True when a line mentions an archive and also hands out a password.
-const zipPassword = (text) => text.split("\n").some((line) => ARCHIVE_WORD.test(line) && PASSWORD_GIVEN.test(line));
+// Returns that line, so the warning can quote it.
+const zipPassword = (text) => text.split("\n").find((line) => ARCHIVE_WORD.test(line) && PASSWORD_GIVEN.test(line));
+// A short piece of text around a match, on one line, for quoting in a warning.
+const around = (text, m) => text.slice(Math.max(0, m.index - 40), m.index + m[0].length + 40).replace(/\s+/g, " ").trim();
 const PIPE_TO_SHELL = /(curl|wget)[^\n|]*\|\s*(sudo\s+)?(ba|z)?sh\b|iwr[^\n|]*\|\s*iex|Invoke-Expression|irm[^\n|]*\|\s*iex|sh\s+-c\s+"\$\((curl|wget)/i;
 const LONG_BASE64 = /[A-Za-z0-9+/]{400,}={0,2}/;
 // Characters you can't see on screen but an AI still reads: "tag" letters, text-direction tricks, and runs of
@@ -423,11 +430,18 @@ export function score(data) {
   const releaseNotes = releases.map((x) => x.body || "").join("\n");
   const about = [r.name, r.description, ...(r.topics || [])].filter(Boolean).join(" ").replace(/[-_.]+/g, " ");
   const text = about + "\n" + readme + "\n" + releaseNotes;
-  if (SCAM_WORDS.some((re) => re.test(text))) flag("Scam-style wording", 15, "Mentions cracks, cheats, keygens or free premium. Most malware on GitHub looks like this.", 35);
+  // A sentence that forbids or warns against cracks ("cracked copies are not allowed") isn't offering one.
+  const NEGATED = /\b(not\s+(allowed|permitted|supported|authori[sz]ed)|unauthori[sz]ed|prohibited|forbidden|illegal|never|don'?t|do\s+not|violat\w*|against\s+(our|the)\s+(terms|rules|license))\b/i;
+  // Sentences often wrap across lines in a README, so join wrapped lines first (not lists or headings).
+  const joined = text.replace(/([^\n])\n(?!\n|\s*([-*+>#|]|\d+\.))/g, "$1 ");
+  const scamSentence = joined.split(/(?<=[.!?])\s+|\n/).find((sentence) => SCAM_WORDS.some((re) => re.test(sentence)) && !NEGATED.test(sentence));
+  const scam = scamSentence && SCAM_WORDS.map((re) => scamSentence.match(re)).find(Boolean);
+  if (scam) flag("Scam-style wording", 15, `Mentions cracks, cheats, keygens or free premium. Most malware on GitHub looks like this. We found: "…${around(scamSentence, scam)}…"`, 35);
   if (DISABLE_AV.test(text)) flag("Asks you to turn off antivirus", 30, "Real software never needs this. This is the #1 sign of malware.", 15);
   // A password in the notes of a release that offers an archive counts too, even if the notes never say "zip".
-  const lockedRelease = releases.some((x) => (x.assets || []).some((a) => ARCHIVE_FILE.test(a.name || "")) && PASSWORD_GIVEN.test(x.body || ""));
-  if (zipPassword(text) || lockedRelease) flag("Password-protected download", 15, "Passwords on zip files stop antivirus from looking inside.", 30);
+  const lockedRelease = releases.find((x) => (x.assets || []).some((a) => ARCHIVE_FILE.test(a.name || "")) && PASSWORD_GIVEN.test(x.body || ""));
+  const pwLine = zipPassword(text) || (lockedRelease && around(lockedRelease.body, lockedRelease.body.match(PASSWORD_GIVEN)));
+  if (pwLine) flag("Password-protected download", 15, `Passwords on zip files stop antivirus from looking inside. We found: "${pwLine.trim().slice(0, 140)}"`, 30);
   const riskyRoot = files.filter((f) => f.type === "file" && RISKY_FILE.test(f.name)).map((f) => f.name);
   const riskyAssets = releases.flatMap((x) => (x.assets || []).map((a) => a.name)).filter((n) => RISKY_FILE.test(n));
   if (riskyRoot.length) flag("Programs sitting in the code", 10, `Ready-to-run files in the main folder: ${riskyRoot.slice(0, 3).join(", ")}. Source code projects rarely do this.`, stars < 100 ? 40 : null);
