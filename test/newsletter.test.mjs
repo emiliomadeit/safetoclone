@@ -53,7 +53,7 @@ globalThis.Date = class extends RealDate {
   constructor(...args) { super(...(args.length ? args : [clock])); }
   static now() { return clock; }
 };
-let hq, calls, segmentsList, failSend, busy = 0, contactExists = false;
+let hq, calls, segmentsList, failSend, busy = 0, contactExists = false, listEmpty = false;
 globalThis.fetch = async (url, opts = {}) => {
   const u = new URL(url);
   const reply = (x, status = 200) => new Response(JSON.stringify(x), { status });
@@ -65,6 +65,7 @@ globalThis.fetch = async (url, opts = {}) => {
     calls.push({ path: u.pathname, body: opts.body ? JSON.parse(opts.body) : null });
     if (u.pathname === "/segments") return reply({ data: segmentsList });
     if (u.pathname === "/broadcasts") return reply({ id: "b1" });
+    if (u.pathname === "/contacts" && !opts.body) return reply({ data: listEmpty ? [] : [{ id: "c1" }] });
     if (u.pathname === "/contacts" && contactExists) return reply({ message: "Contact already exists" }, 409);
     if (u.pathname.endsWith("/send") && busy > 0) { busy--; return reply({ message: "Too many requests" }, 429); }
     if (u.pathname.endsWith("/send")) return failSend ? reply({ message: "oops" }, 500) : reply({ id: "b1" });
@@ -174,6 +175,21 @@ await run(e, "2026-10-25T17:00:00Z");
 assert.equal(calls.filter((c) => c.path === "/broadcasts/b1/send").length, 2);
 assert.equal(JSON.parse(e.INSTAGRAM.store["newsletter:sent:2026-10-25"]).state, "sent");
 assert.equal(sends().length, 1);
+
+// The list is empty: no broadcast, one email to Emile, and it sends once someone is on the list.
+reset();
+put(await approve(issue0));
+listEmpty = true;
+e = env();
+await run(e, "2026-10-25T17:00:00Z");
+await run(e, "2026-10-25T17:30:00Z");
+assert.equal(sends().length, 0);
+assert.equal(mails().filter((m) => /list is empty/.test(m.subject)).length, 1);
+assert.ok(calls.some((c) => c.path === "/contacts" && !c.body));
+listEmpty = false;
+await run(e, "2026-10-25T18:00:00Z");
+assert.equal(sends().length, 1);
+assert.equal(JSON.parse(e.INSTAGRAM.store["newsletter:sent:2026-10-25"]).state, "sent");
 
 // No issue file today: nothing at all.
 reset();

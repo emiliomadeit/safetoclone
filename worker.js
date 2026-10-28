@@ -455,6 +455,14 @@ async function pickSegment(env, fresh = false) {
   throw new Error(list.length ? `Resend has ${list.length} segments, so set RESEND_SEGMENT_ID to pick one` : "Resend has no segment to send to");
 }
 
+// True only when Resend clearly says the segment has no contacts.
+async function segmentIsEmpty(env, segmentId) {
+  const r = await resend(env, `/contacts?segment_id=${encodeURIComponent(segmentId)}&limit=1`).catch(() => null);
+  if (!r?.ok) return false;
+  const body = await r.json().catch(() => null);
+  return Array.isArray(body?.data) && body.data.length === 0;
+}
+
 const sentKey = (date) => `newsletter:sent:${date}`;
 
 async function sendNewsletter(env, now = new Date()) {
@@ -490,6 +498,11 @@ async function sendNewsletter(env, now = new Date()) {
   let segment;
   try { segment = await pickSegment(env, true); } catch (e) {
     return tell("segment", "Newsletter: not sent, no list to send to", `Today's issue wasn't sent: ${e.message}.`);
+  }
+  // An empty list makes Resend refuse the send (Oct 26). Stop before making a broadcast and tell Emile; it
+  // tries again every 30 minutes in the window. If Resend can't answer, carry on rather than block the send.
+  if (await segmentIsEmpty(env, segment.id)) {
+    return tell("empty", "Newsletter: not sent, the list is empty", `Today's issue wasn't sent because the Resend segment "${segment.name || segment.id}" has no contacts. Open Resend > Audience, add your subscribers to it, and the robot sends within 30 minutes (up to 3 hours after the send time).`);
   }
 
   // Write down "sending" first, so a crash halfway can never lead to a second copy.
