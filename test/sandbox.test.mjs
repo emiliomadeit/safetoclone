@@ -44,6 +44,8 @@ try {
   const html = await hub.text();
   assert.ok(!html.includes('<script>alert("x")</script>'));
   assert.ok(html.includes("&lt;script&gt;"));
+  assert.ok(html.includes('src="https://sandbox-baseline-safetoclone.emileantoun10.workers.dev"'));
+  assert.ok(!html.includes('src="https://safetoclone.com'), "Comparison must not load production analytics");
   const status = await worker.fetch(new Request("https://preview.example.com/__sandbox/status"), env, ctx);
   assert.equal((await status.json()).privateHQ, "disconnected");
   assert.ok(assetCalls > 0);
