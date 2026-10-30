@@ -39,6 +39,8 @@ Then open http://localhost:8000
 
 Live at **https://safetoclone.com**. Contact: hello@safetoclone.com (Cloudflare Email Routing forwards it to the owner's Gmail).
 
+For visual testing before production, use the [sandbox and branch preview workflow](SANDBOX.md).
+
 ## Put it online (Cloudflare Workers, free and allowed for business use)
 
 1. Sign up at dash.cloudflare.com.

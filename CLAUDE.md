@@ -31,6 +31,8 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `hq.js` | Reads the weekly batches, the daily check and pictures from the private HQ repo with the read-only `HQ_GITHUB_TOKEN` Secret. If GitHub is down nothing posts; there is no fallback copy, on purpose. **Posts, captions and pictures live in HQ, not here** (see `instagram/README.md` in HQ) |
 | `stats.js` | Rough visitor counts per day (home, repo pages, checks, shares, signups, `agent_mcp` = AI agents asking `/mcp` for grades) and where visitors came from (`?ref=reddit`, `?ref=ig` tags or the linking site). No personal data. Stored in the `INSTAGRAM` KV store as `stats:YYYY-MM-DD`. Read at safetoclone.com/api/stats |
 | `wrangler.jsonc` | Cloudflare settings (what to publish, `previews` for PR test sites) |
+| `sandbox.js`, `SANDBOX.md` | Preview isolation and visual comparison hub at `/__sandbox`; keep production services disconnected. See SANDBOX.md for the baseline/feature workflow |
+| `scripts/sync-sandbox.mjs`, `.github/workflows/sandbox.yml` | Copies successfully deployed main's exact tree to the reserved `sandbox-baseline` preview branch; never edits main or feature branches |
 | `repos.txt` | List of repos in the directory, one per line |
 | `scripts/build-directory.mjs` | Scores every repo in `repos.txt` and writes `data/directory.json` |
 | `data/directory.json` | Generated every night. **Never edit by hand** |
@@ -62,6 +64,8 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `/api/instagram/results` or the `/api/stats` event names | HQ's `instagram/_tools/pull_results.py` reads them every day |
 
 ## Ground rules
+
+- For every website PR also run `node test/sandbox.test.mjs && node test/sandbox-sync.test.mjs`. Inspect its actual Cloudflare Preview before asking Emile to merge. The baseline branch is automation output, not a development branch.
 
 - The GitHub repo `emiliomadeit/safetoclone` is the only real copy of the code.
 - Every merge to `main` redeploys the site automatically.

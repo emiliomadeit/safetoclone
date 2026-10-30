@@ -14,6 +14,7 @@ import { hqFile, hqText, hqJson, batchPath, checkPath } from "./hq.js";
 import { checkBatch, postProblem, claimsProblem, latestCheck, dueNow, dateIn, timeIn, addDays, mondayOf, sha256, DEFAULT_TIME, LATE_MINUTES } from "./batch.js";
 import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
+import { isSandbox, sandboxFetch } from "./sandbox.js";
 import { checkIssue, fingerprint as issueFingerprint, sendWindowOpen, issueClaimsProblem, issuePath, renderHtml, renderText, FROM, NEWSLETTER_TIME } from "./newsletter.js";
 
 const json = (body, status = 200) =>
@@ -580,7 +581,7 @@ export async function osvProxy(request, fetcher = fetch) {
 // Pull request previews use other workers.dev names, so they are left alone.
 const OLD_HOSTS = ["www.safetoclone.com", "safetoclone.emileantoun10.workers.dev"];
 
-export default {
+const site = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const { pathname } = url;
@@ -619,7 +620,15 @@ export default {
   // Runs on the schedule in wrangler.jsonc, every 30 minutes. Each approved post goes out at the first run
   // after its time; the next runs (up to 3 hours later) are second tries, and see the post is up and skip it.
   async scheduled(event, env, ctx) {
+    if (env.SAFETOCLONE_ENV === "sandbox") return;
     await postDue(env);
     await sendNewsletter(env).catch((e) => console.log("Newsletter:", e.message));
   },
+};
+
+export default {
+  fetch(request, env, ctx) {
+    return isSandbox(request, env) ? sandboxFetch(request, env, ctx, site.fetch) : site.fetch(request, env, ctx);
+  },
+  scheduled: site.scheduled,
 };
