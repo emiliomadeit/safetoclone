@@ -25,6 +25,10 @@ export async function sync(api = github) {
     return { state: "waiting_for_production_build", source: sha };
   }
   const source = await api("GET", `git/commits/${sha}`);
+  const tree = await api("GET", `git/trees/${source.tree.sha}`);
+  if (!tree.tree.some((entry) => entry.path === "sandbox.js" && entry.type === "blob")) {
+    return { state: "waiting_for_setup_merge", source: sha };
+  }
   // Listing refs avoids treating authentication/network failures as "branch missing".
   const refs = await api("GET", `git/matching-refs/heads/${BRANCH}`);
   const baseline = refs.find((r) => r.ref === `refs/heads/${BRANCH}`);

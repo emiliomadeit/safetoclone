@@ -76,6 +76,11 @@ proven. If the token-created push does not trigger the external Cloudflare app,
 leave the baseline marked stale and configure the supported Cloudflare preview
 build trigger; do not add personal tokens or production deploy steps silently.
 
+The build check is evidence from the existing main-to-Cloudflare pipeline, not a
+read of Cloudflare's current deployment pointer. If production is rolled back or
+deployed outside that pipeline, pause this workflow and reconcile the baseline
+against the actual deployment before resuming it.
+
 If a baseline refresh fails, keep using the last verified URL and inspect the
 workflow run. Do not reset feature branches. If main is ahead of its successful
 production build, wait; never label an unbuilt main commit as live production.

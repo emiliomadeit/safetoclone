@@ -5,7 +5,7 @@ const SHA = "a".repeat(40), OLD = "b".repeat(40), NEXT = "c".repeat(40), TREE = 
 const check = { id: 1, head_sha: SHA, status: "completed", conclusion: "success",
   name: "Workers Builds: safetoclone", app: { slug: "cloudflare-workers-and-pages" },
   details_url: "https://dash.cloudflare.com/account/workers/services/view/safetoclone/production/builds/build" };
-function fake({ checks = [check], previous = null, mainMoved = false, conflict = false } = {}) {
+function fake({ checks = [check], previous = null, mainMoved = false, conflict = false, setup = true } = {}) {
   const writes = []; let reads = 0;
   return { writes, api: async (method, path, body) => {
     if (method !== "GET") writes.push({ method, path, body });
@@ -13,6 +13,7 @@ function fake({ checks = [check], previous = null, mainMoved = false, conflict =
     if (path.startsWith("commits/")) return { check_runs: checks };
     if (path.startsWith("git/matching-refs/")) return previous ? [{ ref: "refs/heads/sandbox-baseline", object: { sha: OLD } }] : [];
     if (path === `git/commits/${SHA}`) return { tree: { sha: TREE } };
+    if (path === `git/trees/${TREE}`) return { tree: setup ? [{ path: "sandbox.js", type: "blob" }] : [] };
     if (path === `git/commits/${OLD}`) return previous;
     if (path === "git/commits") return { sha: NEXT };
     if (path.startsWith("git/refs")) { if (conflict) throw new Error("not a fast forward"); return {}; }
@@ -26,6 +27,7 @@ for (const checks of [[], [{ ...check, conclusion: "failure" }], [{ ...check, st
   const f = fake({ checks }); assert.equal((await sync(f.api)).state, "waiting_for_production_build"); assert.deepEqual(f.writes, []);
 }
 const fresh = fake(); assert.equal((await sync(fresh.api)).state, "preview_build_requested");
+const notMerged = fake({ setup: false }); assert.equal((await sync(notMerged.api)).state, "waiting_for_setup_merge"); assert.deepEqual(notMerged.writes, []);
 assert.equal(fresh.writes[0].body.tree, TREE); assert.deepEqual(fresh.writes[0].body.parents, [SHA]);
 assert.equal(fresh.writes[1].body.ref, "refs/heads/sandbox-baseline");
 const previous = { tree: { sha: OLD }, message: "Sandbox baseline: previous\n" };
