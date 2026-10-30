@@ -12,7 +12,7 @@ entry point, current evidence and morning handoff. Cloudflare hosts the previews
   production build succeeds. Cloudflare then builds that branch as a Preview.
 - **Feature preview:** a separate branch and pull request for each change. Branch
   pushes update its own Cloudflare Preview. Open `/__sandbox` on the returned URL
-  to compare it with production, at desktop or phone width.
+  to compare it with the isolated production baseline, at desktop or phone width.
 
 The baseline is refreshed on main pushes and checked every 15 minutes. GitHub
 schedule delays and Cloudflare build time can add lag; this is eventual sync,
@@ -27,6 +27,10 @@ The actual homepage, fonts, styles, directory, repository pages, share images,
 public GitHub checker and OSV lookup run from the branch's website code and data.
 `/__sandbox/status` identifies the preview version and disconnected services.
 The homepage is visually unchanged; the comparison hub is a separate page.
+Both comparison panes use isolated previews, so merely opening the hub does not
+visit production or load its Cloudflare analytics beacon. “Open production” is an
+explicit link to the real website. Production's CDN injects an analytics script;
+the sandbox intentionally omits it while retaining the same page source.
 
 Newsletter signup returns an explicit sandbox message and saves nothing. There
 are no email deliveries, Instagram actions, production analytics writes, private

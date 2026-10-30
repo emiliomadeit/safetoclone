@@ -58,20 +58,20 @@ iframe{width:100%;height:760px;background:white;border:1px solid #7c8d80;border-
 @media(max-width:800px){.panes{grid-template-columns:1fr}header,main{padding:18px}iframe{height:650px}}
 </style></head><body><header><div class="eyebrow">SafeToClone / website sandbox</div>
 <h1>See it before it goes live.</h1>
-<p>Compare this preview with the live website. Preview emails, Instagram and visitor counts are disconnected. The checker still reads public repository data.</p>
+<p>Compare this preview with the production baseline. Preview emails, Instagram and visitor counts are disconnected. The checker still reads public repository data.</p>
 <nav class="links" aria-label="Open websites"><a href="/" target="_blank" rel="noopener">Open this preview ↗</a>
 <a href="https://safetoclone.com" target="_blank" rel="noopener">Open production ↗</a>
 <a href="https://github.com/emiliomadeit/safetoclone/pulls" target="_blank" rel="noopener">Review changes ↗</a></nav>
-<p class="note">Preview version: <code>${escape(version?.id || "local development")}</code>. Production remains live and can change independently. The comparison below is read-only.</p></header>
+<p class="note">Preview version: <code>${escape(version?.id || "local development")}</code>. The baseline is a snapshot and can lag behind production. The comparison below is read-only.</p></header>
 <main><div class="controls"><label for="page">Compare page</label><select id="page"><option value="/">Home</option><option value="/repos">Repository directory</option></select>
 <button id="size" type="button" aria-pressed="false">Use phone width</button><button id="reload" type="button">Reload both</button></div>
-<div class="panes" id="panes"><section class="pane"><h2>Production · live now</h2>
-<iframe id="production" title="Production website (read-only)" sandbox="allow-scripts allow-same-origin" inert tabindex="-1" referrerpolicy="no-referrer" src="https://safetoclone.com"></iframe></section>
+<div class="panes" id="panes"><section class="pane"><h2>Production baseline · isolated copy</h2>
+<iframe id="baseline" title="Production baseline (read-only)" sandbox="allow-scripts allow-same-origin" inert tabindex="-1" referrerpolicy="no-referrer" src="https://sandbox-baseline-safetoclone.emileantoun10.workers.dev"></iframe></section>
 <section class="pane"><h2>This preview · changes under review</h2><iframe id="preview" title="Sandbox website (read-only comparison)" sandbox="allow-scripts allow-same-origin" inert tabindex="-1" src="/"></iframe></section></div>
 <p class="note">Use “Open this preview” to test forms and navigation. The comparison panes are non-interactive. This preview contains public website code, not private HQ content; its URL is public.</p></main>
 <script>
-const page=document.getElementById('page'), production=document.getElementById('production'), preview=document.getElementById('preview');
-function reload(){production.src='https://safetoclone.com'+page.value;preview.src=page.value}
+const page=document.getElementById('page'), baseline=document.getElementById('baseline'), preview=document.getElementById('preview');
+function reload(){baseline.src='https://sandbox-baseline-safetoclone.emileantoun10.workers.dev'+page.value;preview.src=page.value}
 page.addEventListener('change',reload);document.getElementById('reload').addEventListener('click',reload);
 document.getElementById('size').addEventListener('click',function(){const mobile=document.getElementById('panes').classList.toggle('mobile');this.setAttribute('aria-pressed',String(mobile));this.textContent=mobile?'Use desktop width':'Use phone width'});
 </script></body></html>`;
