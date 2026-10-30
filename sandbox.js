@@ -62,7 +62,7 @@ iframe{width:100%;height:760px;background:white;border:1px solid #7c8d80;border-
 <nav class="links" aria-label="Open websites"><a href="/" target="_blank" rel="noopener">Open this preview ↗</a>
 <a href="https://safetoclone.com" target="_blank" rel="noopener">Open production ↗</a>
 <a href="https://github.com/emiliomadeit/safetoclone/pulls" target="_blank" rel="noopener">Review changes ↗</a></nav>
-<p class="note">Preview version: <code>${escape(version?.id || "local development")}</code>. The baseline follows production builds and may lag behind. The comparison below is read-only.</p></header>
+<p class="note">Preview version: <code>${escape(version?.id || "local development")}</code>. The baseline is a snapshot and can lag behind production. The comparison below is read-only.</p></header>
 <main><div class="controls"><label for="page">Compare page</label><select id="page"><option value="/">Home</option><option value="/repos">Repository directory</option></select>
 <button id="size" type="button" aria-pressed="false">Use phone width</button><button id="reload" type="button">Reload both</button></div>
 <div class="panes" id="panes"><section class="pane"><h2>Production baseline · isolated copy</h2>
