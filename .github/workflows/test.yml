@@ -17,3 +17,5 @@ jobs:
       - run: node test/stats.test.mjs
       - run: node test/batch.test.mjs
       - run: node test/newsletter.test.mjs
+      - run: node test/sandbox.test.mjs
+      - run: node test/sandbox-sync.test.mjs

@@ -8,12 +8,17 @@
     "binding": "ASSETS",
     // These addresses go through worker.js first: the home page (so shared links /?repo=owner/name get a matching
     // link preview) and the pages built for Google in seo.js (/repo/owner/name, /repos, /sitemap.xml).
-    "run_worker_first": ["/", "/repo/*", "/repos", "/repos/", "/sitemap.xml"]
+    "run_worker_first": ["/", "/repo/*", "/repos", "/repos/", "/sitemap.xml", "/__sandbox", "/__sandbox/*", "/robots.txt"]
   },
   // Checks every 30 minutes for an Instagram post whose time (Ottawa) has come, and posts it.
   "triggers": { "crons": ["*/30 * * * *"] },
   // Storage where instagram.js keeps the renewed Instagram token (KV namespace "safetoclone-instagram").
   "kv_namespaces": [{ "binding": "INSTAGRAM", "id": "c6dcee47a48741efbf4530730b19f4ed" }],
   // Lets Cloudflare build a test copy of the site for every pull request.
-  "previews": {}
+  // Native Worker Previews do not inherit production bindings or secrets.
+  // Never add the production KV namespace, HQ token, Resend or Instagram secrets here.
+  "previews": {
+    "vars": { "SAFETOCLONE_ENV": "sandbox" },
+    "version_metadata": { "binding": "SANDBOX_VERSION" }
+  }
 }
