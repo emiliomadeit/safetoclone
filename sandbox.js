@@ -27,7 +27,7 @@ export async function sandboxFetch(request, env, ctx, fetchSite) {
   } else if (url.pathname === "/api/subscribe") {
     response = json({ error: "Sandbox: signups are turned off. Nothing was sent or saved.", sandbox: true }, 409);
   } else if (url.pathname.startsWith("/api/instagram/") || url.pathname.startsWith("/api/newsletter/") ||
-      url.pathname === "/api/stats" || url.pathname.startsWith("/ig-media/")) {
+      url.pathname === "/api/stats" || url.pathname.startsWith("/ig-media/") || url.pathname.startsWith("/nl-media/")) {
     response = json({ error: "This production service is disconnected in the sandbox.", sandbox: true }, 403);
   } else {
     response = await fetchSite(request, isolated, ctx);
