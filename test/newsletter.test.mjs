@@ -27,6 +27,16 @@ const text = renderText(issue0);
 assert.match(text, /^Hi <there>/);
 assert.ok(!text.includes("**"));
 assert.match(text, /Unsubscribe: \{\{\{RESEND_UNSUBSCRIBE_URL\}\}\}/);
+// "## " headings (also at the top of a paragraph), emoji, and the one-tap rating at the bottom.
+const h = renderHtml({ ...issue0, body: "## This week 🔥\n\nText.\n\n## Tip\nDo **this**.\n\n## <b>x</b>" });
+assert.match(h, /<h2[^>]*>This week 🔥<\/h2>/);
+assert.match(h, /<h2[^>]*>Tip<\/h2><p[^>]*>Do <strong>this<\/strong>\.<\/p>/);
+assert.match(h, /<h2[^>]*>&lt;b&gt;x&lt;\/b&gt;<\/h2>/);
+assert.match(h, /How was this week's\?/);
+for (const v of ["love", "good", "soso"]) assert.ok(h.includes(`href="https://safetoclone.com/newsletter/rate/${v}"`));
+assert.match(h, /😍 Love it<\/a>.*🙂 Good<\/a>.*😐 So so<\/a>/);
+assert.ok(renderHtml(issue0, { test: true }).includes("/newsletter/rate/love?test=1")); // Emile's own taps don't count
+assert.match(renderText({ ...issue0, body: "## Tip\nDo it." }), /^Tip\nDo it\.[\s\S]*😍 Love it: https:\/\/safetoclone\.com\/newsletter\/rate\/love\n/);
 
 // 3. The checks.
 const approve = async (i) => ({ ...i, status: "approved", approval: { by: "Emile", at: "2026-10-25T16:30:00Z", evidence: "cmsg_1", hash: await fingerprint(i) } });
@@ -92,6 +102,8 @@ assert.equal(mails().length, 1);
 assert.equal(mails()[0].to[0], "hello@safetoclone.com");
 assert.match(mails()[0].subject, /^\[Test\] We graded 79 tools$/);
 assert.match(mails()[0].html, /Test copy for Emile, version [0-9a-f]{8}/);
+assert.match(mails()[0].html, />Review and approve<\/a>/);
+assert.ok(mails()[0].html.includes("/newsletter/rate/love?test=1"));
 assert.ok(!mails()[0].html.includes("RESEND_UNSUBSCRIBE_URL"));
 assert.equal(sends().length, 0);
 // A new version gets a new test copy.
@@ -121,7 +133,9 @@ assert.equal(sends().length, 1);
 // The status page shows it.
 let st = await (await worker.fetch(new Request("https://safetoclone.com/api/newsletter/status?date=2026-10-25"), e)).json();
 assert.equal(st.issue.canSend, true);
+assert.equal(st.issue.approvedBy, "HQ file");
 assert.equal(st.sent.state, "sent");
+assert.equal(st.sent.approvedBy, "HQ file");
 assert.equal(st.sendsTo, "General");
 
 // RESEND_SEGMENT_ID wins; several segments without it means no send and an email to Emile.
@@ -190,6 +204,93 @@ listEmpty = false;
 await run(e, "2026-10-25T18:00:00Z");
 assert.equal(sends().length, 1);
 assert.equal(JSON.parse(e.INSTAGRAM.store["newsletter:sent:2026-10-25"]).state, "sent");
+
+// The approve button. Opening the link shows the email but approves nothing; only the POST does.
+const visit = async (e, url, method = "GET", at = "2026-10-25T16:00:00Z") => {
+  clock = RealDate.parse(at); forgetHq();
+  const r = await worker.fetch(new Request(url, { method }), e, { waitUntil() {} });
+  return { status: r.status, text: await r.text(), cache: r.headers.get("Cache-Control") };
+};
+const link = (m) => m.text.match(/Review and approve: (\S+)/)[1];
+reset();
+const ready = { ...issue0, status: "ready" };
+put(ready);
+e = env();
+await run(e, "2026-10-25T16:00:00Z");
+let url = link(mails()[0]);
+assert.match(url, /^https:\/\/safetoclone\.com\/newsletter\/approve\?d=2026-10-25&v=[0-9a-f]{8}&t=[0-9a-f]{64}$/);
+let pg = await visit(e, url);
+assert.equal(pg.status, 200);
+assert.equal(pg.cache, "no-store");
+assert.match(pg.text, /We graded 79 tools/);
+assert.match(pg.text, /Most passed\./);
+assert.match(pg.text, /<iframe[^>]*sandbox srcdoc="[^"]*Hi &amp;lt;there&amp;gt;/); // the full email, escaped twice inside srcdoc
+assert.match(pg.text, /<form method="post"[^>]*>\s*<button class="btn" type="submit">Approve this version<\/button>/);
+assert.match(pg.text, /noindex/);
+assert.equal(e.INSTAGRAM.store["newsletter:approval:2026-10-25"], undefined);
+await run(e, "2026-10-25T17:00:00Z");
+assert.equal(sends().length, 0); // seen is not approved
+// Wrong, malformed, mismatched and expired links are refused and approve nothing.
+const t = url.match(/t=(\w+)/)[1];
+for (const bad of [url.replace(t, "0".repeat(64)), url.replace(t, "nope"), url.replace(/&t=\w+/, ""), url.replace(/v=\w+/, "v=00000000"), url.replace("d=2026-10-25", "d=2026-10-26")]) {
+  pg = await visit(e, bad, "POST");
+  assert.equal(pg.status, 404);
+  assert.match(pg.text, /This link doesn&#39;t work/);
+}
+const tok = JSON.parse(e.INSTAGRAM.store[`newsletter:token:${t}`]);
+e.INSTAGRAM.store[`newsletter:token:${t}`] = JSON.stringify({ ...tok, at: "2026-10-17T16:00:00Z" }); // 8 days old
+assert.equal((await visit(e, url, "POST")).status, 404);
+e.INSTAGRAM.store[`newsletter:token:${t}`] = JSON.stringify(tok);
+assert.equal(e.INSTAGRAM.store["newsletter:approval:2026-10-25"], undefined);
+// HQ put it on hold: the button can't approve it.
+put({ ...ready, status: "held" });
+assert.equal((await visit(e, url, "POST")).status, 409);
+put(ready);
+// The right link, POSTed: approved, and it goes out once at its time.
+pg = await visit(e, url, "POST");
+assert.equal(pg.status, 200);
+assert.match(pg.text, /Approved\. It will go out Sunday, October 25 at 13:00 Ottawa\./);
+assert.equal(JSON.parse(e.INSTAGRAM.store["newsletter:approval:2026-10-25"]).source, "approve button");
+assert.match((await visit(e, url)).text, /Approved\. It will go out/); // opening it again just says so
+await run(e, "2026-10-25T16:30:00Z");
+assert.equal(sends().length, 0); // not before its time
+await run(e, "2026-10-25T17:00:00Z");
+await run(e, "2026-10-25T17:30:00Z");
+assert.equal(sends().length, 1);
+assert.equal(JSON.parse(e.INSTAGRAM.store["newsletter:sent:2026-10-25"]).approvedBy, "approve button");
+st = await (await worker.fetch(new Request("https://safetoclone.com/api/newsletter/status?date=2026-10-25"), e)).json();
+assert.equal(st.issue.approvedBy, "approve button");
+assert.equal(st.issue.buttonApproval.current, true);
+// Approved after the window: it says it won't go out.
+assert.match((await visit(env({ INSTAGRAM: e.INSTAGRAM }), url, "POST", "2026-10-25T21:00:00Z")).text, /has passed, so it won&#39;t go out/);
+
+// Edited after the button approval: not sent, the old link no longer counts, and a new test copy with a new button goes out.
+reset();
+e = env();
+put(ready);
+await run(e, "2026-10-25T16:00:00Z");
+url = link(mails()[0]);
+assert.equal((await visit(e, url, "POST")).status, 200);
+put({ ...ready, body: body + " Extra." });
+await run(e, "2026-10-25T17:00:00Z");
+await run(e, "2026-10-25T17:30:00Z");
+assert.equal(sends().length, 0);
+const fresh = mails().filter((m) => /^\[Test\]/.test(m.subject));
+assert.equal(fresh.length, 2);
+assert.notEqual(link(fresh[1]), url);
+pg = await visit(e, url, "POST");
+assert.equal(pg.status, 410);
+assert.match(pg.text, /This version changed/);
+assert.equal(sends().length, 0);
+st = await (await worker.fetch(new Request("https://safetoclone.com/api/newsletter/status?date=2026-10-25"), e)).json();
+assert.equal(st.issue.canSend, false);
+assert.equal(st.issue.buttonApproval.current, false);
+// Approving the new version sends it, once.
+assert.equal((await visit(e, link(fresh[1]), "POST", "2026-10-25T17:40:00Z")).status, 200);
+await run(e, "2026-10-25T18:00:00Z");
+await run(e, "2026-10-25T18:30:00Z");
+assert.equal(sends().length, 1);
+assert.match(sends()[0].body.html, /Extra\./);
 
 // No issue file today: nothing at all.
 reset();

@@ -29,6 +29,11 @@ try {
     assert.equal((await res.json()).sandbox, true);
     assert.match(res.headers.get("X-Robots-Tag"), /noindex/);
   }
+  // Newsletter approve and rating links in a preview: no KV, no HQ, nothing approved or counted.
+  for (const [path, method] of [[`/newsletter/approve?d=2026-11-01&v=00000000&t=${"a".repeat(64)}`, "POST"], ["/newsletter/rate/love", "GET"]]) {
+    const res = await worker.fetch(new Request(`https://preview.example.com${path}`, { method }), env, ctx);
+    assert.ok([200, 404].includes(res.status));
+  }
   const hit = await worker.fetch(new Request("https://preview.example.com/api/hit", {
     method: "POST", body: '{"event":"check"}',
   }), env, ctx);
