@@ -93,7 +93,10 @@ a:hover { text-decoration-thickness: 2px; }
 .ring-xl circle { stroke-width: 6; }
 .ring-xl b { font-size: clamp(5rem, 10vw, 11rem); }
 .ring-xl small { font-size: var(--text-md); margin-top: var(--space-xs); }
-@media (prefers-reduced-motion: reduce) { .ring .arc, .stamp { animation: none; } }
+/* The hero dial keeps moving: the red line circles the ring and slows right down near the top, without ever stopping */
+.ring-xl svg { animation: orbit 3s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.9s infinite; }
+@keyframes orbit { from { transform: rotate(-90deg); } to { transform: rotate(270deg); } }
+@media (prefers-reduced-motion: reduce) { .ring .arc, .stamp, .ring-xl svg { animation: none; } }
 
 /* ---- A report ---- */
 .report { background: var(--color-paper-2); border: var(--rule-hair) solid var(--color-rule); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: clamp(var(--space-lg), 4vw, var(--space-xl)); display: grid; gap: var(--space-xl); text-align: left; }
