@@ -48,6 +48,7 @@ const reset = () => {
   };
 };
 let githubDown = false;
+let keyExpiry = null; // what GitHub says about the key's expiry date (header)
 let published = [];
 let emails = [];
 let githubAuth = new Set();
@@ -58,7 +59,7 @@ globalThis.fetch = async (url, opts = {}) => {
     if (githubDown) return new Response("Bad Gateway", { status: 502 });
     githubAuth.add(opts.headers?.Authorization);
     const path = decodeURIComponent(u.pathname.replace("/repos/emiliomadeit/safetoclone-hq/contents/", ""));
-    return path in hq ? new Response(hq[path]) : new Response("Not Found", { status: 404 });
+    return path in hq ? new Response(hq[path], { headers: keyExpiry ? { "github-authentication-token-expiration": keyExpiry } : {} }) : new Response("Not Found", { status: 404 });
   }
   if (u.hostname === "api.resend.com") { emails.push(JSON.parse(opts.body)); return reply({ id: "e1" }); }
   const params = Object.fromEntries(opts.body ? new URLSearchParams(opts.body) : u.searchParams);
@@ -69,7 +70,7 @@ globalThis.fetch = async (url, opts = {}) => {
   if (u.pathname.endsWith("/media_publish")) return reply({ id: "p1" });
   return reply({ error: { message: "unexpected " + u.pathname } }, 400);
 };
-const kv = () => { const store = {}; return { store, async get(k, t) { const v = store[k]; return v === undefined ? null : t === "json" ? JSON.parse(v) : v; }, async put(k, v) { store[k] = v; } }; };
+const kv = () => { const store = {}; return { store, async get(k, t) { const v = store[k]; return v === undefined ? null : t === "json" ? JSON.parse(v) : v; }, async put(k, v) { store[k] = v; }, async delete(k) { delete store[k]; } }; };
 // The site's own copy of today's grades (data/directory.json), which the robot rechecks right before posting.
 let directory;
 const gradeA = () => { directory = { repos: [{ name: "ollama/ollama", grade: "A", label: "Strong", flags: [] }] }; };
@@ -251,4 +252,54 @@ assert.equal((await get("/ig-media/instagram/images/2026-11-09/a/1.jpg", noKey))
 await run(noKey);
 assert.deepEqual(published, []);
 
+// --- Alerts when HQ can't be read, and before the key expires ---
+const hqMails = () => emails.filter((e) => /HQ/.test(e.subject));
+const realSetTimeout = globalThis.setTimeout;
+globalThis.setTimeout = (f) => realSetTimeout(f, 0); // skip GitHub's 2-second retry pause in the long outage test
+const runAgain = async (env) => { forgetHq(); await run(env); };
+reset();
+githubDown = true;
+env = makeEnv();
+// A short outage (4 runs = 90 minutes): no email.
+for (let i = 0; i < 4; i++) { await runAgain(env); assert.equal(hqMails().length, 0); clock += 30 * 60e3; }
+assert.ok(env.INSTAGRAM.store["hq:down-since"]);
+// 2 hours in a row: exactly one email, in plain words, with the status link. More failures the same day: no second one.
+await runAgain(env);
+assert.equal(hqMails().length, 1);
+assert.match(hqMails()[0].text, /expired|GitHub is down/);
+assert.match(hqMails()[0].text, /safetoclone\.com\/api\/instagram\/status/);
+const sentEarlier = hqMails()[0];
+clock += 30 * 60e3;
+await runAgain(env);
+assert.equal(hqMails().length, 0); // run() clears the list; the day's alert is already in KV
+assert.ok(env.INSTAGRAM.store[`alert:hq-down:2026-11-10`]);
+// GitHub is back: the failure clock is cleared, so a new outage starts counting from zero.
+githubDown = false;
+await runAgain(env);
+assert.equal(env.INSTAGRAM.store["hq:down-since"], undefined);
+githubDown = true;
+await runAgain(env);
+assert.equal(env.INSTAGRAM.store["hq:down-since"], new Date(clock).toISOString());
+assert.equal(sentEarlier.to[0], "hello@safetoclone.com");
+githubDown = false;
+
+// Key expiry: fewer than 14 days left = one warning a day; more than that, or no header = nothing.
+reset();
+env = makeEnv();
+keyExpiry = "2026-11-20 00:00:00 UTC"; // 9 days from the fake clock
+await runAgain(env);
+assert.equal(emails.filter((e) => /key expires/.test(e.subject)).length, 1);
+assert.match(emails.find((e) => /key expires/.test(e.subject)).text, /2026-11-20/);
+await runAgain(env);
+assert.equal(emails.filter((e) => /key expires/.test(e.subject)).length, 0); // same day: already told
+assert.match((await (await get("/api/instagram/status", env)).json()).hqKeyExpires, /2026-11-20 00:00:00 UTC \(9 days left\)/);
+reset(); env = makeEnv(); keyExpiry = "2027-03-01 00:00:00 UTC";
+await runAgain(env);
+assert.equal(emails.length, 0);
+reset(); env = makeEnv(); keyExpiry = null; // no header = the key doesn't expire
+await runAgain(env);
+assert.equal(emails.length, 0);
+assert.match((await (await get("/api/instagram/status", env)).json()).hqKeyExpires, /doesn't expire/);
+
+globalThis.setTimeout = realSetTimeout;
 console.log("HQ tests passed");
