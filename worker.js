@@ -10,7 +10,7 @@
 //                      (without it: the account's only segment)
 //   ALERT_EMAIL        where the robot's alert emails go (default hello@safetoclone.com)
 import { autopost, status as instagramStatus, listing as igListing, metrics as igMetrics } from "./instagram.js";
-import { hqFile, hqText, hqJson, batchPath, checkPath } from "./hq.js";
+import { hqFile, hqText, hqJson, batchPath, checkPath, hqHealth, hqKeyDaysLeft } from "./hq.js";
 import { checkBatch, postProblem, claimsProblem, latestCheck, dueNow, dateIn, timeIn, addDays, mondayOf, sha256, DEFAULT_TIME, LATE_MINUTES } from "./batch.js";
 import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath, subscribedPage } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
@@ -159,6 +159,40 @@ async function alert(env, key, subject, text) {
   if (!r?.ok) return false;
   await env.INSTAGRAM.put(key, "1", { expirationTtl: 3 * 86400 });
   return true;
+}
+
+// Called after each robot run. Emails Emile (at most once a day each) when HQ couldn't be read for 2 hours in a
+// row (one short GitHub hiccup is fine) and when the HQ key has fewer than 14 days left. Posting rules are untouched.
+async function watchHq(env, now = new Date()) {
+  if (!env.INSTAGRAM) return;
+  const today = dateIn(now);
+  if (hqHealth.expires !== undefined) await env.INSTAGRAM.put("hq:expires", hqHealth.expires ?? "none");
+  if (hqHealth.fail) {
+    const since = await env.INSTAGRAM.get("hq:down-since");
+    if (!since) await env.INSTAGRAM.put("hq:down-since", now.toISOString());
+    else if (now - new Date(since) >= 2 * 3600e3) {
+      await alert(env, `alert:hq-down:${today}`, "SafeToClone: the website can't read HQ, so posts and the newsletter are stopped",
+        `Since ${since} the website has not been able to read the private HQ repo (${hqHealth.error}).\n\n` +
+        `While that lasts, nothing posts to Instagram and no newsletter goes out. The likely cause is that the GitHub key ` +
+        `(HQ_GITHUB_TOKEN in Cloudflare) has expired or was revoked, or that GitHub is down. If GitHub is fine, make a new ` +
+        `read-only key and paste it into Cloudflare.\n\nStatus: ${SITE}/api/instagram/status`);
+    }
+  } else if (hqHealth.ok && await env.INSTAGRAM.get("hq:down-since")) await env.INSTAGRAM.delete("hq:down-since");
+  const left = hqKeyDaysLeft(hqHealth.expires, now);
+  if (left !== null && left < 14) {
+    await alert(env, `alert:hq-key-expiry:${today}`, `SafeToClone: the HQ GitHub key expires in ${Math.max(left, 0)} days`,
+      `The GitHub key the website uses to read HQ (HQ_GITHUB_TOKEN in Cloudflare) expires on ${hqHealth.expires}.\n\n` +
+      `After that, posts and the newsletter stop. Make a new read-only key on GitHub and paste it into Cloudflare before then.\n\nStatus: ${SITE}/api/instagram/status`);
+  }
+}
+
+// When the HQ key expires, for /api/instagram/status. Live answer if we just talked to GitHub, else the last one the robot saw.
+async function hqKeyStatus(env, now = new Date()) {
+  const raw = hqHealth.expires !== undefined ? hqHealth.expires ?? "none" : await env.INSTAGRAM?.get("hq:expires");
+  if (!raw) return "unknown (not seen yet)";
+  if (raw === "none") return "no expiry date (the key doesn't expire)";
+  const days = hqKeyDaysLeft(raw, now);
+  return days === null ? raw : `${raw} (${days} days left)`;
 }
 
 // The last 20 posting errors, shown on the status page so the daily check can see them.
@@ -614,7 +648,7 @@ const site = {
     if (pathname === "/mcp") return mcp(request, env, (event) => track(event));
     if (pathname === "/api/instagram/status") {
       const [account, posting] = await Promise.all([instagramStatus(env), postingStatus(env)]);
-      return new Response(JSON.stringify({ ...account, posting }, null, 2), { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
+      return new Response(JSON.stringify({ ...account, posting, hqKeyExpires: await hqKeyStatus(env) }, null, 2), { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
     }
     if (pathname === "/api/newsletter/status" && request.method === "GET") return newsletterStatus(env, url);
     if (pathname === "/api/instagram/results" && request.method === "GET") return igResults(env, url, ctx);
@@ -631,8 +665,10 @@ const site = {
   // after its time; the next runs (up to 3 hours later) are second tries, and see the post is up and skip it.
   async scheduled(event, env, ctx) {
     if (env.SAFETOCLONE_ENV === "sandbox") return;
+    Object.assign(hqHealth, { ok: 0, fail: 0, error: "" });
     await postDue(env);
     await sendNewsletter(env).catch((e) => console.log("Newsletter:", e.message));
+    await watchHq(env).catch((e) => console.log("HQ watch:", e.message));
   },
 };
 
