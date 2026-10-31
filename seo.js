@@ -3,7 +3,7 @@
 // The worker builds them from data/directory.json, so every nightly update refreshes them by itself.
 // Everything here is plain functions (data in, HTML out) so the tests can check them.
 
-import { esc, levelOf, warningsOf, githubUrl, reportCard, toolCard } from "./report.js";
+import { esc, levelOf, warningsOf, githubUrl, reportCard, toolCard, signupBox } from "./report.js";
 
 export const SITE = "https://safetoclone.com";
 export { levelOf };
@@ -112,12 +112,8 @@ ${reportCard(r, {
     actions: `<a class="btn secondary" href="/?repo=${esc(r.name)}">Run the check again now</a>`,
     footnote: `${checked ? `Checked ${esc(day(checked))}. ` : ""}We re-check this repo every night. A grade is a set of warning signs, not a guarantee.`,
   })}
-${othersHTML}
-<aside class="cta" aria-labelledby="cta-title">
-  <h2 id="cta-title">Get the weekly safety email</h2>
-  <p class="muted">One email a week: the AI tools worth installing, and the ones to avoid. Written for people who don't code.</p>
-  <div class="btns"><a class="btn" href="/#newsletter">Subscribe for free</a><a class="btn secondary" href="/">Check another repo</a></div>
-</aside>`;
+${signupBox()}
+${othersHTML}`;
 
   const data = [
     {
@@ -129,16 +125,17 @@ ${othersHTML}
         { "@type": "ListItem", position: 3, name: r.name, item: url },
       ],
     },
+    // A report page about the repo. Not a "Review": Google only accepts reviews of certain item types and
+    // flagged SoftwareSourceCode as invalid in Search Console (Oct 2026).
     {
       "@context": "https://schema.org",
-      "@type": "Review",
-      name: `Safety check of ${r.name}`,
-      author: { "@type": "Organization", name: "SafeToClone", url: SITE },
+      "@type": "WebPage",
+      name: title,
+      url,
+      description: `${r.verdict} ${warnText}`,
       publisher: { "@type": "Organization", name: "SafeToClone", url: SITE },
-      ...(isoDay(checked) ? { datePublished: isoDay(checked) } : {}),
-      reviewBody: `${r.verdict} ${warnText}`,
-      reviewRating: { "@type": "Rating", ratingValue: r.score, bestRating: 100, worstRating: 0 },
-      itemReviewed: {
+      ...(isoDay(checked) ? { dateModified: isoDay(checked) } : {}),
+      about: {
         "@type": "SoftwareSourceCode",
         name: r.name,
         codeRepository: githubUrl(r),
@@ -196,4 +193,15 @@ export function sitemap(dir) {
 ${[url(SITE + "/", updated), url(SITE + "/repos", updated), ...repos.map((r) => url(SITE + repoPath(r.name), isoDay(r.checkedAt) || updated))].join("\n")}
 </urlset>
 `;
+}
+
+// The page a visitor sees after the signup form is sent without JavaScript.
+export function subscribedPage(ok, message) {
+  const body = `
+<section>
+  <h1>${ok ? "You're on the list" : "That didn't work"}</h1>
+  <p class="answer">${esc(ok ? "Thanks! The weekly safety email comes on Sunday morning. Check your spam folder the first time." : message)}</p>
+  <p><a class="btn" href="/">Check a repo</a> <a class="btn secondary" href="/repos">See all grades</a></p>
+</section>`;
+  return layout({ title: ok ? "You're on the list · SafeToClone" : "Signup problem · SafeToClone", description: "SafeToClone weekly safety email.", canonical: SITE + "/", noindex: true, body });
 }
