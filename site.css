@@ -7,6 +7,7 @@
 /* Hallmark · answered F19 · weight 500 is the only cut of JetBrains Mono the site ships, used for repo names and scores; prose uses 400, 600 and the 800 display */
 /* Hallmark · dismissed 41 · .band.paper-2 and .cta are light paper in light mode and set their ink through the dark-mode tokens, checked in both modes */
 /* Hallmark · waive 72 · the text the checker finds past the box sits inside closed <details> rows of "Why this grade?" · Chrome still measures the hidden answers in a closed row; an open row pads each check by 8px and the box grows to fit */
+/* Hallmark · revised Oct 31 2026 · the email band now sits right after the directory, not near the bottom: 0 signups in 8 days with it 81% of the way down the page · pricing still closes the page */
 /* Hallmark · finish-review: subagent · 7 findings · 7 resolved (hero echo trimmed, report card flattened on the home page, skip-link shadow, hero centring, owner lede restored, phone stamp stacked, "Coming soon" moved under the price) · gap: the directory now needs one click to show all 79 tools */
 
 @import url("./tokens.css");
@@ -347,6 +348,11 @@ footer p a { display: inline; min-height: 0; color: var(--color-accent); text-de
 .news input { flex: 1; min-width: 0; font-size: var(--text-md); color: var(--color-ink); background: var(--color-paper); border: 2px solid var(--color-field); border-radius: var(--radius-pill); padding: var(--space-sm) var(--space-md); min-height: 48px; }
 .news input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 1px; }
 .news input::placeholder { color: var(--color-muted); opacity: 1; }
+/* What the Sunday email holds (signup boxes and the home email band): a short ticked list. */
+.promise-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-2xs); }
+.promise-list li { display: grid; grid-template-columns: 1.25rem minmax(0, 1fr); gap: var(--space-xs); line-height: 1.4; }
+.promise-list li::before { content: "✓"; color: var(--color-accent); font-weight: 800; }
+.news-grid .promise-list { margin-top: var(--space-md); font-size: var(--text-lg); }
 #newsMsg { min-height: 1.5em; margin-top: var(--space-sm); }
 @media (max-width: 60rem) { .news-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 30rem) { .news { flex-direction: column; } }

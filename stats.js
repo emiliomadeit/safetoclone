@@ -3,11 +3,13 @@
 // Kept in the INSTAGRAM KV store under keys "stats:YYYY-MM-DD". Read them at safetoclone.com/api/stats.
 // Counts are rough: two visits in the same instant can overwrite each other. Good enough to compare sources.
 
-export const EVENTS = ["home", "repo_page", "repos_page", "check", "copy_link", "image", "signup", "agent_mcp", "agent_api", "nl_love", "nl_good", "nl_soso"];
+export const EVENTS = ["home", "repo_page", "repos_page", "check", "copy_link", "image", "signup", "signup_home", "signup_result", "signup_repo", "agent_mcp", "agent_api", "nl_love", "nl_good", "nl_soso"];
 // nl_love / nl_good / nl_soso: taps on the rating at the bottom of the newsletter. Email apps may open links by
 // themselves, so these are rough.
 // AI agents checking a repo: agent_mcp is a get_safety_scores call on /mcp. agent_api is kept for the
 // check API, which doesn't exist yet. Agents often look like bots, so these two skip the bot filter.
+// signup counts every new subscriber (HQ reads it). signup_home, signup_result and signup_repo also say which
+// box they used: the email band on the home page, the box under a check result, or the box on a repo page.
 const AGENT_EVENTS = ["agent_mcp", "agent_api"];
 const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|embedly|curl|wget|python|headless/i;
 const day = (d = new Date()) => d.toISOString().slice(0, 10);

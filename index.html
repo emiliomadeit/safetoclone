@@ -117,6 +117,28 @@
     </div>
   </div></section>
 
+  <section class="band deep" id="newsletter" aria-labelledby="newsTitle"><div class="wrap news-grid">
+    <div>
+      <h2 id="newsTitle">Get the free Sunday safety email</h2>
+      <!-- Same words as SIGNUP_PROMISE in report.js (test/share.test.mjs checks they match). -->
+      <ul class="promise-list">
+        <li>Which popular AI tools passed our check this week, and which didn't</li>
+        <li>One trick scammers use on GitHub, and how to spot it</li>
+        <li>Reply with any tool and we'll check it for you</li>
+      </ul>
+      <p class="lead">One email a week, written for people who don't code. Free, no spam, unsubscribe in one click.</p>
+    </div>
+    <div>
+      <form class="news" id="newsForm" action="/api/subscribe" method="post" data-news>
+        <input type="hidden" name="from" value="home">
+        <label class="sr-only" for="newsEmail">Your email address</label>
+        <input id="newsEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+        <button class="btn" type="submit">Send me the Sunday email</button>
+      </form>
+      <p id="newsMsg" class="fine" role="status" data-news-msg></p>
+    </div>
+  </div></section>
+
   <section class="band" id="method" aria-labelledby="methodTitle"><div class="wrap">
     <div class="section-head split">
       <h2 id="methodTitle">Five questions. A letter for each. One honest grade.</h2>
@@ -158,20 +180,6 @@
     </div>
   </div></section>
 
-  <section class="band deep" id="newsletter" aria-labelledby="newsTitle"><div class="wrap news-grid">
-    <div>
-      <h2 id="newsTitle">One email a week: the AI tools worth installing, and the ones to avoid</h2>
-      <p class="lead">Written for people who don't code. No spam, unsubscribe in one click.</p>
-    </div>
-    <div>
-      <form class="news" id="newsForm" action="/api/subscribe" method="post" data-news>
-        <label class="sr-only" for="newsEmail">Your email address</label>
-        <input id="newsEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
-        <button class="btn" type="submit">Subscribe</button>
-      </form>
-      <p id="newsMsg" class="fine" role="status" data-news-msg></p>
-    </div>
-  </div></section>
 
   <section class="band" id="pricing" aria-labelledby="pricingTitle"><div class="wrap">
     <div class="section-head">
@@ -210,7 +218,7 @@ function show(r, { example = false } = {}) {
     <span class="fine" id="shareMsg" role="status"></span>`;
   out.innerHTML = (example ? `<p class="example-intro"><strong>Example report.</strong> This made-up repo shows what we flag when something looks like malware. Paste a real link above to check your own.</p>` : "")
     + reportCard(r, { example, actions: example ? "" : share, headingId: "reportTitle" })
-    + (example ? "" : signupBox("resultEmail"));
+    + (example ? "" : signupBox("resultEmail", "result"));
   if (!example) wireShare(r);
 }
 
@@ -339,7 +347,7 @@ document.addEventListener("submit", async (e) => {
   const button = form.querySelector("button");
   button.disabled = true;
   try {
-    const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.querySelector("input[type=email]").value }) });
+    const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.querySelector("input[type=email]").value, from: form.querySelector("input[name=from]")?.value || "" }) });
     const j = await r.json().catch(() => ({}));
     msg.textContent = r.ok ? "You're on the list. Check your inbox on Sunday." : (j.error || "Couldn't save your email. Try again later.");
     if (r.ok) form.reset();

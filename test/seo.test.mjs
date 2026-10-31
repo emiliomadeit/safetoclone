@@ -1,6 +1,7 @@
 // Checks the pages built for Google: /repo/owner/name, /repos and /sitemap.xml. Run with: node test/seo.test.mjs
 import worker from "../worker.js";
 import { repoPage } from "../seo.js";
+import { SIGNUP_PROMISE } from "../report.js";
 import { LEVELS, WHY } from "../score.js";
 import assert from "node:assert";
 import { readFile } from "node:fs/promises";
@@ -37,6 +38,8 @@ for (const r of dir.repos) {
   assert.ok(html.includes('<link rel="stylesheet" href="/site.css">'));
   // A signup form right on the page (works without JavaScript), and no "Review" data Google rejects.
   assert.ok(html.includes('<form class="news" action="/api/subscribe" method="post" data-news>'), `signup form for ${r.name}`);
+  assert.ok(html.includes('<input type="hidden" name="from" value="repo">'), `signup box on ${r.name} says it's the repo-page box`);
+  assert.ok(html.includes(SIGNUP_PROMISE), `signup promise on ${r.name}`);
   assert.ok(!html.includes('"@type":"Review"') && html.includes('"@type":"WebPage"'), `structured data for ${r.name}`);
 }
 

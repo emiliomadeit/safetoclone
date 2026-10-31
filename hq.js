@@ -6,6 +6,18 @@
 //                    has no posts to read.
 const HQ_REPO = "emiliomadeit/safetoclone-hq";
 
+// What the last reads of HQ looked like, so worker.js can email Emile when HQ can't be read for a while and
+// warn before the key expires. "expires" is GitHub's expiry header: undefined = no answer seen yet,
+// null = answered with no expiry date, otherwise e.g. "2026-12-01 00:00:00 UTC". A missing file (404) counts as
+// a good read (but isn't trusted for the expiry date): GitHub answered and the key works.
+export const hqHealth = { ok: 0, fail: 0, error: "", expires: undefined };
+
+// Whole days left until the key expires, or null when the date is unknown.
+export function hqKeyDaysLeft(expires, now = new Date()) {
+  const t = Date.parse(String(expires || "").replace(" UTC", "Z").replace(" ", "T"));
+  return Number.isNaN(t) ? null : Math.floor((t - now.getTime()) / 86400e3);
+}
+
 // Get one file from HQ. Tries twice, because GitHub sometimes has a short hiccup.
 export async function hqFile(env, path) {
   const url = `https://api.github.com/repos/${HQ_REPO}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
@@ -17,12 +29,16 @@ export async function hqFile(env, path) {
   };
   let last;
   for (let i = 0; i < 2; i++) {
-    const r = await fetch(url, { headers });
+    let r;
+    try { r = await fetch(url, { headers }); } catch (e) { hqHealth.fail++; hqHealth.error = e.message; throw e; }
+    if (r.ok || r.status === 404) hqHealth.ok++;
+    if (r.ok) hqHealth.expires = r.headers.get("github-authentication-token-expiration"); // 404 answers may leave it out
     if (r.ok) return r;
     last = new Error(`HQ ${path}: GitHub said ${r.status}`);
     if (r.status === 404 || r.status === 401 || r.status === 403) break; // no point retrying
     await new Promise((res) => setTimeout(res, 2000));
   }
+  if (!/said 404$/.test(last.message)) { hqHealth.fail++; hqHealth.error = last.message; }
   throw last;
 }
 
