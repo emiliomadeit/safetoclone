@@ -1,6 +1,7 @@
 // Checks shared result links (safetoclone.com/?repo=owner/name) get the right link preview. Run with: node test/share.test.mjs
 import worker, { shareRepoName } from "../worker.js";
 import { GRADES } from "../score.js";
+import { SIGNUP_PROMISE } from "../report.js";
 import assert from "node:assert";
 import { readFile, access } from "node:fs/promises";
 
@@ -68,4 +69,13 @@ const fontFiles = [...css.matchAll(/url\("\/(fonts\/[^"]+)"\)/g)].map((m) => m[1
 assert.ok(fontFiles.length >= 2, "site.css loads its fonts from /fonts");
 for (const f of fontFiles) await access(new URL("../" + f, import.meta.url));
 assert.ok(!/url\(["']?https?:/.test(css), "site.css loads nothing from other websites");
+// The home page's email band promises exactly what every other signup box promises, and says which box it is.
+const raw = await readFile(new URL("../index.html", import.meta.url), "utf8");
+const band = raw.slice(raw.indexOf('id="newsletter"'), raw.indexOf("</section>", raw.indexOf('id="newsletter"')));
+const items = (h) => [...h.matchAll(/<li>([^<]+)<\/li>/g)].map((m) => m[1]);
+assert.ok(items(SIGNUP_PROMISE).length >= 3);
+assert.deepEqual(items(band), items(SIGNUP_PROMISE), "home email band and SIGNUP_PROMISE list the same things");
+assert.ok(band.includes('<input type="hidden" name="from" value="home">'));
+// The email band comes right after the directory, not at the bottom of the page.
+assert.ok(raw.indexOf('id="newsletter"') < raw.indexOf('id="method"') && raw.indexOf('id="newsletter"') > raw.indexOf('id="directory"'));
 console.log("Share tests passed");

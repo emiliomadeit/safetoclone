@@ -169,15 +169,26 @@ export function toolCard(x, { link = true, headingLevel = 3 } = {}) {
 // The weekly-email signup box, shown right under a report (home page and every /repo/ page).
 // It works without JavaScript: the form posts to /api/subscribe, which answers with a short "you're on the list" page.
 // On the home page a script sends it in the background instead (see index.html).
-export function signupBox(id = "signupEmail") {
+// `from` says which box it is ("result" under a check, "repo" on a repo page), so /api/stats can count
+// which box people actually use (signup_result, signup_repo). The words match what the first issue (Oct 26) gave.
+export function signupBox(id = "signupEmail", from = "repo") {
   return `<aside class="cta" aria-labelledby="${id}-title">
-  <h2 id="${id}-title">Get the weekly safety email</h2>
-  <p class="muted">One email a week: the AI tools worth installing, and the ones to avoid. Written for people who don't code. Free, unsubscribe in one click.</p>
+  <h2 id="${id}-title">Get the free Sunday safety email</h2>
+  ${SIGNUP_PROMISE}
   <form class="news" action="/api/subscribe" method="post" data-news>
+    <input type="hidden" name="from" value="${esc(from)}">
     <label class="sr-only" for="${id}">Your email address</label>
     <input id="${id}" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
-    <button class="btn" type="submit">Subscribe</button>
+    <button class="btn" type="submit">Send me the Sunday email</button>
   </form>
   <p class="fine" role="status" data-news-msg></p>
 </aside>`;
 }
+
+// What arrives every Sunday, in the same words on every signup box (index.html's email section shows it too).
+export const SIGNUP_PROMISE = `<ul class="promise-list">
+    <li>Which popular AI tools passed our check this week, and which didn't</li>
+    <li>One trick scammers use on GitHub, and how to spot it</li>
+    <li>Reply with any tool and we'll check it for you</li>
+  </ul>
+  <p class="fine">One email a week, written for people who don't code. Free, no spam, unsubscribe in one click.</p>`;

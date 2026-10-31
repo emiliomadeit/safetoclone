@@ -230,4 +230,26 @@ assert.equal(res.status, 200);
 assert.equal(calls.find((x) => x.path === "/contacts").body.segments, undefined);
 
 globalThis.Date = RealDate;
+
+// 6. /api/stats counts every signup, and which box it came from (hidden "from" field), so we can tell what works.
+const today = () => `stats:${new Date().toISOString().slice(0, 10)}`;
+const settle = () => new Promise((r) => setTimeout(r, 20));
+reset();
+let e6 = env();
+await worker.fetch(new Request("https://safetoclone.com/api/subscribe", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: "email=a%40example.com&from=repo" }), e6);
+await settle();
+assert.deepEqual(JSON.parse(e6.INSTAGRAM.store[today()]).events, { signup: 1, signup_repo: 1 });
+await worker.fetch(new Request("https://safetoclone.com/api/subscribe", { method: "POST", body: JSON.stringify({ email: "b@example.com", from: "result" }) }), e6);
+await settle();
+assert.deepEqual(JSON.parse(e6.INSTAGRAM.store[today()]).events, { signup: 2, signup_repo: 1, signup_result: 1 });
+// An unknown or missing box still counts as a signup, never as a made-up event name.
+await worker.fetch(new Request("https://safetoclone.com/api/subscribe", { method: "POST", body: JSON.stringify({ email: "c@example.com", from: "<x>" }) }), e6);
+await settle();
+assert.deepEqual(JSON.parse(e6.INSTAGRAM.store[today()]).events, { signup: 3, signup_repo: 1, signup_result: 1 });
+// A failed signup counts nothing.
+e6 = env();
+await worker.fetch(new Request("https://safetoclone.com/api/subscribe", { method: "POST", body: JSON.stringify({ email: "nope", from: "home" }) }), e6);
+await settle();
+assert.equal(e6.INSTAGRAM.store[today()], undefined);
+
 console.log("newsletter tests passed");
