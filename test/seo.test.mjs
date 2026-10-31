@@ -35,6 +35,9 @@ for (const r of dir.repos) {
   assert.ok(html.includes(`href="${r.url || `https://github.com/${r.name}`}" target="_blank" rel="noopener">View on GitHub`), `GitHub button for ${r.name}`);
   assert.ok(html.includes(LEVELS[r.level].advice.replace(/'/g, "&#39;")), `advice for ${r.name}`);
   assert.ok(html.includes('<link rel="stylesheet" href="/site.css">'));
+  // A signup form right on the page (works without JavaScript), and no "Review" data Google rejects.
+  assert.ok(html.includes('<form class="news" action="/api/subscribe" method="post" data-news>'), `signup form for ${r.name}`);
+  assert.ok(!html.includes('"@type":"Review"') && html.includes('"@type":"WebPage"'), `structured data for ${r.name}`);
 }
 
 // Wrong upper/lower case or a trailing slash sends you to the one real address.
@@ -80,6 +83,12 @@ assert.ok(rich.includes("share/F-dangerous.png"));
 assert.ok(rich.includes("Why this grade?"));
 assert.ok(rich.includes("but the score is capped at 30 because it has a serious warning sign"));
 assert.ok(rich.includes(WHY.Stars.replace(/'/g, "&#39;")));
+
+// The signup form sent without JavaScript gets a page back.
+const bad = await worker.fetch(new Request("https://safetoclone.com/api/subscribe", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: "email=not-an-email" }), env);
+assert.equal(bad.status, 400);
+assert.match(bad.headers.get("Content-Type"), /text\/html/);
+assert.match(await bad.text(), /doesn&#39;t look right/);
 
 // The rest of the site is untouched.
 assert.equal((await get("/robots.txt")).status, 200);

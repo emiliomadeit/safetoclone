@@ -164,12 +164,12 @@
       <p class="lead">Written for people who don't code. No spam, unsubscribe in one click.</p>
     </div>
     <div>
-      <form class="news" id="newsForm">
+      <form class="news" id="newsForm" action="/api/subscribe" method="post" data-news>
         <label class="sr-only" for="newsEmail">Your email address</label>
-        <input id="newsEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
+        <input id="newsEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
         <button class="btn" type="submit">Subscribe</button>
       </form>
-      <p id="newsMsg" class="fine" role="status"></p>
+      <p id="newsMsg" class="fine" role="status" data-news-msg></p>
     </div>
   </div></section>
 
@@ -195,7 +195,7 @@
 <script type="module">
 import { checkRepo, score } from "./score.js";
 import { shareCard } from "./share-card.js";
-import { reportCard, toolCard, esc, levelOf, ring } from "./report.js";
+import { reportCard, toolCard, esc, levelOf, ring, signupBox } from "./report.js";
 
 const $ = (s) => document.querySelector(s);
 const out = $("#out");
@@ -209,7 +209,8 @@ function show(r, { example = false } = {}) {
     <button type="button" class="btn secondary" id="saveImage">Download image</button>
     <span class="fine" id="shareMsg" role="status"></span>`;
   out.innerHTML = (example ? `<p class="example-intro"><strong>Example report.</strong> This made-up repo shows what we flag when something looks like malware. Paste a real link above to check your own.</p>` : "")
-    + reportCard(r, { example, actions: example ? "" : share, headingId: "reportTitle" });
+    + reportCard(r, { example, actions: example ? "" : share, headingId: "reportTitle" })
+    + (example ? "" : signupBox("resultEmail"));
   if (!example) wireShare(r);
 }
 
@@ -329,15 +330,21 @@ const keepSectionInView = () => {
 fetch("./data/directory.json").then((r) => r.json()).then((d) => { dir = d; renderDir(); keepSectionInView(); })
   .catch(() => { $("#dirNote").textContent = "The directory couldn't load right now. Try refreshing the page."; });
 
-// Newsletter
-$("#newsForm").addEventListener("submit", async (e) => {
+// Newsletter: every signup form on the page (the one at the bottom and the one under a report).
+document.addEventListener("submit", async (e) => {
+  const form = e.target.closest("form[data-news]");
+  if (!form) return;
   e.preventDefault();
-  const msg = $("#newsMsg");
+  const msg = form.parentElement.querySelector("[data-news-msg]");
+  const button = form.querySelector("button");
+  button.disabled = true;
   try {
-    const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: $("#newsEmail").value }) });
+    const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.querySelector("input[type=email]").value }) });
     const j = await r.json().catch(() => ({}));
-    msg.textContent = r.ok ? "You're on the list. Check your inbox on Sunday." : (j.error || "Signup isn't open yet. Check back soon.");
-  } catch { msg.textContent = "Signup isn't open yet. Check back soon."; }
+    msg.textContent = r.ok ? "You're on the list. Check your inbox on Sunday." : (j.error || "Couldn't save your email. Try again later.");
+    if (r.ok) form.reset();
+  } catch { msg.textContent = "Couldn't save your email. Try again later."; }
+  button.disabled = false;
 });
 </script>
 </body>

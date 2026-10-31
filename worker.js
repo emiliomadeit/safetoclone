@@ -12,7 +12,7 @@
 import { autopost, status as instagramStatus, listing as igListing, metrics as igMetrics } from "./instagram.js";
 import { hqFile, hqText, hqJson, batchPath, checkPath } from "./hq.js";
 import { checkBatch, postProblem, claimsProblem, latestCheck, dueNow, dateIn, timeIn, addDays, mondayOf, sha256, DEFAULT_TIME, LATE_MINUTES } from "./batch.js";
-import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath } from "./seo.js";
+import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath, subscribedPage } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
 import { isSandbox, sandboxFetch } from "./sandbox.js";
 import { checkIssue, fingerprint as issueFingerprint, sendWindowOpen, issueClaimsProblem, issuePath, renderHtml, renderText, FROM, NEWSLETTER_TIME } from "./newsletter.js";
@@ -20,9 +20,12 @@ import { checkIssue, fingerprint as issueFingerprint, sendWindowOpen, issueClaim
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 
+const isForm = (request) => /application\/x-www-form-urlencoded|multipart\/form-data/.test(request.headers.get("Content-Type") || "");
+
 async function subscribe(request, env) {
   if (request.method !== "POST") return json({ error: "Use POST" }, 405);
-  const { email: raw } = await request.json().catch(() => ({}));
+  const form = isForm(request);
+  const { email: raw } = form ? Object.fromEntries(await request.formData().catch(() => new Map())) : await request.json().catch(() => ({}));
   const email = String(raw || "").trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "That email address doesn't look right." }, 400);
   if (!env.RESEND_API_KEY) return json({ error: "Newsletter isn't connected yet." }, 503);
@@ -596,6 +599,13 @@ const site = {
     if (pathname === "/api/subscribe") {
       const res = await subscribe(request, env);
       if (res.ok) track("signup");
+      // A form sent without JavaScript gets a page back, not JSON.
+      if (isForm(request)) {
+        const j = await res.clone().json().catch(() => ({}));
+        return new Response(subscribedPage(res.ok, j.error || "Couldn't save your email. Try again later."), {
+          status: res.ok ? 200 : res.status, headers: { "Content-Type": "text/html; charset=utf-8" },
+        });
+      }
       return res;
     }
     if (pathname === "/api/hit") return hit(request, env);

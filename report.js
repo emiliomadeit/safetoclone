@@ -165,3 +165,19 @@ export function toolCard(x, { link = true, headingLevel = 3 } = {}) {
   </div>
 </li>`;
 }
+
+// The weekly-email signup box, shown right under a report (home page and every /repo/ page).
+// It works without JavaScript: the form posts to /api/subscribe, which answers with a short "you're on the list" page.
+// On the home page a script sends it in the background instead (see index.html).
+export function signupBox(id = "signupEmail") {
+  return `<aside class="cta" aria-labelledby="${id}-title">
+  <h2 id="${id}-title">Get the weekly safety email</h2>
+  <p class="muted">One email a week: the AI tools worth installing, and the ones to avoid. Written for people who don't code. Free, unsubscribe in one click.</p>
+  <form class="news" action="/api/subscribe" method="post" data-news>
+    <label class="sr-only" for="${id}">Your email address</label>
+    <input id="${id}" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+    <button class="btn" type="submit">Subscribe</button>
+  </form>
+  <p class="fine" role="status" data-news-msg></p>
+</aside>`;
+}
