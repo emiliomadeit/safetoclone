@@ -23,7 +23,7 @@ try {
     assert.equal(isSandbox(new Request(`https://${host}`), {}), false);
     assert.equal(isSandbox(new Request(`https://${host}`), env), true);
   }
-  for (const path of ["/api/subscribe", "/api/instagram/status", "/api/instagram/results", "/api/newsletter/status", "/api/stats", "/ig-media/private.jpg"]) {
+  for (const path of ["/api/subscribe", "/api/instagram/status", "/api/instagram/results", "/api/newsletter/status", "/api/stats", "/ig-media/private.jpg", "/nl-media/newsletter/images/2026-11-01/a.gif"]) {
     const res = await worker.fetch(new Request(`https://preview.example.com${path}`, { method: "POST", body: '{"email":"test@example.com"}' }), env, ctx);
     assert.ok(res.status >= 400);
     assert.equal((await res.json()).sandbox, true);

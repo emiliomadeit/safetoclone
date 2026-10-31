@@ -15,7 +15,7 @@ import { checkBatch, postProblem, claimsProblem, latestCheck, dueNow, dateIn, ti
 import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath, subscribedPage, notePage, approvePage } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
 import { isSandbox, sandboxFetch } from "./sandbox.js";
-import { checkIssue, fingerprint as issueFingerprint, sendWindowOpen, sendWindowPassed, issueClaimsProblem, issuePath, renderHtml, renderText, FROM, NEWSLETTER_TIME } from "./newsletter.js";
+import { checkIssue, fingerprint as issueFingerprint, sendWindowOpen, sendWindowPassed, issueClaimsProblem, issuePath, renderHtml, renderText, FROM, NEWSLETTER_TIME, pictures, MAX_PICTURE_BYTES, MAX_PICTURES } from "./newsletter.js";
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -475,6 +475,59 @@ const approvalKey = (date) => `newsletter:approval:${date}`; // Emile's tap: { h
 const TOKEN_DAYS = 7;
 const newToken = () => [...crypto.getRandomValues(new Uint8Array(32))].map((b) => b.toString(16).padStart(2, "0")).join("");
 
+// One newsletter picture, read fresh from HQ and checked against the sha256 written in the issue body.
+async function readPicture(env, pic) {
+  const r = await hqFile(env, pic.path).catch(() => null);
+  if (!r) return { status: 502, problem: `couldn't read the picture ${pic.path} from HQ` };
+  const bytes = await r.arrayBuffer();
+  if (bytes.byteLength > MAX_PICTURE_BYTES) return { status: 413, problem: `the picture ${pic.path} is bigger than 3 MB` };
+  if ((await sha256(bytes)) !== pic.hash) return { status: 409, problem: `the picture ${pic.path} isn't the one written in the issue (its fingerprint doesn't match)` };
+  return { bytes };
+}
+// "" when every picture in the issue is written right, loads from HQ and matches its fingerprint.
+async function issuePicturesProblem(env, issue) {
+  const { list, problem } = pictures(issue);
+  if (problem) return problem;
+  for (const pic of list) {
+    const got = await readPicture(env, pic);
+    if (got.problem) return got.problem;
+  }
+  return "";
+}
+
+// safetoclone.com/nl-media/newsletter/images/<date>/<file>?v=<sha256>: the newsletter's pictures, for email apps.
+// Only a picture that the issue file for <date> (status ready or approved) names with that exact
+// path and fingerprint, and only if HQ's bytes still match it. Nothing else in HQ can come out through here.
+// Checked pictures are kept in memory by fingerprint (the bytes can't change under it), at most MAX_PICTURES,
+// so many readers opening the email don't use up the GitHub key's hourly limit.
+// shortcut: memory is per Cloudflare server; add the Cache API if the list grows past a few thousand readers.
+const keptPictures = new Map();
+async function nlMedia(env, url) {
+  const notFound = () => new Response("Not found", { status: 404 });
+  if (!env.HQ_GITHUB_TOKEN) return notFound();
+  let path;
+  try { path = decodeURIComponent(url.pathname.slice("/nl-media/".length)); } catch { return notFound(); }
+  const date = path.match(/^newsletter\/images\/(\d{4}-\d{2}-\d{2})\//)?.[1];
+  if (!date) return notFound();
+  let issue;
+  try { issue = await hqJson(env, issuePath(date)); } catch { return new Response("HQ unreachable", { status: 502 }); }
+  if (!issue || !["ready", "approved"].includes(issue.status)) return notFound();
+  const { list, problem } = pictures(issue);
+  const pic = !problem && list.find((p) => p.path === path && p.hash === url.searchParams.get("v"));
+  if (!pic) return notFound();
+  let bytes = keptPictures.get(pic.hash);
+  if (!bytes) {
+    const got = await readPicture(env, pic);
+    if (got.problem) return new Response(got.problem, { status: got.status });
+    bytes = got.bytes;
+    if (keptPictures.size >= MAX_PICTURES) keptPictures.delete(keptPictures.keys().next().value);
+    keptPictures.set(pic.hash, bytes);
+  }
+  // The fingerprint is in the address, so the picture at this address can never change: cache it for a year.
+  return new Response(bytes, { headers: { "Content-Type": pic.type, "Cache-Control": "public, max-age=31536000, immutable", "X-Content-Type-Options": "nosniff" } });
+}
+export const forgetPictures = () => keptPictures.clear(); // for tests
+
 async function sendNewsletter(env, now = new Date()) {
   if (!env.RESEND_API_KEY || !env.HQ_GITHUB_TOKEN || !env.INSTAGRAM) return;
   const date = dateIn(now);
@@ -486,6 +539,11 @@ async function sendNewsletter(env, now = new Date()) {
 
   // A ready issue: email Emile one test copy of this exact version.
   if (issue.status === "ready" && !(await env.INSTAGRAM.get(`newsletter:test:${fp}`))) {
+    const pics = await issuePicturesProblem(env, issue);
+    if (pics) {
+      await tell(`testpictures:${fp.slice(0, 8)}`, "Newsletter: no test copy, a picture is wrong", `The robot didn't email you the test copy of today's issue because ${pics}. Ask Claude to fix the picture in HQ; a test copy goes out by itself once it's right.`);
+      return console.log("Newsletter: no test copy,", pics);
+    }
     const token = newToken();
     await env.INSTAGRAM.put(tokenKey(token), JSON.stringify({ date, hash: fp, at: now.toISOString() }), { expirationTtl: TOKEN_DAYS * 86400 });
     const approveUrl = `${SITE}/newsletter/approve?d=${date}&v=${fp.slice(0, 8)}&t=${token}`;
@@ -506,6 +564,8 @@ async function sendNewsletter(env, now = new Date()) {
   }
   if (!sendWindowOpen(issue, now)) return;
   if (await env.INSTAGRAM.get(sentKey(date))) return; // already sent (or tried): never twice
+  const pics = await issuePicturesProblem(env, issue);
+  if (pics) return tell(`pictures:${fp.slice(0, 8)}`, "Newsletter: not sent, a picture is wrong", `Today's issue wasn't sent because ${pics}. Ask Claude to fix it in HQ; if that changes the issue, it needs your approval again.`);
   const dir = await readJson(env, "/data/directory.json").catch(() => null);
   const claims = issueClaimsProblem(issue, dir);
   if (claims) return tell("claims", "Newsletter: not sent, a grade changed", `Today's issue wasn't sent because ${claims}. Ask Claude to update it, then approve again.`);
@@ -669,6 +729,7 @@ const site = {
     }
     if (pathname === "/api/instagram/results" && request.method === "GET") return igResults(env, url, ctx);
     if (pathname.startsWith("/ig-media/") && (request.method === "GET" || request.method === "HEAD")) return igMedia(env, pathname);
+    if (pathname.startsWith("/nl-media/") && (request.method === "GET" || request.method === "HEAD")) return nlMedia(env, url);
     const read = request.method === "GET" || request.method === "HEAD";
     if (pathname === "/" && request.method === "GET") track("home", sourceOf(request));
     if (pathname.startsWith("/repo/") && request.method === "GET") track("repo_page", sourceOf(request));

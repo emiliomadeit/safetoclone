@@ -1,8 +1,9 @@
 // Checks the newsletter robot (newsletter.js + worker.js) with a fake HQ and a fake Resend: a ready issue gets
 // one test copy to Emile, an approved one is sent exactly once in its window, and nothing goes out if it
 // changed after approval or a grade it names changed. Run with: node test/newsletter.test.mjs
-import worker from "../worker.js";
-import { fingerprint, checkIssue, sendWindowOpen, issueClaimsProblem, renderHtml, renderText } from "../newsletter.js";
+import worker, { forgetPictures } from "../worker.js";
+import { fingerprint, checkIssue, sendWindowOpen, issueClaimsProblem, renderHtml, renderText, pictures } from "../newsletter.js";
+import { sha256 } from "../batch.js";
 import { forgetHq } from "../hq.js";
 import assert from "node:assert";
 
@@ -40,6 +41,32 @@ assert.match(renderText({ ...issue0, body: "## Tip\nDo it." }), /^Tip\nDo it\.[\
 
 // 3. The checks.
 const approve = async (i) => ({ ...i, status: "approved", approval: { by: "Emile", at: "2026-10-25T16:30:00Z", evidence: "cmsg_1", hash: await fingerprint(i) } });
+
+// Pictures: a line on its own, drawn full width with its alt text; the text version says [Picture: ...].
+// fingerprint() is unchanged (the Python result in 1 still matches): the sha256 inside the body locks the picture.
+const GIF = new Uint8Array([71, 73, 70, 56, 57, 97, 1, 0, 1, 0, 0, 0, 0, 59]);
+const gifHash = await sha256(GIF);
+const picLine = (path = "newsletter/images/2026-10-25/demo.gif", hash = gifHash, alt = "A dial <spinning>") => `![${alt}](${path}#sha256=${hash})`;
+const withPic = { ...issue0, body: `Look:\n${picLine()}\nNice.` };
+const ph = renderHtml(withPic);
+assert.ok(ph.includes(`<img src="https://safetoclone.com/nl-media/newsletter/images/2026-10-25/demo.gif?v=${gifHash}" alt="A dial &lt;spinning&gt;"`));
+assert.match(ph, /<p[^>]*>Look:<\/p><img [^>]*max-width:100%;height:auto;[^>]*border-radius:8px[^>]*><p[^>]*>Nice\.<\/p>/);
+assert.match(renderText(withPic), /^Look:\n\n\[Picture: A dial <spinning>\]\n\nNice\./);
+assert.deepEqual(pictures(withPic).list.map((x) => [x.path, x.hash, x.type]), [["newsletter/images/2026-10-25/demo.gif", gifHash, "image/gif"]]);
+assert.equal((await checkIssue(await approve(withPic))).ok, true);
+// Refused: a broken hash, outside newsletter/images/, "..", another date's folder, no alt text, other file types, outside links.
+for (const bad of [picLine(undefined, "abc"), picLine(undefined, gifHash.toUpperCase()), picLine("instagram/images/2026-10-25/demo.gif"),
+  picLine("newsletter/images/2026-10-25/../../../agents/x.png"), picLine("newsletter/images/2026-10-25/a..png"), picLine("newsletter/images/2026-10-18/demo.gif"),
+  picLine(undefined, undefined, ""), picLine("newsletter/images/2026-10-25/demo.svg"), picLine("https://evil.example/x.gif")]) {
+  const i = { ...issue0, body: `Hi.\n\n${bad}` };
+  assert.ok(pictures(i).problem, bad);
+  const c = await checkIssue(await approve(i));
+  assert.equal(c.ok, false);
+  assert.match(c.reason, /picture/);
+}
+const seven = { ...issue0, body: Array.from({ length: 7 }, (_, n) => picLine(`newsletter/images/2026-10-25/p${n}.gif`)).join("\n\n") };
+assert.match(pictures(seven).problem, /at most 6/);
+assert.equal(pictures({ ...seven, body: seven.body.split("\n\n").slice(1).join("\n\n") }).problem, "");
 assert.equal((await checkIssue(await approve(issue0))).ok, true);
 assert.match((await checkIssue({ ...issue0, status: "ready" })).reason, /not approved/);
 assert.match((await checkIssue({ ...(await approve(issue0)), approval: { by: "Claude", at: "x", evidence: "y", hash: "z" } })).reason, /Emile/);
@@ -291,6 +318,69 @@ await run(e, "2026-10-25T18:00:00Z");
 await run(e, "2026-10-25T18:30:00Z");
 assert.equal(sends().length, 1);
 assert.match(sends()[0].body.html, /Extra\./);
+
+// Pictures, end to end. /nl-media/ serves only a picture that a ready or approved issue names, with its exact
+// fingerprint, and only while HQ's bytes match it. A wrong or missing picture stops the test copy and the send.
+const PIC = "newsletter/images/2026-10-25/demo.gif";
+const picUrl = `/nl-media/${PIC}?v=${gifHash}`;
+const putPic = (i, file = GIF) => { put(i); Object.assign(hq, { [PIC]: file, "newsletter/images/2026-10-25/other.gif": GIF, "agents/claude/inbox/secret.md": "secret" }); };
+const media = async (e, path, method = "GET") => { clock = RealDate.parse("2026-10-25T16:00:00Z"); forgetHq(); forgetPictures(); return worker.fetch(new Request(`https://safetoclone.com${path}`, { method }), e, { waitUntil() {} }); };
+const picReady = { ...ready, body: `${body}\n\n${picLine()}` };
+reset();
+putPic(picReady);
+e = env();
+let mr = await media(e, picUrl);
+assert.equal(mr.status, 200);
+assert.equal(mr.headers.get("Content-Type"), "image/gif");
+assert.match(mr.headers.get("Cache-Control"), /max-age=31536000, immutable/);
+assert.deepEqual(new Uint8Array(await mr.arrayBuffer()), GIF);
+assert.equal((await media(e, picUrl, "HEAD")).status, 200);
+for (const bad of [`/nl-media/${PIC}`, `/nl-media/${PIC}?v=${"0".repeat(64)}`, `/nl-media/newsletter/images/2026-10-25/other.gif?v=${gifHash}`,
+  `/nl-media/agents/claude/inbox/secret.md?v=${gifHash}`, `/nl-media/newsletter/issues/2026-10-25.json`, `/nl-media/newsletter/images/2026-10-25/..%2f..%2f..%2fagents%2fclaude%2finbox%2fsecret.md?v=${gifHash}`,
+  `/nl-media/newsletter/images/2026-10-26/demo.gif?v=${gifHash}`, "/nl-media/%E0%A4%A"]) {
+  assert.equal((await media(e, bad)).status, 404, bad);
+}
+assert.equal((await media(env({ HQ_GITHUB_TOKEN: undefined }), picUrl)).status, 404);
+for (const status of ["held", "draft", undefined]) { putPic({ ...picReady, status }); assert.equal((await media(e, picUrl)).status, 404); }
+putPic(await approve(picReady));
+assert.equal((await media(e, picUrl)).status, 200);
+putPic(picReady, new Uint8Array([1, 2, 3])); // changed in HQ
+assert.equal((await media(e, picUrl)).status, 409);
+// A checked picture is kept in memory, so readers opening the email don't each cost a GitHub call.
+putPic(picReady);
+assert.equal((await media(e, picUrl)).status, 200);
+delete hq[PIC];
+clock = RealDate.parse("2026-10-25T16:00:00Z"); forgetHq();
+assert.equal((await worker.fetch(new Request(`https://safetoclone.com${picUrl}`), e, {})).status, 200);
+// A wrong picture: no test copy, Emile is told why.
+reset();
+putPic(picReady, new Uint8Array([1, 2, 3]));
+e = env();
+await run(e, "2026-10-25T16:00:00Z");
+assert.equal(mails().filter((m) => /^\[Test\]/.test(m.subject)).length, 0);
+assert.ok(mails().some((m) => /no test copy, a picture is wrong/.test(m.subject) && /fingerprint doesn't match/.test(m.text)));
+// Right picture: the test copy shows it, and once approved it goes out with it.
+reset();
+putPic(picReady);
+await run(e, "2026-10-25T16:30:00Z");
+assert.equal(mails().filter((m) => /^\[Test\]/.test(m.subject)).length, 1);
+assert.ok(mails().find((m) => /^\[Test\]/.test(m.subject)).html.includes(`nl-media/${PIC}?v=${gifHash}`));
+assert.match(mails().find((m) => /^\[Test\]/.test(m.subject)).text, /\[Picture: A dial <spinning>\]/);
+putPic(await approve(picReady));
+await run(e, "2026-10-25T17:00:00Z");
+assert.equal(sends().length, 1);
+assert.ok(sends()[0].body.html.includes(`<img src="https://safetoclone.com/nl-media/${PIC}?v=${gifHash}"`));
+// Approved, then the picture is changed or removed in HQ: not sent, Emile is told.
+for (const file of [new Uint8Array([1, 2, 3]), null]) {
+  reset();
+  putPic(await approve(picReady), file);
+  if (!file) delete hq[PIC];
+  e = env();
+  await run(e, "2026-10-25T17:00:00Z");
+  await run(e, "2026-10-25T17:30:00Z");
+  assert.equal(sends().length, 0);
+  assert.equal(mails().filter((m) => /not sent, a picture is wrong/.test(m.subject)).length, 1);
+}
 
 // No issue file today: nothing at all.
 reset();

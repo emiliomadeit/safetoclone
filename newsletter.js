@@ -14,6 +14,8 @@
 //    fingerprint still matches and every grade it names is still true today.
 import { checkClaim, dateIn, timeIn, sha256 } from "./batch.js";
 
+const SITE = "https://safetoclone.com";
+
 export const NEWSLETTER_TIME = "09:00";
 export const SEND_LATE_MINUTES = 180;
 export const issuePath = (date) => `newsletter/issues/${date}.json`;
@@ -35,6 +37,8 @@ export async function checkIssue(issue, button = null) {
   for (const key of ["date", "subject", "preview", "body"]) {
     if (!issue[key]) return { ok: false, reason: `the issue has no ${key}` };
   }
+  const pics = pictures(issue);
+  if (pics.problem) return { ok: false, reason: pics.problem };
   const fp = await fingerprint(issue);
   const a = issue.approval || {};
   let problem;
@@ -75,9 +79,37 @@ export function issueClaimsProblem(issue, dir) {
   return "";
 }
 
+// ---- Pictures ----
+// A line on its own: ![alt text](newsletter/images/<issue date>/<file>.png|gif|jpg#sha256=<64 hex>).
+// The sha256 is part of the body, so the fingerprint above already locks the pictures too. worker.js serves
+// them at /nl-media/<path>?v=<sha256> and checks the bytes still match before every test copy and send.
+export const MAX_PICTURES = 6;
+export const MAX_PICTURE_BYTES = 3 * 1024 * 1024;
+export const PICTURE_TYPES = { png: "image/png", gif: "image/gif", jpg: "image/jpeg" };
+const PICTURE = /^!\[([^\]]+)\]\((newsletter\/images\/(\d{4}-\d{2}-\d{2})\/[\w-][\w.-]*\.(png|gif|jpg))#sha256=([0-9a-f]{64})\)$/;
+const parsePicture = (line) => {
+  const m = String(line).trim().match(PICTURE);
+  return m && !m[2].includes("..") ? { alt: m[1], path: m[2], date: m[3], type: PICTURE_TYPES[m[4]], hash: m[5] } : null;
+};
+export const pictureUrl = (pic) => `${SITE}/nl-media/${pic.path}?v=${pic.hash}`;
+
+// Every picture in the issue, or a plain reason it can't go out.
+export function pictures(issue) {
+  const list = [];
+  for (const line of String(issue?.body || "").split("\n")) {
+    if (!line.trim().startsWith("![")) continue;
+    const pic = parsePicture(line);
+    if (!pic) return { list, problem: `a picture line isn't written right (${line.trim().slice(0, 100)})` };
+    if (pic.date !== issue.date) return { list, problem: `picture ${pic.path} must be in newsletter/images/${issue.date}/` };
+    list.push(pic);
+  }
+  if (list.length > MAX_PICTURES) return { list, problem: `it has ${list.length} pictures (at most ${MAX_PICTURES})` };
+  return { list, problem: "" };
+}
+
 // ---- Drawing the email ----
 // The body is plain Markdown-ish text, the same words Emile approved: blank lines between paragraphs,
-// "## " section headings, **bold**, *italic*, "- " for list items, and bare https:// links.
+// "## " section headings, **bold**, *italic*, "- " for list items, bare https:// links and pictures (above).
 // Every email ends with the one-tap rating (/newsletter/rate/<vote>, counted in stats.js) and the unsubscribe link.
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -88,9 +120,9 @@ function inline(text) {
     .replace(/\*(.+?)\*/g, "<em>$1</em>");
 }
 
-const blocks = (body) => String(body).replace(/\r/g, "").trim().split(/\n\s*\n/);
+// A picture line is always its own block.
+const blocks = (body) => String(body).replace(/\r/g, "").replace(/^[ \t]*(!\[.*)$/gm, "\n$1\n").trim().split(/\n\s*\n/);
 
-const SITE = "https://safetoclone.com";
 export const RATINGS = [["love", "😍", "Love it"], ["good", "🙂", "Good"], ["soso", "😐", "So so"]];
 // test: the rating links in Emile's test copy and on the approve page don't count.
 const rateUrl = (vote, test) => `${SITE}/newsletter/rate/${vote}${test ? "?test=1" : ""}`;
@@ -98,6 +130,8 @@ const rateUrl = (vote, test) => `${SITE}/newsletter/rate/${vote}${test ? "?test=
 export function renderHtml(issue, { unsubscribe = UNSUBSCRIBE, banner = "", approveUrl = "", test = false } = {}) {
   const p = 'style="margin:0 0 16px;font-size:16px;line-height:1.55"';
   const parts = blocks(issue.body).map((b) => {
+    const pic = parsePicture(b);
+    if (pic) return `<img src="${pictureUrl(pic)}" alt="${esc(pic.alt)}" width="528" style="display:block;width:100%;max-width:100%;height:auto;border:0;border-radius:8px;margin:0 0 16px">`;
     const lines = b.split("\n");
     let out = "";
     while (lines[0]?.startsWith("## ")) out += `<h2 style="margin:28px 0 12px;font-size:20px;line-height:1.3">${inline(lines.shift().slice(3))}</h2>`;
@@ -122,7 +156,7 @@ export function renderHtml(issue, { unsubscribe = UNSUBSCRIBE, banner = "", appr
 }
 
 export function renderText(issue, { unsubscribe = UNSUBSCRIBE, test = false } = {}) {
-  const body = blocks(issue.body).map((b) => b.replace(/^## /gm, "").replace(/\*\*(.+?)\*\*/g, "$1").replace(/\*(.+?)\*/g, "$1")).join("\n\n");
+  const body = blocks(issue.body).map((b) => parsePicture(b) ? `[Picture: ${parsePicture(b).alt}]` : b.replace(/^## /gm, "").replace(/\*\*(.+?)\*\*/g, "$1").replace(/\*(.+?)\*/g, "$1")).join("\n\n");
   const rate = RATINGS.map(([v, emoji, label]) => `${emoji} ${label}: ${rateUrl(v, test)}`).join("\n");
   return `${body}\n\n---\nHow was this week's?\n${rate}\n\nYou're getting this because you signed up at safetoclone.com. Unsubscribe: ${unsubscribe}\n`;
 }
