@@ -212,6 +212,12 @@ res = await signup(env());
 assert.equal(res.status, 200);
 assert.ok(calls.some((x) => x.path === "/contacts/new%40example.com/segments/seg1"));
 contactExists = false;
+// A form sent without JavaScript is saved the same way and gets a "you're on the list" page.
+reset();
+res = await worker.fetch(new Request("https://safetoclone.com/api/subscribe", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: "email=Form%40Example.com" }), env());
+assert.equal(res.status, 200);
+assert.match(await res.text(), /You're on the list/);
+assert.equal(calls.find((x) => x.path === "/contacts").body.email, "form@example.com");
 // RESEND_SEGMENT_ID wins.
 reset();
 await signup(env({ RESEND_SEGMENT_ID: "segX" }));
