@@ -25,7 +25,7 @@ const isForm = (request) => /application\/x-www-form-urlencoded|multipart\/form-
 async function subscribe(request, env) {
   if (request.method !== "POST") return json({ error: "Use POST" }, 405);
   const form = isForm(request);
-  const { email: raw } = form ? Object.fromEntries(await request.formData().catch(() => new Map())) : await request.json().catch(() => ({}));
+  const { email: raw, from } = form ? Object.fromEntries(await request.formData().catch(() => new Map())) : await request.json().catch(() => ({}));
   const email = String(raw || "").trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "That email address doesn't look right." }, 400);
   if (!env.RESEND_API_KEY) return json({ error: "Newsletter isn't connected yet." }, 503);
@@ -38,8 +38,10 @@ async function subscribe(request, env) {
   // 409 = this email is already a contact, which is fine; make sure it's in the segment too.
   if (r.status === 409 && segment) await resend(env, `/contacts/${encodeURIComponent(email)}/segments/${segment.id}`, {}).catch(() => {});
   if (!r.ok && r.status !== 409) return json({ error: "Couldn't save your email. Try again later." }, 502);
-  return json({ ok: true });
+  return json({ ok: true, from: SIGNUP_BOXES.includes(from) ? from : "" });
 }
+// Which signup box a visitor used (the hidden "from" field), counted as signup_<box> in /api/stats.
+const SIGNUP_BOXES = ["home", "result", "repo"];
 
 // ---- /mcp: a small read-only MCP server (https://modelcontextprotocol.io) ----
 // Any AI agent can add it as a custom connector: to check grades before installing a repo, or (Meta Muse)
@@ -632,7 +634,11 @@ const site = {
     }
     if (pathname === "/api/subscribe") {
       const res = await subscribe(request, env);
-      if (res.ok) track("signup");
+      if (res.ok) {
+        track("signup");
+        const { from } = await res.clone().json().catch(() => ({}));
+        if (from) track(`signup_${from}`);
+      }
       // A form sent without JavaScript gets a page back, not JSON.
       if (isForm(request)) {
         const j = await res.clone().json().catch(() => ({}));
