@@ -17,6 +17,17 @@ const SCAM_WORDS = [
   /\bspoofer\b/i, /\baimbot\b/i, /\bwallet\s+drainer\b/i,
 ];
 const DISABLE_AV = /(disable|turn\s+off|deactivate)\s+(your\s+)?(anti-?virus|windows\s+defender|defender|real-?time\s+protection|smartscreen)/i;
+// Getting past the computer's own warning: "More info, then Run anyway" (Windows SmartScreen), "Open Anyway" (macOS).
+const BYPASS_WARNING = /\bmore\s+info\b[^\n]{0,80}\brun\s+anyway\b|\bopen\s+anyway\b/i;
+// A direct-download link to a program or archive kept in a subfolder of a repo, instead of in a release.
+// Fake copies of real projects hide their malware zip like this (e.g. src/test/java/app-1.0.zip).
+// shortcut: only raw links count, not relative or /blob/ links; add those if malware starts using them.
+const HIDDEN_DOWNLOAD = /https?:\/\/(?:raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/[^/\s]+|github\.com\/[^/\s]+\/[^/\s]+\/raw\/[^/\s]+)\/((?:[^\s)"'<>/]+\/)+[^\s)"'<>/]+\.(?:exe|scr|msi|vbs|jar|dll|apk|dmg|pkg|zip|rar|7z))\b/i;
+// A "Download" link to another website, in a repo that holds nothing but its README (and license).
+const DOWNLOAD_LINK = /\[[^\]]*\bdownload\b[^\]]*\]\((https?:\/\/(?!(?:[\w-]+\.)*github(?:usercontent)?\.com\/)[^)\s]+)\)/i;
+const PAPERWORK_FILE = /^(readme|licen[sc]e|copying|\.git\w*)(\.|$)/i;
+// VS Code (and editors built on it, like Cursor) can start a task by itself the moment you open the folder.
+const FOLDER_OPEN = /"runOn"\s*:\s*"folderOpen"/;
 // A password that is actually given out ("password: 1234", "the password is abc"), not just the word "password".
 // "pass" only counts as "pass:" or "pass=" ("the tests pass is..." is not a password), and "no password is
 // configured" or "without an admin password: ..." don't count either.
@@ -131,7 +142,7 @@ export const WHY = {
   "Code review": "When a second person checks every change before it goes in, it's much harder to sneak in something bad. From OpenSSF Scorecard, an independent security check.",
   "Known security holes": "Security holes that are public but not fixed yet are what attackers look for first. From OpenSSF Scorecard, or, when it has no data, from the project's list of parts (its lock file) looked up in OSV, Google's free public database of known security holes.",
   "Safe automation": "Most projects use robots that build and publish the software. Robots with loose permissions have been used to slip malware into real, popular projects. From OpenSSF Scorecard.",
-  "Red flags": "We look for tricks that keep showing up in malware: requests to turn off antivirus, locked zip files, cracks and free premium, hidden code, and AI instruction files that try to take over your assistant. Serious ones cap the grade, however popular the repo is.",
+  "Red flags": "We look for tricks that keep showing up in malware: requests to turn off antivirus or click past the computer's warning, locked zip files, downloads hidden deep in the code, cracks and free premium, hidden code, code that runs by itself when you open the folder, parts listed as malware, and AI instruction files that try to take over your assistant. Serious ones cap the grade, however popular the repo is.",
 };
 
 // Accepts "owner/repo", "github.com/owner/repo" or a full URL.
@@ -234,11 +245,31 @@ export function readLockfiles(texts) {
   return files.length ? { files, parts: [...seen.values()].slice(0, MAX_PARTS) } : null;
 }
 
-// Asks OSV which of these parts have known security holes. Returns null if OSV can't be reached,
+// The parts package.json asks for by name, at the lowest version it accepts ("^1.2.0" -> 1.2.0).
+// Only used to look for known malware: a project without a lock file still installs these.
+// Uses that version, not "any version": a few popular parts (chalk, debug) had one hijacked version for a day,
+// and asking about every version would wrongly flag every project that uses them.
+// An alias ("x": "npm:real-name@^1.0.0") installs real-name, not x. Local and git parts aren't on npm, so they're skipped.
+// shortcut: "*", "latest" and git links are skipped; only npm, the ecosystem the malware reports show.
+export function directParts(pkg) {
+  try {
+    const j = JSON.parse(pkg || "{}");
+    return Object.entries({ ...j.dependencies, ...j.devDependencies }).map(([key, spec]) => {
+      const alias = String(spec).match(/^npm:((?:@[^/@\s]+\/)?[^@\s]+)@(.*)$/);
+      const version = (alias ? alias[2] : String(spec)).match(/^[\^~>=<\s]*v?(\d+\.\d+\.\d+[\w.+-]*)/)?.[1];
+      return { name: alias ? alias[1] : key, version, ecosystem: "npm", direct: true };
+    }).filter((p) => p.version);
+  } catch { return []; }
+}
+
+// Asks OSV which of these parts have known security holes, and which are known malware
+// (OSV ids starting with MAL-, from the OpenSSF list of malicious packages). Parts from package.json
+// ("direct") only count for malware. Returns null if OSV can't be reached,
 // so a network problem never looks like a clean result.
 export async function getKnownHoles(lock, osvUrl = OSV_URL) {
   if (!lock) return null;
   const vulnerable = new Map(); // part name -> hole ids
+  const malware = new Map();
   try {
     for (let i = 0; i < lock.parts.length; i += 1000) {
       const batch = lock.parts.slice(i, i + 1000);
@@ -253,11 +284,15 @@ export async function getKnownHoles(lock, osvUrl = OSV_URL) {
       j.results.forEach((r, k) => {
         if (!r?.vulns?.length) return;
         const key = `${batch[k].name}@${batch[k].version}`;
-        vulnerable.set(key, [...new Set([...(vulnerable.get(key) || []), ...r.vulns.map((v) => v.id)])]);
+        const ids = r.vulns.map((v) => v.id);
+        const add = (map, found) => { if (found.length) map.set(key, [...new Set([...(map.get(key) || []), ...found])]); };
+        add(malware, ids.filter((id) => id.startsWith("MAL-")));
+        if (!batch[k].direct) add(vulnerable, ids.filter((id) => !id.startsWith("MAL-")));
       });
     }
   } catch { return null; }
-  return { files: lock.files, parts: lock.parts.length, vulnerable: [...vulnerable].map(([part, ids]) => ({ part, ids: ids.slice(0, 5) })) };
+  const list = (map) => [...map].map(([part, ids]) => ({ part, ids: ids.slice(0, 5) }));
+  return { files: lock.files, parts: lock.parts.filter((p) => !p.direct).length, vulnerable: list(vulnerable), malware: list(malware) };
 }
 
 // OpenSSF Scorecard: a free, independent security check of public GitHub projects (scorecard.dev).
@@ -299,9 +334,12 @@ export async function collect(owner, repo, { token, osvUrl } = {}) {
   // AI instructions in hidden folders (.claude/, .cursor/rules/, .github/copilot-instructions.md ...).
   const list = (path) => getJSON(`${API}/repos/${owner}/${repo}/contents/${path}`, token).then((x) => (Array.isArray(x) ? x : [])).catch(orEmpty([]));
   const folderFiles = [];
+  let tasks = ""; // .vscode/tasks.json: tasks there can start by themselves when you open the folder
   for (const dir of AI_FOLDERS.filter((d) => files.some((f) => f.type === "dir" && f.name === d))) {
     const inside = await list(dir);
     folderFiles.push(...inside.filter((f) => f.type === "file" && AI_FOLDER_FILE.test(f.name)));
+    const t = dir === ".vscode" && inside.find((f) => f.type === "file" && f.name === "tasks.json");
+    if (t?.download_url) tasks = await getText(t.download_url);
     if (dir === ".claude" || dir === ".cursor") {
       for (const sub of inside.filter((f) => f.type === "dir" && AI_SUBFOLDERS.includes(f.name))) {
         folderFiles.push(...(await list(sub.path)).filter((f) => f.type === "file" && /\.(md|mdc)$/i.test(f.name)));
@@ -320,9 +358,11 @@ export async function collect(owner, repo, { token, osvUrl } = {}) {
       const f = files.find((x) => x.type === "file" && x.name === n);
       if (f?.download_url && (f.size || 0) <= LOCK_LIMIT) lockTexts[n] = await getText(f.download_url, LOCK_LIMIT);
     }));
-    deps = await getKnownHoles(readLockfiles(lockTexts), osvUrl);
+    const lock = readLockfiles(lockTexts);
+    const direct = directParts(pkg);
+    deps = await getKnownHoles(lock || direct.length ? { files: lock?.files || [], parts: [...(lock?.parts || []), ...direct] } : null, osvUrl);
   }
-  return { repo: r, user, files, releases: Array.isArray(releases) ? releases : [], readme, pkg, aiFiles, scorecard, deps };
+  return { repo: r, user, files, releases: Array.isArray(releases) ? releases : [], readme, pkg, aiFiles, scorecard, deps, tasks };
 }
 
 // "Does it cost money?" Doesn't change the grade. Many projects are free on GitHub with paid extras elsewhere.
@@ -340,7 +380,7 @@ export function costs({ readme = "", about = "", files = [] }) {
 
 // Turns collected data into a score. Pure function: same input, same output.
 export function score(data) {
-  const { repo: r, user, files, releases, readme, pkg, aiFiles, scorecard, deps } = data;
+  const { repo: r, user, files, releases, readme, pkg, aiFiles, scorecard, deps, tasks = "" } = data;
   const checks = []; // { group, label, points, max, note, level: good|warn|bad }
   const add = (group, label, points, max, level, note) => checks.push({ group, label, points, max, level, note });
 
@@ -402,7 +442,7 @@ export function score(data) {
   // Gentler than Scorecard's version on purpose: big projects use hundreds of parts, OSV lists every known
   // hole however minor, and we can't tell which ones the project actually reaches. So a few holes cost a
   // little, many make this area a C, which keeps the overall grade at B at best (weakest-link rule). Never lower.
-  if (vulns === null && deps) {
+  if (vulns === null && deps?.files.length) {
     const n = deps.vulnerable.length;
     const first = deps.vulnerable.slice(0, 2).map((x) => x.part).join(", ");
     add("Security habits", "Known security holes", n === 0 ? 5 : n < 5 ? 4 : 3, 5, n === 0 ? "good" : "warn",
@@ -438,15 +478,31 @@ export function score(data) {
   const scam = scamSentence && SCAM_WORDS.map((re) => scamSentence.match(re)).find(Boolean);
   if (scam) flag("Scam-style wording", 15, `Mentions cracks, cheats, keygens or free premium. Most malware on GitHub looks like this. We found: "…${around(scamSentence, scam)}…"`, 35);
   if (DISABLE_AV.test(text)) flag("Asks you to turn off antivirus", 30, "Real software never needs this. This is the #1 sign of malware.", 15);
+  // Download tricks: serious for a little-known project, a warning for a widely used one.
+  const trick = (label, note) => flag(label, 10, note, stars < 100 ? 40 : null);
+  const bypass = text.match(BYPASS_WARNING);
+  // Honest, popular apps that aren't signed explain this too (3 of the 134 directory repos), so it only counts for little-known ones.
+  if (bypass) {
+    const label = "Asks you to click past the safety warning";
+    const note = `Tells you to get past the warning Windows or macOS shows for unknown programs. That warning is there to stop malware. ${stars < 100
+      ? "Real software from a known maker is signed and rarely needs this." : "Some honest, widely used apps aren't signed and need this too, so it doesn't cost points here."} We found: "…${around(text, bypass)}…"`;
+    if (stars < 100) trick(label, note); else flag(label, 0, note);
+  }
+  const hiddenDl = readme.match(HIDDEN_DOWNLOAD);
+  if (hiddenDl) trick("Download hidden in the code", `The README's download link points to a file tucked inside the project's folders, not to an official release: ${hiddenDl[1]}. Fake copies of real projects hide malware like this.`);
+  const outsideDl = files.length && files.every((f) => f.type === "file" && PAPERWORK_FILE.test(f.name)) && readme.match(DOWNLOAD_LINK);
+  if (outsideDl) trick("Download link instead of code", `There is no code here, only a README with a download link to another website (${outsideDl[1].split("/")[2]}). Malware campaigns make thousands of repos like this.`);
   // A password in the notes of a release that offers an archive counts too, even if the notes never say "zip".
   const lockedRelease = releases.find((x) => (x.assets || []).some((a) => ARCHIVE_FILE.test(a.name || "")) && PASSWORD_GIVEN.test(x.body || ""));
   const pwLine = zipPassword(text) || (lockedRelease && around(lockedRelease.body, lockedRelease.body.match(PASSWORD_GIVEN)));
   if (pwLine) flag("Password-protected download", 15, `Passwords on zip files stop antivirus from looking inside. We found: "${pwLine.trim().slice(0, 140)}"`, 30);
   const riskyRoot = files.filter((f) => f.type === "file" && RISKY_FILE.test(f.name)).map((f) => f.name);
   const riskyAssets = releases.flatMap((x) => (x.assets || []).map((a) => a.name)).filter((n) => RISKY_FILE.test(n));
-  if (riskyRoot.length) flag("Programs sitting in the code", 10, `Ready-to-run files in the main folder: ${riskyRoot.slice(0, 3).join(", ")}. Source code projects rarely do this.`, stars < 100 ? 40 : null);
+  if (riskyRoot.length) trick("Programs sitting in the code", `Ready-to-run files in the main folder: ${riskyRoot.slice(0, 3).join(", ")}. Source code projects rarely do this.`);
   if (riskyAssets.length && stars < 100) flag("Unknown programs to download", 8, `Releases offer ${riskyAssets.slice(0, 3).join(", ")} from a little-known project.`);
-  if (PIPE_TO_SHELL.test(readme)) flag("Runs a script straight from the internet", 3, "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.");
+  // Shown, but free for widely used projects: in our 2026-10 test it showed on 9 famous safe tools
+  // (Homebrew, Claude Code, nvm...) and on none of the 14 malware repos still online.
+  if (PIPE_TO_SHELL.test(readme)) flag("Runs a script straight from the internet", stars < 100 ? 3 : 0, `The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs.${stars < 100 ? "" : " Widely used tools do this a lot, so it doesn't cost points here."}`);
   // Pictures and badge icons are often stored as encoded text (also inside links, as %2B for "+"). Those are fine.
   // Diagram links (mermaid.live, kroki) also carry long encoded text inside the address. Links are left out too.
   const readmeNoImages = readme.replace(/base64,[A-Za-z0-9+/=%]+/gi, "").replace(/https?:\/\/[^\s)"'<>\]]+/gi, "");
@@ -460,6 +516,20 @@ export function score(data) {
     softCap("fame", 69);
   }
   if (user && ownerAge < 30) flag("Brand-new owner account", 8, "The account behind it is less than a month old.");
+  // A task set to run by itself on opening the folder. Infected projects use it to start hidden code (often a fake font file).
+  const taskText = tasks.replace(/^\s*\/\/.*$/gm, ""); // lines commented out don't run
+  if (FOLDER_OPEN.test(taskText)) {
+    let cmd = "";
+    try {
+      const t = JSON.parse(taskText.replace(/,(\s*[}\]])/g, "$1")).tasks?.find((x) => x.runOptions?.runOn === "folderOpen");
+      cmd = [t?.command || t?.windows?.command, ...(t?.args || [])].filter((x) => typeof x === "string").join(" ");
+    } catch { /* odd JSON: still flagged, just without the quote */ }
+    flag("Runs code when you open the folder", 25, `.vscode/tasks.json tells VS Code (and editors built on it, like Cursor) to run ${cmd ? `"${cmd.slice(0, 120)}"` : "a task"} by itself the moment you open the folder. Real projects almost never do this. It's a known way to put malware on developers' computers.`, 20);
+  }
+  if (deps?.malware?.length) {
+    const m = deps.malware[0];
+    flag("Uses a part listed as malware", 30, `It uses ${m.part}, which OSV (Google's public database) lists as malware (${m.ids[0]}). Installing the project installs it too.`, 15);
+  }
   try {
     const scripts = pkg ? JSON.parse(pkg).scripts || {} : {};
     const hooks = ["preinstall", "install", "postinstall"].filter((k) => scripts[k]);
