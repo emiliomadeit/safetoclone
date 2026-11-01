@@ -1,6 +1,6 @@
 // Checks the visitor counter (stats.js). Run with: node test/stats.test.mjs
 import worker from "../worker.js";
-import { sourceOf } from "../stats.js";
+import { sourceOf, EVENTS } from "../stats.js";
 import assert from "node:assert";
 
 const store = new Map();
@@ -34,7 +34,23 @@ await visit("/mcp", { "User-Agent": "python-httpx/0.27", "Content-Type": "applic
 // Asking about posts is not a repo check.
 await visit("/mcp", { "Content-Type": "application/json" }, { method: "POST", body: JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/call", params: { name: "list_upcoming_posts" } }) });
 
+// The newsletter rating: three known votes, counted per day. Test copies, other words and POSTs don't count,
+// and nothing from the address is shown back.
+let thanks = await visit("/newsletter/rate/love");
+assert.match(await thanks.text(), /Thanks!/);
+await visit("/newsletter/rate/love");
+await visit("/newsletter/rate/soso");
+await visit("/newsletter/rate/good?test=1");
+await visit("/newsletter/rate/home");
+await visit("/newsletter/rate/%3Cscript%3E");
+await visit("/newsletter/rate/love", {}, { method: "POST" });
+await visit("/newsletter/rate/love", { "User-Agent": "Googlebot/2.1" });
+
 const stats = await (await visit("/api/stats")).json();
+assert.equal(stats.total.events.nl_love, 2);
+assert.equal(stats.total.events.nl_soso, 1);
+assert.equal(stats.total.events.nl_good, undefined);
+assert.ok(Object.keys(stats.total.events).every((k) => EVENTS.includes(k)));
 assert.equal(stats.total.events.agent_mcp, 1);
 assert.equal(stats.total.events.home, 2);
 assert.equal(stats.total.events.check, 1);

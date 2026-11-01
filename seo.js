@@ -205,3 +205,41 @@ export function subscribedPage(ok, message) {
 </section>`;
   return layout({ title: ok ? "You're on the list · SafeToClone" : "Signup problem · SafeToClone", description: "SafeToClone weekly safety email.", canonical: SITE + "/", noindex: true, body });
 }
+
+// A short page with one message (newsletter approve link problems, rating thank-you). Google is told not to list it.
+export function notePage(title, message) {
+  const body = `
+<section>
+  <h1>${esc(title)}</h1>
+  <p class="answer">${esc(message)}</p>
+  <p><a class="btn secondary" href="/">Back to SafeToClone</a></p>
+</section>`;
+  return layout({ title: `${title} · SafeToClone`, description: "SafeToClone weekly safety email.", canonical: SITE + "/", noindex: true, body });
+}
+
+// The page behind the "Review and approve" button in Emile's test copy. Opening it changes nothing;
+// only the Approve button (a form POST back to the same link) records his yes. `email` is the full email HTML.
+export function approvePage({ issue, version, when, action, email }) {
+  const body = `
+<section>
+  <h1>Review and approve</h1>
+  <p class="answer">This is exactly what subscribers will get. Nothing is approved until you tap the button at the bottom.</p>
+  <dl class="facts">
+    <dt>Subject</dt><dd>${esc(issue.subject)}</dd>
+    <dt>Preview line</dt><dd>${esc(issue.preview)}</dd>
+    <dt>Goes out</dt><dd>${esc(when)}</dd>
+    <dt>Version</dt><dd>${esc(version)}</dd>
+  </dl>
+</section>
+<section>
+  <h2>The email</h2>
+  <iframe class="email-frame" title="The full email, as subscribers will see it" sandbox srcdoc="${esc(email)}"></iframe>
+</section>
+<section>
+  <form method="post" action="${esc(action)}">
+    <button class="btn" type="submit">Approve this version</button>
+  </form>
+  <p class="fine">Not right? Don't tap anything. Tell Claude what to change; the new version gets its own test copy and button.</p>
+</section>`;
+  return layout({ title: "Review and approve · SafeToClone", description: "Approve this week's SafeToClone email.", canonical: SITE + "/", noindex: true, body });
+}

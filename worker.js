@@ -12,10 +12,10 @@
 import { autopost, status as instagramStatus, listing as igListing, metrics as igMetrics } from "./instagram.js";
 import { hqFile, hqText, hqJson, batchPath, checkPath, hqHealth, hqKeyDaysLeft } from "./hq.js";
 import { checkBatch, postProblem, claimsProblem, latestCheck, dueNow, dateIn, timeIn, addDays, mondayOf, sha256, DEFAULT_TIME, LATE_MINUTES } from "./batch.js";
-import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath, subscribedPage } from "./seo.js";
+import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath, subscribedPage, notePage, approvePage } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
 import { isSandbox, sandboxFetch } from "./sandbox.js";
-import { checkIssue, fingerprint as issueFingerprint, sendWindowOpen, issueClaimsProblem, issuePath, renderHtml, renderText, FROM, NEWSLETTER_TIME } from "./newsletter.js";
+import { checkIssue, fingerprint as issueFingerprint, sendWindowOpen, sendWindowPassed, issueClaimsProblem, issuePath, renderHtml, renderText, FROM, NEWSLETTER_TIME, pictures, MAX_PICTURE_BYTES, MAX_PICTURES } from "./newsletter.js";
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -504,6 +504,65 @@ async function segmentIsEmpty(env, segmentId) {
 }
 
 const sentKey = (date) => `newsletter:sent:${date}`;
+// The approve button: a one-time link per test copy, bound to that exact version, valid 7 days.
+// 256 random bits, so guessing one is pointless; malformed tokens are refused before any lookup.
+const tokenKey = (t) => `newsletter:token:${t}`;
+const approvalKey = (date) => `newsletter:approval:${date}`; // Emile's tap: { hash, at, source }
+const TOKEN_DAYS = 7;
+const newToken = () => [...crypto.getRandomValues(new Uint8Array(32))].map((b) => b.toString(16).padStart(2, "0")).join("");
+
+// One newsletter picture, read fresh from HQ and checked against the sha256 written in the issue body.
+async function readPicture(env, pic) {
+  const r = await hqFile(env, pic.path).catch(() => null);
+  if (!r) return { status: 502, problem: `couldn't read the picture ${pic.path} from HQ` };
+  const bytes = await r.arrayBuffer();
+  if (bytes.byteLength > MAX_PICTURE_BYTES) return { status: 413, problem: `the picture ${pic.path} is bigger than 3 MB` };
+  if ((await sha256(bytes)) !== pic.hash) return { status: 409, problem: `the picture ${pic.path} isn't the one written in the issue (its fingerprint doesn't match)` };
+  return { bytes };
+}
+// "" when every picture in the issue is written right, loads from HQ and matches its fingerprint.
+async function issuePicturesProblem(env, issue) {
+  const { list, problem } = pictures(issue);
+  if (problem) return problem;
+  for (const pic of list) {
+    const got = await readPicture(env, pic);
+    if (got.problem) return got.problem;
+  }
+  return "";
+}
+
+// safetoclone.com/nl-media/newsletter/images/<date>/<file>?v=<sha256>: the newsletter's pictures, for email apps.
+// Only a picture that the issue file for <date> (status ready or approved) names with that exact
+// path and fingerprint, and only if HQ's bytes still match it. Nothing else in HQ can come out through here.
+// Checked pictures are kept in memory by fingerprint (the bytes can't change under it), at most MAX_PICTURES,
+// so many readers opening the email don't use up the GitHub key's hourly limit.
+// shortcut: memory is per Cloudflare server; add the Cache API if the list grows past a few thousand readers.
+const keptPictures = new Map();
+async function nlMedia(env, url) {
+  const notFound = () => new Response("Not found", { status: 404 });
+  if (!env.HQ_GITHUB_TOKEN) return notFound();
+  let path;
+  try { path = decodeURIComponent(url.pathname.slice("/nl-media/".length)); } catch { return notFound(); }
+  const date = path.match(/^newsletter\/images\/(\d{4}-\d{2}-\d{2})\//)?.[1];
+  if (!date) return notFound();
+  let issue;
+  try { issue = await hqJson(env, issuePath(date)); } catch { return new Response("HQ unreachable", { status: 502 }); }
+  if (!issue || !["ready", "approved"].includes(issue.status)) return notFound();
+  const { list, problem } = pictures(issue);
+  const pic = !problem && list.find((p) => p.path === path && p.hash === url.searchParams.get("v"));
+  if (!pic) return notFound();
+  let bytes = keptPictures.get(pic.hash);
+  if (!bytes) {
+    const got = await readPicture(env, pic);
+    if (got.problem) return new Response(got.problem, { status: got.status });
+    bytes = got.bytes;
+    if (keptPictures.size >= MAX_PICTURES) keptPictures.delete(keptPictures.keys().next().value);
+    keptPictures.set(pic.hash, bytes);
+  }
+  // The fingerprint is in the address, so the picture at this address can never change: cache it for a year.
+  return new Response(bytes, { headers: { "Content-Type": pic.type, "Cache-Control": "public, max-age=31536000, immutable", "X-Content-Type-Options": "nosniff" } });
+}
+export const forgetPictures = () => keptPictures.clear(); // for tests
 
 async function sendNewsletter(env, now = new Date()) {
   if (!env.RESEND_API_KEY || !env.HQ_GITHUB_TOKEN || !env.INSTAGRAM) return;
@@ -516,22 +575,33 @@ async function sendNewsletter(env, now = new Date()) {
 
   // A ready issue: email Emile one test copy of this exact version.
   if (issue.status === "ready" && !(await env.INSTAGRAM.get(`newsletter:test:${fp}`))) {
-    const banner = `Test copy for Emile, version ${fp.slice(0, 8)}. Subscribers get exactly this. If it looks right, say "yes" in your to-do thread.`;
+    const pics = await issuePicturesProblem(env, issue);
+    if (pics) {
+      await tell(`testpictures:${fp.slice(0, 8)}`, "Newsletter: no test copy, a picture is wrong", `The robot didn't email you the test copy of today's issue because ${pics}. Ask Claude to fix the picture in HQ; a test copy goes out by itself once it's right.`);
+      return console.log("Newsletter: no test copy,", pics);
+    }
+    const token = newToken();
+    await env.INSTAGRAM.put(tokenKey(token), JSON.stringify({ date, hash: fp, at: now.toISOString() }), { expirationTtl: TOKEN_DAYS * 86400 });
+    const approveUrl = `${SITE}/newsletter/approve?d=${date}&v=${fp.slice(0, 8)}&t=${token}`;
+    const banner = `Test copy for Emile, version ${fp.slice(0, 8)}. Subscribers get exactly this. If it looks right, tap "Review and approve" (or say "yes" in your to-do thread).`;
     const r = await resend(env, "/emails", {
       from: FROM, to: [env.ALERT_EMAIL || "hello@safetoclone.com"], subject: `[Test] ${issue.subject}`,
-      html: renderHtml(issue, { unsubscribe: SITE, banner }), text: `${banner}\n\n${renderText(issue, { unsubscribe: SITE })}`,
+      html: renderHtml(issue, { unsubscribe: SITE, banner, approveUrl, test: true }),
+      text: `${banner}\nReview and approve: ${approveUrl}\n\n${renderText(issue, { unsubscribe: SITE, test: true })}`,
     }).catch(() => null);
     if (r?.ok) await env.INSTAGRAM.put(`newsletter:test:${fp}`, now.toISOString(), { expirationTtl: 14 * 86400 });
     return console.log("Newsletter: test copy", r?.ok ? "sent" : "failed");
   }
 
-  const check = await checkIssue(issue);
+  const check = await checkIssue(issue, await env.INSTAGRAM.get(approvalKey(date), "json"));
   if (!check.ok) {
     if (check.changed) await tell(fp.slice(0, 8), "Newsletter: not sent, it changed after approval", `Today's issue was edited after you said yes, so it won't go out until you approve the new version.`);
     return console.log("Newsletter:", check.reason);
   }
   if (!sendWindowOpen(issue, now)) return;
   if (await env.INSTAGRAM.get(sentKey(date))) return; // already sent (or tried): never twice
+  const pics = await issuePicturesProblem(env, issue);
+  if (pics) return tell(`pictures:${fp.slice(0, 8)}`, "Newsletter: not sent, a picture is wrong", `Today's issue wasn't sent because ${pics}. Ask Claude to fix it in HQ; if that changes the issue, it needs your approval again.`);
   const dir = await readJson(env, "/data/directory.json").catch(() => null);
   const claims = issueClaimsProblem(issue, dir);
   if (claims) return tell("claims", "Newsletter: not sent, a grade changed", `Today's issue wasn't sent because ${claims}. Ask Claude to update it, then approve again.`);
@@ -568,7 +638,7 @@ async function sendNewsletter(env, now = new Date()) {
     if (sent.status !== 429) break;
   }
   const said = sent.ok ? "" : `${sent.status} ${(await sent.text().catch(() => "")).slice(0, 300)}`.trim();
-  const record = { state: sent.ok ? "sent" : "unsure", at: new Date().toISOString(), broadcast: id, version: fp.slice(0, 8), segment: segment.name || segment.how, ...(said ? { resendSaid: said } : {}) };
+  const record = { state: sent.ok ? "sent" : "unsure", at: new Date().toISOString(), broadcast: id, version: fp.slice(0, 8), approvedBy: check.source, segment: segment.name || segment.how, ...(said ? { resendSaid: said } : {}) };
   await env.INSTAGRAM.put(sentKey(date), JSON.stringify(record));
   console.log("Newsletter:", JSON.stringify(record));
   if (sent.ok) await tell("sent", `Newsletter sent: ${issue.subject}`, `Today's issue went out through Resend (broadcast ${id}). Check your inbox, and spam.`);
@@ -585,8 +655,10 @@ async function newsletterStatus(env, url) {
     if (!issue) out.issue = null;
     else {
       const fp = await issueFingerprint(issue);
-      const check = await checkIssue(issue);
+      const button = env.INSTAGRAM ? await env.INSTAGRAM.get(approvalKey(date), "json") : null;
+      const check = await checkIssue(issue, button);
       out.issue = { status: issue.status || null, subject: issue.subject || null, time: issue.time || NEWSLETTER_TIME, version: fp.slice(0, 8), canSend: check.ok, problem: check.ok ? null : check.reason,
+        approvedBy: check.ok ? check.source : null, buttonApproval: button ? { version: String(button.hash).slice(0, 8), at: button.at, current: button.hash === fp } : null,
         testCopySent: env.INSTAGRAM ? await env.INSTAGRAM.get(`newsletter:test:${fp}`) : null };
     }
   } catch (e) { out.issue = { problem: `Couldn't read HQ: ${e.message}` }; }
@@ -595,6 +667,37 @@ async function newsletterStatus(env, url) {
     try { const s = await pickSegment(env); out.sendsTo = s.name || s.how; } catch (e) { out.sendsTo = null; out.segmentProblem = e.message; }
   }
   return new Response(JSON.stringify(out, null, 2), { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
+}
+
+// /newsletter/approve?d=<date>&v=<version>&t=<token>, the "Review and approve" button in Emile's test copy.
+// GET only shows the email (email apps open links by themselves); POST, the page's Approve button, records it.
+const PRIVATE = { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" };
+async function newsletterApprove(request, env, url, now = new Date()) {
+  const page = (title, message, status = 200) => new Response(notePage(title, message), { status, headers: PRIVATE });
+  const q = (k) => url.searchParams.get(k) || "";
+  const t = q("t");
+  const rec = /^[0-9a-f]{64}$/.test(t) && env.INSTAGRAM ? await env.INSTAGRAM.get(tokenKey(t), "json") : null;
+  if (!rec || !(now - Date.parse(rec.at) <= TOKEN_DAYS * 86400e3) || q("d") !== rec.date || q("v") !== rec.hash.slice(0, 8)) {
+    return page("This link doesn't work", "It has expired (links last 7 days) or isn't complete. Nothing was approved. Ask Claude for a new test copy.", 404);
+  }
+  let issue;
+  try { issue = await hqJson(env, issuePath(rec.date)); } catch { return page("Try again in a minute", "We couldn't read the email from HQ, so nothing was approved.", 503); }
+  if (!issue || (await issueFingerprint(issue)) !== rec.hash) {
+    return page("This version changed", "The email was edited after this test copy was sent, so this button no longer counts. The new version gets its own test copy and button.", 410);
+  }
+  if (!["ready", "approved"].includes(issue.status)) return page("Not ready to approve", `HQ has this email on "${issue.status || "no status"}", so nothing was approved.`, 409);
+  const day = new Date(`${rec.date}T12:00:00Z`).toLocaleDateString("en-CA", { weekday: "long", month: "long", day: "numeric", timeZone: "UTC" });
+  const when = `${day} at ${issue.time || NEWSLETTER_TIME} Ottawa`;
+  const approved = () => page("Approved", sendWindowPassed(issue, now)
+    ? `Approved, but its send time (${when}) has passed, so it won't go out. Ask Claude to pick a new time; that needs a new approval.`
+    : `Approved. It will go out ${when}.`);
+  if ((await env.INSTAGRAM.get(approvalKey(rec.date), "json"))?.hash === rec.hash) return approved();
+  if (request.method === "POST") {
+    await env.INSTAGRAM.put(approvalKey(rec.date), JSON.stringify({ hash: rec.hash, at: now.toISOString(), source: "approve button" }), { expirationTtl: 30 * 86400 });
+    return approved();
+  }
+  const email = renderHtml(issue, { unsubscribe: SITE, test: true });
+  return new Response(approvePage({ issue, version: rec.hash.slice(0, 8), when, action: url.pathname + url.search, email }), { headers: PRIVATE });
 }
 
 // The checker on the home page asks OSV (osv.dev, Google's free database of known security holes) about the parts
@@ -657,8 +760,16 @@ const site = {
       return new Response(JSON.stringify({ ...account, posting, hqKeyExpires: await hqKeyStatus(env) }, null, 2), { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
     }
     if (pathname === "/api/newsletter/status" && request.method === "GET") return newsletterStatus(env, url);
+    if (pathname === "/newsletter/approve" && (request.method === "GET" || request.method === "POST")) return newsletterApprove(request, env, url);
+    // The one-tap rating at the bottom of every newsletter. Only these three votes exist; test copies don't count.
+    const vote = pathname.match(/^\/newsletter\/rate\/(love|good|soso)$/);
+    if (vote && request.method === "GET") {
+      if (!url.searchParams.has("test")) track(`nl_${vote[1]}`);
+      return new Response(notePage("Thanks!", "Your vote is in. It helps decide what goes in next week's email."), { headers: PRIVATE });
+    }
     if (pathname === "/api/instagram/results" && request.method === "GET") return igResults(env, url, ctx);
     if (pathname.startsWith("/ig-media/") && (request.method === "GET" || request.method === "HEAD")) return igMedia(env, pathname);
+    if (pathname.startsWith("/nl-media/") && (request.method === "GET" || request.method === "HEAD")) return nlMedia(env, url);
     const read = request.method === "GET" || request.method === "HEAD";
     if (pathname === "/" && request.method === "GET") track("home", sourceOf(request));
     if (pathname.startsWith("/repo/") && request.method === "GET") track("repo_page", sourceOf(request));
