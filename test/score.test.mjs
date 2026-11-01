@@ -1,5 +1,5 @@
 // Run with: node test/score.test.mjs
-import { score, parseRepo, collect, readLockfiles, getKnownHoles } from "../score.js";
+import { score, parseRepo, collect, readLockfiles, getKnownHoles, directParts } from "../score.js";
 import assert from "node:assert";
 const ago = (d) => new Date(Date.now() - d * 864e5).toISOString();
 
@@ -241,6 +241,68 @@ assert(repoWith({ readme: "\nGet free premium unlocked now!" }).flags.length ===
 const lockedZip = repoWith({ readme: "\nExtract the zip, pass: 1234" });
 assert(lockedZip.flags[0]?.label === "Password-protected download" && /pass: 1234/.test(lockedZip.flags[0].note), JSON.stringify(lockedZip.flags));
 assert(repoWith({ readme: "\nUnzip it. The password is infected" }).flags.length === 1, "password is <word>");
+
+// Malware tricks from the 2026-10 benchmark (HQ knowledge/grading). Small made-up repos, not real malware.
+{
+  const small = (o = {}) => score({
+    repo: { full_name: "t/t", name: "t", html_url: "", stargazers_count: o.stars ?? 3, forks_count: 0, created_at: ago(900), pushed_at: ago(5), archived: false, license: { spdx_id: "MIT" }, description: "" },
+    user: { type: "User", created_at: ago(2000) }, files: o.files || [{ name: "src", type: "dir" }, { name: "README.md", type: "file" }],
+    releases: [], readme: o.readme ?? "Docs. ".repeat(400), pkg: "", aiFiles: {}, tasks: o.tasks, deps: o.deps,
+  });
+  const has = (r, label) => r.flags.find((f) => f.label === label);
+  // A task that runs by itself when the folder opens (the PolinRider trick), quoting the command. Comments and trailing commas are fine.
+  const opened = small({ tasks: '{ "version": "2.0.0", "tasks": [ { "label": "eslint-check", "type": "shell",\n // hidden\n "command": "node ./public/fonts/fa-solid-400.woff2", "presentation": { "reveal": "never" }, "runOptions": { "runOn": "folderOpen" } }, ] }' });
+  const ft = has(opened, "Runs code when you open the folder");
+  assert(ft?.severity === "high" && /"node \.\/public\/fonts\/fa-solid-400\.woff2"/.test(ft.note) && opened.level === "dangerous" && opened.grade === "F", JSON.stringify(opened.flags));
+  // A popular repo with the same task is still capped: stars can't buy this one off.
+  assert(small({ stars: 50000, tasks: '{"tasks":[{"command":"x","runOptions":{"runOn":"folderOpen"}}]}' }).level === "dangerous");
+  // Normal build tasks, and a folder-open line that is commented out, are not flagged.
+  for (const tasks of ['{ "version": "2.0.0", "tasks": [ { "label": "Build", "type": "shell", "command": "npm run build", "group": { "kind": "build", "isDefault": true } } ] }',
+    '{ "tasks": [ { "label": "watch", "command": "npm run watch"\n  // , "runOptions": { "runOn": "folderOpen" }\n } ] }']) assert(!small({ tasks }).flags.length, "false alarm on: " + tasks);
+
+  // A download button that points at a zip deep inside the repo (the FakeGit trick).
+  const zipped = small({ stars: 96, readme: "Docs. ".repeat(400) + "\n[![Download](https://img.shields.io/badge/Download-blue)](https://raw.githubusercontent.com/t/t/master/src/test/java/app-1.0-beta.3.zip)" });
+  assert(has(zipped, "Download hidden in the code")?.severity === "high" && /src\/test\/java\/app-1\.0-beta\.3\.zip/.test(has(zipped, "Download hidden in the code").note) && zipped.level === "dangerous", JSON.stringify(zipped.flags));
+  assert(has(small({ stars: 5000, readme: "x https://github.com/t/t/raw/main/dist/a/tool.exe" }), "Download hidden in the code")?.severity === "medium", "popular repos get a warning, not Dangerous");
+  // Release downloads, the project's own site and top-level files are normal.
+  for (const readme of ["Get it: https://github.com/t/t/releases/latest/download/tool.zip", "Download https://ollama.com/download/OllamaSetup.exe",
+    "![logo](https://raw.githubusercontent.com/t/t/main/docs/logo.png)", "Run `sd.webui.zip`"]) assert(!small({ readme: "Docs. ".repeat(400) + readme }).flags.length, "false alarm on: " + readme);
+  // A repo that is only a README with a download link to another site (Stargazers Ghost Network).
+  const onlyLink = small({ files: [{ name: "README.md", type: "file" }], readme: "## [DOWNLOAD](https://evil.example/gg1/index.php)\nFree, fast, no limits." });
+  assert(has(onlyLink, "Download link instead of code")?.severity === "high" && /evil\.example/.test(has(onlyLink, "Download link instead of code").note), JSON.stringify(onlyLink.flags));
+  assert(!has(small({ readme: "[Download](https://example.com/app)" }), "Download link instead of code"), "a repo with code is fine");
+
+  // "Click More info, then Run anyway": getting past Windows' warning.
+  const runAnyway = small({ readme: "Docs. ".repeat(400) + "\nIf Windows protected your PC appears, click More info, then Run anyway." });
+  assert(has(runAnyway, "Asks you to click past the safety warning")?.severity === "high" && /Run anyway/.test(runAnyway.flags[0].note) && runAnyway.level === "dangerous", JSON.stringify(runAnyway.flags));
+  assert(!small({ readme: "Docs. ".repeat(400) + "\nSee more info about the run. Anyway, it works." }).flags.length);
+  const popularApp = small({ stars: 3000, readme: "Docs. ".repeat(400) + "\nNot signed yet: click **More info** → **Run anyway**." });
+  assert(popularApp.flags[0]?.severity === "low" && popularApp.checks.find((c) => c.group === "Red flags").points === 30, "honest popular app: shown, but free");
+
+  // A part listed as malware in OSV (MAL- ids) is a serious flag, apart from ordinary security holes.
+  const mal = small({ stars: 5000, deps: { files: [], parts: 0, vulnerable: [], malware: [{ part: "@0xengine/xmlrpc@1.3.4", ids: ["MAL-2024-11182"] }] } });
+  assert(has(mal, "Uses a part listed as malware")?.severity === "high" && /MAL-2024-11182/.test(mal.flags[0].note) && mal.level === "dangerous", JSON.stringify(mal.flags));
+  assert(!mal.checks.some((c) => c.label === "Known security holes"), "parts from package.json alone don't make a security-holes score");
+  // React's real package.json has "eslint-plugin-react-hooks-published": "npm:eslint-plugin-react-hooks@^5.2.0", and someone
+  // put malware on npm under the alias name. Only the real name gets installed, so only that one is looked up.
+  assert.deepStrictEqual(directParts('{"dependencies":{"@0xengine/xmlrpc":"^1.3.4","x":"*","y":"git+https://g/y#v1.0.0","w":"workspace:^1.0.0","f":"file:../f"},' +
+    '"devDependencies":{"chalk":"~5.3.0","hooks-published":"npm:eslint-plugin-react-hooks@^5.2.0","s":"npm:@a/b@>=2.0.1"}}'),
+    [{ name: "@0xengine/xmlrpc", version: "1.3.4", ecosystem: "npm", direct: true }, { name: "chalk", version: "5.3.0", ecosystem: "npm", direct: true },
+      { name: "eslint-plugin-react-hooks", version: "5.2.0", ecosystem: "npm", direct: true }, { name: "@a/b", version: "2.0.1", ecosystem: "npm", direct: true }]);
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, opts) => new Response(JSON.stringify({ results: JSON.parse(opts.body).queries.map((q) =>
+    ({ vulns: q.package.name === "@0xengine/xmlrpc" ? [{ id: "MAL-2024-11182" }] : q.package.name === "lodash" ? [{ id: "GHSA-1" }, { id: "MAL-2099-1" }] : [{ id: "GHSA-9" }] })) }));
+  const found = await getKnownHoles({ files: ["package-lock.json"], parts: [{ name: "lodash", version: "4.17.15", ecosystem: "npm" }, ...directParts('{"dependencies":{"@0xengine/xmlrpc":"1.3.4","chalk":"5.3.0"}}')] }, "/api/osv");
+  globalThis.fetch = realFetch;
+  assert.deepStrictEqual(found, { files: ["package-lock.json"], parts: 1, vulnerable: [{ part: "lodash@4.17.15", ids: ["GHSA-1"] }],
+    malware: [{ part: "lodash@4.17.15", ids: ["MAL-2099-1"] }, { part: "@0xengine/xmlrpc@1.3.4", ids: ["MAL-2024-11182"] }] }, JSON.stringify(found));
+
+  // "Runs a script straight from the internet" stays visible but only costs points for little-known projects.
+  const pipe = "Docs. ".repeat(400) + "\ncurl -fsSL https://example.com/install.sh | bash";
+  const famous = small({ stars: 80000, readme: pipe }), tiny = small({ stars: 10, readme: pipe });
+  assert(has(famous, "Runs a script straight from the internet") && famous.checks.find((c) => c.group === "Red flags").points === 30, "free for a famous tool");
+  assert(tiny.checks.find((c) => c.group === "Red flags").points === 27, "costs 3 for a little-known one");
+}
 
 // If GitHub's hourly limit hits after the first call, the check must stop, not score a repo with its files missing.
 const realFetch = globalThis.fetch;
