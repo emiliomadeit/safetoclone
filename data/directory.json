@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-02T16:50:54.532Z",
+  "updatedAt": "2026-11-03T14:54:06.192Z",
   "example": false,
   "repos": [
     {
@@ -20,7 +20,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "144,625 people starred it."
+          "note": "144,807 people starred it."
         },
         {
           "group": "Reputation",
@@ -28,7 +28,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "17,236 copies made by other developers."
+          "note": "17,263 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -143,7 +143,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:47:02.481Z"
+      "checkedAt": "2026-11-03T14:50:26.511Z"
     },
     {
       "name": "ggml-org/llama.cpp",
@@ -171,7 +171,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "133,161 people starred it."
+          "note": "133,260 people starred it."
         },
         {
           "group": "Reputation",
@@ -179,7 +179,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "25,062 copies made by other developers."
+          "note": "25,097 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -281,7 +281,7 @@
         "CLAUDE.md",
         ".gemini/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:47:25.110Z"
+      "checkedAt": "2026-11-03T14:50:47.293Z"
     },
     {
       "name": "microsoft/markitdown",
@@ -301,7 +301,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "193,541 people starred it."
+          "note": "193,679 people starred it."
         },
         {
           "group": "Reputation",
@@ -309,7 +309,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "14,518 copies made by other developers."
+          "note": "14,537 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -325,7 +325,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 5 days ago."
+          "note": "Last change 6 days ago."
         },
         {
           "group": "Upkeep",
@@ -409,7 +409,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:36.777Z"
+      "checkedAt": "2026-11-03T14:50:56.143Z"
     },
     {
       "name": "huggingface/transformers",
@@ -429,7 +429,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "168,449 people starred it."
+          "note": "168,489 people starred it."
         },
         {
           "group": "Reputation",
@@ -437,7 +437,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "35,086 copies made by other developers."
+          "note": "35,099 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -556,11 +556,11 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
         "CLAUDE.md",
+        "AGENTS.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-11-02T16:47:38.551Z"
+      "checkedAt": "2026-11-03T14:50:57.686Z"
     },
     {
       "name": "vllm-project/vllm",
@@ -580,7 +580,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "96,141 people starred it."
+          "note": "96,221 people starred it."
         },
         {
           "group": "Reputation",
@@ -588,7 +588,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "24,315 copies made by other developers."
+          "note": "24,354 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -688,7 +688,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:47:43.030Z"
+      "checkedAt": "2026-11-03T14:51:01.295Z"
     },
     {
       "name": "cline/cline",
@@ -708,7 +708,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "71,216 people starred it."
+          "note": "71,254 people starred it."
         },
         {
           "group": "Reputation",
@@ -716,7 +716,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "7,834 copies made by other developers."
+          "note": "7,847 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -815,13 +815,13 @@
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
-        ".claude/settings.json",
-        ".claude/commands/hotfix-release.md",
         ".vscode/settings.json",
+        ".claude/commands/release.md",
+        ".claude/commands/hotfix-release.md",
         ".github/copilot-instructions.md",
-        ".claude/commands/release.md"
+        ".claude/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:47:49.183Z"
+      "checkedAt": "2026-11-03T14:51:06.601Z"
     },
     {
       "name": "Mintplex-Labs/anything-llm",
@@ -841,7 +841,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "67,856 people starred it."
+          "note": "67,895 people starred it."
         },
         {
           "group": "Reputation",
@@ -849,7 +849,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "7,656 copies made by other developers."
+          "note": "7,660 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -857,7 +857,7 @@
           "points": 10,
           "max": 10,
           "level": "good",
-          "note": "Organization created 3.4 years ago."
+          "note": "Organization created 3.5 years ago."
         },
         {
           "group": "Upkeep",
@@ -865,7 +865,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 3 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -949,7 +949,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:47:51.042Z"
+      "checkedAt": "2026-11-03T14:51:09.378Z"
     },
     {
       "name": "xtekky/gpt4free",
@@ -977,7 +977,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "66,993 people starred it."
+          "note": "66,998 people starred it."
         },
         {
           "group": "Reputation",
@@ -1001,7 +1001,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 0 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -1083,11 +1083,11 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "SKILL.md",
         "AGENTS.md",
+        "SKILL.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-11-02T16:47:52.365Z"
+      "checkedAt": "2026-11-03T14:51:10.576Z"
     },
     {
       "name": "upstash/context7",
@@ -1107,7 +1107,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "64,086 people starred it."
+          "note": "64,130 people starred it."
         },
         {
           "group": "Reputation",
@@ -1115,7 +1115,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,200 copies made by other developers."
+          "note": "3,210 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1213,7 +1213,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:53.488Z"
+      "checkedAt": "2026-11-03T14:51:16.013Z"
     },
     {
       "name": "microsoft/playwright-mcp",
@@ -1233,7 +1233,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "38,996 people starred it."
+          "note": "39,127 people starred it."
         },
         {
           "group": "Reputation",
@@ -1241,7 +1241,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,362 copies made by other developers."
+          "note": "3,375 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1257,7 +1257,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 1 days ago."
+          "note": "Last change 2 days ago."
         },
         {
           "group": "Upkeep",
@@ -1354,7 +1354,7 @@
       "aiFilesFound": [
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-11-02T16:48:01.746Z"
+      "checkedAt": "2026-11-03T14:51:25.578Z"
     },
     {
       "name": "GLips/Figma-Context-MCP",
@@ -1374,7 +1374,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "16,135 people starred it."
+          "note": "16,147 people starred it."
         },
         {
           "group": "Reputation",
@@ -1382,7 +1382,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "1,275 copies made by other developers."
+          "note": "1,274 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1398,7 +1398,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 6 days ago."
+          "note": "Last change 7 days ago."
         },
         {
           "group": "Upkeep",
@@ -1483,7 +1483,7 @@
         "CLAUDE.md",
         ".claude/commands/release.md"
       ],
-      "checkedAt": "2026-11-02T16:48:26.368Z"
+      "checkedAt": "2026-11-03T14:51:55.013Z"
     },
     {
       "name": "ChromeDevTools/chrome-devtools-mcp",
@@ -1503,7 +1503,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "54,657 people starred it."
+          "note": "54,721 people starred it."
         },
         {
           "group": "Reputation",
@@ -1511,7 +1511,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "5,249 copies made by other developers."
+          "note": "5,248 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1613,7 +1613,7 @@
         "mcp.json",
         ".gemini/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:48:32.667Z"
+      "checkedAt": "2026-11-03T14:52:01.075Z"
     },
     {
       "name": "supabase/mcp",
@@ -1657,7 +1657,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 2 days ago."
+          "note": "Last change 0 days ago."
         },
         {
           "group": "Upkeep",
@@ -1745,7 +1745,7 @@
         "CLAUDE.md",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:48:34.786Z"
+      "checkedAt": "2026-11-03T14:52:03.386Z"
     },
     {
       "name": "github/spec-kit",
@@ -1765,7 +1765,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "145,336 people starred it."
+          "note": "146,316 people starred it."
         },
         {
           "group": "Reputation",
@@ -1773,7 +1773,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "13,028 copies made by other developers."
+          "note": "13,123 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -1789,7 +1789,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 0 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -1873,7 +1873,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:49:05.352Z"
+      "checkedAt": "2026-11-03T14:52:31.439Z"
     },
     {
       "name": "bytedance/deer-flow",
@@ -1893,7 +1893,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "84,884 people starred it."
+          "note": "84,940 people starred it."
         },
         {
           "group": "Reputation",
@@ -1901,7 +1901,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "11,930 copies made by other developers."
+          "note": "11,941 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2002,11 +2002,11 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
         "AGENTS.md",
+        "CLAUDE.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-11-02T16:50:06.916Z"
+      "checkedAt": "2026-11-03T14:53:25.923Z"
     },
     {
       "name": "assafelovic/gpt-researcher",
@@ -2026,7 +2026,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "30,435 people starred it."
+          "note": "30,463 people starred it."
         },
         {
           "group": "Reputation",
@@ -2034,7 +2034,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "4,167 copies made by other developers."
+          "note": "4,166 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2050,7 +2050,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 23 days ago."
+          "note": "Last change 24 days ago."
         },
         {
           "group": "Upkeep",
@@ -2132,10 +2132,10 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        ".cursorrules",
-        ".mcp.json"
+        ".mcp.json",
+        ".cursorrules"
       ],
-      "checkedAt": "2026-11-02T16:50:21.568Z"
+      "checkedAt": "2026-11-03T14:53:38.296Z"
     },
     {
       "name": "apify/apify-mcp-server",
@@ -2155,7 +2155,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "14,374 people starred it."
+          "note": "14,529 people starred it."
         },
         {
           "group": "Reputation",
@@ -2163,7 +2163,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "417 copies made by other developers."
+          "note": "421 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2264,13 +2264,13 @@
       },
       "capReason": null,
       "aiFilesFound": [
+        "CLAUDE.md",
         ".mcp.json",
         "AGENTS.md",
-        "CLAUDE.md",
-        ".vscode/settings.json",
-        ".claude/agents/mcpc-tester.md"
+        ".claude/agents/mcpc-tester.md",
+        ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:50:36.306Z"
+      "checkedAt": "2026-11-03T14:53:49.747Z"
     },
     {
       "name": "haris-musa/excel-mcp-server",
@@ -2290,7 +2290,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "4,271 people starred it."
+          "note": "4,272 people starred it."
         },
         {
           "group": "Reputation",
@@ -2298,7 +2298,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "478 copies made by other developers."
+          "note": "479 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2314,7 +2314,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 2 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -2412,7 +2412,7 @@
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:50:41.776Z"
+      "checkedAt": "2026-11-03T14:53:54.819Z"
     },
     {
       "name": "ollama/ollama",
@@ -2440,7 +2440,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "185,677 people starred it."
+          "note": "185,785 people starred it."
         },
         {
           "group": "Reputation",
@@ -2448,7 +2448,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "18,870 copies made by other developers."
+          "note": "18,889 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2562,7 +2562,7 @@
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:46:57.184Z"
+      "checkedAt": "2026-11-03T14:50:21.125Z"
     },
     {
       "name": "microsoft/autogen",
@@ -2582,7 +2582,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "61,680 people starred it."
+          "note": "61,690 people starred it."
         },
         {
           "group": "Reputation",
@@ -2590,7 +2590,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "9,348 copies made by other developers."
+          "note": "9,359 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2606,7 +2606,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 5 days ago."
+          "note": "Last change 6 days ago."
         },
         {
           "group": "Upkeep",
@@ -2711,7 +2711,7 @@
       "aiFilesFound": [
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-11-02T16:47:30.207Z"
+      "checkedAt": "2026-11-03T14:50:51.487Z"
     },
     {
       "name": "continuedev/continue",
@@ -2731,7 +2731,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "36,398 people starred it."
+          "note": "36,402 people starred it."
         },
         {
           "group": "Reputation",
@@ -2739,7 +2739,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "5,542 copies made by other developers."
+          "note": "5,545 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2763,7 +2763,7 @@
           "points": 8,
           "max": 8,
           "level": "good",
-          "note": "Repo is 3.4 years old."
+          "note": "Repo is 3.5 years old."
         },
         {
           "group": "Upkeep",
@@ -2852,7 +2852,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:48:06.216Z"
+      "checkedAt": "2026-11-03T14:51:36.582Z"
     },
     {
       "name": "github/github-mcp-server",
@@ -2872,7 +2872,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "34,167 people starred it."
+          "note": "34,188 people starred it."
         },
         {
           "group": "Reputation",
@@ -2880,7 +2880,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "5,274 copies made by other developers."
+          "note": "5,280 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -2995,7 +2995,7 @@
       "aiFilesFound": [
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-11-02T16:48:10.116Z"
+      "checkedAt": "2026-11-03T14:51:40.310Z"
     },
     {
       "name": "invoke-ai/InvokeAI",
@@ -3015,7 +3015,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "28,958 people starred it."
+          "note": "28,971 people starred it."
         },
         {
           "group": "Reputation",
@@ -3023,7 +3023,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,090 copies made by other developers."
+          "note": "3,092 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3137,7 +3137,7 @@
         "AGENTS.md",
         ".github/AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:48:13.616Z"
+      "checkedAt": "2026-11-03T14:51:43.663Z"
     },
     {
       "name": "anthropics/claude-code",
@@ -3165,7 +3165,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "154,267 people starred it."
+          "note": "154,390 people starred it."
         },
         {
           "group": "Reputation",
@@ -3173,7 +3173,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "25,531 copies made by other developers."
+          "note": "25,551 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3272,11 +3272,11 @@
       "capReason": null,
       "aiFilesFound": [
         "CLAUDE.md",
-        ".claude/commands/triage-issue.md",
         ".claude/commands/commit-push-pr.md",
-        ".claude/commands/dedupe.md"
+        ".claude/commands/dedupe.md",
+        ".claude/commands/triage-issue.md"
       ],
-      "checkedAt": "2026-11-02T16:47:06.811Z"
+      "checkedAt": "2026-11-03T14:50:30.991Z"
     },
     {
       "name": "Significant-Gravitas/AutoGPT",
@@ -3296,7 +3296,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "187,872 people starred it."
+          "note": "187,884 people starred it."
         },
         {
           "group": "Reputation",
@@ -3304,7 +3304,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "45,902 copies made by other developers."
+          "note": "45,903 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3407,10 +3407,10 @@
       "aiFilesFound": [
         "AGENTS.md",
         "CLAUDE.md",
-        ".claude/settings.json",
-        ".github/copilot-instructions.md"
+        ".github/copilot-instructions.md",
+        ".claude/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:47:13.893Z"
+      "checkedAt": "2026-11-03T14:50:37.193Z"
     },
     {
       "name": "lobehub/lobehub",
@@ -3430,7 +3430,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "83,716 people starred it."
+          "note": "83,774 people starred it."
         },
         {
           "group": "Reputation",
@@ -3438,7 +3438,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "16,033 copies made by other developers."
+          "note": "16,038 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3538,11 +3538,11 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "GEMINI.md",
         "AGENTS.md",
+        "GEMINI.md",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:47:21.022Z"
+      "checkedAt": "2026-11-03T14:50:43.805Z"
     },
     {
       "name": "langgenius/dify",
@@ -3562,7 +3562,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "160,242 people starred it."
+          "note": "160,319 people starred it."
         },
         {
           "group": "Reputation",
@@ -3570,7 +3570,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "25,334 copies made by other developers."
+          "note": "25,356 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3670,10 +3670,9 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
-        ".claude/settings.json"
+        "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:47:40.988Z"
+      "checkedAt": "2026-11-03T14:50:59.194Z"
     },
     {
       "name": "janhq/jan",
@@ -3693,7 +3692,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "45,331 people starred it."
+          "note": "45,375 people starred it."
         },
         {
           "group": "Reputation",
@@ -3701,7 +3700,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,132 copies made by other developers."
+          "note": "3,138 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3799,7 +3798,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:00.232Z"
+      "checkedAt": "2026-11-03T14:51:23.950Z"
     },
     {
       "name": "activepieces/activepieces",
@@ -3819,7 +3818,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "25,339 people starred it."
+          "note": "25,357 people starred it."
         },
         {
           "group": "Reputation",
@@ -3827,7 +3826,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "4,421 copies made by other developers."
+          "note": "4,422 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3928,22 +3927,22 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
-        ".mcp.json",
         "AGENTS.md",
+        ".mcp.json",
+        "CLAUDE.md",
+        ".claude/settings.json",
+        ".claude/agents/changelog.md",
+        ".claude/rules/safe-http.md",
+        ".claude/rules/database-first.md",
+        ".claude/rules/core-packages.md",
+        ".vscode/settings.json",
+        ".claude/rules/linear-tickets.md",
         ".claude/agents/server.md",
         ".claude/agents/web.md",
-        ".vscode/settings.json",
-        ".claude/agents/changelog.md",
-        ".claude/settings.json",
-        ".claude/rules/linear-tickets.md",
-        ".claude/rules/core-packages.md",
-        ".claude/rules/safe-http.md",
-        ".claude/rules/edition-safety.md",
-        ".claude/rules/database-first.md",
-        ".claude/rules/self-hosting.md"
+        ".claude/rules/self-hosting.md",
+        ".claude/rules/edition-safety.md"
       ],
-      "checkedAt": "2026-11-02T16:50:24.188Z"
+      "checkedAt": "2026-11-03T14:53:40.567Z"
     },
     {
       "name": "modelcontextprotocol/servers",
@@ -3963,7 +3962,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "91,744 people starred it."
+          "note": "91,768 people starred it."
         },
         {
           "group": "Reputation",
@@ -3971,7 +3970,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "11,907 copies made by other developers."
+          "note": "11,915 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -3987,7 +3986,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 4 days ago."
+          "note": "Last change 5 days ago."
         },
         {
           "group": "Upkeep",
@@ -4086,7 +4085,7 @@
         "AGENTS.md",
         ".claude/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:47:28.216Z"
+      "checkedAt": "2026-11-03T14:50:49.640Z"
     },
     {
       "name": "ChatGPTNextWeb/NextChat",
@@ -4114,7 +4113,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "58,645 copies made by other developers."
+          "note": "58,638 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -4130,7 +4129,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 13 days ago."
+          "note": "Last change 14 days ago."
         },
         {
           "group": "Upkeep",
@@ -4214,7 +4213,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:44.319Z"
+      "checkedAt": "2026-11-03T14:51:02.573Z"
     },
     {
       "name": "firecrawl/firecrawl-mcp-server",
@@ -4234,7 +4233,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "7,752 people starred it."
+          "note": "7,756 people starred it."
         },
         {
           "group": "Reputation",
@@ -4343,7 +4342,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:16.717Z"
+      "checkedAt": "2026-11-03T14:51:46.802Z"
     },
     {
       "name": "cloudflare/mcp-server-cloudflare",
@@ -4363,7 +4362,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "4,439 people starred it."
+          "note": "4,440 people starred it."
         },
         {
           "group": "Reputation",
@@ -4387,7 +4386,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 11 days ago."
+          "note": "Last change 12 days ago."
         },
         {
           "group": "Upkeep",
@@ -4474,7 +4473,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:48:36.488Z"
+      "checkedAt": "2026-11-03T14:52:04.973Z"
     },
     {
       "name": "obra/superpowers",
@@ -4494,7 +4493,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "311,062 people starred it."
+          "note": "311,636 people starred it."
         },
         {
           "group": "Reputation",
@@ -4502,7 +4501,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "27,680 copies made by other developers."
+          "note": "27,726 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -4518,7 +4517,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 4 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -4603,7 +4602,7 @@
         "AGENTS.md",
         "GEMINI.md"
       ],
-      "checkedAt": "2026-11-02T16:48:44.982Z"
+      "checkedAt": "2026-11-03T14:52:12.783Z"
     },
     {
       "name": "thedotmack/claude-mem",
@@ -4631,7 +4630,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "110,440 people starred it."
+          "note": "111,440 people starred it."
         },
         {
           "group": "Reputation",
@@ -4639,7 +4638,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "9,638 copies made by other developers."
+          "note": "9,710 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -4743,7 +4742,7 @@
         ".claude/settings.json",
         ".claude/commands/anti-pattern-czar.md"
       ],
-      "checkedAt": "2026-11-02T16:49:09.834Z"
+      "checkedAt": "2026-11-03T14:52:35.297Z"
     },
     {
       "name": "affaan-m/ECC",
@@ -4763,7 +4762,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "295,361 people starred it."
+          "note": "296,221 people starred it."
         },
         {
           "group": "Reputation",
@@ -4771,7 +4770,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "43,714 copies made by other developers."
+          "note": "43,819 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -4787,7 +4786,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 0 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -4795,7 +4794,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 289 days old."
+          "note": "Repo is 290 days old."
         },
         {
           "group": "Upkeep",
@@ -4884,23 +4883,23 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
         "AGENTS.md",
+        "CLAUDE.md",
         ".mcp.json",
-        ".cursor/rules/common-git-workflow.md",
-        ".cursor/rules/common-patterns.md",
-        ".cursor/rules/common-coding-style.md",
         ".claude/commands/database-migration.md",
         ".claude/commands/feature-development.md",
-        ".claude/commands/add-language-rules.md",
-        ".claude/rules/ecc-guardrails.md",
         ".cursor/rules/common-development-workflow.md",
-        ".claude/rules/node.md",
         ".cursor/rules/common-agents.md",
+        ".cursor/rules/common-patterns.md",
+        ".cursor/rules/common-git-workflow.md",
+        ".claude/commands/add-language-rules.md",
+        ".cursor/rules/common-hooks.md",
+        ".cursor/rules/common-coding-style.md",
+        ".claude/rules/ecc-guardrails.md",
         ".cursor/rules/common-performance.md",
-        ".cursor/rules/common-hooks.md"
+        ".claude/rules/node.md"
       ],
-      "checkedAt": "2026-11-02T16:49:29.421Z"
+      "checkedAt": "2026-11-03T14:52:51.185Z"
     },
     {
       "name": "heygen-com/hyperframes",
@@ -4920,7 +4919,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "77,560 people starred it."
+          "note": "78,127 people starred it."
         },
         {
           "group": "Reputation",
@@ -4928,7 +4927,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "7,119 copies made by other developers."
+          "note": "7,202 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -4952,7 +4951,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 238 days old."
+          "note": "Repo is 239 days old."
         },
         {
           "group": "Upkeep",
@@ -5026,11 +5025,11 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
         "CLAUDE.md",
+        "AGENTS.md",
         ".claude/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:49:44.946Z"
+      "checkedAt": "2026-11-03T14:53:05.184Z"
     },
     {
       "name": "jarrodwatts/claude-hud",
@@ -5050,7 +5049,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "29,081 people starred it."
+          "note": "29,085 people starred it."
         },
         {
           "group": "Reputation",
@@ -5058,7 +5057,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "1,330 copies made by other developers."
+          "note": "1,331 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -5082,7 +5081,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 305 days old."
+          "note": "Repo is 306 days old."
         },
         {
           "group": "Upkeep",
@@ -5158,7 +5157,7 @@
       "aiFilesFound": [
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-11-02T16:49:54.829Z"
+      "checkedAt": "2026-11-03T14:53:14.462Z"
     },
     {
       "name": "NVIDIA/SkillSpector",
@@ -5186,7 +5185,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "23,963 people starred it."
+          "note": "24,146 people starred it."
         },
         {
           "group": "Reputation",
@@ -5194,7 +5193,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "2,069 copies made by other developers."
+          "note": "2,082 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -5218,7 +5217,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 227 days old."
+          "note": "Repo is 228 days old."
         },
         {
           "group": "Upkeep",
@@ -5323,7 +5322,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:50:03.038Z"
+      "checkedAt": "2026-11-03T14:53:22.724Z"
     },
     {
       "name": "bytedance/UI-TARS-desktop",
@@ -5343,7 +5342,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "39,522 people starred it."
+          "note": "39,532 people starred it."
         },
         {
           "group": "Reputation",
@@ -5351,7 +5350,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "4,018 copies made by other developers."
+          "note": "4,021 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -5367,7 +5366,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 25 days ago."
+          "note": "Last change 26 days ago."
         },
         {
           "group": "Upkeep",
@@ -5480,7 +5479,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:50:08.216Z"
+      "checkedAt": "2026-11-03T14:53:27.019Z"
     },
     {
       "name": "firecrawl/firecrawl",
@@ -5500,7 +5499,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "197,888 people starred it."
+          "note": "198,204 people starred it."
         },
         {
           "group": "Reputation",
@@ -5508,7 +5507,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "10,458 copies made by other developers."
+          "note": "10,468 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -5613,7 +5612,7 @@
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:50:09.289Z"
+      "checkedAt": "2026-11-03T14:53:28.010Z"
     },
     {
       "name": "D4Vinci/Scrapling",
@@ -5633,7 +5632,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "92,484 people starred it."
+          "note": "93,904 people starred it."
         },
         {
           "group": "Reputation",
@@ -5641,7 +5640,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "9,754 copies made by other developers."
+          "note": "9,861 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -5657,7 +5656,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 0 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -5742,7 +5741,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:50:10.252Z"
+      "checkedAt": "2026-11-03T14:53:28.827Z"
     },
     {
       "name": "bytebase/dbhub",
@@ -5762,7 +5761,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "3,771 people starred it."
+          "note": "3,779 people starred it."
         },
         {
           "group": "Reputation",
@@ -5770,7 +5769,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "330 copies made by other developers."
+          "note": "331 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -5786,7 +5785,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 7 days ago."
+          "note": "Last change 0 days ago."
         },
         {
           "group": "Upkeep",
@@ -5871,7 +5870,7 @@
         "CLAUDE.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-11-02T16:50:45.777Z"
+      "checkedAt": "2026-11-03T14:53:58.637Z"
     },
     {
       "name": "Panniantong/Agent-Reach",
@@ -5891,7 +5890,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "107,965 people starred it."
+          "note": "108,321 people starred it."
         },
         {
           "group": "Reputation",
@@ -5899,7 +5898,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "9,631 copies made by other developers."
+          "note": "9,664 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -5915,7 +5914,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 1 days ago."
+          "note": "Last change 2 days ago."
         },
         {
           "group": "Upkeep",
@@ -5923,7 +5922,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 252 days old."
+          "note": "Repo is 253 days old."
         },
         {
           "group": "Upkeep",
@@ -5997,7 +5996,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:50:51.737Z"
+      "checkedAt": "2026-11-03T14:54:03.911Z"
     },
     {
       "name": "makenotion/notion-mcp-server",
@@ -6025,7 +6024,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "640 copies made by other developers."
+          "note": "641 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -6041,7 +6040,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 4 days ago."
+          "note": "Last change 5 days ago."
         },
         {
           "group": "Upkeep",
@@ -6049,7 +6048,7 @@
           "points": 8,
           "max": 8,
           "level": "good",
-          "note": "Repo is 1.6 years old."
+          "note": "Repo is 1.7 years old."
         },
         {
           "group": "Upkeep",
@@ -6138,7 +6137,7 @@
       "aiFilesFound": [
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-11-02T16:48:29.570Z"
+      "checkedAt": "2026-11-03T14:51:57.607Z"
     },
     {
       "name": "stickerdaniel/linkedin-mcp-server",
@@ -6166,7 +6165,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "4,089 people starred it."
+          "note": "4,104 people starred it."
         },
         {
           "group": "Reputation",
@@ -6174,7 +6173,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "721 copies made by other developers."
+          "note": "727 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -6182,7 +6181,7 @@
           "points": 10,
           "max": 10,
           "level": "good",
-          "note": "Account created 6.5 years ago."
+          "note": "Account created 6.6 years ago."
         },
         {
           "group": "Upkeep",
@@ -6285,13 +6284,13 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
         ".mcp.json",
+        "AGENTS.md",
         ".claude/settings.json",
         ".gemini/settings.json",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:50:44.118Z"
+      "checkedAt": "2026-11-03T14:53:57.023Z"
     },
     {
       "name": "morluto/rea",
@@ -6311,7 +6310,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "421,869 people starred it."
+          "note": "425,689 people starred it."
         },
         {
           "group": "Reputation",
@@ -6319,7 +6318,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "105,252 copies made by other developers."
+          "note": "106,014 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -6343,7 +6342,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 203 days old."
+          "note": "Repo is 204 days old."
         },
         {
           "group": "Upkeep",
@@ -6432,7 +6431,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:50:48.485Z"
+      "checkedAt": "2026-11-03T14:54:00.891Z"
     },
     {
       "name": "harry0703/MoneyPrinterTurbo",
@@ -6452,7 +6451,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "137,369 people starred it."
+          "note": "138,085 people starred it."
         },
         {
           "group": "Reputation",
@@ -6460,7 +6459,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "21,935 copies made by other developers."
+          "note": "22,044 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -6476,7 +6475,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 0 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -6484,7 +6483,7 @@
           "points": 8,
           "max": 8,
           "level": "good",
-          "note": "Repo is 2.6 years old."
+          "note": "Repo is 2.7 years old."
         },
         {
           "group": "Upkeep",
@@ -6571,7 +6570,176 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:50:53.450Z"
+      "checkedAt": "2026-11-03T14:54:05.214Z"
+    },
+    {
+      "name": "DeusData/codebase-memory-mcp",
+      "url": "https://github.com/DeusData/codebase-memory-mcp",
+      "description": "Local code intelligence for developers and AI agents. Connect code, docs and infrastructure in a persistent graph, with CBM Lens, MCP tools, agent integrations and change-aware test selection.",
+      "score": 96,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [
+        "Asks you to click past the safety warning",
+        "Runs a script straight from the internet"
+      ],
+      "warnings": [
+        {
+          "label": "Asks you to click past the safety warning",
+          "note": "Tells you to get past the warning Windows or macOS shows for unknown programs. That warning is there to stop malware. Some honest, widely used apps aren't signed and need this too, so it doesn't cost points here. We found: \"…warning for unsigned software. Click **\"More info\"** → **\"Run anyway\"**. Verify integrity with `checksums.tx…\"",
+          "severity": "low"
+        },
+        {
+          "label": "Runs a script straight from the internet",
+          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs. Widely used tools do this a lot, so it doesn't cost points here.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "48,047 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "3,956 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 10,
+          "max": 10,
+          "level": "good",
+          "note": "Account created 5.6 years ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 5,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 252 days old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Security habits",
+          "label": "Code review",
+          "points": 3,
+          "max": 3,
+          "level": "good",
+          "note": "Almost every change is checked by a second person before it goes in."
+        },
+        {
+          "group": "Security habits",
+          "label": "Known security holes",
+          "points": 2,
+          "max": 3,
+          "level": "warn",
+          "note": "About 3 known security holes still unfixed."
+        },
+        {
+          "group": "Security habits",
+          "label": "Safe automation",
+          "points": 4,
+          "max": 4,
+          "level": "good",
+          "note": "Its build-and-publish robots are set up safely."
+        },
+        {
+          "group": "Red flags",
+          "label": "2 warning signs",
+          "points": 30,
+          "max": 30,
+          "level": "good",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        },
+        "Upkeep": {
+          "points": 22,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 15,
+          "max": 15,
+          "grade": "A"
+        },
+        "Security habits": {
+          "points": 9,
+          "max": 10,
+          "grade": "A"
+        },
+        "Red flags": {
+          "points": 30,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": true,
+      "costs": {
+        "mentionsPaid": false,
+        "words": [],
+        "account": null,
+        "folder": null
+      },
+      "capReason": null,
+      "aiFilesFound": [],
+      "checkedAt": "2026-11-03T14:54:06.192Z"
     },
     {
       "name": "awslabs/mcp",
@@ -6591,7 +6759,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "9,863 people starred it."
+          "note": "9,866 people starred it."
         },
         {
           "group": "Reputation",
@@ -6599,7 +6767,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "1,842 copies made by other developers."
+          "note": "1,847 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -6729,7 +6897,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:15.647Z"
+      "checkedAt": "2026-11-03T14:51:45.532Z"
     },
     {
       "name": "hesreallyhim/awesome-claude-code",
@@ -6749,7 +6917,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "57,104 people starred it."
+          "note": "57,163 people starred it."
         },
         {
           "group": "Reputation",
@@ -6857,7 +7025,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:47.278Z"
+      "checkedAt": "2026-11-03T14:52:15.026Z"
     },
     {
       "name": "BerriAI/litellm",
@@ -6877,7 +7045,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "62,557 people starred it."
+          "note": "62,629 people starred it."
         },
         {
           "group": "Reputation",
@@ -6885,7 +7053,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "12,931 copies made by other developers."
+          "note": "12,975 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -7018,7 +7186,7 @@
         "AGENTS.md",
         "GEMINI.md"
       ],
-      "checkedAt": "2026-11-02T16:49:22.931Z"
+      "checkedAt": "2026-11-03T14:52:46.014Z"
     },
     {
       "name": "manaflow-ai/cmux",
@@ -7038,7 +7206,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "28,648 people starred it."
+          "note": "28,669 people starred it."
         },
         {
           "group": "Reputation",
@@ -7046,7 +7214,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "2,613 copies made by other developers."
+          "note": "2,619 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -7070,7 +7238,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 278 days old."
+          "note": "Repo is 279 days old."
         },
         {
           "group": "Upkeep",
@@ -7144,17 +7312,17 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
         "CLAUDE.md",
-        ".claude/commands/pull.md",
-        ".claude/commands/release-local.md",
-        ".claude/commands/sync-branch.md",
+        "AGENTS.md",
         ".claude/commands/cleanup-builds.md",
-        ".claude/commands/release-nightly.md",
+        ".claude/commands/pull.md",
         ".claude/commands/release.md",
-        ".claude/commands/review.md"
+        ".claude/commands/review.md",
+        ".claude/commands/release-nightly.md",
+        ".claude/commands/release-local.md",
+        ".claude/commands/sync-branch.md"
       ],
-      "checkedAt": "2026-11-02T16:49:57.643Z"
+      "checkedAt": "2026-11-03T14:53:17.775Z"
     },
     {
       "name": "AgentDeskAI/browser-tools-mcp",
@@ -7198,7 +7366,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 5 days ago."
+          "note": "Last change 6 days ago."
         },
         {
           "group": "Upkeep",
@@ -7293,176 +7461,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:50:37.970Z"
-    },
-    {
-      "name": "DeusData/codebase-memory-mcp",
-      "url": "https://github.com/DeusData/codebase-memory-mcp",
-      "description": "Local code intelligence for developers and AI agents. Connect code, docs and infrastructure in a persistent graph, with CBM Lens, MCP tools, agent integrations and change-aware test selection.",
-      "score": 95,
-      "grade": "A",
-      "level": "trusted",
-      "label": "Strong",
-      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
-      "flags": [
-        "Asks you to click past the safety warning",
-        "Runs a script straight from the internet"
-      ],
-      "warnings": [
-        {
-          "label": "Asks you to click past the safety warning",
-          "note": "Tells you to get past the warning Windows or macOS shows for unknown programs. That warning is there to stop malware. Some honest, widely used apps aren't signed and need this too, so it doesn't cost points here. We found: \"…warning for unsigned software. Click **\"More info\"** → **\"Run anyway\"**. Verify integrity with `checksums.tx…\"",
-          "severity": "low"
-        },
-        {
-          "label": "Runs a script straight from the internet",
-          "note": "The install step downloads and runs code in one line. Common with real tools too, but you can't see what runs. Widely used tools do this a lot, so it doesn't cost points here.",
-          "severity": "low"
-        }
-      ],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "47,999 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "3,951 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 10,
-          "max": 10,
-          "level": "good",
-          "note": "Account created 5.6 years ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 0 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 5,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 251 days old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the MIT license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Tells people how to report security problems."
-        },
-        {
-          "group": "Security habits",
-          "label": "Code review",
-          "points": 2,
-          "max": 3,
-          "level": "warn",
-          "note": "Some changes go in without a second person checking them."
-        },
-        {
-          "group": "Security habits",
-          "label": "Known security holes",
-          "points": 2,
-          "max": 3,
-          "level": "warn",
-          "note": "About 3 known security holes still unfixed."
-        },
-        {
-          "group": "Security habits",
-          "label": "Safe automation",
-          "points": 4,
-          "max": 4,
-          "level": "good",
-          "note": "Its build-and-publish robots are set up safely."
-        },
-        {
-          "group": "Red flags",
-          "label": "2 warning signs",
-          "points": 30,
-          "max": 30,
-          "level": "good",
-          "note": "Each one is explained under Warning signs."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        },
-        "Upkeep": {
-          "points": 22,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 15,
-          "max": 15,
-          "grade": "A"
-        },
-        "Security habits": {
-          "points": 8,
-          "max": 10,
-          "grade": "B"
-        },
-        "Red flags": {
-          "points": 30,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": true,
-      "costs": {
-        "mentionsPaid": false,
-        "words": [],
-        "account": null,
-        "folder": null
-      },
-      "capReason": null,
-      "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:50:54.531Z"
+      "checkedAt": "2026-11-03T14:53:51.238Z"
     },
     {
       "name": "n8n-io/n8n",
@@ -7496,7 +7495,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "209,368 people starred it."
+          "note": "209,443 people starred it."
         },
         {
           "group": "Reputation",
@@ -7504,7 +7503,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "61,358 copies made by other developers."
+          "note": "61,364 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -7625,12 +7624,12 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
         "CLAUDE.md",
-        ".github/CLAUDE.md",
-        ".claude/settings.json"
+        "AGENTS.md",
+        ".claude/settings.json",
+        ".github/CLAUDE.md"
       ],
-      "checkedAt": "2026-11-02T16:47:17.168Z"
+      "checkedAt": "2026-11-03T14:50:40.374Z"
     },
     {
       "name": "idosal/git-mcp",
@@ -7650,7 +7649,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "8,501 people starred it."
+          "note": "8,503 people starred it."
         },
         {
           "group": "Reputation",
@@ -7658,7 +7657,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "760 copies made by other developers."
+          "note": "762 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -7674,7 +7673,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 178 days ago."
+          "note": "Last change 179 days ago."
         },
         {
           "group": "Upkeep",
@@ -7756,7 +7755,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:40.712Z"
+      "checkedAt": "2026-11-03T14:52:08.781Z"
     },
     {
       "name": "punkpeye/awesome-mcp-servers",
@@ -7776,7 +7775,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "97,197 people starred it."
+          "note": "97,246 people starred it."
         },
         {
           "group": "Reputation",
@@ -7784,7 +7783,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "19,028 copies made by other developers."
+          "note": "19,120 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -7886,7 +7885,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:43.955Z"
+      "checkedAt": "2026-11-03T14:52:11.822Z"
     },
     {
       "name": "wshobson/agents",
@@ -7906,7 +7905,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "42,102 people starred it."
+          "note": "42,145 people starred it."
         },
         {
           "group": "Reputation",
@@ -7914,7 +7913,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "4,453 copies made by other developers."
+          "note": "4,454 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -7930,7 +7929,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 1 days ago."
+          "note": "Last change 2 days ago."
         },
         {
           "group": "Upkeep",
@@ -8014,11 +8013,11 @@
       "aiFilesFound": [
         "AGENTS.md",
         "CLAUDE.md",
-        ".cursor/rules/000-project-conventions.mdc",
         ".cursor/rules/010-python-tooling.mdc",
-        ".cursor/rules/020-agent-skill-authoring.mdc"
+        ".cursor/rules/020-agent-skill-authoring.mdc",
+        ".cursor/rules/000-project-conventions.mdc"
       ],
-      "checkedAt": "2026-11-02T16:48:46.376Z"
+      "checkedAt": "2026-11-03T14:52:14.001Z"
     },
     {
       "name": "decolua/9router",
@@ -8038,7 +8037,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "31,848 people starred it."
+          "note": "31,886 people starred it."
         },
         {
           "group": "Reputation",
@@ -8046,7 +8045,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "6,206 copies made by other developers."
+          "note": "6,208 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -8062,7 +8061,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 5 days ago."
+          "note": "Last change 6 days ago."
         },
         {
           "group": "Upkeep",
@@ -8152,7 +8151,7 @@
         "CLAUDE.md",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:49:19.514Z"
+      "checkedAt": "2026-11-03T14:52:43.730Z"
     },
     {
       "name": "DietrichGebert/ponytail",
@@ -8172,7 +8171,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "182,688 people starred it."
+          "note": "183,427 people starred it."
         },
         {
           "group": "Reputation",
@@ -8180,7 +8179,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "10,089 copies made by other developers."
+          "note": "10,132 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -8196,7 +8195,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 4 days ago."
+          "note": "Last change 5 days ago."
         },
         {
           "group": "Upkeep",
@@ -8204,7 +8203,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 144 days old."
+          "note": "Repo is 145 days old."
         },
         {
           "group": "Upkeep",
@@ -8279,10 +8278,10 @@
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
-        ".github/copilot-instructions.md",
-        ".cursor/rules/ponytail.mdc"
+        ".cursor/rules/ponytail.mdc",
+        ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-11-02T16:49:31.107Z"
+      "checkedAt": "2026-11-03T14:52:52.500Z"
     },
     {
       "name": "addyosmani/agent-skills",
@@ -8302,7 +8301,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "112,734 people starred it."
+          "note": "112,960 people starred it."
         },
         {
           "group": "Reputation",
@@ -8310,7 +8309,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "11,802 copies made by other developers."
+          "note": "11,823 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -8326,7 +8325,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 1 days ago."
+          "note": "Last change 2 days ago."
         },
         {
           "group": "Upkeep",
@@ -8334,7 +8333,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 260 days old."
+          "note": "Repo is 261 days old."
         },
         {
           "group": "Upkeep",
@@ -8408,20 +8407,20 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
         "AGENTS.md",
-        ".claude/commands/constraints.md",
-        ".claude/commands/build.md",
-        ".claude/commands/code-simplify.md",
-        ".claude/rules/skills-contributing.md",
-        ".claude/commands/review.md",
+        "CLAUDE.md",
         ".claude/commands/test.md",
-        ".claude/commands/ship.md",
         ".claude/commands/webperf.md",
         ".claude/commands/plan.md",
-        ".claude/commands/spec.md"
+        ".claude/commands/review.md",
+        ".claude/commands/spec.md",
+        ".claude/commands/code-simplify.md",
+        ".claude/commands/build.md",
+        ".claude/commands/ship.md",
+        ".claude/commands/constraints.md",
+        ".claude/rules/skills-contributing.md"
       ],
-      "checkedAt": "2026-11-02T16:49:32.906Z"
+      "checkedAt": "2026-11-03T14:52:54.000Z"
     },
     {
       "name": "coreyhaines31/marketingskills",
@@ -8441,7 +8440,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "58,021 people starred it."
+          "note": "58,237 people starred it."
         },
         {
           "group": "Reputation",
@@ -8449,7 +8448,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "8,531 copies made by other developers."
+          "note": "8,548 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -8465,7 +8464,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 3 days ago."
+          "note": "Last change 4 days ago."
         },
         {
           "group": "Upkeep",
@@ -8473,7 +8472,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 291 days old."
+          "note": "Repo is 292 days old."
         },
         {
           "group": "Upkeep",
@@ -8550,10 +8549,10 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "CLAUDE.md",
-        "AGENTS.md"
+        "AGENTS.md",
+        "CLAUDE.md"
       ],
-      "checkedAt": "2026-11-02T16:49:47.909Z"
+      "checkedAt": "2026-11-03T14:53:07.930Z"
     },
     {
       "name": "blader/humanizer",
@@ -8573,7 +8572,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "63,905 people starred it."
+          "note": "64,262 people starred it."
         },
         {
           "group": "Reputation",
@@ -8581,7 +8580,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "5,057 copies made by other developers."
+          "note": "5,081 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -8597,7 +8596,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 5 days ago."
+          "note": "Last change 6 days ago."
         },
         {
           "group": "Upkeep",
@@ -8605,7 +8604,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 288 days old."
+          "note": "Repo is 289 days old."
         },
         {
           "group": "Upkeep",
@@ -8682,7 +8681,7 @@
         "SKILL.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:49:48.842Z"
+      "checkedAt": "2026-11-03T14:53:08.775Z"
     },
     {
       "name": "browser-use/browser-use",
@@ -8702,7 +8701,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "119,842 people starred it."
+          "note": "119,933 people starred it."
         },
         {
           "group": "Reputation",
@@ -8710,7 +8709,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "13,357 copies made by other developers."
+          "note": "13,373 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -8726,7 +8725,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 1 days ago."
+          "note": "Last change 2 days ago."
         },
         {
           "group": "Upkeep",
@@ -8813,7 +8812,7 @@
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:47:29.181Z"
+      "checkedAt": "2026-11-03T14:50:50.545Z"
     },
     {
       "name": "openai/whisper",
@@ -8833,7 +8832,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "111,778 people starred it."
+          "note": "111,858 people starred it."
         },
         {
           "group": "Reputation",
@@ -8841,7 +8840,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "13,550 copies made by other developers."
+          "note": "13,560 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -8857,7 +8856,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 63 days ago."
+          "note": "Last change 64 days ago."
         },
         {
           "group": "Upkeep",
@@ -8960,7 +8959,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:41.913Z"
+      "checkedAt": "2026-11-03T14:51:00.107Z"
     },
     {
       "name": "bmad-code-org/BMAD-METHOD",
@@ -8980,7 +8979,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "54,894 people starred it."
+          "note": "54,930 people starred it."
         },
         {
           "group": "Reputation",
@@ -8988,7 +8987,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "6,132 copies made by other developers."
+          "note": "6,135 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -9004,7 +9003,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 2 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -9101,7 +9100,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:49:06.814Z"
+      "checkedAt": "2026-11-03T14:52:32.718Z"
     },
     {
       "name": "lidge-jun/opencodex",
@@ -9135,7 +9134,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "18,165 people starred it."
+          "note": "18,182 people starred it."
         },
         {
           "group": "Reputation",
@@ -9143,7 +9142,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "1,435 copies made by other developers."
+          "note": "1,437 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -9151,7 +9150,7 @@
           "points": 6,
           "max": 10,
           "level": "good",
-          "note": "Account created 358 days ago."
+          "note": "Account created 359 days ago."
         },
         {
           "group": "Upkeep",
@@ -9167,7 +9166,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 137 days old."
+          "note": "Repo is 138 days old."
         },
         {
           "group": "Upkeep",
@@ -9246,7 +9245,7 @@
         "AGENTS.md",
         ".github/AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:49:21.586Z"
+      "checkedAt": "2026-11-03T14:52:45.099Z"
     },
     {
       "name": "Egonex-AI/Understand-Anything",
@@ -9274,7 +9273,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "89,810 people starred it."
+          "note": "90,173 people starred it."
         },
         {
           "group": "Reputation",
@@ -9282,7 +9281,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "7,639 copies made by other developers."
+          "note": "7,700 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -9290,7 +9289,7 @@
           "points": 6,
           "max": 10,
           "level": "good",
-          "note": "Organization created 279 days ago."
+          "note": "Organization created 280 days ago."
         },
         {
           "group": "Upkeep",
@@ -9298,7 +9297,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 7 days ago."
+          "note": "Last change 8 days ago."
         },
         {
           "group": "Upkeep",
@@ -9306,7 +9305,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 233 days old."
+          "note": "Repo is 234 days old."
         },
         {
           "group": "Upkeep",
@@ -9384,7 +9383,7 @@
       "aiFilesFound": [
         "CLAUDE.md"
       ],
-      "checkedAt": "2026-11-02T16:49:37.566Z"
+      "checkedAt": "2026-11-03T14:52:58.535Z"
     },
     {
       "name": "nanocoai/nanoclaw",
@@ -9404,7 +9403,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "31,073 people starred it."
+          "note": "31,076 people starred it."
         },
         {
           "group": "Reputation",
@@ -9412,7 +9411,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "12,683 copies made by other developers."
+          "note": "12,681 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -9420,7 +9419,7 @@
           "points": 6,
           "max": 10,
           "level": "good",
-          "note": "Organization created 291 days ago."
+          "note": "Organization created 292 days ago."
         },
         {
           "group": "Upkeep",
@@ -9436,7 +9435,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 275 days old."
+          "note": "Repo is 276 days old."
         },
         {
           "group": "Upkeep",
@@ -9512,12 +9511,12 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        ".mcp.json",
         "AGENTS.md",
+        ".mcp.json",
         "CLAUDE.md",
         ".claude/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:49:53.579Z"
+      "checkedAt": "2026-11-03T14:53:12.846Z"
     },
     {
       "name": "AgriciDaniel/claude-seo",
@@ -9545,7 +9544,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "25,883 people starred it."
+          "note": "26,202 people starred it."
         },
         {
           "group": "Reputation",
@@ -9553,7 +9552,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,388 copies made by other developers."
+          "note": "3,418 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -9569,7 +9568,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 1 days ago."
+          "note": "Last change 2 days ago."
         },
         {
           "group": "Upkeep",
@@ -9577,7 +9576,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 268 days old."
+          "note": "Repo is 269 days old."
         },
         {
           "group": "Upkeep",
@@ -9656,7 +9655,7 @@
         "CLAUDE.md",
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:50:02.037Z"
+      "checkedAt": "2026-11-03T14:53:21.676Z"
     },
     {
       "name": "BrowserMCP/mcp",
@@ -9676,7 +9675,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "7,272 people starred it."
+          "note": "7,283 people starred it."
         },
         {
           "group": "Reputation",
@@ -9684,7 +9683,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "599 copies made by other developers."
+          "note": "601 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -9700,7 +9699,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 0 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -9784,7 +9783,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:50:39.241Z"
+      "checkedAt": "2026-11-03T14:53:52.405Z"
     },
     {
       "name": "iOfficeAI/AionUi",
@@ -9812,7 +9811,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "33,995 people starred it."
+          "note": "34,019 people starred it."
         },
         {
           "group": "Reputation",
@@ -9820,7 +9819,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,550 copies made by other developers."
+          "note": "3,553 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -9836,7 +9835,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 10 days ago."
+          "note": "Last change 11 days ago."
         },
         {
           "group": "Upkeep",
@@ -9922,7 +9921,7 @@
         "AGENTS.md",
         ".claude/commands/package-assistant.md"
       ],
-      "checkedAt": "2026-11-02T16:50:50.798Z"
+      "checkedAt": "2026-11-03T14:54:03.095Z"
     },
     {
       "name": "PatrickJS/awesome-cursorrules",
@@ -9942,7 +9941,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "41,089 people starred it."
+          "note": "41,093 people starred it."
         },
         {
           "group": "Reputation",
@@ -9950,7 +9949,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,539 copies made by other developers."
+          "note": "3,540 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -9966,7 +9965,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 156 days ago."
+          "note": "Last change 157 days ago."
         },
         {
           "group": "Upkeep",
@@ -10048,7 +10047,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:49:04.342Z"
+      "checkedAt": "2026-11-03T14:52:30.439Z"
     },
     {
       "name": "anthropics/claude-plugins-official",
@@ -10068,7 +10067,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "45,804 people starred it."
+          "note": "45,937 people starred it."
         },
         {
           "group": "Reputation",
@@ -10076,7 +10075,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "4,770 copies made by other developers."
+          "note": "4,784 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -10100,7 +10099,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 347 days old."
+          "note": "Repo is 348 days old."
         },
         {
           "group": "Upkeep",
@@ -10174,7 +10173,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:49:49.566Z"
+      "checkedAt": "2026-11-03T14:53:09.629Z"
     },
     {
       "name": "0x4m4/hexstrike-ai",
@@ -10194,7 +10193,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "13,303 people starred it."
+          "note": "13,325 people starred it."
         },
         {
           "group": "Reputation",
@@ -10202,7 +10201,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "2,681 copies made by other developers."
+          "note": "2,688 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -10218,7 +10217,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 91 days ago."
+          "note": "Last change 92 days ago."
         },
         {
           "group": "Upkeep",
@@ -10313,7 +10312,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:50:46.808Z"
+      "checkedAt": "2026-11-03T14:53:59.414Z"
     },
     {
       "name": "AUTOMATIC1111/stable-diffusion-webui",
@@ -10333,7 +10332,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "165,225 people starred it."
+          "note": "165,234 people starred it."
         },
         {
           "group": "Reputation",
@@ -10341,7 +10340,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "31,915 copies made by other developers."
+          "note": "31,925 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -10357,7 +10356,7 @@
           "points": 5,
           "max": 12,
           "level": "warn",
-          "note": "Last change 245 days ago."
+          "note": "Last change 246 days ago."
         },
         {
           "group": "Upkeep",
@@ -10452,7 +10451,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:04.428Z"
+      "checkedAt": "2026-11-03T14:50:28.245Z"
     },
     {
       "name": "lllyasviel/Fooocus",
@@ -10472,7 +10471,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "53,801 people starred it."
+          "note": "53,808 people starred it."
         },
         {
           "group": "Reputation",
@@ -10480,7 +10479,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "8,619 copies made by other developers."
+          "note": "8,621 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -10496,7 +10495,7 @@
           "points": 5,
           "max": 12,
           "level": "warn",
-          "note": "Last change 336 days ago."
+          "note": "Last change 337 days ago."
         },
         {
           "group": "Upkeep",
@@ -10578,7 +10577,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:05.289Z"
+      "checkedAt": "2026-11-03T14:50:29.167Z"
     },
     {
       "name": "hangwin/mcp-chrome",
@@ -10598,7 +10597,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "12,526 people starred it."
+          "note": "12,531 people starred it."
         },
         {
           "group": "Reputation",
@@ -10622,7 +10621,7 @@
           "points": 5,
           "max": 12,
           "level": "warn",
-          "note": "Last change 300 days ago."
+          "note": "Last change 301 days ago."
         },
         {
           "group": "Upkeep",
@@ -10704,7 +10703,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:30.820Z"
+      "checkedAt": "2026-11-03T14:51:59.285Z"
     },
     {
       "name": "VoltAgent/awesome-claude-code-subagents",
@@ -10724,7 +10723,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "26,279 people starred it."
+          "note": "26,301 people starred it."
         },
         {
           "group": "Reputation",
@@ -10732,7 +10731,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,013 copies made by other developers."
+          "note": "3,014 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -10748,7 +10747,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 0 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -10835,7 +10834,7 @@
         "CLAUDE.md",
         ".claude/settings.local.json"
       ],
-      "checkedAt": "2026-11-02T16:49:03.327Z"
+      "checkedAt": "2026-11-03T14:52:29.478Z"
     },
     {
       "name": "stablyai/orca",
@@ -10863,7 +10862,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "113,381 people starred it."
+          "note": "114,189 people starred it."
         },
         {
           "group": "Reputation",
@@ -10871,7 +10870,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "7,166 copies made by other developers."
+          "note": "7,215 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -10971,11 +10970,11 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        ".mcp.json",
         "AGENTS.md",
+        ".mcp.json",
         ".claude/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:49:36.376Z"
+      "checkedAt": "2026-11-03T14:52:57.319Z"
     },
     {
       "name": "Graphify-Labs/graphify",
@@ -11003,7 +11002,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "140,967 people starred it."
+          "note": "141,606 people starred it."
         },
         {
           "group": "Reputation",
@@ -11011,7 +11010,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "13,474 copies made by other developers."
+          "note": "13,543 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -11019,7 +11018,7 @@
           "points": 3,
           "max": 10,
           "level": "warn",
-          "note": "Organization created 127 days ago."
+          "note": "Organization created 128 days ago."
         },
         {
           "group": "Upkeep",
@@ -11035,7 +11034,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 213 days old."
+          "note": "Repo is 214 days old."
         },
         {
           "group": "Upkeep",
@@ -11126,7 +11125,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:49:39.553Z"
+      "checkedAt": "2026-11-03T14:53:00.335Z"
     },
     {
       "name": "headroomlabs-ai/headroom",
@@ -11154,7 +11153,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "78,645 people starred it."
+          "note": "78,706 people starred it."
         },
         {
           "group": "Reputation",
@@ -11162,7 +11161,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "6,140 copies made by other developers."
+          "note": "6,150 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -11170,7 +11169,7 @@
           "points": 3,
           "max": 10,
           "level": "warn",
-          "note": "Organization created 139 days ago."
+          "note": "Organization created 140 days ago."
         },
         {
           "group": "Upkeep",
@@ -11186,7 +11185,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 299 days old."
+          "note": "Repo is 300 days old."
         },
         {
           "group": "Upkeep",
@@ -11226,7 +11225,7 @@
           "points": 4,
           "max": 5,
           "level": "warn",
-          "note": "4 of the 796 parts it uses have a known security hole (for example paste@1.0.15, langgraph@1.2.11). Not every hole affects you, but the owner should update them."
+          "note": "1 of the 793 parts it uses has a known security hole (for example paste@1.0.15). Not every hole affects you, but the owner should update them."
         },
         {
           "group": "Red flags",
@@ -11277,7 +11276,7 @@
       "aiFilesFound": [
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-11-02T16:49:43.288Z"
+      "checkedAt": "2026-11-03T14:53:03.629Z"
     },
     {
       "name": "citrolabs/ego-lite",
@@ -11297,7 +11296,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "21,327 people starred it."
+          "note": "21,457 people starred it."
         },
         {
           "group": "Reputation",
@@ -11305,7 +11304,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "1,192 copies made by other developers."
+          "note": "1,205 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -11329,7 +11328,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 200 days old."
+          "note": "Repo is 201 days old."
         },
         {
           "group": "Upkeep",
@@ -11405,7 +11404,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:50:00.835Z"
+      "checkedAt": "2026-11-03T14:53:20.634Z"
     },
     {
       "name": "Klavis-AI/klavis",
@@ -11449,7 +11448,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 154 days ago."
+          "note": "Last change 155 days ago."
         },
         {
           "group": "Upkeep",
@@ -11531,7 +11530,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:50:40.271Z"
+      "checkedAt": "2026-11-03T14:53:53.497Z"
     },
     {
       "name": "SuperClaude-Org/SuperClaude_Framework",
@@ -11559,7 +11558,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "23,922 people starred it."
+          "note": "23,925 people starred it."
         },
         {
           "group": "Reputation",
@@ -11583,7 +11582,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 36 days ago."
+          "note": "Last change 37 days ago."
         },
         {
           "group": "Upkeep",
@@ -11667,11 +11666,11 @@
       },
       "capReason": null,
       "aiFilesFound": [
-        "AGENTS.md",
         "CLAUDE.md",
+        "AGENTS.md",
         ".claude/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:48:52.426Z"
+      "checkedAt": "2026-11-03T14:52:19.750Z"
     },
     {
       "name": "paperclipai/paperclip",
@@ -11699,7 +11698,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "110,220 people starred it."
+          "note": "110,734 people starred it."
         },
         {
           "group": "Reputation",
@@ -11707,7 +11706,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "18,263 copies made by other developers."
+          "note": "18,329 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -11715,7 +11714,7 @@
           "points": 6,
           "max": 10,
           "level": "good",
-          "note": "Organization created 248 days ago."
+          "note": "Organization created 249 days ago."
         },
         {
           "group": "Upkeep",
@@ -11731,7 +11730,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 245 days old."
+          "note": "Repo is 246 days old."
         },
         {
           "group": "Upkeep",
@@ -11808,10 +11807,10 @@
       "capReason": null,
       "aiFilesFound": [
         "AGENTS.md",
-        ".claude/agents/token-auditor.md",
-        ".claude/agents/codemod-runner.md"
+        ".claude/agents/codemod-runner.md",
+        ".claude/agents/token-auditor.md"
       ],
-      "checkedAt": "2026-11-02T16:49:34.637Z"
+      "checkedAt": "2026-11-03T14:52:55.687Z"
     },
     {
       "name": "chatboxai/chatbox",
@@ -11839,7 +11838,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "42,232 people starred it."
+          "note": "42,244 people starred it."
         },
         {
           "group": "Reputation",
@@ -11847,7 +11846,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "4,303 copies made by other developers."
+          "note": "4,305 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -11945,7 +11944,7 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:49:59.603Z"
+      "checkedAt": "2026-11-03T14:53:19.347Z"
     },
     {
       "name": "mksglu/context-mode",
@@ -11973,7 +11972,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "33,250 people starred it."
+          "note": "33,347 people starred it."
         },
         {
           "group": "Reputation",
@@ -11981,7 +11980,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "2,294 copies made by other developers."
+          "note": "2,297 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -12005,7 +12004,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 252 days old."
+          "note": "Repo is 253 days old."
         },
         {
           "group": "Upkeep",
@@ -12084,7 +12083,7 @@
         "CLAUDE.md",
         ".claude/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:50:28.253Z"
+      "checkedAt": "2026-11-03T14:53:44.019Z"
     },
     {
       "name": "Ebony-Vinyl/dsh-our-free-model",
@@ -12112,7 +12111,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "57,130 people starred it."
+          "note": "58,660 people starred it."
         },
         {
           "group": "Reputation",
@@ -12120,7 +12119,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "1,555 copies made by other developers."
+          "note": "1,595 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -12128,7 +12127,7 @@
           "points": 6,
           "max": 10,
           "level": "good",
-          "note": "Account created 345 days ago."
+          "note": "Account created 346 days ago."
         },
         {
           "group": "Upkeep",
@@ -12136,7 +12135,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 0 days ago."
+          "note": "Last change 1 days ago."
         },
         {
           "group": "Upkeep",
@@ -12144,7 +12143,7 @@
           "points": 2,
           "max": 8,
           "level": "warn",
-          "note": "Repo is 39 days old."
+          "note": "Repo is 40 days old."
         },
         {
           "group": "Upkeep",
@@ -12231,7 +12230,181 @@
       },
       "capReason": null,
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:49:15.674Z"
+      "checkedAt": "2026-11-03T14:52:40.552Z"
+    },
+    {
+      "name": "cheaper-inference/OmniRoute",
+      "url": "https://github.com/cheaper-inference/OmniRoute",
+      "description": "Never stop coding. Free MIT AI gateway: one endpoint, 375 providers (150+ free), 1,400+ models Kimi, Claude, GPT, Gemini, GLM, DeepSeek, MiniMax. Works with Claude Code, Codex, Cursor, OpenCode, Cline & Copilot. Quota-aware auto-fallback, RTK+Caveman compression saves 15-95% tokens, MCP/A2A, Desktop/PWA. Built by 900+ contributors",
+      "score": 85,
+      "grade": "A",
+      "level": "trusted",
+      "label": "Strong",
+      "verdict": "Strong on every check. No grade is a guarantee, so only install what you need.",
+      "flags": [
+        "Runs code during install"
+      ],
+      "warnings": [
+        {
+          "label": "Runs code during install",
+          "note": "package.json runs \"node scripts/build/postinstall.mjs\" the moment you install it.",
+          "severity": "low"
+        }
+      ],
+      "checks": [
+        {
+          "group": "Reputation",
+          "label": "Stars",
+          "points": 15,
+          "max": 15,
+          "level": "good",
+          "note": "84,155 people starred it."
+        },
+        {
+          "group": "Reputation",
+          "label": "Forks",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "12,630 copies made by other developers."
+        },
+        {
+          "group": "Reputation",
+          "label": "Owner history",
+          "points": 3,
+          "max": 10,
+          "level": "warn",
+          "note": "Organization created 71 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Recent updates",
+          "points": 12,
+          "max": 12,
+          "level": "good",
+          "note": "Last change 0 days ago."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Track record",
+          "points": 5,
+          "max": 8,
+          "level": "good",
+          "note": "Repo is 263 days old."
+        },
+        {
+          "group": "Upkeep",
+          "label": "Releases",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Publishes versioned releases."
+        },
+        {
+          "group": "Transparency",
+          "label": "License",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Uses the MIT license."
+        },
+        {
+          "group": "Transparency",
+          "label": "Instructions",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Has a README that explains the project."
+        },
+        {
+          "group": "Transparency",
+          "label": "Security contact",
+          "points": 5,
+          "max": 5,
+          "level": "good",
+          "note": "Tells people how to report security problems."
+        },
+        {
+          "group": "Security habits",
+          "label": "Code review",
+          "points": 3,
+          "max": 3,
+          "level": "good",
+          "note": "Almost every change is checked by a second person before it goes in."
+        },
+        {
+          "group": "Security habits",
+          "label": "Known security holes",
+          "points": 0,
+          "max": 3,
+          "level": "bad",
+          "note": "About 10 known security holes still unfixed (10 or more)."
+        },
+        {
+          "group": "Security habits",
+          "label": "Safe automation",
+          "points": 4,
+          "max": 4,
+          "level": "good",
+          "note": "Its build-and-publish robots are set up safely."
+        },
+        {
+          "group": "Red flags",
+          "label": "1 warning sign",
+          "points": 26,
+          "max": 30,
+          "level": "good",
+          "note": "Each one is explained under Warning signs."
+        }
+      ],
+      "areas": {
+        "Reputation": {
+          "points": 23,
+          "max": 30,
+          "grade": "B"
+        },
+        "Upkeep": {
+          "points": 22,
+          "max": 25,
+          "grade": "A"
+        },
+        "Transparency": {
+          "points": 15,
+          "max": 15,
+          "grade": "A"
+        },
+        "Security habits": {
+          "points": 7,
+          "max": 10,
+          "grade": "B"
+        },
+        "Red flags": {
+          "points": 26,
+          "max": 30,
+          "grade": "A"
+        }
+      },
+      "securityChecked": true,
+      "costs": {
+        "mentionsPaid": true,
+        "words": [
+          "free tier",
+          "subscriptions",
+          "subscription",
+          "pricing"
+        ],
+        "account": null,
+        "folder": null
+      },
+      "capReason": null,
+      "aiFilesFound": [
+        "CLAUDE.md",
+        "GEMINI.md",
+        "AGENTS.md",
+        ".vscode/settings.json",
+        ".github/copilot-instructions.md"
+      ],
+      "checkedAt": "2026-11-03T14:52:42.310Z"
     },
     {
       "name": "open-webui/open-webui",
@@ -12251,7 +12424,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "157,558 people starred it."
+          "note": "157,647 people starred it."
         },
         {
           "group": "Reputation",
@@ -12259,7 +12432,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "22,917 copies made by other developers."
+          "note": "22,935 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -12323,7 +12496,7 @@
           "points": 3,
           "max": 5,
           "level": "warn",
-          "note": "42 of the 1,137 parts it uses have a known security hole (for example @sveltejs/kit@2.70.3, cookie@0.6.0). Not every hole affects you, but the owner should update them."
+          "note": "42 of the 1,152 parts it uses have a known security hole (for example @sveltejs/kit@2.70.3, cookie@0.6.0). Not every hole affects you, but the owner should update them."
         },
         {
           "group": "Red flags",
@@ -12363,16 +12536,14 @@
       },
       "securityChecked": true,
       "costs": {
-        "mentionsPaid": true,
-        "words": [
-          "enterprise plan"
-        ],
+        "mentionsPaid": false,
+        "words": [],
         "account": null,
         "folder": null
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:00.406Z"
+      "checkedAt": "2026-11-03T14:50:24.261Z"
     },
     {
       "name": "openai/codex",
@@ -12400,7 +12571,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "132,865 people starred it."
+          "note": "132,985 people starred it."
         },
         {
           "group": "Reputation",
@@ -12408,7 +12579,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "21,004 copies made by other developers."
+          "note": "21,045 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -12531,7 +12702,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:47:08.841Z"
+      "checkedAt": "2026-11-03T14:50:33.167Z"
     },
     {
       "name": "google-gemini/gemini-cli",
@@ -12551,7 +12722,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "108,671 people starred it."
+          "note": "108,699 people starred it."
         },
         {
           "group": "Reputation",
@@ -12559,7 +12730,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "14,915 copies made by other developers."
+          "note": "14,921 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -12675,10 +12846,10 @@
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
         "GEMINI.md",
-        ".gemini/settings.json",
-        ".vscode/settings.json"
+        ".vscode/settings.json",
+        ".gemini/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:47:12.173Z"
+      "checkedAt": "2026-11-03T14:50:35.671Z"
     },
     {
       "name": "langchain-ai/langchain",
@@ -12698,7 +12869,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "148,883 people starred it."
+          "note": "148,942 people starred it."
         },
         {
           "group": "Reputation",
@@ -12706,7 +12877,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "25,032 copies made by other developers."
+          "note": "25,049 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -12730,7 +12901,7 @@
           "points": 8,
           "max": 8,
           "level": "good",
-          "note": "Repo is 4 years old."
+          "note": "Repo is 4.1 years old."
         },
         {
           "group": "Upkeep",
@@ -12825,11 +12996,11 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
-        "AGENTS.md",
         ".mcp.json",
+        "AGENTS.md",
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:47:15.187Z"
+      "checkedAt": "2026-11-03T14:50:38.517Z"
     },
     {
       "name": "mudler/LocalAI",
@@ -12849,7 +13020,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "50,138 people starred it."
+          "note": "50,161 people starred it."
         },
         {
           "group": "Reputation",
@@ -12857,7 +13028,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "4,566 copies made by other developers."
+          "note": "4,572 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -12968,10 +13139,10 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
-        "AGENTS.md",
-        "CLAUDE.md"
+        "CLAUDE.md",
+        "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:47:23.381Z"
+      "checkedAt": "2026-11-03T14:50:45.898Z"
     },
     {
       "name": "nomic-ai/gpt4all",
@@ -12991,7 +13162,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "77,346 people starred it."
+          "note": "77,344 people starred it."
         },
         {
           "group": "Reputation",
@@ -12999,7 +13170,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "8,259 copies made by other developers."
+          "note": "8,263 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -13015,7 +13186,7 @@
           "points": 2,
           "max": 12,
           "level": "bad",
-          "note": "Last change 524 days ago."
+          "note": "Last change 525 days ago."
         },
         {
           "group": "Upkeep",
@@ -13097,7 +13268,7 @@
       },
       "capReason": "nobody has changed it in over a year",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:26.103Z"
+      "checkedAt": "2026-11-03T14:50:48.127Z"
     },
     {
       "name": "crewAIInc/crewAI",
@@ -13125,7 +13296,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "60,425 people starred it."
+          "note": "60,453 people starred it."
         },
         {
           "group": "Reputation",
@@ -13133,7 +13304,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "9,000 copies made by other developers."
+          "note": "9,018 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -13248,7 +13419,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:47:32.632Z"
+      "checkedAt": "2026-11-03T14:50:53.394Z"
     },
     {
       "name": "infiniflow/ragflow",
@@ -13268,7 +13439,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "93,364 people starred it."
+          "note": "93,430 people starred it."
         },
         {
           "group": "Reputation",
@@ -13276,7 +13447,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "11,207 copies made by other developers."
+          "note": "11,218 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -13390,7 +13561,7 @@
         "AGENTS.md",
         ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-11-02T16:47:35.925Z"
+      "checkedAt": "2026-11-03T14:50:55.321Z"
     },
     {
       "name": "anthropics/skills",
@@ -13410,7 +13581,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "186,667 people starred it."
+          "note": "187,002 people starred it."
         },
         {
           "group": "Reputation",
@@ -13418,7 +13589,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "22,045 copies made by other developers."
+          "note": "22,082 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -13434,7 +13605,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 5 days ago."
+          "note": "Last change 6 days ago."
         },
         {
           "group": "Upkeep",
@@ -13518,7 +13689,7 @@
       },
       "capReason": "it has no license",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:37.347Z"
+      "checkedAt": "2026-11-03T14:50:56.752Z"
     },
     {
       "name": "unclecode/crawl4ai",
@@ -13538,7 +13709,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "86,775 people starred it."
+          "note": "86,825 people starred it."
         },
         {
           "group": "Reputation",
@@ -13546,7 +13717,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "9,043 copies made by other developers."
+          "note": "9,049 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -13659,10 +13830,10 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
-        ".claude/settings.local.json",
-        ".claude/commands/c4ai-check.md"
+        ".claude/commands/c4ai-check.md",
+        ".claude/settings.local.json"
       ],
-      "checkedAt": "2026-11-02T16:47:46.786Z"
+      "checkedAt": "2026-11-03T14:51:04.816Z"
     },
     {
       "name": "zylon-ai/private-gpt",
@@ -13690,7 +13861,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "57,626 people starred it."
+          "note": "57,630 people starred it."
         },
         {
           "group": "Reputation",
@@ -13698,7 +13869,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "7,620 copies made by other developers."
+          "note": "7,621 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -13714,7 +13885,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 4 days ago."
+          "note": "Last change 0 days ago."
         },
         {
           "group": "Upkeep",
@@ -13809,7 +13980,7 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:55.763Z"
+      "checkedAt": "2026-11-03T14:51:19.638Z"
     },
     {
       "name": "Aider-AI/aider",
@@ -13829,7 +14000,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "49,907 people starred it."
+          "note": "49,922 people starred it."
         },
         {
           "group": "Reputation",
@@ -13853,7 +14024,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 164 days ago."
+          "note": "Last change 165 days ago."
         },
         {
           "group": "Upkeep",
@@ -13948,7 +14119,7 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:58.797Z"
+      "checkedAt": "2026-11-03T14:51:22.692Z"
     },
     {
       "name": "khoj-ai/khoj",
@@ -13968,7 +14139,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "37,945 people starred it."
+          "note": "37,972 people starred it."
         },
         {
           "group": "Reputation",
@@ -13976,7 +14147,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "2,529 copies made by other developers."
+          "note": "2,530 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -13992,7 +14163,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 93 days ago."
+          "note": "Last change 94 days ago."
         },
         {
           "group": "Upkeep",
@@ -14089,7 +14260,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:48:04.147Z"
+      "checkedAt": "2026-11-03T14:51:31.216Z"
     },
     {
       "name": "TabbyML/tabby",
@@ -14109,7 +14280,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "33,921 people starred it."
+          "note": "33,917 people starred it."
         },
         {
           "group": "Reputation",
@@ -14117,7 +14288,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "1,793 copies made by other developers."
+          "note": "1,792 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -14133,7 +14304,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 125 days ago."
+          "note": "Last change 126 days ago."
         },
         {
           "group": "Upkeep",
@@ -14228,7 +14399,7 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:08.532Z"
+      "checkedAt": "2026-11-03T14:51:38.893Z"
     },
     {
       "name": "Pythagora-io/gpt-pilot",
@@ -14248,7 +14419,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "33,649 people starred it."
+          "note": "33,648 people starred it."
         },
         {
           "group": "Reputation",
@@ -14272,7 +14443,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 137 days ago."
+          "note": "Last change 138 days ago."
         },
         {
           "group": "Upkeep",
@@ -14367,7 +14538,7 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:11.479Z"
+      "checkedAt": "2026-11-03T14:51:41.724Z"
     },
     {
       "name": "lllyasviel/stable-diffusion-webui-forge",
@@ -14387,7 +14558,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "13,107 people starred it."
+          "note": "13,111 people starred it."
         },
         {
           "group": "Reputation",
@@ -14395,7 +14566,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "1,779 copies made by other developers."
+          "note": "1,781 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -14411,7 +14582,7 @@
           "points": 2,
           "max": 12,
           "level": "bad",
-          "note": "Last change 460 days ago."
+          "note": "Last change 461 days ago."
         },
         {
           "group": "Upkeep",
@@ -14493,7 +14664,7 @@
       },
       "capReason": "nobody has changed it in over a year",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:14.664Z"
+      "checkedAt": "2026-11-03T14:51:44.559Z"
     },
     {
       "name": "executeautomation/mcp-playwright",
@@ -14632,7 +14803,7 @@
       },
       "capReason": "its weakest area (\"Is anyone looking after it?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:18.527Z"
+      "checkedAt": "2026-11-03T14:51:48.210Z"
     },
     {
       "name": "PrefectHQ/fastmcp",
@@ -14652,7 +14823,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "28,274 people starred it."
+          "note": "28,290 people starred it."
         },
         {
           "group": "Reputation",
@@ -14660,7 +14831,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "2,551 copies made by other developers."
+          "note": "2,558 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -14724,7 +14895,7 @@
           "points": 3,
           "max": 5,
           "level": "warn",
-          "note": "6 of the 162 parts it uses have a known security hole (for example authlib@1.7.2, black@26.5.1). Not every hole affects you, but the owner should update them."
+          "note": "6 of the 163 parts it uses have a known security hole (for example authlib@1.7.2, black@26.5.1). Not every hole affects you, but the owner should update them."
         },
         {
           "group": "Red flags",
@@ -14771,10 +14942,10 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
-        "CLAUDE.md",
-        "AGENTS.md"
+        "AGENTS.md",
+        "CLAUDE.md"
       ],
-      "checkedAt": "2026-11-02T16:48:20.695Z"
+      "checkedAt": "2026-11-03T14:51:50.139Z"
     },
     {
       "name": "tadata-org/fastapi_mcp",
@@ -14794,7 +14965,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "12,023 people starred it."
+          "note": "12,025 people starred it."
         },
         {
           "group": "Reputation",
@@ -14818,7 +14989,7 @@
           "points": 5,
           "max": 12,
           "level": "warn",
-          "note": "Last change 343 days ago."
+          "note": "Last change 344 days ago."
         },
         {
           "group": "Upkeep",
@@ -14913,7 +15084,7 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:22.143Z"
+      "checkedAt": "2026-11-03T14:51:51.566Z"
     },
     {
       "name": "oraios/serena",
@@ -14933,7 +15104,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "31,017 people starred it."
+          "note": "31,054 people starred it."
         },
         {
           "group": "Reputation",
@@ -14941,7 +15112,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "2,121 copies made by other developers."
+          "note": "2,123 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -14957,7 +15128,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 5 days ago."
+          "note": "Last change 6 days ago."
         },
         {
           "group": "Upkeep",
@@ -15056,10 +15227,10 @@
       "aiFilesFound": [
         "AGENTS.md",
         "CLAUDE.md",
-        ".vscode/settings.json",
-        ".github/copilot-instructions.md"
+        ".github/copilot-instructions.md",
+        ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:48:24.488Z"
+      "checkedAt": "2026-11-03T14:51:53.381Z"
     },
     {
       "name": "ahujasid/mcp-for-blender",
@@ -15087,7 +15258,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "33,067 people starred it."
+          "note": "33,168 people starred it."
         },
         {
           "group": "Reputation",
@@ -15095,7 +15266,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "2,995 copies made by other developers."
+          "note": "3,007 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -15111,7 +15282,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 4 days ago."
+          "note": "Last change 5 days ago."
         },
         {
           "group": "Upkeep",
@@ -15206,7 +15377,7 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:27.882Z"
+      "checkedAt": "2026-11-03T14:51:56.324Z"
     },
     {
       "name": "exa-labs/exa-mcp-server",
@@ -15234,7 +15405,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "407 copies made by other developers."
+          "note": "408 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -15347,7 +15518,7 @@
       "aiFilesFound": [
         "mcp.json"
       ],
-      "checkedAt": "2026-11-02T16:48:38.120Z"
+      "checkedAt": "2026-11-03T14:52:06.330Z"
     },
     {
       "name": "wonderwhy-er/DesktopCommanderMCP",
@@ -15381,7 +15552,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "10,199 people starred it."
+          "note": "10,204 people starred it."
         },
         {
           "group": "Reputation",
@@ -15506,7 +15677,7 @@
         ".mcp.json",
         ".claude/settings.local.json"
       ],
-      "checkedAt": "2026-11-02T16:48:43.105Z"
+      "checkedAt": "2026-11-03T14:52:10.934Z"
     },
     {
       "name": "ComposioHQ/awesome-claude-skills",
@@ -15526,7 +15697,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "78,580 people starred it."
+          "note": "78,647 people starred it."
         },
         {
           "group": "Reputation",
@@ -15534,7 +15705,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "9,502 copies made by other developers."
+          "note": "9,527 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -15550,7 +15721,7 @@
           "points": 9,
           "max": 12,
           "level": "good",
-          "note": "Last change 45 days ago."
+          "note": "Last change 46 days ago."
         },
         {
           "group": "Upkeep",
@@ -15634,7 +15805,7 @@
       },
       "capReason": "it has no license",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:48.147Z"
+      "checkedAt": "2026-11-03T14:52:15.907Z"
     },
     {
       "name": "davila7/claude-code-templates",
@@ -15654,7 +15825,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "33,067 people starred it."
+          "note": "33,095 people starred it."
         },
         {
           "group": "Reputation",
@@ -15662,7 +15833,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,844 copies made by other developers."
+          "note": "3,847 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -15773,22 +15944,22 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
-        "CLAUDE.md",
         ".mcp.json",
-        ".claude/agents/build-checker.md",
+        "CLAUDE.md",
         ".claude/agents/agent-expert.md",
-        ".claude/agents/deployer.md",
-        ".claude/agents/blog-writer.md",
-        ".claude/agents/component-migrator.md",
-        ".claude/agents/component-improver.md",
-        ".claude/agents/component-reviewer.md",
         ".claude/agents/cli-ui-designer.md",
-        ".claude/agents/component-researcher.md",
+        ".claude/agents/catalog-generator.md",
+        ".claude/agents/deployer.md",
+        ".claude/agents/build-checker.md",
         ".claude/agents/docusaurus-expert.md",
         ".claude/agents/command-expert.md",
-        ".claude/agents/catalog-generator.md"
+        ".claude/agents/component-researcher.md",
+        ".claude/agents/blog-writer.md",
+        ".claude/agents/component-migrator.md",
+        ".claude/agents/component-reviewer.md",
+        ".claude/agents/component-improver.md"
       ],
-      "checkedAt": "2026-11-02T16:48:50.927Z"
+      "checkedAt": "2026-11-03T14:52:18.321Z"
     },
     {
       "name": "ruvnet/ruflo",
@@ -15816,7 +15987,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "80,613 people starred it."
+          "note": "80,759 people starred it."
         },
         {
           "group": "Reputation",
@@ -15824,7 +15995,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "9,461 copies made by other developers."
+          "note": "9,483 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -15935,23 +16106,23 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
+        "SKILL.md",
         "CLAUDE.md",
         "AGENTS.md",
-        "SKILL.md",
+        ".claude/commands/claude-flow-help.md",
         ".claude/settings.json",
-        ".claude/agents/MIGRATION_SUMMARY.md",
-        ".claude/agents/security-auditor.md",
         ".claude/mcp.json",
-        ".claude/agents/python-specialist.md",
-        ".claude/agents/base-template-generator.md",
-        ".claude/agents/typescript-specialist.md",
+        ".claude/agents/project-coordinator.md",
         ".claude/commands/claude-flow-swarm.md",
         ".claude/commands/claude-flow-memory.md",
-        ".claude/commands/claude-flow-help.md",
-        ".claude/agents/project-coordinator.md",
+        ".claude/agents/typescript-specialist.md",
+        ".claude/agents/MIGRATION_SUMMARY.md",
+        ".claude/agents/security-auditor.md",
+        ".claude/agents/python-specialist.md",
+        ".claude/agents/base-template-generator.md",
         ".claude/agents/database-specialist.md"
       ],
-      "checkedAt": "2026-11-02T16:48:56.384Z"
+      "checkedAt": "2026-11-03T14:52:23.158Z"
     },
     {
       "name": "musistudio/claude-code-router",
@@ -15971,7 +16142,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "37,959 people starred it."
+          "note": "37,977 people starred it."
         },
         {
           "group": "Reputation",
@@ -15979,7 +16150,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,188 copies made by other developers."
+          "note": "3,189 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -16090,7 +16261,7 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:58.166Z"
+      "checkedAt": "2026-11-03T14:52:24.907Z"
     },
     {
       "name": "eyaltoledano/claude-task-master",
@@ -16110,7 +16281,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "28,293 people starred it."
+          "note": "28,296 people starred it."
         },
         {
           "group": "Reputation",
@@ -16134,7 +16305,7 @@
           "points": 5,
           "max": 12,
           "level": "warn",
-          "note": "Last change 188 days ago."
+          "note": "Last change 189 days ago."
         },
         {
           "group": "Upkeep",
@@ -16232,22 +16403,22 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
-        "CLAUDE.md",
         ".mcp.json",
-        ".cursor/mcp.json",
-        ".cursor/rules/ai_services.mdc",
+        "CLAUDE.md",
         ".claude/commands/dedupe.md",
-        ".cursor/rules/architecture.mdc",
-        ".cursor/commands/goham.md",
         ".cursor/rules/cursor_rules.mdc",
         ".cursor/rules/changeset.mdc",
         ".cursor/rules/dev_workflow.mdc",
-        ".cursor/rules/commands.mdc",
-        ".cursor/rules/ai_providers.mdc",
         ".cursor/rules/context_gathering.mdc",
-        ".cursor/rules/dependencies.mdc"
+        ".cursor/commands/goham.md",
+        ".cursor/rules/ai_providers.mdc",
+        ".cursor/rules/architecture.mdc",
+        ".cursor/rules/dependencies.mdc",
+        ".cursor/rules/commands.mdc",
+        ".cursor/rules/ai_services.mdc",
+        ".cursor/mcp.json"
       ],
-      "checkedAt": "2026-11-02T16:49:01.985Z"
+      "checkedAt": "2026-11-03T14:52:28.260Z"
     },
     {
       "name": "coleam00/context-engineering-intro",
@@ -16267,7 +16438,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "13,894 people starred it."
+          "note": "13,895 people starred it."
         },
         {
           "group": "Reputation",
@@ -16275,7 +16446,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "2,708 copies made by other developers."
+          "note": "2,707 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -16291,7 +16462,7 @@
           "points": 5,
           "max": 12,
           "level": "warn",
-          "note": "Last change 231 days ago."
+          "note": "Last change 232 days ago."
         },
         {
           "group": "Upkeep",
@@ -16374,185 +16545,11 @@
       "capReason": "its weakest area (\"Is anyone looking after it?\") only gets a C",
       "aiFilesFound": [
         "CLAUDE.md",
-        ".claude/settings.local.json",
         ".claude/commands/execute-prp.md",
-        ".claude/commands/generate-prp.md"
+        ".claude/commands/generate-prp.md",
+        ".claude/settings.local.json"
       ],
-      "checkedAt": "2026-11-02T16:49:08.078Z"
-    },
-    {
-      "name": "cheaper-inference/OmniRoute",
-      "url": "https://github.com/cheaper-inference/OmniRoute",
-      "description": "Never stop coding. Free MIT AI gateway: one endpoint, 375 providers (150+ free), 1,400+ models Kimi, Claude, GPT, Gemini, GLM, DeepSeek, MiniMax. Works with Claude Code, Codex, Cursor, OpenCode, Cline & Copilot. Quota-aware auto-fallback, RTK+Caveman compression saves 15-95% tokens, MCP/A2A, Desktop/PWA. Built by 900+ contributors",
-      "score": 84,
-      "grade": "B",
-      "level": "fine",
-      "label": "Probably fine",
-      "verdict": "Probably fine. Read the warnings first.",
-      "flags": [
-        "Runs code during install"
-      ],
-      "warnings": [
-        {
-          "label": "Runs code during install",
-          "note": "package.json runs \"node scripts/build/postinstall.mjs\" the moment you install it.",
-          "severity": "low"
-        }
-      ],
-      "checks": [
-        {
-          "group": "Reputation",
-          "label": "Stars",
-          "points": 15,
-          "max": 15,
-          "level": "good",
-          "note": "83,880 people starred it."
-        },
-        {
-          "group": "Reputation",
-          "label": "Forks",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "12,552 copies made by other developers."
-        },
-        {
-          "group": "Reputation",
-          "label": "Owner history",
-          "points": 3,
-          "max": 10,
-          "level": "warn",
-          "note": "Organization created 70 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Recent updates",
-          "points": 12,
-          "max": 12,
-          "level": "good",
-          "note": "Last change 0 days ago."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Track record",
-          "points": 5,
-          "max": 8,
-          "level": "good",
-          "note": "Repo is 262 days old."
-        },
-        {
-          "group": "Upkeep",
-          "label": "Releases",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Publishes versioned releases."
-        },
-        {
-          "group": "Transparency",
-          "label": "License",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Uses the MIT license."
-        },
-        {
-          "group": "Transparency",
-          "label": "Instructions",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Has a README that explains the project."
-        },
-        {
-          "group": "Transparency",
-          "label": "Security contact",
-          "points": 5,
-          "max": 5,
-          "level": "good",
-          "note": "Tells people how to report security problems."
-        },
-        {
-          "group": "Security habits",
-          "label": "Code review",
-          "points": 2,
-          "max": 3,
-          "level": "good",
-          "note": "Almost every change is checked by a second person before it goes in."
-        },
-        {
-          "group": "Security habits",
-          "label": "Known security holes",
-          "points": 0,
-          "max": 3,
-          "level": "bad",
-          "note": "About 10 known security holes still unfixed (10 or more)."
-        },
-        {
-          "group": "Security habits",
-          "label": "Safe automation",
-          "points": 4,
-          "max": 4,
-          "level": "good",
-          "note": "Its build-and-publish robots are set up safely."
-        },
-        {
-          "group": "Red flags",
-          "label": "1 warning sign",
-          "points": 26,
-          "max": 30,
-          "level": "good",
-          "note": "Each one is explained under Warning signs."
-        }
-      ],
-      "areas": {
-        "Reputation": {
-          "points": 23,
-          "max": 30,
-          "grade": "B"
-        },
-        "Upkeep": {
-          "points": 22,
-          "max": 25,
-          "grade": "A"
-        },
-        "Transparency": {
-          "points": 15,
-          "max": 15,
-          "grade": "A"
-        },
-        "Security habits": {
-          "points": 6,
-          "max": 10,
-          "grade": "C"
-        },
-        "Red flags": {
-          "points": 26,
-          "max": 30,
-          "grade": "A"
-        }
-      },
-      "securityChecked": true,
-      "costs": {
-        "mentionsPaid": true,
-        "words": [
-          "free tier",
-          "subscriptions",
-          "subscription",
-          "pricing"
-        ],
-        "account": null,
-        "folder": null
-      },
-      "capReason": null,
-      "aiFilesFound": [
-        "AGENTS.md",
-        "CLAUDE.md",
-        "GEMINI.md",
-        ".github/copilot-instructions.md",
-        ".vscode/settings.json"
-      ],
-      "checkedAt": "2026-11-02T16:49:17.460Z"
+      "checkedAt": "2026-11-03T14:52:33.784Z"
     },
     {
       "name": "NousResearch/hermes-agent",
@@ -16586,7 +16583,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "259,731 people starred it."
+          "note": "260,119 people starred it."
         },
         {
           "group": "Reputation",
@@ -16594,7 +16591,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "57,180 copies made by other developers."
+          "note": "57,314 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -16658,7 +16655,7 @@
           "points": 3,
           "max": 5,
           "level": "warn",
-          "note": "10 of the 1,230 parts it uses have a known security hole (for example glob@10.5.0, minimatch@9.0.9). Not every hole affects you, but the owner should update them."
+          "note": "10 of the 1,163 parts it uses have a known security hole (for example glob@10.5.0, minimatch@9.0.9). Not every hole affects you, but the owner should update them."
         },
         {
           "group": "Red flags",
@@ -16707,7 +16704,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:49:26.352Z"
+      "checkedAt": "2026-11-03T14:52:49.078Z"
     },
     {
       "name": "Yeachan-Heo/oh-my-claudecode",
@@ -16735,7 +16732,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "40,513 people starred it."
+          "note": "40,531 people starred it."
         },
         {
           "group": "Reputation",
@@ -16743,7 +16740,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,626 copies made by other developers."
+          "note": "3,627 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -16854,12 +16851,12 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
-        "AGENTS.md",
         ".mcp.json",
+        "AGENTS.md",
         "CLAUDE.md",
         ".github/CLAUDE.md"
       ],
-      "checkedAt": "2026-11-02T16:49:51.783Z"
+      "checkedAt": "2026-11-03T14:53:11.394Z"
     },
     {
       "name": "OpenHands/OpenHands",
@@ -16887,7 +16884,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "92,502 people starred it."
+          "note": "92,575 people starred it."
         },
         {
           "group": "Reputation",
@@ -16895,7 +16892,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "12,329 copies made by other developers."
+          "note": "12,344 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -16959,7 +16956,7 @@
           "points": 3,
           "max": 5,
           "level": "warn",
-          "note": "10 of the 594 parts it uses have a known security hole (for example axios@1.18.0, deepmerge@4.3.1). Not every hole affects you, but the owner should update them."
+          "note": "9 of the 594 parts it uses have a known security hole (for example axios@1.18.0, deepmerge@4.3.1). Not every hole affects you, but the owner should update them."
         },
         {
           "group": "Red flags",
@@ -17008,7 +17005,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:50:05.514Z"
+      "checkedAt": "2026-11-03T14:53:24.726Z"
     },
     {
       "name": "unslothai/unsloth",
@@ -17036,7 +17033,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "78,959 people starred it."
+          "note": "79,003 people starred it."
         },
         {
           "group": "Reputation",
@@ -17044,7 +17041,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "7,354 copies made by other developers."
+          "note": "7,361 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -17173,7 +17170,7 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:50:11.301Z"
+      "checkedAt": "2026-11-03T14:53:29.765Z"
     },
     {
       "name": "mem0ai/mem0",
@@ -17193,7 +17190,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "68,286 people starred it."
+          "note": "68,333 people starred it."
         },
         {
           "group": "Reputation",
@@ -17201,7 +17198,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "8,103 copies made by other developers."
+          "note": "8,112 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -17217,7 +17214,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 3 days ago."
+          "note": "Last change 4 days ago."
         },
         {
           "group": "Upkeep",
@@ -17312,12 +17309,12 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
-        "CLAUDE.md",
         "AGENTS.md",
+        "CLAUDE.md",
         ".github/CLAUDE.md",
         ".github/AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:50:13.506Z"
+      "checkedAt": "2026-11-03T14:53:31.849Z"
     },
     {
       "name": "MemPalace/mempalace",
@@ -17337,7 +17334,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "60,244 people starred it."
+          "note": "60,316 people starred it."
         },
         {
           "group": "Reputation",
@@ -17345,7 +17342,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "7,637 copies made by other developers."
+          "note": "7,654 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -17353,7 +17350,7 @@
           "points": 6,
           "max": 10,
           "level": "good",
-          "note": "Organization created 206 days ago."
+          "note": "Organization created 207 days ago."
         },
         {
           "group": "Upkeep",
@@ -17361,7 +17358,7 @@
           "points": 12,
           "max": 12,
           "level": "good",
-          "note": "Last change 2 days ago."
+          "note": "Last change 3 days ago."
         },
         {
           "group": "Upkeep",
@@ -17369,7 +17366,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 212 days old."
+          "note": "Repo is 213 days old."
         },
         {
           "group": "Upkeep",
@@ -17457,11 +17454,11 @@
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
         "AGENTS.md",
-        "mcp.json",
         "CLAUDE.md",
-        ".mcp.json"
+        ".mcp.json",
+        "mcp.json"
       ],
-      "checkedAt": "2026-11-02T16:50:15.869Z"
+      "checkedAt": "2026-11-03T14:53:33.815Z"
     },
     {
       "name": "tinyhumansai/openhuman",
@@ -17495,7 +17492,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "42,501 people starred it."
+          "note": "42,521 people starred it."
         },
         {
           "group": "Reputation",
@@ -17503,7 +17500,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "4,209 copies made by other developers."
+          "note": "4,208 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -17527,7 +17524,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 257 days old."
+          "note": "Repo is 258 days old."
         },
         {
           "group": "Upkeep",
@@ -17567,7 +17564,7 @@
           "points": 3,
           "max": 5,
           "level": "warn",
-          "note": "6 of the 1,042 parts it uses have a known security hole (for example bincode@1.3.3, rustls@0.22.4). Not every hole affects you, but the owner should update them."
+          "note": "8 of the 1,043 parts it uses have a known security hole (for example bincode@1.3.3, calamine@0.37.0). Not every hole affects you, but the owner should update them."
         },
         {
           "group": "Red flags",
@@ -17617,19 +17614,19 @@
         "CLAUDE.md",
         "AGENTS.md",
         ".claude/agents/build-agent.md",
-        ".claude/agents/pr-reviewer.md",
-        ".claude/mcp.json",
-        ".claude/agents/dev-agent.md",
-        ".claude/agents/pr-manager.md",
-        ".claude/agents/mobile-agent.md",
-        ".claude/agents/pr-manager-lite.md",
-        ".claude/agents/designguru.md",
         ".claude/agents/architectobot.md",
-        ".claude/settings.json",
+        ".claude/mcp.json",
+        ".claude/agents/codecrusher.md",
+        ".claude/agents/dev-agent.md",
+        ".claude/agents/pr-reviewer.md",
+        ".claude/agents/designguru.md",
         ".claude/agents/deploy-agent.md",
-        ".claude/agents/codecrusher.md"
+        ".claude/agents/pr-manager-lite.md",
+        ".claude/settings.json",
+        ".claude/agents/mobile-agent.md",
+        ".claude/agents/pr-manager.md"
       ],
-      "checkedAt": "2026-11-02T16:50:20.372Z"
+      "checkedAt": "2026-11-03T14:53:37.207Z"
     },
     {
       "name": "DayuanJiang/next-ai-draw-io",
@@ -17649,7 +17646,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "36,584 people starred it."
+          "note": "36,637 people starred it."
         },
         {
           "group": "Reputation",
@@ -17657,7 +17654,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "3,816 copies made by other developers."
+          "note": "3,819 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -17770,7 +17767,7 @@
       "aiFilesFound": [
         ".vscode/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:50:26.671Z"
+      "checkedAt": "2026-11-03T14:53:42.595Z"
     },
     {
       "name": "czlonkowski/n8n-mcp",
@@ -17790,7 +17787,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "23,191 people starred it."
+          "note": "23,195 people starred it."
         },
         {
           "group": "Reputation",
@@ -17862,7 +17859,7 @@
           "points": 3,
           "max": 5,
           "level": "warn",
-          "note": "46 of the 1,351 parts it uses have a known security hole (for example uuid@8.3.2, @hono/node-server@1.19.17). Not every hole affects you, but the owner should update them."
+          "note": "40 of the 1,361 parts it uses have a known security hole (for example uuid@8.3.2, @hono/node-server@1.19.17). Not every hole affects you, but the owner should update them."
         },
         {
           "group": "Red flags",
@@ -17911,18 +17908,18 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a C",
       "aiFilesFound": [
-        "CLAUDE.md",
         "AGENTS.md",
-        ".claude/agents/context-manager.md",
-        ".claude/agents/technical-researcher.md",
-        ".claude/agents/code-reviewer.md",
-        ".claude/agents/n8n-mcp-tester.md",
+        "CLAUDE.md",
         ".claude/agents/test-automator.md",
-        ".claude/agents/deployment-engineer.md",
         ".claude/agents/mcp-backend-engineer.md",
-        ".claude/agents/debugger.md"
+        ".claude/agents/code-reviewer.md",
+        ".claude/agents/deployment-engineer.md",
+        ".claude/agents/technical-researcher.md",
+        ".claude/agents/context-manager.md",
+        ".claude/agents/debugger.md",
+        ".claude/agents/n8n-mcp-tester.md"
       ],
-      "checkedAt": "2026-11-02T16:50:32.058Z"
+      "checkedAt": "2026-11-03T14:53:47.692Z"
     },
     {
       "name": "ccusage/ccusage",
@@ -17950,7 +17947,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "19,300 people starred it."
+          "note": "19,315 people starred it."
         },
         {
           "group": "Reputation",
@@ -17958,7 +17955,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "906 copies made by other developers."
+          "note": "907 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -17966,7 +17963,7 @@
           "points": 3,
           "max": 10,
           "level": "warn",
-          "note": "Organization created 147 days ago."
+          "note": "Organization created 148 days ago."
         },
         {
           "group": "Upkeep",
@@ -18061,7 +18058,7 @@
         ".claude/AGENTS.md",
         ".claude/settings.json"
       ],
-      "checkedAt": "2026-11-02T16:49:11.963Z"
+      "checkedAt": "2026-11-03T14:52:37.352Z"
     },
     {
       "name": "FlowiseAI/Flowise",
@@ -18089,7 +18086,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "55,543 people starred it."
+          "note": "55,548 people starred it."
         },
         {
           "group": "Reputation",
@@ -18097,7 +18094,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "25,090 copies made by other developers."
+          "note": "25,080 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -18195,7 +18192,7 @@
       },
       "capReason": "the owner archived it, so nobody fixes problems anymore",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:47:57.104Z"
+      "checkedAt": "2026-11-03T14:51:21.121Z"
     },
     {
       "name": "browserbase/mcp-server-browserbase",
@@ -18323,7 +18320,7 @@
       },
       "capReason": "the owner archived it, so nobody fixes problems anymore",
       "aiFilesFound": [],
-      "checkedAt": "2026-11-02T16:48:39.374Z"
+      "checkedAt": "2026-11-03T14:52:07.412Z"
     },
     {
       "name": "steipete/claude-code-mcp",
@@ -18464,11 +18461,11 @@
       "aiFilesFound": [
         ".windsurfrules",
         "CLAUDE.md",
-        ".github/copilot-instructions.md",
         ".cursor/rules/agent.mdc",
-        ".vscode/settings.json"
+        ".vscode/settings.json",
+        ".github/copilot-instructions.md"
       ],
-      "checkedAt": "2026-11-02T16:49:14.308Z"
+      "checkedAt": "2026-11-03T14:52:39.367Z"
     },
     {
       "name": "JuliusBrussee/caveman",
@@ -18496,7 +18493,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "116,875 people starred it."
+          "note": "117,108 people starred it."
         },
         {
           "group": "Reputation",
@@ -18504,7 +18501,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "6,786 copies made by other developers."
+          "note": "6,807 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -18528,7 +18525,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 212 days old."
+          "note": "Repo is 213 days old."
         },
         {
           "group": "Upkeep",
@@ -18633,11 +18630,11 @@
       },
       "capReason": "its weakest area (\"Does it have good security habits?\") only gets a D",
       "aiFilesFound": [
-        "CLAUDE.md",
         "AGENTS.md",
+        "CLAUDE.md",
         "GEMINI.md"
       ],
-      "checkedAt": "2026-11-02T16:49:40.756Z"
+      "checkedAt": "2026-11-03T14:53:01.368Z"
     },
     {
       "name": "gsd-build/get-shit-done",
@@ -18657,7 +18654,7 @@
           "points": 15,
           "max": 15,
           "level": "good",
-          "note": "64,175 people starred it."
+          "note": "64,167 people starred it."
         },
         {
           "group": "Reputation",
@@ -18665,7 +18662,7 @@
           "points": 5,
           "max": 5,
           "level": "good",
-          "note": "5,439 copies made by other developers."
+          "note": "5,445 copies made by other developers."
         },
         {
           "group": "Reputation",
@@ -18673,7 +18670,7 @@
           "points": 6,
           "max": 10,
           "level": "good",
-          "note": "Organization created 266 days ago."
+          "note": "Organization created 267 days ago."
         },
         {
           "group": "Upkeep",
@@ -18689,7 +18686,7 @@
           "points": 5,
           "max": 8,
           "level": "good",
-          "note": "Repo is 323 days old."
+          "note": "Repo is 324 days old."
         },
         {
           "group": "Upkeep",
@@ -18778,7 +18775,7 @@
       "aiFilesFound": [
         "AGENTS.md"
       ],
-      "checkedAt": "2026-11-02T16:49:46.619Z"
+      "checkedAt": "2026-11-03T14:53:06.626Z"
     }
   ]
 }
