@@ -80,7 +80,9 @@ ${body}
 // Same picture names as SHARE_IMAGES in worker.js.
 const IMAGES = ["A-trusted", "B-fine", "C-careful", "D-unproven", "F-unproven", "A-dangerous", "B-dangerous", "C-dangerous", "D-dangerous", "F-dangerous"];
 
-export function repoPage(r, dir) {
+// onDemand: a repo outside the nightly list, graded when someone asked for it (agent.js). Kept for a day and
+// not listed on Google, so the site's Google pages stay the ones we re-check every night.
+export function repoPage(r, dir, { onDemand = false } = {}) {
   const level = levelOf(r);
   const warnings = warningsOf(r);
   const url = SITE + repoPath(r.name);
@@ -110,7 +112,7 @@ export function repoPage(r, dir) {
 </section>
 ${reportCard(r, {
     actions: `<a class="btn secondary" href="/?repo=${esc(r.name)}">Run the check again now</a>`,
-    footnote: `${checked ? `Checked ${esc(day(checked))}. ` : ""}We re-check this repo every night. A grade is a set of warning signs, not a guarantee.`,
+    footnote: `${checked ? `Checked ${esc(day(checked))}. ` : ""}${onDemand ? "This repo isn't in our nightly list, so we keep this grade for a day." : "We re-check this repo every night."} A grade is a set of warning signs, not a guarantee.`,
   })}
 ${signupBox()}
 ${othersHTML}`;
@@ -143,7 +145,7 @@ ${othersHTML}`;
       },
     },
   ];
-  return layout({ title, description, canonical: url, image, imageAlt: `SafeToClone grade ${r.grade}: ${r.label}`, body, data });
+  return layout({ title, description, canonical: url, image, imageAlt: `SafeToClone grade ${r.grade}: ${r.label}`, noindex: onDemand, body, data });
 }
 
 export function reposPage(dir) {
@@ -171,12 +173,19 @@ export function reposPage(dir) {
   return layout({ title, description, canonical: SITE + "/repos", wide: true, body, data });
 }
 
-// For a repo we haven't graded: a friendly page that sends people to the live checker. Google is told not to list it.
-export function missingPage(name) {
+// For a repo we couldn't grade: a friendly page that sends people to the live checker. Google is told not to list it.
+//   reason "missing": GitHub says it doesn't exist (or it's private)
+//   reason "busy":    GitHub's hourly limit, or the check couldn't finish
+const MISSING = {
+  missing: (n) => [`We couldn't find ${n}`, "GitHub says this repo doesn't exist, or it's private. Check the spelling of the link."],
+  busy: (n) => [`We couldn't check ${n} right now`, "GitHub is busy. Try again in a few minutes, or run the check in your browser now."],
+};
+export function missingPage(name, reason) {
+  const [h1, answer] = MISSING[reason]?.(esc(name)) || [`We haven't graded ${esc(name)} yet`, "It's not in our nightly list, but you can check it right now for free."];
   const body = `
 <section>
-  <h1>We haven't graded ${esc(name)} yet</h1>
-  <p class="answer">It's not in our nightly list, but you can check it right now for free.</p>
+  <h1>${h1}</h1>
+  <p class="answer">${answer}</p>
 </section>
 <section>
   <div class="btns"><a class="btn" href="/?repo=${esc(name)}">Check ${esc(name)} now</a><a class="btn secondary" href="/repos">See all grades</a></div>

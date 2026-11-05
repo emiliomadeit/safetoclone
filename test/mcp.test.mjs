@@ -24,7 +24,7 @@ assert.equal((await call({ jsonrpc: "2.0", method: "notifications/initialized" }
 assert.equal((await call(null, "GET")).status, 405);
 
 const list = await (await call({ jsonrpc: "2.0", id: 2, method: "tools/list" })).json();
-assert.deepEqual(list.result.tools.map((t) => t.name), ["get_next_post", "list_upcoming_posts", "get_safety_scores"]);
+assert.deepEqual(list.result.tools.map((t) => t.name), ["get_next_post", "list_upcoming_posts", "get_safety_scores", "check_repo"]);
 
 const scores = await (await call({ jsonrpc: "2.0", id: 3, method: "tools/call", params: { name: "get_safety_scores", arguments: {} } })).json();
 assert.ok(JSON.parse(scores.result.content[0].text).repos.length > 0);
