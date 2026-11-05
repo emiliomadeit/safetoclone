@@ -1,5 +1,5 @@
 // Checks the /mcp connector that Meta Muse uses. Run with: node test/mcp.test.mjs
-import worker, { osvProxy } from "../worker.js";
+import worker, { osvProxy, MCP_REGISTRY_PROOF } from "../worker.js";
 import assert from "node:assert";
 import { readFile } from "node:fs/promises";
 
@@ -55,6 +55,24 @@ assert.equal(bad.error.code, -32601);
   assert.equal((await osvProxy(post({ queries: [] }), fakeOsv)).status, 400);
   assert.equal((await osvProxy(post({ queries: [{ package: { name: "a" }, version: "1" }] }), fakeOsv)).status, 400);
   assert.equal(forwarded, null, "bad requests are never sent on");
+}
+
+// The official MCP Registry listing: the proof file must be plain text (no redirect, no HTML),
+// and server.json must match what /mcp says about itself.
+{
+  const proof = await worker.fetch(new Request("https://safetoclone.com/.well-known/mcp-registry-auth", { headers: { Accept: "text/plain", "User-Agent": "mcp-registry/1.0" } }), env);
+  assert.equal(proof.status, 200);
+  assert.match(proof.headers.get("Content-Type"), /^text\/plain/);
+  assert.equal(await proof.text(), MCP_REGISTRY_PROOF);
+  assert.match(MCP_REGISTRY_PROOF, /^v=MCPv1; k=ed25519; p=[A-Za-z0-9+/]{43}=$/);
+  const server = JSON.parse(await readFile(new URL("../server.json", import.meta.url), "utf8"));
+  assert.equal(server.name, "com.safetoclone/safetoclone", "HTTP proof on safetoclone.com only covers com.safetoclone/*");
+  assert.equal(server.version, init.result.serverInfo.version, "bump server.json version with serverInfo");
+  assert.deepEqual(server.remotes, [{ type: "streamable-http", url: "https://safetoclone.com/mcp" }]);
+  assert.ok(server.description.length <= 100);
+  const ignored = (await readFile(new URL("../.assetsignore", import.meta.url), "utf8")).split("\n");
+  assert.ok(ignored.includes("server.json"), "server.json is not part of the website");
+  assert.match(await readFile(new URL("../icon.svg", import.meta.url), "utf8"), /^<svg /);
 }
 
 console.log("MCP tests passed");

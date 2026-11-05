@@ -791,6 +791,11 @@ export async function osvProxy(request, fetcher = fetch) {
   return new Response(await res.text(), { status: res.status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
 }
 
+// Proves to the official MCP Registry (registry.modelcontextprotocol.io) that we own safetoclone.com, so the
+// connector can be listed there as com.safetoclone/safetoclone. Only the public half of the key is here; it is safe to show.
+// To publish again later: make a new key pair, put its public half here, merge, then follow server.json's notes.
+export const MCP_REGISTRY_PROOF = "v=MCPv1; k=ed25519; p=zMP9yrGjIYQSeZprLgzhwASFj+iGeufymtc+Ds247so=";
+
 // Old addresses that should send visitors to the main one.
 // Pull request previews use other workers.dev names, so they are left alone.
 const OLD_HOSTS = ["www.safetoclone.com", "safetoclone.emileantoun10.workers.dev"];
@@ -804,6 +809,9 @@ const site = {
       const job = count(env, request, event, source).catch(() => {});
       if (ctx?.waitUntil) ctx.waitUntil(job);
     };
+    if (pathname === "/.well-known/mcp-registry-auth") {
+      return new Response(MCP_REGISTRY_PROOF, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" } });
+    }
     if (OLD_HOSTS.includes(url.hostname) && (request.method === "GET" || request.method === "HEAD")) {
       return Response.redirect(`https://safetoclone.com${pathname}${url.search}`, 301);
     }
