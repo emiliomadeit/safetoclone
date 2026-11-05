@@ -153,10 +153,26 @@ export function parseRepo(input) {
   return { owner: m[1], repo: m[2] };
 }
 
+// Cloudflare stops a request after too many fetches. If that happened halfway, files would look empty and a
+// bad repo could look clean, so these errors always stop the check (like GitHub's hourly limit does).
+const tooMuch = (e) => {
+  if (/subrequest/i.test(e?.message || "")) {
+    const err = new Error("This repo needs more lookups than we can do at once. Try the check on safetoclone.com instead.");
+    err.code = "TOO_BIG";
+    return err;
+  }
+  return null;
+};
+const mustStop = (e) => e?.code === "RATE_LIMIT" || e?.code === "TOO_BIG";
+
 async function getJSON(url, token) {
   const headers = { Accept: "application/vnd.github+json" };
   if (token) headers.Authorization = `Bearer ${token}`;
-  const res = await fetch(url, { headers });
+  // GitHub refuses requests without a User-Agent. Browsers always send one (and won't let us change it);
+  // Cloudflare Workers send none, so the Worker names itself.
+  if (typeof window === "undefined") headers["User-Agent"] = "safetoclone (+https://safetoclone.com)";
+  let res;
+  try { res = await fetch(url, { headers }); } catch (e) { throw tooMuch(e) || e; }
   if (res.status === 404) return null;
   if (res.status === 403 || res.status === 429) {
     const err = new Error("GitHub's free hourly limit was reached. Try again in a few minutes.");
@@ -173,7 +189,11 @@ async function getText(url, limit = 200000) {
     if (!res.ok) return "";
     const t = await res.text();
     return t.slice(0, limit);
-  } catch { return ""; }
+  } catch (e) {
+    const stop = tooMuch(e);
+    if (stop) throw stop;
+    return "";
+  }
 }
 
 // ---- Known security holes in the parts a project uses (its "dependencies") ----
@@ -290,7 +310,11 @@ export async function getKnownHoles(lock, osvUrl = OSV_URL) {
         if (!batch[k].direct) add(vulnerable, ids.filter((id) => !id.startsWith("MAL-")));
       });
     }
-  } catch { return null; }
+  } catch (e) {
+    const stop = tooMuch(e);
+    if (stop) throw stop;
+    return null;
+  }
   const list = (map) => [...map].map(([part, ids]) => ({ part, ids: ids.slice(0, 5) }));
   return { files: lock.files, parts: lock.parts.filter((p) => !p.direct).length, vulnerable: list(vulnerable), malware: list(malware) };
 }
@@ -305,7 +329,11 @@ export async function getScorecard(fullName) {
       if (!res.ok) continue;
       const j = await res.json();
       if (Array.isArray(j.checks)) return { date: j.date, checks: j.checks.map(({ name: n, score }) => ({ name: n, score })) };
-    } catch { /* unreachable: treat as no data */ }
+    } catch (e) {
+      const stop = tooMuch(e);
+      if (stop) throw stop;
+      /* unreachable: treat as no data */
+    }
   }
   return null;
 }
@@ -315,7 +343,7 @@ export async function collect(owner, repo, { token, osvUrl } = {}) {
   const r = await getJSON(`${API}/repos/${owner}/${repo}`, token);
   if (!r) { const e = new Error("That repo doesn't exist or is private."); e.code = "NOT_FOUND"; throw e; }
   // If GitHub's hourly limit hits halfway, stop. Scoring with missing files could make a bad repo look clean.
-  const orEmpty = (empty) => (e) => { if (e.code === "RATE_LIMIT") throw e; return empty; };
+  const orEmpty = (empty) => (e) => { if (mustStop(e)) throw e; return empty; };
   const [user, contents, releases] = await Promise.all([
     getJSON(`${API}/users/${r.owner.login}`, token).catch(orEmpty(null)),
     getJSON(`${API}/repos/${owner}/${repo}/contents/`, token).catch(orEmpty([])),
@@ -609,6 +637,19 @@ export function score(data) {
     aiFilesFound: aiNames,
     costs: costs({ readme, about, files }),
     checkedAt: new Date().toISOString(),
+  };
+}
+
+// The fields we keep for each repo: in the nightly directory (data/directory.json) and in the grades the
+// Worker makes on request for AI agents and repo pages (agent.js). Both draw the same report from them.
+export function directoryEntry(r) {
+  return {
+    name: r.name, url: r.url, description: r.description, score: r.score, grade: r.grade,
+    level: r.level, label: r.label, verdict: r.verdict, flags: r.flags.map((f) => f.label),
+    // Extra detail for the repo pages Google reads (/repo/owner/name, built in seo.js).
+    warnings: r.flags.map(({ label, note, severity }) => ({ label, note, severity })),
+    checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, costs: r.costs, capReason: r.capReason,
+    aiFilesFound: r.aiFilesFound, checkedAt: r.checkedAt,
   };
 }
 

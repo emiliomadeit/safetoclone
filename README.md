@@ -19,6 +19,8 @@ A website that gives non-technical people a safety grade (A to F) for any GitHub
 | `.assetsignore` | Files Cloudflare should not publish |
 | `CLAUDE.md` | Guide for AI helpers: what each file does and what a change affects |
 | `test/score.test.mjs` | Checks the scoring still works: `node test/score.test.mjs` |
+| `agent.js` | Lets AI agents grade any public repo: `safetoclone.com/api/check?repo=owner/name`, the `check_repo` tool at `safetoclone.com/mcp`, and repo pages for repos outside the nightly list |
+| `llms.txt`, `skill/SKILL.md` | Tell AI agents how to use SafeToClone. People save the skill in `~/.claude/skills/safetoclone/` |
 | `seo.js` | Pages for Google: `safetoclone.com/repo/owner/name` for every graded repo, `/repos`, and `/sitemap.xml` |
 | `share-card.js`, `share/` | Sharing: the "Download image" card, and the pictures shown when someone pastes a `safetoclone.com/?repo=owner/name` link |
 
@@ -28,7 +30,7 @@ A website that gives non-technical people a safety grade (A to F) for any GitHub
 
 The exact points, caps and grade cut-offs live in one place only: `score.js`. Read it there so this page never goes out of date.
 
-**Limits:** it only reads the README, the top folder, releases and AI instruction files. It never runs code. It is a warning-sign checker, not antivirus. Visitors' browsers call GitHub directly, so each visitor gets about 12 checks an hour before GitHub's free limit kicks in.
+**Limits:** it only reads the README, the top folder, releases and AI instruction files. It never runs code. It is a warning-sign checker, not antivirus. Visitors' browsers call GitHub directly, so each visitor gets about 12 checks an hour before GitHub's free limit kicks in. Checks made by AI agents run on Cloudflare and share one GitHub key (the `GITHUB_TOKEN` Secret, 5,000 lookups an hour); each grade is kept for a day.
 
 ## Run it on your computer
 

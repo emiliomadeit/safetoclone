@@ -117,6 +117,18 @@
     </div>
   </div></section>
 
+  <section class="band" id="ai" aria-labelledby="aiTitle"><div class="wrap">
+    <div class="section-head split">
+      <h2 id="aiTitle">Let your AI check repos for you</h2>
+      <p class="lead">Paste a GitHub link into your AI chat, and it checks SafeToClone before it installs anything. It tells you the grade and what to do. Free, no sign-in.</p>
+    </div>
+    <div class="plans agents">
+      <div class="plan"><h3>Claude and other AI apps</h3><p>Add SafeToClone as a custom connector. In Claude: Settings, then Connectors, then Add custom connector. Paste this address:</p><p><code>https://safetoclone.com/mcp</code></p></div>
+      <div class="plan"><h3>Claude Code</h3><p>Save our skill once. After that, Claude checks every GitHub link by itself. Just ask Claude Code:</p><p>“Save <code>https://safetoclone.com/<wbr>skill/<wbr>SKILL.md</code> as <code>~/.claude/<wbr>skills/<wbr>safetoclone/<wbr>SKILL.md</code>”</p></div>
+      <div class="plan"><h3>Any AI that can open links</h3><p>Tell it: “Before you install anything from GitHub, check it at safetoclone.com/api/check?repo=owner/name and tell me what it says.”</p><p class="fine">For developers: <a href="/llms.txt">how agents use SafeToClone</a>.</p></div>
+    </div>
+  </div></section>
+
   <section class="band deep" id="newsletter" aria-labelledby="newsTitle"><div class="wrap news-grid">
     <div>
       <h2 id="newsTitle">Get the free Sunday safety email</h2>
