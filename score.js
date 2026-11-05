@@ -168,6 +168,9 @@ const mustStop = (e) => e?.code === "RATE_LIMIT" || e?.code === "TOO_BIG";
 async function getJSON(url, token) {
   const headers = { Accept: "application/vnd.github+json" };
   if (token) headers.Authorization = `Bearer ${token}`;
+  // GitHub refuses requests without a User-Agent. Browsers always send one (and won't let us change it);
+  // Cloudflare Workers send none, so the Worker names itself.
+  if (typeof window === "undefined") headers["User-Agent"] = "safetoclone (+https://safetoclone.com)";
   let res;
   try { res = await fetch(url, { headers }); } catch (e) { throw tooMuch(e) || e; }
   if (res.status === 404) return null;

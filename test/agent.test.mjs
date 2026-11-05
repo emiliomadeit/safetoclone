@@ -91,6 +91,15 @@ globalThis.fetch = fakeGitHub({
 });
 
 // ---- Grading on request ----
+// GitHub refuses requests without a User-Agent, and Cloudflare Workers don't add one.
+{
+  const before = globalThis.fetch;
+  let agent;
+  globalThis.fetch = async (url, opts) => { if (/api\.github\.com/.test(url)) agent ??= opts?.headers?.["User-Agent"]; return before(url, opts); };
+  await gradeRepo({}, "new/thing");
+  globalThis.fetch = before;
+  assert.match(agent || "", /safetoclone/, "GitHub lookups name themselves");
+}
 {
   lookups = 0;
   const { entry, source } = await gradeRepo({}, "https://github.com/good/tool");
