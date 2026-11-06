@@ -366,6 +366,7 @@ footer p a { display: inline; min-height: 0; color: var(--color-accent); text-de
 .plan .price small { font: 400 var(--text-md) var(--font-body); color: var(--color-muted); letter-spacing: 0; }
 .plan ul { margin: 0; padding-left: var(--space-md); font-size: var(--text-md); display: grid; gap: var(--space-xs); color: var(--color-ink-2); }
 .plan .btn { justify-self: start; }
+.plans.agents code { overflow-wrap: anywhere; font-size: var(--text-sm); }
 .soon { font-size: var(--text-sm); font-weight: 600; color: var(--color-accent); }
 @media (max-width: 60rem) { .plans { grid-template-columns: minmax(0, 1fr); max-width: 32rem; } }
 @media (max-width: 40rem) {

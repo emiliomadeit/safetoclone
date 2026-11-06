@@ -48,12 +48,25 @@ const moved = await get(`/repo/${first.name.toLowerCase()}/`);
 assert.equal(moved.status, 301);
 assert.equal(moved.headers.get("Location"), `https://safetoclone.com/repo/${first.name}`);
 
-// A repo we haven't graded: friendly page, 404, and hidden from Google.
+// A repo that isn't on GitHub (or is private): friendly page, 404, and hidden from Google.
+// (Repos outside the nightly list are graded on request; test/agent.test.mjs covers that.)
+const realFetch = globalThis.fetch;
+globalThis.fetch = async (url) => (/api\.github\.com\/repos\/someone\/brand-new-thing$/.test(url)
+  ? new Response("Not Found", { status: 404 })
+  : realFetch(url));
 const missing = await get("/repo/someone/brand-new-thing");
 assert.equal(missing.status, 404);
 const missingHtml = await missing.text();
 assert.ok(missingHtml.includes('<meta name="robots" content="noindex">'));
+assert.ok(missingHtml.includes("doesn&#39;t exist") || missingHtml.includes("doesn't exist"));
 assert.ok(missingHtml.includes('href="/?repo=someone/brand-new-thing"'));
+// GitHub busy: "try again later" (503), never a made-up grade.
+globalThis.fetch = async () => new Response("{}", { status: 403 });
+const busy = await get("/repo/someone/brand-new-thing");
+assert.equal(busy.status, 503);
+assert.equal(busy.headers.get("Retry-After"), "600");
+assert.ok((await busy.text()).includes('<meta name="robots" content="noindex">'));
+globalThis.fetch = realFetch;
 assert.equal((await get("/repo/%E0%A4%A")).status, 404);
 assert.ok(!(await (await get('/repo/"><script>alert(1)</script>')).text()).includes("<script>alert(1)"));
 

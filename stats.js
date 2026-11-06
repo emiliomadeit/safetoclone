@@ -6,8 +6,8 @@
 export const EVENTS = ["home", "repo_page", "repos_page", "check", "copy_link", "image", "signup", "signup_home", "signup_result", "signup_repo", "agent_mcp", "agent_api", "nl_love", "nl_good", "nl_soso"];
 // nl_love / nl_good / nl_soso: taps on the rating at the bottom of the newsletter. Email apps may open links by
 // themselves, so these are rough.
-// AI agents checking a repo: agent_mcp is a get_safety_scores call on /mcp. agent_api is kept for the
-// check API, which doesn't exist yet. Agents often look like bots, so these two skip the bot filter.
+// AI agents checking a repo: agent_mcp is a get_safety_scores or check_repo call on /mcp, agent_api a call to
+// /api/check. Agents often look like bots, so these two skip the bot filter.
 // signup counts every new subscriber (HQ reads it). signup_home, signup_result and signup_repo also say which
 // box they used: the email band on the home page, the box under a check result, or the box on a repo page.
 const AGENT_EVENTS = ["agent_mcp", "agent_api"];
