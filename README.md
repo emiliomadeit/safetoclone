@@ -30,7 +30,7 @@ A website that gives non-technical people a safety grade (A to F) for any GitHub
 
 The exact points, caps and grade cut-offs live in one place only: `score.js`. Read it there so this page never goes out of date.
 
-**Limits:** it only reads the README, the top folder, releases and AI instruction files. It never runs code. It is a warning-sign checker, not antivirus. Visitors' browsers call GitHub directly, so each visitor gets about 12 checks an hour before GitHub's free limit kicks in. Checks made by AI agents run on Cloudflare and share one GitHub key (the `GITHUB_TOKEN` Secret, 5,000 lookups an hour); each grade is kept for a day.
+**Limits:** it only reads the README, the top folder, releases and AI instruction files. It never runs code. It is a warning-sign checker, not antivirus. Checks run on Cloudflare (the home page asks `/api/report`, AI agents ask `/api/check` or `/mcp`) and share one GitHub key (the `GITHUB_TOKEN` Secret, 5,000 lookups an hour); each grade is kept for a day. If the server can't answer, the home page checks from the visitor's browser instead, where GitHub allows about 8 checks an hour.
 
 ## Run it on your computer
 
