@@ -223,6 +223,32 @@ const get = (path, init) => worker.fetch(new Request("https://safetoclone.com" +
   assert.equal((await get("/api/check?repo=not-a-repo")).status, 400);
 }
 
+// ---- Through the website: /api/report (the home page checker) ----
+{
+  const ok = await get("/api/report?repo=" + encodeURIComponent("https://github.com/night/owl"));
+  assert.equal(ok.status, 200);
+  assert.equal(ok.headers.get("Access-Control-Allow-Origin"), null, "same site only");
+  const { entry, source } = await ok.json();
+  assert.equal(source, "nightly");
+  assert.equal(entry.name, "Night/Owl");
+  assert.equal(entry.grade, "B");
+  assert.ok(Array.isArray(entry.checks), "full report fields, so report.js can draw it");
+
+  const fresh = await (await get("/api/report?repo=bad/agent")).json();
+  assert.equal(fresh.entry.level, "dangerous");
+  assert.ok(fresh.entry.warnings.some((w) => w.severity === "high"), "warning signs keep their severity for the share picture");
+
+  const missing = await get("/api/report?repo=nobody/here");
+  assert.equal(missing.status, 404);
+  assert.equal((await missing.json()).code, "NOT_FOUND");
+  assert.equal((await get("/api/report?repo=busy/repo")).status, 503);
+  const bad = await get("/api/report?repo=not-a-repo");
+  assert.equal(bad.status, 400);
+  assert.equal((await bad.json()).code, "BAD_INPUT");
+  assert.equal((await get("/api/report")).status, 400);
+  assert.equal((await get("/api/report?repo=x/y", { method: "POST" })).status, 405);
+}
+
 // ---- Through /mcp: the check_repo tool ----
 {
   const rpc = async (body) => (await get("/mcp", { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })).json();
