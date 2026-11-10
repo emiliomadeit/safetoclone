@@ -79,9 +79,18 @@ const sm = await get("/sitemap.xml");
 assert.ok(sm.headers.get("Content-Type").includes("xml"));
 const xml = await sm.text();
 const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-assert.equal(locs.length, dir.repos.length + 2);
+assert.equal(locs.length, dir.repos.length + 3);
+assert.ok(locs.includes("https://safetoclone.com/about"));
 assert.ok(locs.includes("https://safetoclone.com/repos"));
 assert.ok(locs.includes(`https://safetoclone.com/repo/${first.name}`));
+
+// The About page names who makes the site and is linked from every page's footer.
+const about = await get("/about");
+assert.equal(about.status, 200);
+const aboutHtml = await about.text();
+assert.ok(aboutHtml.includes("Emile, in Ottawa"));
+assert.ok(aboutHtml.includes('<link rel="canonical" href="https://safetoclone.com/about">'));
+assert.ok(list.includes('href="/about"'));
 
 // Full details from the nightly build (warnings with notes, checks) show up on the page. Text is escaped.
 const rich = repoPage({
