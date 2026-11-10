@@ -23,4 +23,5 @@ jobs:
           git config user.email "bot@users.noreply.github.com"
           git add data/directory.json
           git diff --cached --quiet || git commit -m "Nightly score update"
+          git pull --rebase   # the run can take over an hour now, so main may have moved
           git push
