@@ -7,10 +7,31 @@ import { checkRepo, directoryEntry } from "../score.js";
 const list = (await readFile(new URL("../repos.txt", import.meta.url), "utf8"))
   .split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#"));
 
+// GitHub allows about 1,000 calls an hour here. When they run out, wait for the next hour instead of skipping repos.
+// Returns false if the 403 wasn't the hourly limit (then the repo is skipped as before).
+async function waitForGitHub() {
+  const headers = { "User-Agent": "safetoclone (+https://safetoclone.com)" };
+  if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  const core = (await (await fetch("https://api.github.com/rate_limit", { headers })).json()).resources?.core;
+  if (!core || core.remaining > 0) return false;
+  const ms = Math.max(core.reset * 1000 - Date.now(), 0) + 10000;
+  console.log(`GitHub's hourly limit reached, waiting ${Math.ceil(ms / 60000)} min`);
+  await new Promise((r) => setTimeout(r, ms));
+  return true;
+}
+
+const check = async (name) => {
+  try { return await checkRepo(name, { token: process.env.GITHUB_TOKEN }); }
+  catch (e) {
+    if (e.code === "RATE_LIMIT" && await waitForGitHub().catch(() => false)) return checkRepo(name, { token: process.env.GITHUB_TOKEN });
+    throw e;
+  }
+};
+
 const results = [];
 for (const name of list) {
   try {
-    const r = await checkRepo(name, { token: process.env.GITHUB_TOKEN });
+    const r = await check(name);
     results.push(directoryEntry(r));
     console.log(`${r.grade} ${String(r.score).padStart(3)}  ${r.securityChecked ? (r.checks.some((c) => c.group === "Security habits" && c.label !== "Known security holes") ? "scorecard" : "osv-only  ") : "not-checked"}  ${r.name}`);
   } catch (e) {

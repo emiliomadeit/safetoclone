@@ -84,7 +84,7 @@ ryoppippi/ccusage
 steipete/claude-code-mcp
 # Added 2026-10-27: the newest popular AI tools (agent apps, "free model" gateways, Claude Code add-ons, skills,
 # MCP servers). Each one gets its own Google page, so people searching "is <name> safe" land here.
-# Keep the whole list under about 150: the nightly job's GitHub key allows about 1,000 GitHub calls an hour.
+# No size cap: when the nightly job hits GitHub's hourly limit (about 1,000 calls), it waits for the next hour and carries on.
 Ebony-Vinyl/dsh-our-free-model
 cheaper-inference/OmniRoute
 decolua/9router
@@ -141,3 +141,23 @@ iOfficeAI/AionUi
 Panniantong/Agent-Reach
 harry0703/MoneyPrinterTurbo
 DeusData/codebase-memory-mcp
+# Added 2026-11-10: AI apps people without coding skills download (chat, voice, face-swap, local models) and the
+# newest coding agents. Roo-Code is archived: a useful example of a popular tool nobody fixes anymore.
+deepseek-ai/DeepSeek-V3
+openai/gpt-oss
+oobabooga/textgen
+SillyTavern/SillyTavern
+hacksider/Deep-Live-Cam
+facefusion/facefusion
+RVC-Project/Retrieval-based-Voice-Conversion-WebUI
+Comfy-Org/ComfyUI-Manager
+LibreChat-AI/LibreChat
+aaif-goose/goose
+anomalyco/opencode
+RooCodeInc/Roo-Code
+QwenLM/qwen-code
+charmbracelet/crush
+exo-explore/exo
+lmstudio-ai/lms
+openai/openai-agents-python
+2noise/ChatTTS
