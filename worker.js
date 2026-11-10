@@ -14,7 +14,7 @@
 import { autopost, status as instagramStatus, listing as igListing, metrics as igMetrics } from "./instagram.js";
 import { hqFile, hqText, hqJson, batchPath, checkPath, hqHealth, hqKeyDaysLeft } from "./hq.js";
 import { checkBatch, postProblem, claimsProblem, latestCheck, dueNow, dateIn, timeIn, addDays, mondayOf, sha256, DEFAULT_TIME, LATE_MINUTES } from "./batch.js";
-import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath, subscribedPage, notePage, approvePage } from "./seo.js";
+import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath, subscribedPage, notePage, approvePage, aboutPage } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
 import { isSandbox, sandboxFetch } from "./sandbox.js";
 import { gradeRepo, agentAnswer, failure } from "./agent.js";
@@ -538,6 +538,7 @@ async function seoPage(env, url, ctx) {
     return new Response(sitemap(dir), { headers: { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" } });
   }
   if (pathname === "/repos") return html(reposPage(dir));
+  if (pathname === "/about") return html(aboutPage());
   if (pathname === "/repos/") return Response.redirect(`${SITE}/repos`, 301);
   let rest = pathname.slice("/repo/".length);
   try { rest = decodeURIComponent(rest); } catch { /* bad % code in the address: use it as typed */ }
@@ -883,7 +884,7 @@ const site = {
     if (pathname.startsWith("/repo/") && request.method === "GET") track("repo_page", sourceOf(request));
     if (pathname === "/repos" && request.method === "GET") track("repos_page", sourceOf(request));
     if (pathname === "/" && read) return homePage(request, env, url);
-    if (read && (pathname === "/sitemap.xml" || pathname === "/repos" || pathname === "/repos/" || pathname.startsWith("/repo/"))) return seoPage(env, url, ctx);
+    if (read && (pathname === "/sitemap.xml" || pathname === "/repos" || pathname === "/about" || pathname === "/repos/" || pathname.startsWith("/repo/"))) return seoPage(env, url, ctx);
     return env.ASSETS.fetch(request);
   },
   // Runs on the schedule in wrangler.jsonc, every 30 minutes. Each approved post goes out at the first run

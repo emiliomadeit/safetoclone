@@ -8,7 +8,7 @@
     "binding": "ASSETS",
     // These addresses go through worker.js first: the home page (so shared links /?repo=owner/name get a matching
     // link preview) and the pages built for Google in seo.js (/repo/owner/name, /repos, /sitemap.xml).
-    "run_worker_first": ["/", "/repo/*", "/repos", "/repos/", "/sitemap.xml", "/__sandbox", "/__sandbox/*", "/robots.txt"]
+    "run_worker_first": ["/", "/repo/*", "/repos", "/repos/", "/about", "/sitemap.xml", "/__sandbox", "/__sandbox/*", "/robots.txt"]
   },
   // Checks every 30 minutes for an Instagram post whose time (Ottawa) has come, and posts it.
   "triggers": { "crons": ["*/30 * * * *"] },

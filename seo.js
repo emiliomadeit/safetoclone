@@ -70,7 +70,7 @@ ${data.map(ld).join("\n")}
 ${body}
 </main>
 <footer><div class="wrap">
-  <nav aria-label="More"><a href="/">Check a repo</a><a href="/repos">All safety grades</a><a href="/#method">How we score</a><a href="mailto:hello@safetoclone.com">hello@safetoclone.com</a></nav>
+  <nav aria-label="More"><a href="/">Check a repo</a><a href="/repos">All safety grades</a><a href="/#method">How we score</a><a href="/about">About</a><a href="mailto:hello@safetoclone.com">hello@safetoclone.com</a></nav>
   <p>SafeToClone reads public GitHub data and gives an opinion. It is not antivirus software and can be wrong. Not affiliated with GitHub.</p>
 </div></footer>
 </body>
@@ -199,9 +199,45 @@ export function sitemap(dir) {
   const url = (loc, lastmod) => `  <url><loc>${esc(loc)}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[url(SITE + "/", updated), url(SITE + "/repos", updated), ...repos.map((r) => url(SITE + repoPath(r.name), isoDay(r.checkedAt) || updated))].join("\n")}
+${[url(SITE + "/", updated), url(SITE + "/repos", updated), url(SITE + "/about"), ...repos.map((r) => url(SITE + repoPath(r.name), isoDay(r.checkedAt) || updated))].join("\n")}
 </urlset>
 `;
+}
+
+// /about: who makes SafeToClone. Google and AI search trust a safety site more when a real person stands behind it.
+// Emile chose "first name and Ottawa" on Nov 6, 2026. Don't add more about him without asking.
+const SOCIAL = ["https://x.com/SafeToClone", "https://www.instagram.com/safetoclone/", "https://github.com/emiliomadeit/safetoclone"];
+export function aboutPage() {
+  const body = `
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span><span>About</span></nav>
+<section>
+  <h1>About SafeToClone</h1>
+  <p class="answer">SafeToClone is made by one person, Emile, in Ottawa, Canada. It grades public GitHub repos from A to F in plain English, so people who don't code can decide before they download.</p>
+</section>
+<section>
+  <h2>Why it exists</h2>
+  <p>AI tools now tell people to download a project from GitHub and run it. Most of us can't read the code to know if that's safe, and malware on GitHub often dresses up as a popular tool. I wanted a plain answer anyone can understand: go ahead, be careful, or don't.</p>
+</section>
+<section>
+  <h2>How the grades work</h2>
+  <p>Every grade comes from public information only: GitHub, OpenSSF Scorecard and OSV (Google's public list of known security holes). We never download or run the code. <a href="/#method">How we score</a> explains the rules, and the scoring code is <a href="https://github.com/emiliomadeit/safetoclone">public on GitHub</a>. Our own repo gets graded by the same rules: <a href="/?repo=emiliomadeit/safetoclone">see its grade</a>.</p>
+</section>
+<section>
+  <h2>What it isn't</h2>
+  <p>It's not antivirus software, and it can be wrong. A grade is an opinion based on warning signs, not a guarantee. If a grade looks wrong to you, tell me and I'll look into it.</p>
+</section>
+<section>
+  <h2>Get in touch</h2>
+  <p>Email <a href="mailto:hello@safetoclone.com">hello@safetoclone.com</a>, or find SafeToClone on <a href="${SOCIAL[0]}">X</a> and <a href="${SOCIAL[1]}">Instagram</a>.</p>
+</section>`;
+  const data = [{
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    url: SITE + "/about",
+    mainEntity: { "@type": "Organization", name: "SafeToClone", url: SITE + "/", email: "hello@safetoclone.com", sameAs: SOCIAL,
+      founder: { "@type": "Person", name: "Emile", homeLocation: { "@type": "Place", name: "Ottawa, Canada" } } },
+  }];
+  return layout({ title: "About SafeToClone · Made by one person in Ottawa", description: "Who makes SafeToClone, why it exists, and how the A to F safety grades for GitHub repos work.", canonical: SITE + "/about", body, data });
 }
 
 // The page a visitor sees after the signup form is sent without JavaScript.
