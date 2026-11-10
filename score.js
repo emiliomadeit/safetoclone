@@ -28,6 +28,8 @@ const DOWNLOAD_LINK = /\[[^\]]*\bdownload\b[^\]]*\]\((https?:\/\/(?!(?:[\w-]+\.)
 const PAPERWORK_FILE = /^(readme|licen[sc]e|copying|\.git\w*)(\.|$)/i;
 // VS Code (and editors built on it, like Cursor) can start a task by itself the moment you open the folder.
 const FOLDER_OPEN = /"runOn"\s*:\s*"folderOpen"/;
+// One of the project's own scripts from package.json, like "bun run watch:esbuild" (no file paths, so no fake font file).
+const OWN_SCRIPT = /^(npm|pnpm|yarn|bun) run [\w:-]+$/;
 // A password that is actually given out ("password: 1234", "the password is abc"), not just the word "password".
 // "pass" only counts as "pass:" or "pass=" ("the tests pass is..." is not a password), and "no password is
 // configured" or "without an admin password: ..." don't count either.
@@ -55,7 +57,9 @@ const AI_FILE_LIMIT = 12;
 const PROMPT_INJECTION = [
   /ignore\s+(all\s+)?(previous|prior|above)\s+instructions/i,
   /do\s+not\s+(tell|inform|mention\s+(this\s+)?to)\s+the\s+user/i,
-  /without\s+(asking|telling)\s+the\s+user/i,
+  // "Without telling" hides things from you. "Without asking" is left out: real AGENTS.md files use it for
+  // permission ("tests can be run without asking the user", Open Interpreter, 2026-11).
+  /without\s+(telling|informing|notifying)\s+the\s+user/i,
   // Only counts when secrets are sent somewhere: "send the API key to https://...".
   /\b(send|upload|post|exfiltrate|forward|transmit)\b[^\n]{0,40}\b(api[_ -]?keys?|tokens?|\.env|credentials|ssh\s+keys?|secrets?)\b[^\n]{0,40}\b(to|at)\s+(https?:\/\/|an?\s+(external|remote)|this\s+(url|endpoint|server))/i,
   // Discord webhooks only count with a real numeric ID: projects often document their own as ".../webhooks/xxx".
@@ -547,12 +551,28 @@ export function score(data) {
   // A task set to run by itself on opening the folder. Infected projects use it to start hidden code (often a fake font file).
   const taskText = tasks.replace(/^\s*\/\/.*$/gm, ""); // lines commented out don't run
   if (FOLDER_OPEN.test(taskText)) {
-    let cmd = "";
+    // Every command the task runs, including the tasks it starts first ("dependsOn").
+    const cmds = [];
     try {
-      const t = JSON.parse(taskText.replace(/,(\s*[}\]])/g, "$1")).tasks?.find((x) => x.runOptions?.runOn === "folderOpen");
-      cmd = [t?.command || t?.windows?.command, ...(t?.args || [])].filter((x) => typeof x === "string").join(" ");
+      const all = JSON.parse(taskText.replace(/,(\s*[}\]])/g, "$1")).tasks || [];
+      const seen = new Set();
+      const walk = (t) => {
+        if (!t || seen.has(t)) return;
+        seen.add(t);
+        const cmd = [t.command || t.windows?.command, ...(t.args || [])].filter((x) => typeof x === "string").join(" ").replace(/\s+/g, " ").trim();
+        if (cmd) cmds.push(cmd);
+        for (const d of [t.dependsOn].flat()) walk(all.find((x) => x.label === d));
+      };
+      all.filter((x) => x.runOptions?.runOn === "folderOpen").forEach(walk);
     } catch { /* odd JSON: still flagged, just without the quote */ }
-    flag("Runs code when you open the folder", 25, `.vscode/tasks.json tells VS Code (and editors built on it, like Cursor) to run ${cmd ? `"${cmd.slice(0, 120)}"` : "a task"} by itself the moment you open the folder. Real projects almost never do this. It's a known way to put malware on developers' computers.`, 20);
+    const shown = cmds.length ? cmds.slice(0, 3).map((c) => `"${c.slice(0, 80)}"`).join(", ") : "a task";
+    // A widely used project that only starts its own build scripts (Kilo Code starts "bun run watch:esbuild"): shown, not Dangerous.
+    // Stars alone never make it OK: any other command keeps the Dangerous label.
+    if (cmds.length && cmds.every((c) => OWN_SCRIPT.test(c)) && stars >= 1000 && establishedOwner) {
+      flag("Runs code when you open the folder", 4, `.vscode/tasks.json tells VS Code (and editors built on it, like Cursor) to run ${shown} by itself the moment you open the folder. These are the project's own build scripts, a convenience some big projects use. Check package.json if you want to see what they do.`);
+    } else {
+      flag("Runs code when you open the folder", 25, `.vscode/tasks.json tells VS Code (and editors built on it, like Cursor) to run ${shown} by itself the moment you open the folder. Real projects almost never do this. It's a known way to put malware on developers' computers.`, 20);
+    }
   }
   if (deps?.malware?.length) {
     const m = deps.malware[0];
@@ -572,7 +592,7 @@ export function score(data) {
     const text = aiFiles[injected[0]];
     const hit = PROMPT_INJECTION.map((re) => text.match(re)).find(Boolean);
     const line = hit ? text.slice(0, hit.index).split("\n").length : null;
-    const quote = hit ? text.split("\n")[line - 1].trim().slice(0, 140) : "a long block of scrambled text";
+    const quote = hit ? around(text, hit) : "a long block of scrambled text"; // the words around the match, not the start of a long line
     flag("Could hijack your AI assistant", 25, `${injected.join(", ")} contains instructions that try to override your AI, hide things from you, or send data away. ${hit ? `Line ${line} of ${injected[0]}: "${quote}"` : `It contains ${quote}.`}`, 20);
   }
   const hidden = aiNames.filter((n) => !injected.includes(n) && HIDDEN_CHARS.test(aiFiles[n].replace(/^\uFEFF/, "")));
