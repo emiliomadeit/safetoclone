@@ -161,3 +161,6 @@ exo-explore/exo
 lmstudio-ai/lms
 openai/openai-agents-python
 2noise/ChatTTS
+# Added 2026-11-10 after the grading fix that cleared their false Dangerous labels.
+openinterpreter/open-interpreter
+Kilo-Org/kilocode
