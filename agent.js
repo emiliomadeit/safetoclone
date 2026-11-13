@@ -56,8 +56,10 @@ export async function gradeRepo(env, input, { dir = null, ctx = null } = {}) {
     const save = (key) => cache.put(key, new Response(JSON.stringify(entry), {
       headers: { "Content-Type": "application/json", "Cache-Control": `public, max-age=${KEEP_SECONDS}` },
     })).catch(() => {});
-    // Renamed repos: keep the grade under the old and the new name.
-    const jobs = [save(cacheKey(name)), ...(entry.name && entry.name.toLowerCase() !== name.toLowerCase() ? [save(cacheKey(entry.name))] : [])];
+    // Renamed repos: keep the grade under the old and the new name. Not when the owner changed: the
+    // "new owner" warning is about the old link and would be wrong for someone checking the new one.
+    const sameOwner = entry.name && entry.name.split("/")[0].toLowerCase() === name.split("/")[0].toLowerCase();
+    const jobs = [save(cacheKey(name)), ...(sameOwner && entry.name.toLowerCase() !== name.toLowerCase() ? [save(cacheKey(entry.name))] : [])];
     const all = Promise.all(jobs);
     if (ctx?.waitUntil) ctx.waitUntil(all); else await all;
   }
