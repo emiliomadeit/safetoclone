@@ -53,7 +53,8 @@ const AI_FILES = ["CLAUDE.md", "AGENTS.md", ".cursorrules", "SKILL.md", ".windsu
 const AI_FOLDERS = [".claude", ".cursor", ".github", ".vscode", ".windsurf", ".gemini"];
 const AI_FOLDER_FILE = /^(CLAUDE\.md|AGENTS\.md|GEMINI\.md|copilot-instructions\.md|mcp\.json|settings(\.local)?\.json|.+\.mdc|rules\.md)$/i;
 const AI_SUBFOLDERS = ["rules", "commands", "agents"]; // inside .claude/ and .cursor/
-const AI_FILE_LIMIT = 12;
+// Files read from hidden folders and deeper folders together. Each one is a lookup, and Cloudflare allows about 50 per check.
+const AI_FILE_LIMIT = 20;
 const PROMPT_INJECTION = [
   /ignore\s+(all\s+)?(previous|prior|above)\s+instructions/i,
   /do\s+not\s+(tell|inform|mention\s+(this\s+)?to)\s+the\s+user/i,
@@ -378,7 +379,21 @@ export async function collect(owner, repo, { token, osvUrl } = {}) {
       }
     }
   }
-  await Promise.all(folderFiles.slice(0, AI_FILE_LIMIT).map(async (f) => {
+  // AI instructions anywhere deeper in the repo: skill packs keep a SKILL.md in every folder.
+  // One lookup lists every file on the main branch.
+  const tree = r.default_branch
+    ? await getJSON(`${API}/repos/${owner}/${repo}/git/trees/${encodeURIComponent(r.default_branch)}?recursive=1`, token).catch(orEmpty(null))
+    : null;
+  const names = new Set(AI_FILES.map((n) => n.toLowerCase()));
+  const seen = new Set(folderFiles.map((f) => f.path));
+  const deep = (tree?.tree || [])
+    .filter((f) => f.type === "blob" && f.path.includes("/") && !seen.has(f.path) && names.has(f.path.split("/").pop().toLowerCase()))
+    .sort((a, b) => a.path.split("/").length - b.path.split("/").length) // closest to the top first
+    .map((f) => ({ path: f.path, download_url: `https://raw.githubusercontent.com/${r.full_name}/${encodeURI(r.default_branch)}/${f.path.split("/").map(encodeURIComponent).join("/")}` }));
+  const toRead = [...folderFiles, ...deep];
+  // shortcut: past the limit, files are listed but not read; a bad one deep in a huge skill pack could slip by. Raise the limit if Cloudflare allows more lookups.
+  const aiFilesUnread = toRead.slice(AI_FILE_LIMIT).map((f) => f.path);
+  await Promise.all(toRead.slice(0, AI_FILE_LIMIT).map(async (f) => {
     if (f.download_url) aiFiles[f.path] = await getText(f.download_url);
   }));
   const scorecard = await getScorecard(r.full_name || `${owner}/${repo}`);
@@ -394,7 +409,10 @@ export async function collect(owner, repo, { token, osvUrl } = {}) {
     const direct = directParts(pkg);
     deps = await getKnownHoles(lock || direct.length ? { files: lock?.files || [], parts: [...(lock?.parts || []), ...direct] } : null, osvUrl);
   }
-  return { repo: r, user, files, releases: Array.isArray(releases) ? releases : [], readme, pkg, aiFiles, scorecard, deps, tasks };
+  // GitHub quietly sends old links to a repo's new home. A new owner behind a familiar link is a takeover sign.
+  const asked = `${owner}/${repo}`;
+  const movedFrom = r.full_name && r.full_name.toLowerCase() !== asked.toLowerCase() ? asked : null;
+  return { repo: r, user, files, releases: Array.isArray(releases) ? releases : [], readme, pkg, aiFiles, aiFilesUnread, scorecard, deps, tasks, movedFrom };
 }
 
 // "Does it cost money?" Doesn't change the grade. Many projects are free on GitHub with paid extras elsewhere.
@@ -412,7 +430,7 @@ export function costs({ readme = "", about = "", files = [] }) {
 
 // Turns collected data into a score. Pure function: same input, same output.
 export function score(data) {
-  const { repo: r, user, files, releases, readme, pkg, aiFiles, scorecard, deps, tasks = "" } = data;
+  const { repo: r, user, files, releases, readme, pkg, aiFiles, aiFilesUnread = [], scorecard, deps, tasks = "", movedFrom = null } = data;
   const checks = []; // { group, label, points, max, note, level: good|warn|bad }
   const add = (group, label, points, max, level, note) => checks.push({ group, label, points, max, level, note });
 
@@ -548,6 +566,20 @@ export function score(data) {
     softCap("fame", 69);
   }
   if (user && ownerAge < 30) flag("Brand-new owner account", 8, "The account behind it is less than a month old.");
+  // A copy (fork) of a better-known project. Lookalike copies of popular tools are a common way to spread malware.
+  const original = r.fork ? (r.source || r.parent) : null;
+  const copyOf = original?.full_name && (original.stargazers_count || 0) > stars ? original.full_name : null;
+  if (original?.full_name) {
+    flag("Copy of another project", copyOf ? 8 : 0, copyOf
+      ? `This is a copy (fork) of ${copyOf}, made by someone else. Unless you know why you need this copy, use the original: https://github.com/${copyOf}`
+      : `This is a copy (fork) of ${original.full_name}, but it has more users than the original, so it may be the one people use now.`);
+    if (copyOf) softCap("fork", 69);
+  }
+  // The owner part of the link changed: the link you checked now leads to someone else's account.
+  const oldOwner = movedFrom?.split("/")[0];
+  if (oldOwner && oldOwner.toLowerCase() !== r.full_name.split("/")[0].toLowerCase()) {
+    flag("This link now points to a new owner", 8, `You checked ${movedFrom}, but GitHub sends that link to ${r.full_name}. The project changed hands. That can be normal (a move to a company account), but it's also how projects get taken over. Make sure you trust the new owner.`);
+  }
   // A task set to run by itself on opening the folder. Infected projects use it to start hidden code (often a fake font file).
   const taskText = tasks.replace(/^\s*\/\/.*$/gm, ""); // lines commented out don't run
   if (FOLDER_OPEN.test(taskText)) {
@@ -648,13 +680,14 @@ export function score(data) {
     capReason: cap < raw ? {
       flag: "it has a serious warning sign", fame: "it got famous suspiciously fast", users: "fewer than 50 people have starred it",
       archived: "the owner archived it, so nobody fixes problems anymore", stale: "nobody has changed it in over a year",
-      license: "it has no license", weak: `its weakest area ("${GROUPS[weakGroup] || weakGroup}") only gets ${/^[AEF]/.test(weak.grade) ? "an" : "a"} ${weak.grade}`,
+      license: "it has no license", fork: `it is a copy of ${copyOf}, so use the original unless you know why you need this copy`, weak: `its weakest area ("${GROUPS[weakGroup] || weakGroup}") only gets ${/^[AEF]/.test(weak.grade) ? "an" : "a"} ${weak.grade}`,
     }[capReason] : null,
     areas,
     securityChecked: Boolean(areas["Security habits"]),
     checks,
     flags,
-    aiFilesFound: aiNames,
+    aiFilesFound: [...aiNames, ...aiFilesUnread],
+    aiFilesUnread: aiFilesUnread.length,
     costs: costs({ readme, about, files }),
     checkedAt: new Date().toISOString(),
   };
@@ -669,7 +702,7 @@ export function directoryEntry(r) {
     // Extra detail for the repo pages Google reads (/repo/owner/name, built in seo.js).
     warnings: r.flags.map(({ label, note, severity }) => ({ label, note, severity })),
     checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, costs: r.costs, capReason: r.capReason,
-    aiFilesFound: r.aiFilesFound, checkedAt: r.checkedAt,
+    aiFilesFound: r.aiFilesFound, aiFilesUnread: r.aiFilesUnread || 0, checkedAt: r.checkedAt,
   };
 }
 

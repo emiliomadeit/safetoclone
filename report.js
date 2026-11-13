@@ -46,7 +46,7 @@ function aiHTML(r) {
   return `<section class="ai-files">
   <h3>Talks to your AI <span class="count">${found.length}</span></h3>
   <p class="muted">${found.length
-    ? `This repo has ${found.length} file${found.length > 1 ? "s" : ""} that AI coding tools like Claude Code, Cursor and Copilot read as instructions when you open the folder: <span class="files">${found.map((f) => `<code>${esc(f)}</code>`).join(", ")}</span>. ${hijack ? "At least one of them tries to take over your AI. See Warning signs." : "We read them and found nothing that tries to take over your AI. It's still worth opening them yourself before you let an AI work in this folder."}`
+    ? `This repo has ${found.length} file${found.length > 1 ? "s" : ""} that AI coding tools like Claude Code, Cursor and Copilot read as instructions when you open the folder: <span class="files">${found.map((f) => `<code>${esc(f)}</code>`).join(", ")}</span>. ${hijack ? "At least one of them tries to take over your AI. See Warning signs." : `We read ${r.aiFilesUnread ? `the first ${found.length - r.aiFilesUnread}` : "them"} and found nothing that tries to take over your AI. It's still worth opening them yourself before you let an AI work in this folder.`}`
     : "We found no files that give instructions to AI coding tools."}</p>
 </section>`;
 }
