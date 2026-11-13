@@ -553,7 +553,9 @@ async function seoPage(env, url, ctx) {
   // Not in the nightly list: grade it now (agents read these pages too). Google is told not to list these.
   try {
     const { entry } = await gradeRepo(env, name, { dir, ctx });
-    if (pathname !== repoPath(entry.name)) return Response.redirect(SITE + repoPath(entry.name), 301);
+    // A new owner: stay on the old link, so the "new owner" warning isn't lost in the redirect.
+    const sameOwner = entry.name.split("/")[0].toLowerCase() === name.split("/")[0].toLowerCase();
+    if (sameOwner && pathname !== repoPath(entry.name)) return Response.redirect(SITE + repoPath(entry.name), 301);
     return html(repoPage(entry, dir, { onDemand: true }));
   } catch (e) {
     const { status } = failure(e);
