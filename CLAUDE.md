@@ -49,7 +49,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 
 | You change | Also affected |
 |---|---|
-| `score.js` | The website checker, the nightly directory, the tests. Run the tests. If you change point weights, grade cut-offs or labels, update "How we score" and "What the grades mean" in `index.html` and the directory filter buttons. If you add or rename a check, add a line for it in `WHY` |
+| `score.js` | The website checker, the nightly directory, the tests. Run the tests. If you change point weights, grade cut-offs or labels, update "How we score" and "What the grades mean" in `index.html` and the directory filter buttons. If you add or rename a check, add a line for it in `WHY`. If you add or rename a warning sign (a `flag(...)` label), add a one-sentence line for it in `WARNING_TEXT` in `agent.js`; `node test/agent.test.mjs` fails without it |
 | `score.js` result fields | `directoryEntry` in `score.js` (the fields kept for the nightly directory and for on-request grades in `agent.js`), `report.js` (draws them), the directory code in `index.html`, and the repo pages in `seo.js` |
 | `report.js` or `site.css` | The home page and every Google page at once. Run `node test/seo.test.mjs` and look at both `/` and a `/repo/owner/name` page |
 | The questions in `index.html` | The FAQ data at the top of `index.html` must match word for word (Google rule). `node test/share.test.mjs` checks it |
@@ -63,7 +63,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 | `repos.txt` | Nothing until the next nightly run (or run the workflow by hand). Then each new repo gets its own Google page and sitemap entry |
 | `serverInfo` version in `worker.js` | `version` in `server.json` (`node test/mcp.test.mjs` checks they match), then publish it to the MCP Registry again |
 | `/mcp` tool names in `worker.js` | Any agent connected to it calls them by name. Meta Muse uses `/mcp/muse`, the only address that lists the Instagram tools |
-| `agentAnswer` fields or `RECOMMENDATION` in `agent.js` | Agents read them: `llms.txt`, `skill/SKILL.md` and the `check_repo` description must say the same. Run `node test/agent.test.mjs` |
+| `agentAnswer` fields or `RECOMMENDATION` in `agent.js` | Agents read them: `llms.txt`, `skill/SKILL.md` and the `check_repo` description must say the same. Run `node test/agent.test.mjs`. Nothing the repo's author wrote (quotes, file names, package names) may reach an agent: warnings use our fixed `WARNING_TEXT`, `aiFilesFound` is a list of file kinds, and text goes through `plain()` |
 | `batch.js`, `instagram.js`, `hq.js` or the cron in `wrangler.jsonc` | Real posts on @safetoclone. Run `node test/batch.test.mjs && node test/instagram.test.mjs && node test/hq.test.mjs`. Never loosen the lock in `batch.js` without Emile's OK. `/ig-media/` must only ever serve pictures of approved posts, never other HQ files. Don't also let Muse post from the batches, or posts double up |
 | `fingerprint()` or `checkClaim()` in `batch.js` | HQ's `instagram/_tools/common.py` (`fingerprint`, `check_claim`) must change the same way in the same week, or approved weeks stop posting. `test/batch.test.mjs` holds results made by the Python code |
 | `/api/instagram/results` or the `/api/stats` event names | HQ's `instagram/_tools/pull_results.py` reads them every day |
@@ -72,6 +72,7 @@ Never commit secrets. `RESEND_API_KEY` lives only in Cloudflare as a Secret.
 
 - For every website PR also run `node test/sandbox.test.mjs && node test/sandbox-sync.test.mjs`. Inspect its actual Cloudflare Preview before asking Emile to merge. The baseline branch is automation output, not a development branch.
 
+- Write-ups of weak spots (how a grade could be fooled, audit notes, test results) go in the private HQ repo under `knowledge/decisions/`, never in this public repo.
 - The GitHub repo `emiliomadeit/safetoclone` is the only real copy of the code.
 - Every merge to `main` redeploys the site automatically.
 - No build step and no npm packages. Keep it that way unless there's a strong reason.
