@@ -14,6 +14,13 @@
   "triggers": { "crons": ["*/30 * * * *"] },
   // Storage where instagram.js keeps the renewed Instagram token (KV namespace "safetoclone-instagram").
   "kv_namespaces": [{ "binding": "INSTAGRAM", "id": "c6dcee47a48741efbf4530730b19f4ed" }],
+  // Limits per connection (Cloudflare counts them per location, and only roughly). Used by agent.js (allowed) and worker.js.
+  // Where a binding is missing (tests, pull request previews), nothing is limited. Needs Wrangler 4.36 or newer.
+  "ratelimits": [
+    { "name": "CHECK_LIMIT", "namespace_id": "50101", "simple": { "limit": 15, "period": 60 } },  // new checks: each costs GitHub lookups
+    { "name": "SIGNUP_LIMIT", "namespace_id": "50102", "simple": { "limit": 5, "period": 60 } },   // /api/subscribe
+    { "name": "API_LIMIT", "namespace_id": "50103", "simple": { "limit": 60, "period": 60 } }     // /api/osv and /api/hit
+  ],
   // Lets Cloudflare build a test copy of the site for every pull request.
   // Native Worker Previews do not inherit production bindings or secrets.
   // Never add the production KV namespace, HQ token, Resend or Instagram secrets here.
