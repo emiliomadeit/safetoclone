@@ -196,6 +196,10 @@ const tooMuch = (e) => {
 };
 const mustStop = (e) => e?.code === "RATE_LIMIT" || e?.code === "TOO_BIG";
 
+// How many lookups GitHub says the key has left, noted from every answer (no extra lookup). agent.js reads it to stop
+// new checks before the shared key runs dry. remaining: null until the first answer; resetAt: when the hour rolls over.
+export const githubBudget = { remaining: null, resetAt: 0 };
+
 async function getJSON(url, token) {
   const headers = { Accept: "application/vnd.github+json" };
   if (token) headers.Authorization = `Bearer ${token}`;
@@ -204,6 +208,10 @@ async function getJSON(url, token) {
   if (typeof window === "undefined") headers["User-Agent"] = "safetoclone (+https://safetoclone.com)";
   let res;
   try { res = await fetch(url, { headers }); } catch (e) { throw tooMuch(e) || e; }
+  if (token && res.headers.get("x-ratelimit-remaining") !== null) {
+    githubBudget.remaining = Number(res.headers.get("x-ratelimit-remaining"));
+    githubBudget.resetAt = Number(res.headers.get("x-ratelimit-reset")) * 1000;
+  }
   if (res.status === 404) return null;
   if (res.status === 403 || res.status === 429) {
     const err = new Error("GitHub's free hourly limit was reached. Try again in a few minutes.");

@@ -1,6 +1,6 @@
 // Checks the visitor counter (stats.js). Run with: node test/stats.test.mjs
 import worker from "../worker.js";
-import { sourceOf, EVENTS } from "../stats.js";
+import { sourceOf, EVENTS, count } from "../stats.js";
 import assert from "node:assert";
 
 const store = new Map();
@@ -55,6 +55,27 @@ assert.equal(stats.total.events.agent_mcp, 1);
 assert.equal(stats.total.events.home, 2);
 assert.equal(stats.total.events.check, 1);
 assert.deepEqual(stats.total.sources, { reddit: 1, "news.ycombinator.com": 1 });
+
+// A busy day can't use up the KV store's daily writes: past 150 events, most are skipped and the rest count for more.
+{
+  const writes = []; const data = new Map();
+  const kv2 = { get: async (k) => (data.has(k) ? JSON.parse(data.get(k)) : null), put: async (k, v) => { writes.push(k); data.set(k, v); } };
+  const day = new Date().toISOString().slice(0, 10);
+  data.set(`stats:${day}`, JSON.stringify({ events: { home: 3000 }, sources: {} }));
+  const req = new Request("https://safetoclone.com/", { headers: { "User-Agent": "Mozilla/5.0" } });
+  await count({ INSTAGRAM: kv2 }, req, "home", "", () => 0.5);   // unlucky draw: skipped, no write
+  assert.equal(writes.length, 0);
+  await count({ INSTAGRAM: kv2 }, req, "home", "reddit", () => 0.01); // lucky draw: counts for 3000/150 = 20
+  assert.equal(writes.length, 1);
+  assert.deepEqual(JSON.parse(data.get(`stats:${day}`)).events, { home: 3020 });
+  assert.equal(JSON.parse(data.get(`stats:${day}`)).sources.reddit, 20);
+  await count({ INSTAGRAM: kv2 }, req, "signup", "", () => 0.5);  // signups always count, even on a busy day
+  assert.equal(JSON.parse(data.get(`stats:${day}`)).events.signup, 1);
+  // A quiet day counts every event, one each.
+  data.clear(); writes.length = 0;
+  for (let i = 0; i < 100; i++) await count({ INSTAGRAM: kv2 }, req, "home", "", () => 0.99);
+  assert.equal(JSON.parse(data.get(`stats:${day}`)).events.home, 100);
+}
 
 // Without the KV store (tests, previews) nothing breaks.
 const plain = await worker.fetch(new Request("https://safetoclone.com/api/stats"), {});
