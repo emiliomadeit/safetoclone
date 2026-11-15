@@ -27,13 +27,24 @@ export function sourceOf(request) {
   return "";
 }
 
-export async function count(env, request, event, source = "") {
+// Every counted event is a write to the KV store, and the same store holds the newsletter's "already sent" lock and the
+// approve-button tokens. The free plan allows 1,000 writes a day, so a busy day (or someone flooding us) must not use them all up.
+// Past SAMPLE_FROM events in a day an event is only counted by chance, and counts for what it stands for (about 1 in 10 counts
+// for 10), so the totals stay about right while writes grow slowly (roughly 800 even at 10,000 events). Signups are always counted.
+const SAMPLE_FROM = 150;
+export async function count(env, request, event, source = "", random = Math.random) {
   if (!env?.INSTAGRAM || !EVENTS.includes(event)) return;
   if (!AGENT_EVENTS.includes(event) && BOT.test(request.headers.get("User-Agent") || "")) return;
   const key = `stats:${day()}`;
   const s = (await env.INSTAGRAM.get(key, "json")) || { events: {}, sources: {} };
-  s.events[event] = (s.events[event] || 0) + 1;
-  if (source && Object.keys(s.sources).length < 200) s.sources[source] = (s.sources[source] || 0) + 1;
+  const total = Object.values(s.events).reduce((a, b) => a + b, 0);
+  let weight = 1;
+  if (total > SAMPLE_FROM && !event.startsWith("signup")) {
+    if (random() >= SAMPLE_FROM / total) return;
+    weight = Math.round(total / SAMPLE_FROM);
+  }
+  s.events[event] = (s.events[event] || 0) + weight;
+  if (source && Object.keys(s.sources).length < 200) s.sources[source] = (s.sources[source] || 0) + weight;
   await env.INSTAGRAM.put(key, JSON.stringify(s), { expirationTtl: 400 * 86400 });
 }
 
