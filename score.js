@@ -55,18 +55,44 @@ const AI_FOLDER_FILE = /^(CLAUDE\.md|AGENTS\.md|GEMINI\.md|copilot-instructions\
 const AI_SUBFOLDERS = ["rules", "commands", "agents"]; // inside .claude/ and .cursor/
 // Files read from hidden folders and deeper folders together. Each one is a lookup, and Cloudflare allows about 50 per check.
 const AI_FILE_LIMIT = 20;
+// Each rule is [pattern, excuse]. excuse(before, after) gets the words around a match and returns true when the match is
+// harmless: a rule that protects you ("Do not post this without telling the user") or a documented example of an attack.
+// shortcut: this is text matching, so anyone who has read it can word around it (and wrap a real attack in quotes plus "e.g.").
+// It stops false alarms on real skill packs; it is not a defence against a determined attacker. Upgrade to reading the file's meaning.
+// "Never ...", "do not ...", "no need to ..." right before the match (same clause: no comma or full stop in between).
+const NEGATED = /\b(never|not|don['’]?t|doesn['’]?t|won['’]?t|shouldn['’]?t|needn['’]?t|no\s+need\s+to)\s+(?:[\w'’`-]+\s+){0,6}$/i;
+const negated = (before) => NEGATED.test(before);
+// A quoted sample of an attack, in a sentence that says it is one: (e.g. "Ignore previous instructions...").
+const quotedExample = (before, after) => /["“'‘`]\s*$/.test(before)
+  && /\b(e\.?g\.?|for example|such as|example|attacker|attack|injection|untrusted|as data|spam|malicious|suspicious)\b/i.test(before + " " + after);
 const PROMPT_INJECTION = [
-  /ignore\s+(all\s+)?(previous|prior|above)\s+instructions/i,
-  /do\s+not\s+(tell|inform|mention\s+(this\s+)?to)\s+the\s+user/i,
+  [/ignore\s+(all\s+)?(previous|prior|above)\s+instructions/i, quotedExample],
+  // "Do not tell the user to run X" is an instruction about what to say, not a request to hide anything.
+  [/do\s+not\s+(tell|inform|mention\s+(this\s+)?to)\s+the\s+user(?!\s+to\b)/i],
   // "Without telling" hides things from you. "Without asking" is left out: real AGENTS.md files use it for
   // permission ("tests can be run without asking the user", Open Interpreter, 2026-11).
-  /without\s+(telling|informing|notifying)\s+the\s+user/i,
+  [/without\s+(telling|informing|notifying)\s+the\s+user/i, negated],
   // Only counts when secrets are sent somewhere: "send the API key to https://...".
-  /\b(send|upload|post|exfiltrate|forward|transmit)\b[^\n]{0,40}\b(api[_ -]?keys?|tokens?|\.env|credentials|ssh\s+keys?|secrets?)\b[^\n]{0,40}\b(to|at)\s+(https?:\/\/|an?\s+(external|remote)|this\s+(url|endpoint|server))/i,
+  [/\b(send|upload|post|exfiltrate|forward|transmit)\b[^\n]{0,40}\b(api[_ -]?keys?|tokens?|\.env|credentials|ssh\s+keys?|secrets?)\b[^\n]{0,40}\b(to|at)\s+(https?:\/\/|an?\s+(external|remote)|this\s+(url|endpoint|server))/i, negated],
   // Discord webhooks only count with a real numeric ID: projects often document their own as ".../webhooks/xxx".
-  /(webhook\.site|requestbin|pipedream\.net|ngrok\.io|discord(app)?\.com\/api\/webhooks\/\d{6,})/i,
-  /\bcat\s+~\/\.(ssh|aws)|\bprintenv\b|process\.env\b[^\n]{0,40}(fetch|post)/i,
+  [/(webhook\.site|requestbin|pipedream\.net|ngrok\.io|discord(app)?\.com\/api\/webhooks\/\d{6,})/i],
+  // Reading your SSH or AWS keys, or sending the environment to a download tool. A plain "printenv NAME" or
+  // "process.env.X" in an example is everyday code (Superpowers, Orca, 9router, 2026-11), so those don't count.
+  [/\bcat\s+~\/\.(ssh|aws)\b|\bprintenv\b[^\n]{0,60}\|\s*(curl|wget|nc|base64)\b|\b(curl|wget)\b[^\n]{0,120}\$\(\s*(printenv|env|cat\s+~)/i, negated],
 ];
+// The first match of a rule that is not excused as harmless, or null.
+function firstReal(re, text, excuse) {
+  for (const m of text.matchAll(new RegExp(re.source, re.flags.replace("g", "") + "g"))) {
+    const before = text.slice(Math.max(0, m.index - 80), m.index);
+    const after = text.slice(m.index + m[0].length, m.index + m[0].length + 140);
+    if (!excuse?.(before, after)) return m;
+  }
+  return null;
+}
+const injectionHit = (text) => PROMPT_INJECTION.map(([re, excuse]) => firstReal(re, text, excuse)).find(Boolean) || null;
+// A SKILL.md inside a tests, fixtures or samples folder is never loaded by an AI tool, so attack text there is a test case
+// (NVIDIA's SkillSpector keeps deliberately poisoned examples). CLAUDE.md and AGENTS.md still count anywhere: tools read those from subfolders.
+const SAMPLE_SKILL = /(^|\/)(tests?|__tests__|fixtures?|testdata|examples?|samples?)\/(.+\/)?SKILL\.md$/i;
 // Ready-to-run programs and archives. Plain-text launch scripts (.bat, .ps1, .sh) are left out:
 // many real projects ship them, and anyone can open them to read what they do.
 const RISKY_FILE = /\.(exe|scr|msi|vbs|jar|dll|apk|dmg|pkg|zip|rar|7z)$/i;
@@ -527,7 +553,7 @@ export function score(data) {
   const scamSentence = joined.split(/(?<=[.!?])\s+|\n/).find((sentence) => SCAM_WORDS.some((re) => re.test(sentence)) && !NEGATED.test(sentence));
   const scam = scamSentence && SCAM_WORDS.map((re) => scamSentence.match(re)).find(Boolean);
   if (scam) flag("Scam-style wording", 15, `Mentions cracks, cheats, keygens or free premium. Most malware on GitHub looks like this. We found: "…${around(scamSentence, scam)}…"`, 35);
-  if (DISABLE_AV.test(text)) flag("Asks you to turn off antivirus", 30, "Real software never needs this. This is the #1 sign of malware.", 15);
+  if (firstReal(DISABLE_AV, text, negated)) flag("Asks you to turn off antivirus", 30, "Real software never needs this. This is the #1 sign of malware.", 15);
   // Download tricks: serious for a little-known project, a warning for a widely used one.
   const trick = (label, note) => flag(label, 10, note, stars < 100 ? 40 : null);
   const bypass = text.match(BYPASS_WARNING);
@@ -618,15 +644,18 @@ export function score(data) {
 
   // AI-agent check: instruction files that could hijack your AI assistant.
   const aiNames = Object.keys(aiFiles);
-  const injected = aiNames.filter((n) => PROMPT_INJECTION.some((re) => re.test(aiFiles[n])) || LONG_BASE64.test(aiFiles[n]));
+  const attacky = aiNames.filter((n) => injectionHit(aiFiles[n]) || LONG_BASE64.test(aiFiles[n]));
+  const samples = attacky.filter((n) => SAMPLE_SKILL.test(n));
+  const injected = attacky.filter((n) => !samples.includes(n));
   if (injected.length) {
     // Quote the line we found, so anyone can check our work.
     const text = aiFiles[injected[0]];
-    const hit = PROMPT_INJECTION.map((re) => text.match(re)).find(Boolean);
+    const hit = injectionHit(text);
     const line = hit ? text.slice(0, hit.index).split("\n").length : null;
     const quote = hit ? around(text, hit) : "a long block of scrambled text"; // the words around the match, not the start of a long line
     flag("Could hijack your AI assistant", 25, `${injected.join(", ")} contains instructions that try to override your AI, hide things from you, or send data away. ${hit ? `Line ${line} of ${injected[0]}: "${quote}"` : `It contains ${quote}.`}`, 20);
   }
+  if (samples.length) flag("Attack-style text in test files", 0, `${samples.join(", ")} holds attack-style text, but it sits in a tests or samples folder, where AI tools don't load it. It looks like a test case. Don't copy it into your own AI folders.`);
   const hidden = aiNames.filter((n) => !injected.includes(n) && HIDDEN_CHARS.test(aiFiles[n].replace(/^\uFEFF/, "")));
   if (hidden.length) flag("Hidden text for your AI", 25, `${hidden.join(", ")} contains invisible characters. Your AI can read them, you can't. This is a known way to hide instructions.`, 20);
 
