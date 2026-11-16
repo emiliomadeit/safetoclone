@@ -3,8 +3,9 @@
 // Kept in the INSTAGRAM KV store under keys "stats:YYYY-MM-DD". Read them at safetoclone.com/api/stats.
 // Counts are rough: two visits in the same instant can overwrite each other. Good enough to compare sources.
 
-export const EVENTS = ["home", "repo_page", "repos_page", "check", "check_fail", "copy_link", "image", "signup", "signup_home", "signup_result", "signup_repo", "agent_mcp", "agent_api", "nl_love", "nl_good", "nl_soso"];
+export const EVENTS = ["home", "repo_page", "repos_page", "check", "check_fail", "check_busy", "copy_link", "image", "signup", "signup_home", "signup_result", "signup_repo", "agent_mcp", "agent_api", "nl_love", "nl_good", "nl_soso"];
 // check_fail: a check on the home page that showed an error instead of a grade (wrong link, GitHub busy...).
+// check_busy: the part of check_fail that was a busy day (our limit or GitHub's), not a wrong link. Counted in check_fail too.
 // nl_love / nl_good / nl_soso: taps on the rating at the bottom of the newsletter. Email apps may open links by
 // themselves, so these are rough.
 // AI agents checking a repo: agent_mcp is a get_safety_scores or check_repo call on /mcp, agent_api a call to
@@ -52,7 +53,7 @@ export async function count(env, request, event, source = "", random = Math.rand
 export async function hit(request, env) {
   if (request.method !== "POST") return new Response("Use POST", { status: 405 });
   const { event } = await request.json().catch(() => ({}));
-  if (!["check", "check_fail", "copy_link", "image"].includes(event)) return new Response("Unknown event", { status: 400 });
+  if (!["check", "check_fail", "check_busy", "copy_link", "image"].includes(event)) return new Response("Unknown event", { status: 400 });
   await count(env, request, event).catch(() => {});
   return new Response(null, { status: 204 });
 }
