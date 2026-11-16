@@ -26,6 +26,7 @@ await visit("/?ref=reddit");
 await visit("/", { Referer: "https://news.ycombinator.com/" });
 await visit("/", { "User-Agent": "Googlebot/2.1" }); // bots don't count
 await visit("/api/hit", { "Content-Type": "application/json" }, { method: "POST", body: JSON.stringify({ event: "check" }) });
+await visit("/api/hit", { "Content-Type": "application/json" }, { method: "POST", body: JSON.stringify({ event: "check_busy" }) });
 const bad = await visit("/api/hit", {}, { method: "POST", body: JSON.stringify({ event: "home" }) });
 assert.equal(bad.status, 400); // the browser can only report on-page events, not fake page views
 
@@ -54,6 +55,7 @@ assert.ok(Object.keys(stats.total.events).every((k) => EVENTS.includes(k)));
 assert.equal(stats.total.events.agent_mcp, 1);
 assert.equal(stats.total.events.home, 2);
 assert.equal(stats.total.events.check, 1);
+assert.equal(stats.total.events.check_busy, 1);
 assert.deepEqual(stats.total.sources, { reddit: 1, "news.ycombinator.com": 1 });
 
 // A busy day can't use up the KV store's daily writes: past 150 events, most are skipped and the rest count for more.

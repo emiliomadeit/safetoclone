@@ -25,6 +25,15 @@ assert.equal(repoName("owner/.."), null);
 assert.equal(repoName(""), null);
 assert.equal(repoName(undefined), null);
 assert.equal(repoName("a/" + "b".repeat(400)), null);
+// A pasted install command counts as the link inside it
+assert.equal(repoName("git clone https://github.com/owner/repo"), "owner/repo");
+assert.equal(repoName("git clone --depth 1 https://github.com/owner/repo.git my-folder"), "owner/repo");
+assert.equal(repoName("git clone git@github.com:owner/repo.git"), "owner/repo");
+assert.equal(repoName('git clone "https://github.com/owner/repo"'), "owner/repo");
+assert.equal(repoName("gh repo clone owner/repo"), "owner/repo");
+assert.equal(repoName("git clone https://example.com/owner/repo"), null, "only GitHub links, also inside a command");
+assert.equal(repoName("git clone"), null);
+assert.equal(repoName("rm -rf x; git clone https://github.com/owner/repo"), null, "the command must come first");
 
 // ---- A fake GitHub ----
 // repos: name -> { stars, agents (text of AGENTS.md), status }
@@ -134,6 +143,8 @@ globalThis.fetch = fakeGitHub({
 
 // Errors have a code and a plain message, and never become a grade.
 await assert.rejects(gradeRepo({}, "https://example.com/a/b"), (e) => e.code === "BAD_INPUT");
+await assert.rejects(gradeRepo({}, "github.com/anthropics"), (e) => e.code === "BAD_INPUT" && /account, not a single repo/.test(e.message));
+await assert.rejects(gradeRepo({}, "notarepo"), (e) => e.code === "BAD_INPUT" && /doesn't look like a GitHub repo/.test(e.message));
 await assert.rejects(gradeRepo({}, "nobody/here"), (e) => e.code === "NOT_FOUND");
 await assert.rejects(gradeRepo({}, "busy/repo"), (e) => e.code === "RATE_LIMIT");
 assert.equal(failure({ code: "NOT_FOUND", message: "x" }).status, 404);

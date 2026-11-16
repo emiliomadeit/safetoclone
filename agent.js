@@ -18,8 +18,12 @@ export const KEEP_SECONDS = 24 * 3600;
 // "owner/name" from a GitHub link or a plain owner/name. Anything that isn't GitHub gets null.
 // GitHub account names have no dots, so "example.com/a/b" can't sneak through as a repo.
 export function repoName(input) {
-  const s = String(input ?? "").trim();
+  let s = String(input ?? "").trim();
   if (!s || s.length > 300) return null;
+  // A pasted install command counts as the link inside it. Only the first GitHub-looking word is used, then the
+  // strict pattern below decides, so flags like "--depth 1" and a folder name at the end are ignored.
+  const cmd = s.match(/^(?:git\s+clone|gh\s+repo\s+clone)\s+(.+)$/i);
+  if (cmd) s = (cmd[1].split(/\s+/).find((w) => /github\.com[/:]|^["']?[\w.-]+\/[\w.-]+["']?$/i.test(w)) ?? "").replace(/^["']|["']$/g, "");
   const m = s.match(/^(?:(?:https?:\/\/)?(?:www\.)?github\.com\/|git@github\.com:)?([A-Za-z0-9_-]{1,39})\/([A-Za-z0-9_.-]{1,100}?)(?:\.git)?\/?(?:[/?#].*)?$/i);
   if (!m || m[2] === "." || m[2] === "..") return null;
   return `${m[1]}/${m[2]}`;
@@ -57,7 +61,13 @@ const coded = (code, message) => Object.assign(new Error(message), { code });
 // ip: the visitor's connection (clientKey), used only to limit new checks.
 export async function gradeRepo(env, input, { dir = null, ctx = null, ip = null } = {}) {
   const name = repoName(input);
-  if (!name) { const e = new Error("That isn't a GitHub repo. Send a link like https://github.com/owner/name."); e.code = "BAD_INPUT"; throw e; }
+  if (!name) {
+    const account = /^(?:https?:\/\/)?(?:www\.)?github\.com\/[A-Za-z0-9_-]{1,39}\/?$/i.test(String(input ?? "").trim());
+    const e = new Error(account
+      ? "That's a GitHub account, not a single repo. Paste a link to one of its repos, like github.com/owner/name."
+      : "That doesn't look like a GitHub repo. Paste a link like github.com/owner/name.");
+    e.code = "BAD_INPUT"; throw e;
+  }
   const known = findIn(dir, name);
   if (known && hoursSince(known.checkedAt || dir.updatedAt) < FRESH_HOURS) return { entry: known, source: "nightly" };
 
