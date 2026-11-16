@@ -313,6 +313,7 @@ async function runCheck(val) {
       : busy && serverBusy ? serverBusy : err.message;
     out.innerHTML = `<div class="error" role="alert"><strong>We couldn't check that repo.</strong><p>${esc(msg)}</p></div>`;
     say("");
+    out.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });   // the error sits below the form: bring it into view
   } finally {
     btn.disabled = false; btn.textContent = "Check safety";
     out.removeAttribute("aria-busy");
