@@ -1,5 +1,5 @@
 // Run with: node test/score.test.mjs
-import { score, parseRepo, collect, readLockfiles, getKnownHoles, directParts, FIX } from "../score.js";
+import { score, parseRepo, collect, readLockfiles, getKnownHoles, directParts, FIX, outsideGitHub } from "../score.js";
 import { reportCard, esc } from "../report.js";
 import assert from "node:assert";
 const ago = (d) => new Date(Date.now() - d * 864e5).toISOString();
@@ -448,4 +448,16 @@ assert.ok(!reportCard(score(mirrorData(true, lowSecurity))).includes("issue trac
 assert.ok(!reportCard(score(mirrorData(false, null))).includes("issue tracker is turned off"), "no note when the security area is fine or unchecked");
 assert.ok(!reportCard(good).includes("issue tracker is turned off"));
 assert.equal(score(mirrorData(false, lowSecurity)).score, mirror.score, "the note never changes the score");
+
+// The note only applies to otherwise established projects.
+{
+  const A = { Reputation: { grade: "A" }, "Security habits": { grade: "F" } };
+  assert.equal(outsideGitHub({ issuesOff: true, areas: A, flags: [] }), true);
+  assert.equal(outsideGitHub({ issuesOff: true, areas: A, flags: [], warnings: [] }), true);
+  assert.equal(outsideGitHub({ issuesOff: false, areas: A, flags: [] }), false);
+  assert.equal(outsideGitHub({ areas: A, flags: [] }), false, "an older entry without the field");
+  assert.equal(outsideGitHub({ issuesOff: true, areas: { ...A, Reputation: { grade: "C" } }, flags: [] }), false, "not established");
+  assert.equal(outsideGitHub({ issuesOff: true, areas: { ...A, "Security habits": { grade: "C" } }, flags: [] }), false, "security is not weak");
+  assert.equal(outsideGitHub({ issuesOff: true, areas: A, flags: ["Scam-style wording"] }), false, "a warning sign, so no note");
+}
 console.log("all tests passed");

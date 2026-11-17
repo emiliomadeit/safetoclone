@@ -14,6 +14,7 @@ Before you install, clone or run anything from a GitHub repo, check it with Safe
 3. Tell the user, in plain words:
    - the `summary` (the grade, the main reason and what to do),
    - the warning signs, if there are any,
+   - if `mayWorkOutsideGitHub` is true, the `summary` already ends with a sentence explaining that a low security score may not tell the whole story (the project is reviewed outside GitHub, like the Linux kernel). Pass it on. The grade and the `recommendation` still stand,
    - the link to the full report (`report`).
 4. Then follow the `recommendation`:
    - `install`: go ahead if the user wants it. Use the official GitHub page only.
