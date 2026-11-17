@@ -1,5 +1,6 @@
 // Run with: node test/score.test.mjs
-import { score, parseRepo, collect, readLockfiles, getKnownHoles, directParts } from "../score.js";
+import { score, parseRepo, collect, readLockfiles, getKnownHoles, directParts, FIX } from "../score.js";
+import { reportCard, esc } from "../report.js";
 import assert from "node:assert";
 const ago = (d) => new Date(Date.now() - d * 864e5).toISOString();
 
@@ -410,4 +411,17 @@ globalThis.fetch = async (url) => /\/repos\/[^/]+\/[^/]+$/.test(url)
   : new Response("{}", { status: 403 });
 await assert.rejects(collect("x", "y"), (e) => e.code === "RATE_LIMIT", "rate limit halfway must stop the check");
 globalThis.fetch = realFetch;
+
+// "If it's your repo": a fix for each check an owner can act on, shown only where points were lost,
+// and never for popularity, age or the red flags.
+assert.ok(Object.entries(FIX).every(([, f]) => f.text && (!f.url || f.url.startsWith("https://docs.github.com/"))), "every fix has plain text and an official guide");
+assert.ok(!["Stars", "Forks", "Owner history", "Track record", "Red flags"].some((k) => k in FIX), "no how-to for things an owner can't fix or the malware flags");
+const weak = score({
+  repo: { full_name: "acme/bare", html_url: "", stargazers_count: 12000, forks_count: 900, created_at: ago(1500), pushed_at: ago(3), archived: false, license: null, description: "Bare" },
+  user: { type: "Organization", created_at: ago(3000) }, files: [], releases: [], readme: "short", pkg: null, aiFiles: {},
+});
+const weakHtml = reportCard(weak);
+for (const label of ["Releases", "License", "Instructions", "Security contact"]) assert.ok(weakHtml.includes(esc(FIX[label].text)), `${label} shows its fix`);
+assert.ok(weakHtml.includes("If it's your repo"));
+assert.ok(!reportCard(good).includes("If it's your repo"), "a strong repo gets no fix lines");
 console.log("all tests passed");
