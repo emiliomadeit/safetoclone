@@ -2,7 +2,7 @@
 // Shared by the home page checker (index.html, runs in the visitor's browser) and the Google pages
 // (seo.js, runs in the Worker), so a result looks and reads the same everywhere.
 // Plain functions: data in, HTML text out. Every piece of text that comes from GitHub goes through esc().
-import { GRADES, LEVELS, GROUPS, WHY, FIX, areaGrades } from "./score.js";
+import { GRADES, LEVELS, GROUPS, WHY, FIX, OUTSIDE_GITHUB, outsideGitHub, areaGrades } from "./score.js";
 
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -75,19 +75,16 @@ function costHTML(r) {
 // types. Posts to /api/watch, never /api/subscribe: these addresses are not on the Sunday list. index.html wires data-watch.
 const watchHTML = (r) => `<section class="watch">
   <h3>Want a heads-up if this grade drops?</h3>
-  <p class="muted">Alerts aren't switched on yet. Leave your email and we'll write to you once, on the day they are. We won't add you to the Sunday email, and we'll use your address for nothing else.</p>
+  <p class="muted">Alerts aren't switched on yet. Leave your email and we'll send you one message to confirm it. Once you confirm, we'll write to you once, on the day alerts launch. We won't add you to the Sunday email, and we'll use your address for nothing else.</p>
   <form class="news" action="/api/watch" method="post" data-watch>
     <input type="hidden" name="repo" value="${esc(r.name)}">
     <label class="sr-only" for="watch-email">Your email address</label>
     <input id="watch-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
-    <button class="btn secondary" type="submit">Tell me when alerts launch</button>
+    <button class="btn secondary" type="submit">Email me to confirm</button>
   </form>
   <p class="fine" role="status" data-watch-msg></p>
 </section>`;
 
-// Shown under "Why this grade?" when GitHub's issue tracker is off and "Security habits" is weak. Projects like the Linux
-// kernel do their reviews by email, which the security check can't see. A fact about this project, not a verdict.
-const OUTSIDE_GITHUB = "GitHub's issue tracker is turned off for this project, so its bug reports and reviews may happen somewhere else (the Linux kernel, for example, works through mailing lists). We can only see GitHub, so a low security score here may not tell the whole story.";
 
 // "If it's your repo": one plain step for a check that lost points (FIX in score.js), with GitHub's own guide.
 const fixHTML = (c) => {
@@ -138,7 +135,7 @@ export function reportCard(r, { example = false, actions = "", headingId = "", f
     <ul class="checks">${list.map((c) => `<li class="${esc(c.level)}"><span class="icon" aria-hidden="true"></span><div><p><span class="sr-only">${MARK[c.level] || ""}: </span><strong>${esc(c.label)}.</strong> ${esc(c.note)}</p>${WHY[c.label] || WHY[c.group] ? `<p class="list-note">${esc(WHY[c.label] || WHY[c.group])}</p>` : ""}${fixHTML(c)}</div></li>`).join("")}</ul>
   </details>`;
     }).join("")}</div>
-  ${r.issuesOff && ["D", "F"].includes(areas["Security habits"]?.grade) ? `<p class="fine">${esc(OUTSIDE_GITHUB)}</p>` : ""}
+  ${outsideGitHub(r, areas) ? `<p class="fine">${esc(OUTSIDE_GITHUB)}</p>` : ""}
   ${groups["Security habits"] ? "" : `<p class="fine">${esc(GROUPS["Security habits"])} Not checked: the independent OpenSSF Scorecard check has no data for this repo yet, so the grade uses the other areas.</p>`}
 </section>`;
   }

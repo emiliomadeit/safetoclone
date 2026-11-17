@@ -83,74 +83,128 @@ assert.deepEqual(stats.total.sources, { reddit: 1, "news.ycombinator.com": 1 });
 const plain = await worker.fetch(new Request("https://safetoclone.com/api/stats"), {});
 assert.equal(plain.status, 200);
 
-// ---- /api/watch: "tell me when alerts launch" is its own list, never the newsletter ----
+// ---- /api/watch: "tell me when alerts launch" is its own list, never the newsletter, and only after the person confirms ----
 const resendCalls = [];
 const realFetch = globalThis.fetch;
-globalThis.fetch = async (u, ...rest) => (String(u).includes("resend.com") ? (resendCalls.push(String(u)), new Response("{}", { status: 200 })) : realFetch(u, ...rest));
-const wenv = { ...env, RESEND_API_KEY: "re_test" }; // a key is present, so any accidental newsletter signup would show up as a Resend call
-const watchPost = async (body, { form = false, e = wenv } = {}) => {
-  const init = form
-    ? { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "Mozilla/5.0" }, body: new URLSearchParams(body).toString() }
-    : { method: "POST", headers: { "Content-Type": "application/json", "User-Agent": "Mozilla/5.0" }, body: JSON.stringify(body) };
-  const res = await worker.fetch(new Request("https://safetoclone.com/api/watch", init), e, ctx);
-  await Promise.all(jobs.splice(0));
-  return res;
+globalThis.fetch = async (u, init = {}, ...rest) => {
+  if (!String(u).includes("resend.com")) return realFetch(u, init, ...rest);
+  resendCalls.push({ url: String(u), body: init.body ? JSON.parse(init.body) : null });
+  return new Response(JSON.stringify({ id: "e1" }), { status: 200 });
 };
+const wenv = { ...env, RESEND_API_KEY: "re_test" };
+const send = async (path, init, e = wenv) => { const res = await worker.fetch(new Request("https://safetoclone.com" + path, init), e, ctx); await Promise.all(jobs.splice(0)); return res; };
+const watchPost = (body, { form = false, e = wenv } = {}) => send("/api/watch", form
+  ? { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "Mozilla/5.0" }, body: new URLSearchParams(body).toString() }
+  : { method: "POST", headers: { "Content-Type": "application/json", "User-Agent": "Mozilla/5.0" }, body: JSON.stringify(body) }, e);
 const today = new Date().toISOString().slice(0, 10);
 const statsToday = () => JSON.parse(store.get(`stats:${today}`)).events;
+const confirmed = () => JSON.parse(store.get(`watch:${today}`) || "[]");
+const pending = () => JSON.parse(store.get(`watchpend:${today}`) || "[]");
 const signupsBefore = statsToday().signup || 0;
+const linkIn = (call) => call.body.text.match(/https:\/\/safetoclone\.com\/watch\/confirm\?t=([0-9a-f.-]+)/)[1];
 
 let w = await watchPost({ email: " Ann@Example.com ", repo: "git clone https://github.com/torvalds/linux" });
 assert.equal(w.status, 200);
-let kept = JSON.parse(store.get(`watch:${today}`));
-assert.equal(kept.length, 1);
-assert.equal(kept[0].email, "ann@example.com", "trimmed and lower-cased");
-assert.equal(kept[0].repo, "torvalds/linux", "the repo goes through the same link reading as the checker");
-assert.equal(statsToday().watch_signup, 1);
+assert.deepEqual(await w.json(), { ok: true, sent: true });
+assert.equal(confirmed().length, 0, "nothing is on the list until the person confirms");
+assert.equal(pending().length, 1);
+assert.equal(pending()[0].email, "ann@example.com", "trimmed and lower-cased");
+assert.deepEqual(pending()[0].repos, ["torvalds/linux"], "the repo goes through the same link reading as the checker");
+assert.equal(resendCalls.length, 1);
+assert.ok(resendCalls.every((c) => c.url === "https://api.resend.com/emails"), "only the confirmation email: never /contacts, /segments or /broadcasts");
+const mail = resendCalls[0].body;
+assert.deepEqual(mail.to, ["ann@example.com"]);
+assert.equal(mail.subject, "Please confirm your email address", "no repo name in the subject: a stranger chose it");
+assert.ok(!/torvalds|linux/i.test(mail.text + mail.html + mail.subject), "nothing a stranger typed is in the email");
+assert.match(mail.text, /If this wasn't you, ignore this email/);
+const token = linkIn(resendCalls[0]);
+assert.ok(!JSON.stringify(pending()).includes(token), "only a hash of the token is stored");
+assert.equal(statsToday().watch_request, 1);
+assert.equal(statsToday().watch_signup || 0, 0, "not a sign-up until confirmed");
 assert.equal(statsToday().signup || 0, signupsBefore, "never counted as a newsletter subscriber");
-assert.equal(resendCalls.length, 0, "nothing reaches Resend, so nobody lands in the Sunday list");
 
-w = await watchPost({ email: "ann@example.com", repo: "torvalds/linux" });
-assert.equal(w.status, 200);
-assert.equal(JSON.parse(store.get(`watch:${today}`)).length, 1, "the same email and repo is kept once");
-await watchPost({ email: "ann@example.com", repo: "git/git" });
-assert.equal(JSON.parse(store.get(`watch:${today}`)).length, 2, "the same email can watch another repo");
+// Opening the link (a GET, which mail scanners do) shows a button and changes nothing.
+let g = await send(`/watch/confirm?t=${token}`, { method: "GET", headers: { "User-Agent": "Mozilla/5.0" } });
+let gHtml = await g.text();
+assert.equal(g.status, 200);
+assert.ok(gHtml.includes('method="post"') && gHtml.includes("Yes, tell me when alerts launch"));
+assert.equal(confirmed().length, 0, "a GET never confirms");
+assert.equal(statsToday().watch_signup || 0, 0);
 
+// The button (POST) confirms. Doing it twice is harmless.
+let c = await send(`/watch/confirm?t=${token}`, { method: "POST", headers: { "User-Agent": "Mozilla/5.0" } });
+assert.ok((await c.text()).includes("You&#39;re confirmed"), "the page says so (the apostrophe is escaped)");
+assert.equal(confirmed().length, 1);
+assert.deepEqual(confirmed()[0], { email: "ann@example.com", repo: "torvalds/linux", at: confirmed()[0].at, confirmed: true });
+assert.equal(statsToday().watch_signup, 1);
+await send(`/watch/confirm?t=${token}`, { method: "POST", headers: { "User-Agent": "Mozilla/5.0" } });
+assert.equal(confirmed().length, 1, "confirming twice adds nothing");
+assert.equal(statsToday().watch_signup, 1, "and counts once");
+assert.equal(statsToday().signup || 0, signupsBefore);
+
+// One confirmation email per address a day, however many repos; a new repo joins the same request.
+w = await watchPost({ email: "ann@example.com", repo: "git/git" });
+assert.deepEqual(await w.json(), { ok: true, sent: false });
+assert.equal(resendCalls.length, 1, "no second email to the same address");
+assert.deepEqual(pending()[0].repos, ["torvalds/linux", "git/git"]);
+const token2 = (await watchPost({ email: "bea@example.com", repo: "git/git" }), linkIn(resendCalls[1]));
+assert.equal(resendCalls.length, 2);
+assert.notEqual(token2, token);
+await send(`/watch/confirm?t=${token2}`, { method: "POST", headers: { "User-Agent": "Mozilla/5.0" } });
+assert.equal(confirmed().filter((x) => x.email === "bea@example.com").length, 1);
+
+// Bad links and bad input.
+for (const bad of ["", "abc", `${today}.${"0".repeat(48)}`, `1999-01-01.${"a".repeat(48)}`]) {
+  const r = await send(`/watch/confirm?t=${bad}`, { method: "POST", headers: { "User-Agent": "Mozilla/5.0" } });
+  assert.ok(!(await r.text()).includes("You&#39;re confirmed"), `bad link "${bad}" confirms nothing`);
+}
+const sendsBefore = resendCalls.length;
 assert.equal((await watchPost({ email: "not-an-email", repo: "torvalds/linux" })).status, 400);
 assert.equal((await watchPost({ email: "a".repeat(250) + "@example.com", repo: "torvalds/linux" })).status, 400, "too long");
 assert.equal((await watchPost({ email: "bob@example.com", repo: "https://example.com/a/b" })).status, 400, "only GitHub repos");
 assert.equal((await watchPost({ email: "bob@example.com" })).status, 400);
-assert.equal(JSON.parse(store.get(`watch:${today}`)).length, 2, "refused sign-ups save nothing");
+assert.equal(resendCalls.length, sendsBefore, "refused sign-ups send nothing");
 
-// One address can't fill the day, and the day has a hard ceiling (writes are shared with the newsletter's send-lock).
-store.set(`watch:${today}`, JSON.stringify(Array.from({ length: 20 }, (_, i) => ({ email: "many@example.com", repo: `o/r${i}`, at: "x" }))));
+// Ceilings: per address, and a low daily limit on emails (Resend's allowance is shared with the newsletter).
+store.set(`watchpend:${today}`, JSON.stringify([{ email: "many@example.com", repos: Array.from({ length: 20 }, (_, i) => `o/r${i}`), th: "x", at: "x" }]));
 assert.equal((await watchPost({ email: "many@example.com", repo: "o/another" })).status, 429);
-store.set(`watch:${today}`, JSON.stringify(Array.from({ length: 200 }, (_, i) => ({ email: `u${i}@example.com`, repo: "o/r", at: "x" }))));
-const before = store.get(`watch:${today}`);
+store.set(`watchpend:${today}`, JSON.stringify(Array.from({ length: 20 }, (_, i) => ({ email: `u${i}@example.com`, repos: ["o/r"], th: "x", at: "x" }))));
+const full = store.get(`watchpend:${today}`);
+const beforeCap = resendCalls.length;
 assert.equal((await watchPost({ email: "late@example.com", repo: "o/r" })).status, 503);
-assert.equal(store.get(`watch:${today}`), before, "past the ceiling nothing more is written");
-store.delete(`watch:${today}`);
+assert.equal(store.get(`watchpend:${today}`), full, "past the ceiling nothing more is written");
+assert.equal(resendCalls.length, beforeCap, "and no email goes out");
+store.delete(`watchpend:${today}`);
 
-// Without JavaScript the form gets a page back that does not promise the Sunday email.
+// Without JavaScript the form gets a page back that says to check the inbox, and is not the newsletter's thank-you page.
 const page = await watchPost({ email: "carol@example.com", repo: "torvalds/linux" }, { form: true });
 const pageHtml = await page.text();
 assert.equal(page.status, 200);
 assert.match(page.headers.get("Content-Type"), /text\/html/);
-assert.ok(pageHtml.includes("alerts launch") && pageHtml.includes("not on the Sunday email list"));
+assert.ok(pageHtml.includes("Check your inbox") && pageHtml.includes("Nothing is saved until you do"));
 assert.ok(!pageHtml.includes("weekly safety email comes"), "not the newsletter's thank-you page");
+assert.equal(confirmed().filter((x) => x.email === "carol@example.com").length, 0);
 
-// No storage, or storage that fails: an honest error, nothing counted as a sign-up.
+// No storage, no Resend key, a failing store or a failing email: an honest error, nothing counted as asked.
 const { INSTAGRAM, ...noKv } = wenv;
 assert.equal((await watchPost({ email: "dan@example.com", repo: "torvalds/linux" }, { e: noKv })).status, 503);
-const countBefore = statsToday().watch_signup;
+const { RESEND_API_KEY, ...noMail } = wenv;
+assert.equal((await watchPost({ email: "dan@example.com", repo: "torvalds/linux" }, { e: noMail })).status, 503, "no email key, no sign-up");
+const asked = statsToday().watch_request;
 const broken = { ...wenv, INSTAGRAM: { get: async () => null, put: async () => { throw new Error("KV down"); } } };
 assert.equal((await watchPost({ email: "dan@example.com", repo: "torvalds/linux" }, { e: broken })).status, 502);
-assert.equal(statsToday().watch_signup, countBefore);
-assert.equal((await worker.fetch(new Request("https://safetoclone.com/api/watch"), wenv, ctx)).status, 405, "POST only");
+assert.equal(statsToday().watch_request, asked);
+const realFetch2 = globalThis.fetch;
+globalThis.fetch = async (u, ...rest) => (String(u).includes("resend.com") ? new Response("{}", { status: 500 }) : realFetch2(u, ...rest));
+assert.equal((await watchPost({ email: "erin@example.com", repo: "torvalds/linux" })).status, 502, "a failed email is an error, not a success");
+assert.equal(statsToday().watch_request, asked);
+globalThis.fetch = realFetch2;
+assert.equal((await send("/api/watch", { method: "GET" })).status, 405, "POST only");
 
-// The public stats never show the alert list.
+// The public stats never show the list.
 const publicStats = await (await visit("/api/stats")).text();
 assert.ok(!publicStats.includes("example.com") && !publicStats.includes("torvalds"), "/api/stats only reads stats: keys");
-assert.equal(resendCalls.length, 0);
+assert.ok(resendCalls.every((c) => c.url === "https://api.resend.com/emails"), "the Sunday list is never touched");
 globalThis.fetch = realFetch;
+
 console.log("stats tests passed");

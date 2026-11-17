@@ -32,7 +32,10 @@ visit production or load its Cloudflare analytics beacon. “Open production” 
 explicit link to the real website. Production's CDN injects an analytics script;
 the sandbox intentionally omits it while retaining the same page source.
 
-Newsletter signup returns an explicit sandbox message and saves nothing. There
+Newsletter signup returns an explicit sandbox message and saves nothing. The
+alert sign-up (`/api/watch`) and its confirm link (`/watch/confirm`) do the same:
+nothing is sent or saved, so a preview can't prove a confirmation email arrives
+(test that on the live site with your own address). There
 are no email deliveries, Instagram actions, production analytics writes, private
 HQ reads or production KV bindings. The application passes only `ASSETS` into
 preview request handlers, including on unknown/custom preview hosts. Preview

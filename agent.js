@@ -8,7 +8,7 @@
 //   3. "fresh":   we check it now with score.js, exactly like the home page checker does.
 // GitHub allows 60 lookups an hour without a key and 5,000 with one, so set the optional GITHUB_TOKEN Secret.
 // A check takes about 5 to 15 lookups.
-import { checkRepo, directoryEntry, LEVELS, githubBudget } from "./score.js";
+import { checkRepo, directoryEntry, LEVELS, githubBudget, OUTSIDE_GITHUB, outsideGitHub } from "./score.js";
 import { levelOf, warningsOf, githubUrl } from "./report.js";
 
 const SITE = "https://safetoclone.com";
@@ -177,6 +177,7 @@ export function agentAnswer(entry, source = "nightly") {
       ? `Warning signs: ${warnings.map((w) => plain(w.label, 80)).join(", ")}.`
       : "No malware warning signs found.";
   const report = `${SITE}/repo/${entry.name}`;
+  const outside = outsideGitHub(entry); // an established project that works outside GitHub: its weak security score may mislead
   return {
     repo: entry.name,
     github: githubUrl(entry),
@@ -184,7 +185,8 @@ export function agentAnswer(entry, source = "nightly") {
     score: entry.score,
     label: entry.label || L.label,
     recommendation: RECOMMENDATION[level] || "ask_first",
-    summary: `${entry.name} gets ${an(entry.grade)} ${entry.grade} (${entry.score}/100, ${entry.label || L.label}) from SafeToClone. ${reason} ${L.verdict}`,
+    summary: `${entry.name} gets ${an(entry.grade)} ${entry.grade} (${entry.score}/100, ${entry.label || L.label}) from SafeToClone. ${reason} ${L.verdict}${outside ? ` ${OUTSIDE_GITHUB}` : ""}`,
+    mayWorkOutsideGitHub: outside,
     advice: L.advice,
     warnings: warnings.map(({ label, severity }) => ({ label: plain(label, 80), severity, note: WARNING_TEXT[label] || GENERIC_WARNING })),
     areas: Object.fromEntries(Object.entries(entry.areas || {}).map(([k, v]) => [k, v?.grade]).filter(([, g]) => g)),

@@ -1,6 +1,7 @@
 // Checks grading any repo for AI agents: /api/check, the check_repo tool in /mcp, and repo pages outside the
 // nightly list (agent.js). No real network: GitHub, Scorecard and OSV are faked. Run with: node test/agent.test.mjs
 import worker from "../worker.js";
+import { OUTSIDE_GITHUB } from "../score.js";
 import { repoName, gradeRepo, agentAnswer, RECOMMENDATION, failure, WARNING_TEXT, aiKinds, plain, clientKey, allowed, RESERVE } from "../agent.js";
 import { LEVELS, githubBudget } from "../score.js";
 import assert from "node:assert";
@@ -230,6 +231,25 @@ assert.equal(Object.keys(RECOMMENDATION).sort().join(), Object.keys(LEVELS).sort
   const quiet = agentAnswer({ name: "x/y", grade: "A", score: 90, level: "trusted", label: "Strong", flags: [] });
   assert.ok(quiet.summary.includes("No malware warning signs found."));
   assert.ok(quiet.summary.startsWith("x/y gets an A (90/100, Strong)"));
+}
+
+// ---- A project that works outside GitHub (the Linux kernel): the agent gets our sentence, the verdict stays ----
+{
+  const base = { name: "acme/kernel", url: "https://github.com/acme/kernel", grade: "D", score: 54, level: "careful", label: "Be careful", flags: [], warnings: [],
+    areas: { Reputation: { grade: "A" }, Upkeep: { grade: "A" }, Transparency: { grade: "A" }, "Security habits": { grade: "F" }, "Red flags": { grade: "A" } } };
+  const off = agentAnswer({ ...base, issuesOff: true });
+  assert.equal(off.mayWorkOutsideGitHub, true);
+  assert.ok(off.summary.endsWith(OUTSIDE_GITHUB), "the summary agents repeat carries our fixed sentence: " + off.summary);
+  assert.equal(off.recommendation, "ask_first", "the verdict does not change");
+  assert.equal(off.grade, "D");
+  const on = agentAnswer({ ...base, issuesOff: false });
+  assert.equal(on.mayWorkOutsideGitHub, false);
+  assert.ok(!on.summary.includes("issue tracker"));
+  // Only for otherwise established projects.
+  assert.equal(agentAnswer({ ...base, issuesOff: true, warnings: [{ label: "Scam-style wording", severity: "high", note: "x" }] }).mayWorkOutsideGitHub, false, "any warning sign: no softening");
+  assert.equal(agentAnswer({ ...base, issuesOff: true, areas: { ...base.areas, Reputation: { grade: "D" } } }).mayWorkOutsideGitHub, false, "not established: no softening");
+  assert.equal(agentAnswer({ ...base, issuesOff: true, areas: { ...base.areas, "Security habits": { grade: "B" } } }).mayWorkOutsideGitHub, false, "security is fine: nothing to explain");
+  assert.equal(agentAnswer({ ...base }).mayWorkOutsideGitHub, false, "an older entry without the field");
 }
 
 // ---- Through the website: /api/check ----
