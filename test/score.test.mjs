@@ -431,4 +431,21 @@ assert.ok(withWatch.includes('action="/api/watch"') && withWatch.includes("data-
 assert.ok(!withWatch.includes("data-news") && !withWatch.includes("/api/subscribe"), "the alert form never posts to the newsletter");
 assert.ok(withWatch.includes("Alerts aren't switched on yet"), "says alerts don't exist yet, before anyone types");
 assert.ok(!reportCard(good, { example: true }).includes("data-watch"), "the made-up example report has no alert form");
+
+// Linux-shaped: issue tracker off, strong everywhere except the GitHub-based security check -> a note, same grade.
+const mirrorData = (hasIssues, scorecard) => ({
+  repo: { full_name: "acme/kernel", html_url: "", stargazers_count: 150000, forks_count: 50000, created_at: ago(4000), pushed_at: ago(1), archived: false, license: { spdx_id: "GPL-2.0" }, description: "Kernel", has_issues: hasIssues },
+  user: { type: "User", created_at: ago(6000) }, files: [{ name: "SECURITY.md", type: "file" }], releases: [{ assets: [] }],
+  readme: "This kernel does things. ".repeat(150), pkg: null, aiFiles: {}, scorecard,
+});
+const lowSecurity = { checks: [{ name: "Code-Review", score: 0 }, { name: "Vulnerabilities", score: 3 }] };
+const mirror = score(mirrorData(false, lowSecurity));
+assert.equal(mirror.issuesOff, true);
+assert.ok(["D", "F"].includes(mirror.areas["Security habits"].grade), "the GitHub-based security check is the weak spot");
+assert.ok(reportCard(mirror).includes("issue tracker is turned off"), "a Linux-shaped project gets the note");
+assert.equal(score(mirrorData(true, lowSecurity)).issuesOff, false);
+assert.ok(!reportCard(score(mirrorData(true, lowSecurity))).includes("issue tracker is turned off"), "an ordinary project with weak security habits gets no note");
+assert.ok(!reportCard(score(mirrorData(false, null))).includes("issue tracker is turned off"), "no note when the security area is fine or unchecked");
+assert.ok(!reportCard(good).includes("issue tracker is turned off"));
+assert.equal(score(mirrorData(false, lowSecurity)).score, mirror.score, "the note never changes the score");
 console.log("all tests passed");

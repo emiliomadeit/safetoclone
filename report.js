@@ -85,6 +85,10 @@ const watchHTML = (r) => `<section class="watch">
   <p class="fine" role="status" data-watch-msg></p>
 </section>`;
 
+// Shown under "Why this grade?" when GitHub's issue tracker is off and "Security habits" is weak. Projects like the Linux
+// kernel do their reviews by email, which the security check can't see. A fact about this project, not a verdict.
+const OUTSIDE_GITHUB = "GitHub's issue tracker is turned off for this project, so its bug reports and reviews may happen somewhere else (the Linux kernel, for example, works through mailing lists). We can only see GitHub, so a low security score here may not tell the whole story.";
+
 // "If it's your repo": one plain step for a check that lost points (FIX in score.js), with GitHub's own guide.
 const fixHTML = (c) => {
   const f = c.level !== "good" && FIX[c.label];
@@ -134,6 +138,7 @@ export function reportCard(r, { example = false, actions = "", headingId = "", f
     <ul class="checks">${list.map((c) => `<li class="${esc(c.level)}"><span class="icon" aria-hidden="true"></span><div><p><span class="sr-only">${MARK[c.level] || ""}: </span><strong>${esc(c.label)}.</strong> ${esc(c.note)}</p>${WHY[c.label] || WHY[c.group] ? `<p class="list-note">${esc(WHY[c.label] || WHY[c.group])}</p>` : ""}${fixHTML(c)}</div></li>`).join("")}</ul>
   </details>`;
     }).join("")}</div>
+  ${r.issuesOff && ["D", "F"].includes(areas["Security habits"]?.grade) ? `<p class="fine">${esc(OUTSIDE_GITHUB)}</p>` : ""}
   ${groups["Security habits"] ? "" : `<p class="fine">${esc(GROUPS["Security habits"])} Not checked: the independent OpenSSF Scorecard check has no data for this repo yet, so the grade uses the other areas.</p>`}
 </section>`;
   }

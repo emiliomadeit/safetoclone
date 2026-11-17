@@ -736,6 +736,8 @@ export function score(data) {
     }[capReason] : null,
     areas,
     securityChecked: Boolean(areas["Security habits"]),
+    // GitHub's issue tracker is switched off: the project may do its reviews and bug reports elsewhere (report.js says so).
+    issuesOff: r.has_issues === false,
     checks,
     flags,
     aiFilesFound: [...aiNames, ...aiFilesUnread],
@@ -753,7 +755,7 @@ export function directoryEntry(r) {
     level: r.level, label: r.label, verdict: r.verdict, flags: r.flags.map((f) => f.label),
     // Extra detail for the repo pages Google reads (/repo/owner/name, built in seo.js).
     warnings: r.flags.map(({ label, note, severity }) => ({ label, note, severity })),
-    checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, costs: r.costs, capReason: r.capReason,
+    checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, issuesOff: r.issuesOff, costs: r.costs, capReason: r.capReason,
     aiFilesFound: r.aiFilesFound, aiFilesUnread: r.aiFilesUnread || 0, checkedAt: r.checkedAt,
   };
 }
