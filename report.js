@@ -2,7 +2,7 @@
 // Shared by the home page checker (index.html, runs in the visitor's browser) and the Google pages
 // (seo.js, runs in the Worker), so a result looks and reads the same everywhere.
 // Plain functions: data in, HTML text out. Every piece of text that comes from GitHub goes through esc().
-import { GRADES, LEVELS, GROUPS, WHY, areaGrades } from "./score.js";
+import { GRADES, LEVELS, GROUPS, WHY, FIX, areaGrades } from "./score.js";
 
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -71,6 +71,12 @@ function costHTML(r) {
 
 // r = a result from score.js, or an entry from data/directory.json.
 // Options: example (a made-up repo: no links), actions (extra buttons, HTML), headingId, footnote (HTML).
+// "If it's your repo": one plain step for a check that lost points (FIX in score.js), with GitHub's own guide.
+const fixHTML = (c) => {
+  const f = c.level !== "good" && FIX[c.label];
+  return f ? `<p class="list-note"><strong>If it's your repo:</strong> ${esc(f.text)}${f.url ? ` <a href="${esc(f.url)}" target="_blank" rel="noopener">GitHub's guide<span class="ext" aria-hidden="true">↗</span>${NEW_TAB}</a>` : ""}</p>` : "";
+};
+
 export function reportCard(r, { example = false, actions = "", headingId = "", footnote = "" } = {}) {
   const level = levelOf(r);
   const L = LEVELS[level] || LEVELS.careful;
@@ -111,7 +117,7 @@ export function reportCard(r, { example = false, actions = "", headingId = "", f
       const tone = { A: "good", B: "good", C: "warn", D: "warn" }[letter] || "bad";
       return `<details>
     <summary><span class="area-grade ${tone}"><span class="sr-only">Area grade </span>${esc(letter)}</span><span class="q">${esc(GROUPS[g] || g)}</span><span class="bar ${tone}" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="pts"><span class="sr-only">, ${got} out of ${max} points</span><span aria-hidden="true">${got}/${max}</span></span></summary>
-    <ul class="checks">${list.map((c) => `<li class="${esc(c.level)}"><span class="icon" aria-hidden="true"></span><div><p><span class="sr-only">${MARK[c.level] || ""}: </span><strong>${esc(c.label)}.</strong> ${esc(c.note)}</p>${WHY[c.label] || WHY[c.group] ? `<p class="list-note">${esc(WHY[c.label] || WHY[c.group])}</p>` : ""}</div></li>`).join("")}</ul>
+    <ul class="checks">${list.map((c) => `<li class="${esc(c.level)}"><span class="icon" aria-hidden="true"></span><div><p><span class="sr-only">${MARK[c.level] || ""}: </span><strong>${esc(c.label)}.</strong> ${esc(c.note)}</p>${WHY[c.label] || WHY[c.group] ? `<p class="list-note">${esc(WHY[c.label] || WHY[c.group])}</p>` : ""}${fixHTML(c)}</div></li>`).join("")}</ul>
   </details>`;
     }).join("")}</div>
   ${groups["Security habits"] ? "" : `<p class="fine">${esc(GROUPS["Security habits"])} Not checked: the independent OpenSSF Scorecard check has no data for this repo yet, so the grade uses the other areas.</p>`}
