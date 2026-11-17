@@ -387,6 +387,23 @@ document.addEventListener("submit", async (e) => {
   } catch { msg.textContent = "Couldn't save your email. Try again later."; }
   button.disabled = false;
 });
+
+// "Tell me when alerts launch" under a report: its own list at /api/watch, never the newsletter.
+document.addEventListener("submit", async (e) => {
+  const form = e.target.closest("form[data-watch]");
+  if (!form) return;
+  e.preventDefault();
+  const msg = form.parentElement.querySelector("[data-watch-msg]");
+  const button = form.querySelector("button");
+  button.disabled = true;
+  try {
+    const r = await fetch("/api/watch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.querySelector("input[type=email]").value, repo: form.querySelector("input[name=repo]").value }) });
+    const j = await r.json().catch(() => ({}));
+    msg.textContent = r.ok ? "Got it. We'll email you once, on the day alerts launch." : (j.error || "Couldn't save your email. Try again later.");
+    if (r.ok) form.reset();
+  } catch { msg.textContent = "Couldn't save your email. Try again later."; }
+  button.disabled = false;
+});
 </script>
 </body>
 </html>

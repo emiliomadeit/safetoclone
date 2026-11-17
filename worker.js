@@ -17,7 +17,7 @@ import { checkBatch, postProblem, claimsProblem, latestCheck, dueNow, dateIn, ti
 import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath, subscribedPage, notePage, approvePage, aboutPage } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
 import { isSandbox, sandboxFetch } from "./sandbox.js";
-import { gradeRepo, agentAnswer, failure, clientKey, allowed } from "./agent.js";
+import { gradeRepo, agentAnswer, failure, clientKey, allowed, repoName } from "./agent.js";
 import { checkIssue, fingerprint as issueFingerprint, sendWindowOpen, sendWindowPassed, issueClaimsProblem, issuePath, renderHtml, renderText, FROM, NEWSLETTER_TIME, pictures, MAX_PICTURE_BYTES, MAX_PICTURES } from "./newsletter.js";
 
 const json = (body, status = 200) =>
@@ -43,6 +43,34 @@ async function subscribe(request, env) {
   if (!r.ok && r.status !== 409) return json({ error: "Couldn't save your email. Try again later." }, 502);
   return json({ ok: true, from: SIGNUP_BOXES.includes(from) ? from : "" });
 }
+// "Tell me when alerts launch": the form under every report. Alerts don't exist yet, so this only keeps the address.
+// NOT the newsletter: nothing here touches Resend or the Sunday segment, and nothing is emailed to this list without
+// Emile's OK. Kept in the INSTAGRAM KV store as ONE record per day ("watch:YYYY-MM-DD", at most WATCH_DAILY_MAX entries),
+// so a flood can't use up the free plan's 1,000 writes a day (the newsletter's send-lock lives in the same store).
+// Read them in Cloudflare > Workers KV > safetoclone-instagram, keys starting "watch:".
+// shortcut: two sign-ups in the same instant can overwrite each other (same as stats.js), upgrade if volume ever makes that matter.
+const WATCH_DAILY_MAX = 200, WATCH_PER_EMAIL = 20;
+async function watch(request, env) {
+  if (request.method !== "POST") return json({ error: "Use POST" }, 405);
+  const { email: raw, repo: rawRepo } = isForm(request) ? Object.fromEntries(await request.formData().catch(() => new Map())) : await request.json().catch(() => ({}));
+  const email = String(raw || "").trim().toLowerCase();
+  if (email.length > 254 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "That email address doesn't look right." }, 400);
+  const repo = repoName(rawRepo);
+  if (!repo) return json({ error: "That isn't a GitHub repo we can watch." }, 400);
+  if (!env.INSTAGRAM) return json({ error: "Alert sign-up isn't connected yet." }, 503);
+  const key = `watch:${new Date().toISOString().slice(0, 10)}`;
+  try {
+    const list = (await env.INSTAGRAM.get(key, "json")) || [];
+    if (!list.some((x) => x.email === email && x.repo === repo)) {
+      if (list.length >= WATCH_DAILY_MAX) return json({ error: "We've had a lot of sign-ups today. Please try again tomorrow." }, 503);
+      if (list.filter((x) => x.email === email).length >= WATCH_PER_EMAIL) return json({ error: "That's a lot of repos for one day. Try again tomorrow." }, 429);
+      list.push({ email, repo, at: new Date().toISOString() });
+      await env.INSTAGRAM.put(key, JSON.stringify(list), { expirationTtl: 365 * 86400 });
+    }
+  } catch { return json({ error: "Couldn't save your email. Try again later." }, 502); }
+  return json({ ok: true });
+}
+
 // Which signup box a visitor used (the hidden "from" field), counted as signup_<box> in /api/stats.
 const SIGNUP_BOXES = ["home", "result", "repo"];
 
@@ -864,6 +892,17 @@ const site = {
         return new Response(subscribedPage(res.ok, j.error || "Couldn't save your email. Try again later."), {
           status: res.ok ? 200 : res.status, headers: { "Content-Type": "text/html; charset=utf-8" },
         });
+      }
+      return res;
+    }
+    if (pathname === "/api/watch") {
+      const res = (await allowed(env.SIGNUP_LIMIT, clientKey(request))) ? await watch(request, env) : json({ error: "Too many tries. Wait a minute and try again." }, 429);
+      if (res.ok) track("watch_signup"); // never "signup": HQ reads that as newsletter subscribers
+      if (isForm(request)) { // sent without JavaScript: a page back, not JSON
+        const j = await res.clone().json().catch(() => ({}));
+        return new Response(notePage(res.ok ? "Got it" : "That didn't work", res.ok
+          ? "We'll email you once, on the day alerts launch. You're not on the Sunday email list. You can sign up for that on the home page."
+          : j.error || "Couldn't save your email. Try again later."), { status: res.ok ? 200 : res.status, headers: { "Content-Type": "text/html; charset=utf-8" } });
       }
       return res;
     }
