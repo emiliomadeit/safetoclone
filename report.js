@@ -75,12 +75,12 @@ function costHTML(r) {
 // types. Posts to /api/watch, never /api/subscribe: these addresses are not on the Sunday list. index.html wires data-watch.
 const watchHTML = (r) => `<section class="watch">
   <h3>Want a heads-up if this grade drops?</h3>
-  <p class="muted">Alerts aren't switched on yet. Leave your email and we'll write to you once, on the day they are. We won't add you to the Sunday email, and we'll use your address for nothing else.</p>
+  <p class="muted">Alerts aren't switched on yet. Leave your email and we'll send you one message to confirm it. Once you confirm, we'll write to you once, on the day alerts launch. We won't add you to the Sunday email, and we'll use your address for nothing else.</p>
   <form class="news" action="/api/watch" method="post" data-watch>
     <input type="hidden" name="repo" value="${esc(r.name)}">
     <label class="sr-only" for="watch-email">Your email address</label>
     <input id="watch-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
-    <button class="btn secondary" type="submit">Tell me when alerts launch</button>
+    <button class="btn secondary" type="submit">Email me to confirm</button>
   </form>
   <p class="fine" role="status" data-watch-msg></p>
 </section>`;

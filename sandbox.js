@@ -24,7 +24,7 @@ export async function sandboxFetch(request, env, ctx, fetchSite) {
     response = new Response(hub(env.SANDBOX_VERSION), { headers: { "Content-Type": "text/html; charset=utf-8" } });
   } else if (url.pathname === "/robots.txt") {
     response = new Response("User-agent: *\nDisallow: /\n", { headers: { "Content-Type": "text/plain" } });
-  } else if (url.pathname === "/api/subscribe" || url.pathname === "/api/watch") {
+  } else if (url.pathname === "/api/subscribe" || url.pathname === "/api/watch" || url.pathname === "/watch/confirm") {
     response = json({ error: "Sandbox: signups are turned off. Nothing was sent or saved.", sandbox: true }, 409);
   } else if (url.pathname.startsWith("/api/instagram/") || url.pathname.startsWith("/api/newsletter/") ||
       url.pathname === "/api/stats" || url.pathname.startsWith("/ig-media/") || url.pathname.startsWith("/nl-media/")) {

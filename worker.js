@@ -14,7 +14,7 @@
 import { autopost, status as instagramStatus, listing as igListing, metrics as igMetrics } from "./instagram.js";
 import { hqFile, hqText, hqJson, batchPath, checkPath, hqHealth, hqKeyDaysLeft } from "./hq.js";
 import { checkBatch, postProblem, claimsProblem, latestCheck, dueNow, dateIn, timeIn, addDays, mondayOf, sha256, DEFAULT_TIME, LATE_MINUTES } from "./batch.js";
-import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath, subscribedPage, notePage, approvePage, aboutPage } from "./seo.js";
+import { repoPage, reposPage, missingPage, sitemap, findRepo, repoPath, subscribedPage, notePage, approvePage, aboutPage, watchConfirmPage } from "./seo.js";
 import { count, sourceOf, hit, report as statsReport } from "./stats.js";
 import { isSandbox, sandboxFetch } from "./sandbox.js";
 import { gradeRepo, agentAnswer, failure, clientKey, allowed, repoName } from "./agent.js";
@@ -43,13 +43,21 @@ async function subscribe(request, env) {
   if (!r.ok && r.status !== 409) return json({ error: "Couldn't save your email. Try again later." }, 502);
   return json({ ok: true, from: SIGNUP_BOXES.includes(from) ? from : "" });
 }
-// "Tell me when alerts launch": the form under every report. Alerts don't exist yet, so this only keeps the address.
-// NOT the newsletter: nothing here touches Resend or the Sunday segment, and nothing is emailed to this list without
-// Emile's OK. Kept in the INSTAGRAM KV store as ONE record per day ("watch:YYYY-MM-DD", at most WATCH_DAILY_MAX entries),
-// so a flood can't use up the free plan's 1,000 writes a day (the newsletter's send-lock lives in the same store).
-// Read them in Cloudflare > Workers KV > safetoclone-instagram, keys starting "watch:".
+// "Tell me when alerts launch": the form under every report. Alerts don't exist yet, so this only keeps an address, and only
+// after the person confirms it from an email we send (double opt-in).
+// NOT the newsletter: nothing here touches the Sunday segment (no /contacts, /segments or /broadcasts calls), and nothing more
+// is emailed to this list without Emile's OK. Only the one confirmation email below goes to a new address.
+//  - Asking: the address waits in ONE record per day ("watchpend:YYYY-MM-DD", kept 3 days, then gone). One confirmation email
+//    per address per day, however many repos it asks about, and at most WATCH_PENDING_MAX emails a day (Resend's allowance is
+//    shared with the newsletter and the warning emails to Emile; raise the ceiling once the plan's limit is known).
+//  - Confirming: opening the link only shows a button (mail scanners open links); the POST adds the address to "watch:YYYY-MM-DD"
+//    with confirmed: true. Only the SHA-256 of the token is stored. Confirming twice is harmless and writes nothing new.
+// Writes a day: at most WATCH_PENDING_MAX asks plus as many confirmations, well under the free plan's 1,000 (the newsletter's
+// send-lock and Instagram's token live in the same store). Read the list in Cloudflare > Workers KV > safetoclone-instagram.
 // shortcut: two sign-ups in the same instant can overwrite each other (same as stats.js), upgrade if volume ever makes that matter.
-const WATCH_DAILY_MAX = 200, WATCH_PER_EMAIL = 20;
+const WATCH_PENDING_MAX = 20, WATCH_PER_EMAIL = 20, WATCH_LINK_DAYS = 2;
+const today = () => new Date().toISOString().slice(0, 10);
+const tokenBytes = () => [...crypto.getRandomValues(new Uint8Array(24))].map((b) => b.toString(16).padStart(2, "0")).join("");
 async function watch(request, env) {
   if (request.method !== "POST") return json({ error: "Use POST" }, 405);
   const { email: raw, repo: rawRepo } = isForm(request) ? Object.fromEntries(await request.formData().catch(() => new Map())) : await request.json().catch(() => ({}));
@@ -57,18 +65,58 @@ async function watch(request, env) {
   if (email.length > 254 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "That email address doesn't look right." }, 400);
   const repo = repoName(rawRepo);
   if (!repo) return json({ error: "That isn't a GitHub repo we can watch." }, 400);
-  if (!env.INSTAGRAM) return json({ error: "Alert sign-up isn't connected yet." }, 503);
-  const key = `watch:${new Date().toISOString().slice(0, 10)}`;
+  if (!env.INSTAGRAM || !env.RESEND_API_KEY) return json({ error: "Alert sign-up isn't connected yet." }, 503);
+  const key = `watchpend:${today()}`;
+  let token = null;
   try {
     const list = (await env.INSTAGRAM.get(key, "json")) || [];
-    if (!list.some((x) => x.email === email && x.repo === repo)) {
-      if (list.length >= WATCH_DAILY_MAX) return json({ error: "We've had a lot of sign-ups today. Please try again tomorrow." }, 503);
-      if (list.filter((x) => x.email === email).length >= WATCH_PER_EMAIL) return json({ error: "That's a lot of repos for one day. Try again tomorrow." }, 429);
-      list.push({ email, repo, at: new Date().toISOString() });
-      await env.INSTAGRAM.put(key, JSON.stringify(list), { expirationTtl: 365 * 86400 });
+    const mine = list.find((x) => x.email === email);
+    if (mine) {
+      // Already asked today: no second email to this address. A new repo is added to the same request.
+      if (!mine.repos.includes(repo)) {
+        if (mine.repos.length >= WATCH_PER_EMAIL) return json({ error: "That's a lot of repos for one day. Try again tomorrow." }, 429);
+        mine.repos.push(repo);
+        await env.INSTAGRAM.put(key, JSON.stringify(list), { expirationTtl: 3 * 86400 });
+      }
+      return json({ ok: true, sent: false });
     }
+    if (list.length >= WATCH_PENDING_MAX) return json({ error: "We've had a lot of sign-ups today. Please try again tomorrow." }, 503);
+    token = `${today()}.${tokenBytes()}`;
+    list.push({ email, repos: [repo], th: await sha256(token), at: new Date().toISOString() });
+    await env.INSTAGRAM.put(key, JSON.stringify(list), { expirationTtl: 3 * 86400 });
   } catch { return json({ error: "Couldn't save your email. Try again later." }, 502); }
-  return json({ ok: true });
+  const link = `${SITE}/watch/confirm?t=${token}`;
+  const sent = await resend(env, "/emails", {
+    from: FROM, to: [email], reply_to: "hello@safetoclone.com", subject: "Please confirm your email address",
+    text: `Someone (hopefully you) entered this email address on safetoclone.com to hear when SafeToClone's grade alerts launch.\n\nTo confirm, open this link and press the button:\n${link}\n\nThe link works for ${WATCH_LINK_DAYS} days. If this wasn't you, ignore this email: nothing is saved, and you won't hear from us.\n\nSafeToClone, safetoclone.com`,
+    html: `<p>Someone (hopefully you) entered this email address on safetoclone.com to hear when SafeToClone's grade alerts launch.</p><p>To confirm, <a href="${link}">open this link</a> and press the button.</p><p>The link works for ${WATCH_LINK_DAYS} days. If this wasn't you, ignore this email: nothing is saved, and you won't hear from us.</p><p>SafeToClone, <a href="${SITE}">safetoclone.com</a></p>`,
+  }).catch(() => null);
+  if (!sent?.ok) return json({ error: "Couldn't send the confirmation email. Try again later." }, 502);
+  return json({ ok: true, sent: true });
+}
+
+// /watch/confirm?t=<token>: opening it only shows a button; the POST confirms (mail scanners open links, so a GET must never act).
+async function watchConfirm(request, env) {
+  const t = new URL(request.url).searchParams.get("t") || "";
+  const page = (title, message, token = "") => new Response(watchConfirmPage({ title, message, token }), { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
+  if (!/^\d{4}-\d{2}-\d{2}\.[0-9a-f]{48}$/.test(t)) return page("That link isn't valid", "Ask again from the form under any report on safetoclone.com.");
+  if (request.method === "GET") return page("Confirm your email", "Press the button and we'll write to you once, on the day SafeToClone alerts launch. Nothing is saved until you do.", t);
+  if (!env.INSTAGRAM) return page("Not connected yet", "Alert sign-up isn't connected yet. Try again later.");
+  const day = t.slice(0, 10);
+  if ((Date.parse(today()) - Date.parse(day)) / 864e5 > WATCH_LINK_DAYS) return page("That link has expired", "Ask again from the form under any report on safetoclone.com.");
+  try {
+    const th = await sha256(t);
+    const pending = ((await env.INSTAGRAM.get(`watchpend:${day}`, "json")) || []).find((x) => x.th === th);
+    if (!pending) return page("That link isn't valid", "It may have expired. Ask again from the form under any report on safetoclone.com.");
+    const key = `watch:${today()}`;
+    const list = (await env.INSTAGRAM.get(key, "json")) || [];
+    let added = false;
+    for (const repo of pending.repos) {
+      if (!list.some((x) => x.email === pending.email && x.repo === repo)) { list.push({ email: pending.email, repo, at: new Date().toISOString(), confirmed: true }); added = true; }
+    }
+    if (added) await env.INSTAGRAM.put(key, JSON.stringify(list), { expirationTtl: 365 * 86400 });
+    return Object.assign(page("You're confirmed", "Thanks. We'll write to you once, on the day SafeToClone alerts launch. You're not on the Sunday email list."), { newlyConfirmed: added });
+  } catch { return page("That didn't work", "Couldn't save your confirmation. Try again later."); }
 }
 
 // Which signup box a visitor used (the hidden "from" field), counted as signup_<box> in /api/stats.
@@ -897,13 +945,19 @@ const site = {
     }
     if (pathname === "/api/watch") {
       const res = (await allowed(env.SIGNUP_LIMIT, clientKey(request))) ? await watch(request, env) : json({ error: "Too many tries. Wait a minute and try again." }, 429);
-      if (res.ok) track("watch_signup"); // never "signup": HQ reads that as newsletter subscribers
+      const j = res.ok ? await res.clone().json().catch(() => ({})) : {};
+      if (res.ok && j.sent) track("watch_request"); // asked and emailed, not yet confirmed
       if (isForm(request)) { // sent without JavaScript: a page back, not JSON
-        const j = await res.clone().json().catch(() => ({}));
-        return new Response(notePage(res.ok ? "Got it" : "That didn't work", res.ok
-          ? "We'll email you once, on the day alerts launch. You're not on the Sunday email list. You can sign up for that on the home page."
-          : j.error || "Couldn't save your email. Try again later."), { status: res.ok ? 200 : res.status, headers: { "Content-Type": "text/html; charset=utf-8" } });
+        const e = res.ok ? {} : await res.clone().json().catch(() => ({}));
+        return new Response(notePage(res.ok ? "Check your inbox" : "That didn't work", res.ok
+          ? "We've sent you an email. Open the link in it and press the button to confirm. Nothing is saved until you do. You're not on the Sunday email list."
+          : e.error || "Couldn't save your email. Try again later."), { status: res.ok ? 200 : res.status, headers: { "Content-Type": "text/html; charset=utf-8" } });
       }
+      return res;
+    }
+    if (pathname === "/watch/confirm" && (request.method === "GET" || request.method === "POST")) {
+      const res = await watchConfirm(request, env);
+      if (res.newlyConfirmed) track("watch_signup"); // a confirmed address: the real sign-up (never "signup", which HQ reads as newsletter subscribers)
       return res;
     }
     // Checked before anything is read or written, so a flood costs us nothing but the refusal.
