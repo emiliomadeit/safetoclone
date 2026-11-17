@@ -191,6 +191,15 @@ export const FIX = {
   "Safe automation": { text: "Don't let automatic builds run code from outside contributors with extra permissions (the pull_request_target setting), and don't paste outside text into build scripts. GitHub's guide covers both.", url: GH + "actions/security-for-github-actions/security-guides/security-hardening-for-github-actions" },
 };
 
+// One sentence for projects like the Linux kernel, which do their reviews by email (the security check can't see that).
+// report.js shows it under "Why this grade?", and agent.js adds it to the summary agents repeat. Our own fixed words.
+export const OUTSIDE_GITHUB = "GitHub's issue tracker is turned off for this project, so its bug reports and reviews may happen somewhere else (the Linux kernel, for example, works through mailing lists). We can only see GitHub, so a low security score here may not tell the whole story.";
+// When it applies: the issue tracker is off, the GitHub-based security area is weak (D or F), and the project is otherwise
+// established (people trust it, no warning signs). Takes a live result or a directory entry; never changes points, grades or labels.
+export function outsideGitHub(r, areas = r.areas) {
+  return r.issuesOff === true && ["D", "F"].includes(areas?.["Security habits"]?.grade) && areas?.Reputation?.grade === "A" && !(r.warnings || r.flags || []).length;
+}
+
 // Accepts "owner/repo", "github.com/owner/repo" or a full URL.
 export function parseRepo(input) {
   const s = String(input || "").trim().replace(/\.git$/, "").replace(/\/+$/, "");
