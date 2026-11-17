@@ -176,6 +176,21 @@ export const WHY = {
   "Red flags": "We look for tricks that keep showing up in malware: requests to turn off antivirus or click past the computer's warning, locked zip files, downloads hidden deep in the code, cracks and free premium, hidden code, code that runs by itself when you open the folder, parts listed as malware, and AI instruction files that try to take over your assistant. Serious ones cap the grade, however popular the repo is.",
 };
 
+// What an owner can do about a check that lost points, in plain words, with GitHub's own guide. Only checks an owner
+// can really act on: never stars, forks, account or repo age, or the red flags (a how-to for those would be a guide to
+// looking clean). Shown by report.js on every report, never sent to AI agents.
+const GH = "https://docs.github.com/en/";
+export const FIX = {
+  "Recent updates": { text: "Make a small change or publish a release, so people can see it is still looked after. If you archived it on purpose, there is nothing to fix." },
+  Releases: { text: "Publish a release, so people download a finished version and not whatever is in the code that day.", url: GH + "repositories/releasing-projects-on-github/managing-releases-in-a-repository" },
+  License: { text: "Add a LICENSE file. choosealicense.com helps you pick one in a few minutes.", url: GH + "communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository" },
+  Instructions: { text: "Write a README that says what the project does, how to install it and how to use it.", url: GH + "repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes" },
+  "Security contact": { text: "Add a SECURITY.md file that says how to report a problem privately.", url: GH + "code-security/getting-started/adding-a-security-policy-to-your-repository" },
+  "Code review": { text: "Turn on branch protection and ask for one approval before changes go in. If you work alone, you can't fully fix this.", url: GH + "repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches" },
+  "Known security holes": { text: "Update the listed parts to their fixed versions. Turning on Dependabot alerts finds them for you.", url: GH + "code-security/dependabot/dependabot-alerts/about-dependabot-alerts" },
+  "Safe automation": { text: "Don't let automatic builds run code from outside contributors with extra permissions (the pull_request_target setting), and don't paste outside text into build scripts. GitHub's guide covers both.", url: GH + "actions/security-for-github-actions/security-guides/security-hardening-for-github-actions" },
+};
+
 // Accepts "owner/repo", "github.com/owner/repo" or a full URL.
 export function parseRepo(input) {
   const s = String(input || "").trim().replace(/\.git$/, "").replace(/\/+$/, "");
@@ -721,6 +736,8 @@ export function score(data) {
     }[capReason] : null,
     areas,
     securityChecked: Boolean(areas["Security habits"]),
+    // GitHub's issue tracker is switched off: the project may do its reviews and bug reports elsewhere (report.js says so).
+    issuesOff: r.has_issues === false,
     checks,
     flags,
     aiFilesFound: [...aiNames, ...aiFilesUnread],
@@ -738,7 +755,7 @@ export function directoryEntry(r) {
     level: r.level, label: r.label, verdict: r.verdict, flags: r.flags.map((f) => f.label),
     // Extra detail for the repo pages Google reads (/repo/owner/name, built in seo.js).
     warnings: r.flags.map(({ label, note, severity }) => ({ label, note, severity })),
-    checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, costs: r.costs, capReason: r.capReason,
+    checks: r.checks, areas: r.areas, securityChecked: r.securityChecked, issuesOff: r.issuesOff, costs: r.costs, capReason: r.capReason,
     aiFilesFound: r.aiFilesFound, aiFilesUnread: r.aiFilesUnread || 0, checkedAt: r.checkedAt,
   };
 }

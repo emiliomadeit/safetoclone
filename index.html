@@ -275,14 +275,17 @@ $("#specimen .ring").outerHTML = ring(example, "xl");
 
 // The full report from our server (/api/report in worker.js), drawn like a check made here.
 // A wrong link or a missing repo is a real answer, so it's shown. Anything else (server busy, network) returns null.
+let serverBusy = "";   // our server's own "wait a minute" message, kept in case the browser check can't answer either
 async function serverReport(val) {
   let res, j;
+  serverBusy = "";
   try {
     res = await fetch(`/api/report?repo=${encodeURIComponent(val)}`);
     j = await res.json();
   } catch { return null; }
   if (res.ok && j?.entry?.grade) return { ...j.entry, flags: j.entry.warnings || [] };
   if (j?.code === "BAD_INPUT" || j?.code === "NOT_FOUND") throw Object.assign(new Error(j.error), { code: j.code });
+  if (j?.code === "SLOW_DOWN" || j?.code === "RATE_LIMIT") serverBusy = j.error;
   return null;
 }
 
@@ -303,11 +306,14 @@ async function runCheck(val) {
     out.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
   } catch (err) {
     note("check_fail");
+    const busy = err.code === "RATE_LIMIT" || err.code === "TOO_BIG";
+    if (busy) note("check_busy");   // a busy day, not a typo: lets us tell the two apart in /api/stats
     const msg = err instanceof TypeError
       ? "We couldn't reach GitHub from here. If you're on a work network, it may block this. Try again on another connection."
-      : err.message;
+      : busy && serverBusy ? serverBusy : err.message;
     out.innerHTML = `<div class="error" role="alert"><strong>We couldn't check that repo.</strong><p>${esc(msg)}</p></div>`;
     say("");
+    out.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });   // the error sits below the form: bring it into view
   } finally {
     btn.disabled = false; btn.textContent = "Check safety";
     out.removeAttribute("aria-busy");
@@ -377,6 +383,23 @@ document.addEventListener("submit", async (e) => {
     const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.querySelector("input[type=email]").value, from: form.querySelector("input[name=from]")?.value || "" }) });
     const j = await r.json().catch(() => ({}));
     msg.textContent = r.ok ? "You're on the list. Check your inbox on Sunday." : (j.error || "Couldn't save your email. Try again later.");
+    if (r.ok) form.reset();
+  } catch { msg.textContent = "Couldn't save your email. Try again later."; }
+  button.disabled = false;
+});
+
+// "Tell me when alerts launch" under a report: its own list at /api/watch, never the newsletter.
+document.addEventListener("submit", async (e) => {
+  const form = e.target.closest("form[data-watch]");
+  if (!form) return;
+  e.preventDefault();
+  const msg = form.parentElement.querySelector("[data-watch-msg]");
+  const button = form.querySelector("button");
+  button.disabled = true;
+  try {
+    const r = await fetch("/api/watch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.querySelector("input[type=email]").value, repo: form.querySelector("input[name=repo]").value }) });
+    const j = await r.json().catch(() => ({}));
+    msg.textContent = r.ok ? "Got it. We'll email you once, on the day alerts launch." : (j.error || "Couldn't save your email. Try again later.");
     if (r.ok) form.reset();
   } catch { msg.textContent = "Couldn't save your email. Try again later."; }
   button.disabled = false;
