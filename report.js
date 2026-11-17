@@ -71,6 +71,20 @@ function costHTML(r) {
 
 // r = a result from score.js, or an entry from data/directory.json.
 // Options: example (a made-up repo: no links), actions (extra buttons, HTML), headingId, footnote (HTML).
+// "Tell me when alerts launch": a form under every real report. Alerts aren't built yet, so the text says so before anyone
+// types. Posts to /api/watch, never /api/subscribe: these addresses are not on the Sunday list. index.html wires data-watch.
+const watchHTML = (r) => `<section class="watch">
+  <h3>Want a heads-up if this grade drops?</h3>
+  <p class="muted">Alerts aren't switched on yet. Leave your email and we'll write to you once, on the day they are. We won't add you to the Sunday email, and we'll use your address for nothing else.</p>
+  <form class="news" action="/api/watch" method="post" data-watch>
+    <input type="hidden" name="repo" value="${esc(r.name)}">
+    <label class="sr-only" for="watch-email">Your email address</label>
+    <input id="watch-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+    <button class="btn secondary" type="submit">Tell me when alerts launch</button>
+  </form>
+  <p class="fine" role="status" data-watch-msg></p>
+</section>`;
+
 // Shown under "Why this grade?" when GitHub's issue tracker is off and "Security habits" is weak. Projects like the Linux
 // kernel do their reviews by email, which the security check can't see. A fact about this project, not a verdict.
 const OUTSIDE_GITHUB = "GitHub's issue tracker is turned off for this project, so its bug reports and reviews may happen somewhere else (the Linux kernel, for example, works through mailing lists). We can only see GitHub, so a low security score here may not tell the whole story.";
@@ -152,6 +166,7 @@ ${buttons ? `<div class="actions">${buttons}</div>` : ""}
 ${aiHTML(r)}
 ${costHTML(r)}
 ${whyHTML}
+${example ? "" : watchHTML(r)}
 <p class="fine">${footnote || `A grade is a set of warning signs, not a guarantee.`} <a href="/#method">How we score</a></p>
 </article>`;
 }

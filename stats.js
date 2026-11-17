@@ -3,13 +3,15 @@
 // Kept in the INSTAGRAM KV store under keys "stats:YYYY-MM-DD". Read them at safetoclone.com/api/stats.
 // Counts are rough: two visits in the same instant can overwrite each other. Good enough to compare sources.
 
-export const EVENTS = ["home", "repo_page", "repos_page", "check", "check_fail", "check_busy", "copy_link", "image", "signup", "signup_home", "signup_result", "signup_repo", "agent_mcp", "agent_api", "nl_love", "nl_good", "nl_soso"];
+export const EVENTS = ["home", "repo_page", "repos_page", "check", "check_fail", "check_busy", "copy_link", "image", "signup", "signup_home", "signup_result", "signup_repo", "watch_signup", "agent_mcp", "agent_api", "nl_love", "nl_good", "nl_soso"];
 // check_fail: a check on the home page that showed an error instead of a grade (wrong link, GitHub busy...).
 // check_busy: the part of check_fail that was a busy day (our limit or GitHub's), not a wrong link. Counted in check_fail too.
 // nl_love / nl_good / nl_soso: taps on the rating at the bottom of the newsletter. Email apps may open links by
 // themselves, so these are rough.
 // AI agents checking a repo: agent_mcp is a get_safety_scores or check_repo call on /mcp, agent_api a call to
 // /api/check. Agents often look like bots, so these two skip the bot filter.
+// watch_signup: someone left an email under a report to hear when alerts launch (a separate list from the newsletter, so never
+// counted as signup, which HQ reads as subscribers).
 // signup counts every new subscriber (HQ reads it). signup_home, signup_result and signup_repo also say which
 // box they used: the email band on the home page, the box under a check result, or the box on a repo page.
 const AGENT_EVENTS = ["agent_mcp", "agent_api"];

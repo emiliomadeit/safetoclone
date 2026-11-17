@@ -425,6 +425,13 @@ for (const label of ["Releases", "License", "Instructions", "Security contact"])
 assert.ok(weakHtml.includes("If it's your repo"));
 assert.ok(!reportCard(good).includes("If it's your repo"), "a strong repo gets no fix lines");
 
+// The alert sign-up under a report is its own list: its own address, and never the newsletter form the page script catches.
+const withWatch = reportCard(good);
+assert.ok(withWatch.includes('action="/api/watch"') && withWatch.includes("data-watch") && withWatch.includes('name="repo" value="acme/tool"'));
+assert.ok(!withWatch.includes("data-news") && !withWatch.includes("/api/subscribe"), "the alert form never posts to the newsletter");
+assert.ok(withWatch.includes("Alerts aren't switched on yet"), "says alerts don't exist yet, before anyone types");
+assert.ok(!reportCard(good, { example: true }).includes("data-watch"), "the made-up example report has no alert form");
+
 // Linux-shaped: issue tracker off, strong everywhere except the GitHub-based security check -> a note, same grade.
 const mirrorData = (hasIssues, scorecard) => ({
   repo: { full_name: "acme/kernel", html_url: "", stargazers_count: 150000, forks_count: 50000, created_at: ago(4000), pushed_at: ago(1), archived: false, license: { spdx_id: "GPL-2.0" }, description: "Kernel", has_issues: hasIssues },
