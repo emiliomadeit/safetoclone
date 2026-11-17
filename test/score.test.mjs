@@ -430,6 +430,7 @@ const withWatch = reportCard(good);
 assert.ok(withWatch.includes('action="/api/watch"') && withWatch.includes("data-watch") && withWatch.includes('name="repo" value="acme/tool"'));
 assert.ok(!withWatch.includes("data-news") && !withWatch.includes("/api/subscribe"), "the alert form never posts to the newsletter");
 assert.ok(withWatch.includes("Alerts aren't switched on yet"), "says alerts don't exist yet, before anyone types");
+assert.ok(withWatch.includes("send you one message to confirm"), "says an email follows, before anyone types");
 assert.ok(!reportCard(good, { example: true }).includes("data-watch"), "the made-up example report has no alert form");
 
 // Linux-shaped: issue tracker off, strong everywhere except the GitHub-based security check -> a note, same grade.

@@ -262,6 +262,17 @@ export function notePage(title, message) {
   return layout({ title: `${title} · SafeToClone`, description: "SafeToClone weekly safety email.", canonical: SITE + "/", noindex: true, body });
 }
 
+// The page behind the link in the alert confirmation email. Opening it changes nothing; only the button (a POST) confirms.
+export function watchConfirmPage({ title, message, token = "" }) {
+  const body = `
+<section>
+  <h1>${esc(title)}</h1>
+  <p class="answer">${esc(message)}</p>
+  ${token ? `<form method="post" action="/watch/confirm?t=${esc(token)}"><button class="btn" type="submit">Yes, tell me when alerts launch</button></form>` : `<p><a class="btn secondary" href="/">Back to SafeToClone</a></p>`}
+</section>`;
+  return layout({ title: `${title} · SafeToClone`, description: "Confirm your email for SafeToClone alerts.", canonical: SITE + "/", noindex: true, body });
+}
+
 // The page behind the "Review and approve" button in Emile's test copy. Opening it changes nothing;
 // only the Approve button (a form POST back to the same link) records his yes. `email` is the full email HTML.
 export function approvePage({ issue, version, when, action, email }) {
